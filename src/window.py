@@ -87,7 +87,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         for file_name in os.listdir(directory):
             path = os.path.join(directory, file_name)
             icon_name = self._find_icon(path)
-            row = PortfolioRow(path, icon_name, file_name)
+            row = PortfolioRow(self.list, path, icon_name, file_name)
             self.list.add(row)
 
         if directory not in self._history or not navigating:
