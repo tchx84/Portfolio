@@ -80,7 +80,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             return True
         return text.lower() in os.path.basename(row.path.lower())
 
-    def _populate(self, directory):
+    def _populate(self, directory, navigating=False):
         for row in self.list.get_children():
             row.destroy()
 
@@ -90,7 +90,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             row = PortfolioRow(path, icon_name, file_name)
             self.list.add(row)
 
-        if directory not in self._history:
+        if directory not in self._history or not navigating:
             del self._history[self._index + 1:]
             self._history.append(directory)
             self._index += 1
@@ -99,11 +99,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.directory.set_text(directory)
         self._reset_search()
 
-    def _move(self, path):
+    def _move(self, path, navigating=False):
         if path is None:
             return
         elif os.path.isdir(path):
-            self._populate(path)
+            self._populate(path, navigating)
         else:
             Gio.AppInfo.launch_default_for_uri(f'file://{path}')
 
@@ -134,11 +134,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_go_previous(self, button):
         self._index -= 1
-        self._move(self._history[self._index])
+        self._move(self._history[self._index], True)
 
     def _on_go_next(self, button):
         self._index += 1
-        self._move(self._history[self._index])
+        self._move(self._history[self._index], True)
 
     def _on_search_toggled(self, button):
         toggled = self.search.get_active()
