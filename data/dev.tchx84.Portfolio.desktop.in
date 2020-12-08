@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=portfolio
+Exec=dev.tchx84.Portfolio
+Terminal=false
+Type=Application
+Categories=Utility;
+Icon=dev.tchx84.Portfolio
+StartupNotify=true

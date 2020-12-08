@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/dev/tchx84/Portfolio">
+    <file>window.ui</file>
+    <file>row.ui</file>
+    <file>about.ui</file>
+    <file>menu.ui</file>
+    <file>popup.ui</file>
+    <file>main.css</file>
+  </gresource>
+</gresources>
