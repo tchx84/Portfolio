@@ -1,6 +1,22 @@
 # Portfolio
 
-A quick prototype for a minimalistic mobile-oriented file-browser.
+A minimalist file manager for Linux mobile devices.
+
+## Build it yourself
+
+```
+$ git clone https://github.com/tchx84/Portfolio.git
+$ cd Portfolio
+$ flatpak-builder --force-clean --repo=repo build dev.tchx84.Portfolio.json
+$ flatpak build-bundle repo portfolio.flatpak dev.tchx84.Portfolio
+$ flatpak install portfolio.flatpak
+```
+
+## Note
+
+This is just another weekend project, barely a prototype, but I will improve it over time. Currently, it allows you to browse your home directory, search, open, rename and delete files.
+
+The reason I am creating yet another files manager is because my experience browsing files on my Pinephone has not been great and I wanted to build something for my own use and learn.
 
 ## Disclaimer
 

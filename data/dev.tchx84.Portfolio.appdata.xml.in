@@ -3,9 +3,24 @@
 	<id>dev.tchx84.Portfolio.desktop</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
+  <content_rating type="oars-1.1"/>
+  <name>Portfolio</name>
+  <summary>Manage your files</summary>
 	<description>
     <p>
-      A quick prototype for a minimalistic mobile-oriented file-browser.
+      A minimalist file manager for Linux mobile devices.
     </p>
 	</description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/1.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>Martin Abente Lahaye</developer_name>
+  <update_contact>martin.abente.lahaye@gmail.com</update_contact>
+  <url type="homepage">https://github.com/tchx84/Portfolio</url>
+  <url type="bugtracker">https://github.com/tchx84/Portfolio/issues</url>
+  <custom>
+    <value key="Purism::form_factor">mobile</value>
+  </custom>
 </component>
