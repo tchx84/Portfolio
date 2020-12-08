@@ -31,7 +31,6 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="selection-mode">browse</property>
-                        <property name="activate-on-single-click">False</property>
                       </object>
                     </child>
                   </object>

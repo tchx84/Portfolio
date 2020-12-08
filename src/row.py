@@ -29,11 +29,16 @@ class PortfolioRow(Gtk.ListBoxRow):
     new_name = Gtk.Template.Child()
     stack = Gtk.Template.Child()
 
-    def __init__(self, path, icon_name, text):
+    def __init__(self, list, path, icon_name, text):
         super().__init__()
         self.path = path
         self.icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID)
         self.name.set_text(text)
+
+        self.select_gesture = Gtk.GestureLongPress.new(self)
+        self.select_gesture.connect('pressed', self._on_long_pressed, list)
+        self.select_gesture.connect_after('cancelled', self._on_cancelled, list)
+
 
     def delete(self):
         os.unlink(self.path)
@@ -56,3 +61,10 @@ class PortfolioRow(Gtk.ListBoxRow):
 
             self.path = new_path
             self.name.set_text(new_name)
+
+    def _on_long_pressed(self, gesture, x, y, list):
+        self.props.activatable = False
+        list.select_row(self)
+
+    def _on_cancelled(self, gesture, data=None):
+        self.props.activatable = True
