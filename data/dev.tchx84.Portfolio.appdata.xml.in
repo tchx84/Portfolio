@@ -4,6 +4,9 @@
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
   <content_rating type="oars-1.1"/>
+  <releases>
+    <release date="2020-12-08" version="0.6.0"/>
+  </releases>
   <name>Portfolio</name>
   <summary>Manage your files</summary>
 	<description>
