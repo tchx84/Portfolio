@@ -5,7 +5,7 @@
 	<project_license>GPL-3.0-or-later</project_license>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2020-12-08" version="0.6.1"/>
+    <release date="2020-12-08" version="0.6.2"/>
   </releases>
   <name>Portfolio</name>
   <summary>Manage your files</summary>
