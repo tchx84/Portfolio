@@ -164,8 +164,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         for child in self.list.get_children():
             if child  == row:
                 continue
-            child.props.selectable = deactivated
-            child.props.activatable = deactivated
+            child.props.sensitive = deactivated
 
         # Disallow navigation
         if toggled:

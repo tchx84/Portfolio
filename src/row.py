@@ -46,6 +46,7 @@ class PortfolioRow(Gtk.ListBoxRow):
     def set_rename_mode(self, mode=False):
         if mode is True:
             self.new_name.set_text(self.name.get_text())
+            self.new_name.grab_focus()
             self.stack.set_visible_child(self.new_name)
         else:
             self.stack.set_visible_child(self.name)
