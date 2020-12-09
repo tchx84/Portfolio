@@ -34,6 +34,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     rename = Gtk.Template.Child()
     delete = Gtk.Template.Child()
     menu = Gtk.Template.Child()
+    select_all = Gtk.Template.Child()
+    select_none = Gtk.Template.Child()
+
 
     directory_box = Gtk.Template.Child()
     directory = Gtk.Template.Child()
@@ -41,6 +44,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     search_entry = Gtk.Template.Child()
     stack = Gtk.Template.Child()
     popup_box = Gtk.Template.Child()
+    action_stack = Gtk.Template.Child()
+    navigation_box = Gtk.Template.Child()
+    selection_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -54,13 +60,16 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._index = -1
 
         self.list.set_filter_func(self._filter)
-        self.list.connect('row-selected', self._on_row_selected)
+        self.list.connect('selected-rows-changed', self._on_row_selected)
         self.list.connect('row-activated', self._on_row_activated)
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
         self.previous.connect('clicked', self._on_go_previous)
         self.next.connect('clicked', self._on_go_next)
         self.rename.connect('toggled', self._on_rename_toggled)
         self.delete.connect('clicked', self._on_delete_clicked)
+        self.select_all.connect('clicked', self._on_select_all)
+        self.select_none.connect('clicked', self._on_select_none)
 
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
@@ -122,10 +131,18 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.list.invalidate_filter()
         self.search.grab_focus()
 
-    def _on_row_selected(self, widget, row):
-        selected = row is not None
-        self.rename.props.sensitive = selected
+    def _on_row_selected(self, widget):
+        rows = self.list.get_selected_rows()
+        selected = len(rows) >= 1
+        single = len(rows) == 1
+
+        self.rename.props.sensitive = single
         self.delete.props.sensitive = selected
+
+        if selected:
+            self.action_stack.set_visible_child(self.selection_box)
+        else:
+            self.action_stack.set_visible_child(self.navigation_box)
 
     def _on_row_activated(self, widget, row):
         if row is None:
@@ -176,20 +193,35 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.set_rename_mode(toggled)
 
     def _on_delete_clicked(self, button):
-        row = self.list.get_selected_row()
+        rows = self.list.get_selected_rows()
 
-        name = os.path.basename(row.path)
-        description =  f'{name} will be deleted'
+        if len(rows) == 1:
+            name = os.path.basename(rows[0].path)
+        else:
+            name = f'{len(rows)} files'
 
-        popup = PortfolioPopup(description, self.on_popup_confirmed, self.on_popup_cancelled, row)
+        description = f'{name} will be deleted'
+
+        popup = PortfolioPopup(
+            description,
+            self.on_popup_confirmed,
+            self.on_popup_cancelled,
+            rows)
         popup.props.reveal_child = True
 
         self.popup_box.add(popup)
 
-    def on_popup_confirmed(self, button, popup, row):
-        row.delete()
-        row.destroy()
+    def on_popup_confirmed(self, button, popup, rows):
+        for row in rows:
+            row.delete()
+            row.destroy()
         popup.destroy()
 
-    def on_popup_cancelled(self, button, popup, row):
+    def on_popup_cancelled(self, button, popup, rows):
         popup.destroy()
+
+    def _on_select_all(self, button):
+        self.list.select_all()
+
+    def _on_select_none(self, button):
+        self.list.unselect_all()

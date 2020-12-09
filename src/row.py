@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import shutil
 
 from gi.repository import GLib, Gtk
 
@@ -31,17 +32,25 @@ class PortfolioRow(Gtk.ListBoxRow):
 
     def __init__(self, list, path, icon_name, text):
         super().__init__()
+        self._list = list
         self.path = path
         self.icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID)
         self.name.set_text(text)
 
         self.select_gesture = Gtk.GestureLongPress.new(self)
-        self.select_gesture.connect('pressed', self._on_long_pressed, list)
-        self.connect_after('button-release-event', self._on_release)
-        list.connect_after('row-selected', self._on_row_selected)
+        self.select_gesture.connect('pressed', self._on_long_pressed)
+        self._selected_id = self._list.connect_after('row-selected', self._on_row_selected)
+
+    def destroy(self):
+        self._list.disconnect(self._selected_id)
+        self._list = None
+        super().destroy()
 
     def delete(self):
-        os.unlink(self.path)
+        if os.path.isdir(self.path):
+            shutil.rmtree(self.path)
+        else:
+            os.unlink(self.path)
 
     def set_rename_mode(self, mode=False):
         if mode is True:
@@ -63,27 +72,13 @@ class PortfolioRow(Gtk.ListBoxRow):
             self.path = new_path
             self.name.set_text(new_name)
 
-    def _on_long_pressed(self, gesture, x, y, list):
-        selected = list.get_selected_row() == self
-        self.props.activatable = False
-
-        if not selected:
-            list.select_row(self)
-        else:
-            list.unselect_row(self)
-            self.props.selectable = False
-
-    def _on_release(self, widget, event):
-        selectable = self.props.selectable
-        activatable = self.props.activatable
-
-        if not selectable and not activatable:
-            GLib.idle_add(self._on_restore)
+    def _on_long_pressed(self, gesture, x, y):
+        self._list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
+        self._list.select_row(self)
 
     def _on_row_selected(self, widget, row):
-        if row is not None and row != self:
-            self._on_restore()
-
-    def _on_restore(self):
-        self.props.activatable = True
-        self.props.selectable = True
+        self.props.activatable = False
+        rows = self._list.get_selected_rows()
+        if not rows:
+            self._list.set_selection_mode(Gtk.SelectionMode.NONE)
+            self.props.activatable = True

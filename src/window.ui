@@ -30,7 +30,7 @@
                       <object class="GtkListBox" id="list">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="selection-mode">browse</property>
+                        <property name="selection-mode">multiple</property>
                       </object>
                     </child>
                   </object>
@@ -53,50 +53,115 @@
                     <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkStack" id="action_stack">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkButton" id="previous">
+                          <object class="GtkBox" id="navigation_box">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
+                            <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkImage">
+                              <object class="GtkButton" id="previous">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="icon-name">go-previous-symbolic</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">go-previous-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="previous-button"/>
+                                </style>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
-                            <style>
-                              <class name="previous-button"/>
-                            </style>
+                            <child>
+                              <object class="GtkButton" id="next">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">go-next-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="next-button"/>
+                                </style>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="name">page0</property>
+                            <property name="title" translatable="yes">page0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="next">
+                          <object class="GtkBox" id="selection_box">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
+                            <property name="can-focus">False</property>
                             <child>
-                              <object class="GtkImage">
+                              <object class="GtkButton" id="select_all">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="icon-name">go-next-symbolic</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">checkbox-checked-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="select-all-button"/>
+                                </style>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
-                            <style>
-                              <class name="next-button"/>
-                            </style>
+                            <child>
+                              <object class="GtkButton" id="select_none">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">checkbox-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="select-none-button"/>
+                                </style>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
+                            <property name="name">page1</property>
+                            <property name="title" translatable="yes">page1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
