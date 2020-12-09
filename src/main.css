@@ -26,12 +26,16 @@
 
 .select-all-button,
 .previous-button {
+    padding-right: 12.5px;
+    padding-left: 12.5px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
 .select-none-button,
 .next-button {
+    padding-right: 12.5px;
+    padding-left: 12.5px;
     border-left: none;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -39,5 +43,9 @@
 
 .delete-button {
   background-color: @error_color;
+  margin-right: 5px;
+}
+
+.confirm-button {
   margin-right: 5px;
 }
