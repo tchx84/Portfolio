@@ -49,3 +49,11 @@
 .confirm-button {
   margin-right: 5px;
 }
+
+.placeholder {
+    color: @insensitive_fg_color;
+}
+.placeholder label {
+    margin: 10px;
+    font-size: 20px;
+}

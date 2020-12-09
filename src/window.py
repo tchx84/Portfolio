@@ -21,6 +21,7 @@ from gi.repository import Gtk, Gio, GObject
 
 from .row import PortfolioRow
 from .popup import PortfolioPopup
+from .placeholder import PortfolioPlaceholder
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
@@ -59,9 +60,13 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._history = []
         self._index = -1
 
+        placeholder = PortfolioPlaceholder()
+        placeholder.show_all()
+
         self.list.set_filter_func(self._filter)
         self.list.connect('selected-rows-changed', self._on_row_selected)
         self.list.connect('row-activated', self._on_row_activated)
+        self.list.set_placeholder(placeholder)
         self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
         self.previous.connect('clicked', self._on_go_previous)
