@@ -17,7 +17,7 @@
 
 import os
 
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/row.ui')
@@ -37,8 +37,8 @@ class PortfolioRow(Gtk.ListBoxRow):
 
         self.select_gesture = Gtk.GestureLongPress.new(self)
         self.select_gesture.connect('pressed', self._on_long_pressed, list)
-        self.select_gesture.connect_after('cancelled', self._on_cancelled, list)
-
+        self.connect_after('button-release-event', self._on_release)
+        list.connect_after('row-selected', self._on_row_selected)
 
     def delete(self):
         os.unlink(self.path)
@@ -64,8 +64,26 @@ class PortfolioRow(Gtk.ListBoxRow):
             self.name.set_text(new_name)
 
     def _on_long_pressed(self, gesture, x, y, list):
+        selected = list.get_selected_row() == self
         self.props.activatable = False
-        list.select_row(self)
 
-    def _on_cancelled(self, gesture, data=None):
+        if not selected:
+            list.select_row(self)
+        else:
+            list.unselect_row(self)
+            self.props.selectable = False
+
+    def _on_release(self, widget, event):
+        selectable = self.props.selectable
+        activatable = self.props.activatable
+
+        if not selectable and not activatable:
+            GLib.idle_add(self._on_restore)
+
+    def _on_row_selected(self, widget, row):
+        if row is not None and row != self:
+            self._on_restore()
+
+    def _on_restore(self):
         self.props.activatable = True
+        self.props.selectable = True
