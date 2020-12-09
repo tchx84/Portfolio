@@ -32,6 +32,7 @@ portfolio_sources = [
   'row.py',
   'about.py',
   'popup.py',
+  'placeholder.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)

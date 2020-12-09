@@ -6,6 +6,7 @@
     <file>about.ui</file>
     <file>menu.ui</file>
     <file>popup.ui</file>
+    <file>placeholder.ui</file>
     <file>main.css</file>
   </gresource>
 </gresources>
