@@ -73,6 +73,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         placeholder = PortfolioPlaceholder()
         placeholder.show_all()
 
+        self.list.set_sort_func(self._sort)
         self.list.set_filter_func(self._filter)
         self.list.connect('selected-rows-changed', self._on_row_selected)
         self.list.connect('row-activated', self._on_row_activated)
@@ -107,6 +108,25 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if not text:
             return True
         return text.lower() in os.path.basename(row.path.lower())
+
+    def _sort(self, row1, row2):
+        row1_is_dir = os.path.isdir(row1.path)
+        row2_is_dir = os.path.isdir(row2.path)
+
+        if row1_is_dir and not row2_is_dir:
+            return -1
+        elif not row1_is_dir and row2_is_dir:
+            return 1
+
+        path1 = row1.path.lower()
+        path2 = row2.path.lower()
+
+        if path1 < path2:
+            return -1
+        elif path1 > path2:
+            return 1
+
+        return 0
 
     def _populate(self, directory, navigating=False):
         for row in self.list.get_children():
