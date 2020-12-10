@@ -113,6 +113,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             row.destroy()
 
         for file_name in os.listdir(directory):
+            # XXX ignore these until I can add some filters
+            if file_name.startswith('.'):
+                continue
             path = os.path.join(directory, file_name)
             icon_name = self._find_icon(path)
             row = PortfolioRow(self.list, path, icon_name, file_name)
