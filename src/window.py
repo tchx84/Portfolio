@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import shutil
 
 from gi.repository import Gtk, Gio, GObject
 
@@ -34,6 +35,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     search = Gtk.Template.Child()
     rename = Gtk.Template.Child()
     delete = Gtk.Template.Child()
+    cut = Gtk.Template.Child()
+    copy = Gtk.Template.Child()
+    paste = Gtk.Template.Child()
     menu = Gtk.Template.Child()
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
@@ -57,6 +61,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         builder = Gtk.Builder.new_from_resource('/dev/tchx84/Portfolio/menu.ui')
         self.menu.set_menu_model(builder.get_object('menu'))
 
+        self._to_copy = []
+        self._to_cut = []
         self._history = []
         self._index = -1
 
@@ -73,6 +79,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.next.connect('clicked', self._on_go_next)
         self.rename.connect('toggled', self._on_rename_toggled)
         self.delete.connect('clicked', self._on_delete_clicked)
+        self.cut.connect('clicked', self._on_cut_clicked)
+        self.copy.connect('clicked', self._on_copy_clicked)
+        self.paste.connect('clicked', self._on_paste_clicked)
         self.select_all.connect('clicked', self._on_select_all)
         self.select_none.connect('clicked', self._on_select_none)
 
@@ -121,14 +130,60 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         else:
             Gio.AppInfo.launch_default_for_uri(f'file://{path}')
 
-    def _update_navigation(self, override=None):
-        if override is not None:
-            self.previous.props.sensitive = override
-            self.next.props.sensitive = override
+    def _refresh(self):
+        self._move(self._history[self._index], True)
+
+    def _update_search(self):
+        sensitive = not self.rename.props.active
+        self.search.props.sensitive = sensitive
+        self.search_entry.props.sensitive = sensitive
+
+    def _update_navigation(self):
+        rows = self.list.get_selected_rows()
+        selected = len(rows) >= 1
+
+        if selected:
+            self.previous.props.sensitive = False
+            self.next.props.sensitive = False
             return
 
         self.previous.props.sensitive = True if self._index > 0 else False
         self.next.props.sensitive = True if len(self._history) - 1 > self._index else False
+
+    def _update_tools(self):
+        rows = self.list.get_selected_rows()
+        sensitive = len(rows) >= 1 and not self.rename.props.active
+
+        self.delete.props.sensitive = sensitive
+        self.cut.props.sensitive = sensitive
+        self.copy.props.sensitive = sensitive
+        self.paste.props.sensitive = sensitive
+
+        self._update_rename()
+        self._update_paste()
+
+    def _update_multi_selection(self):
+        sensitive = not self.rename.props.active
+
+        self.select_all.props.sensitive = sensitive
+        self.select_none.props.sensitive = sensitive
+
+    def _update_action_stack(self):
+        rows = self.list.get_selected_rows()
+        selected = len(rows) >= 1
+        child = self.selection_box if selected else self.navigation_box
+        self.action_stack.set_visible_child(child)
+
+    def _update_rename(self):
+        rows = self.list.get_selected_rows()
+        single = len(rows) == 1
+        self.rename.props.sensitive = single
+
+    def _update_paste(self):
+        rows = self.list.get_selected_rows()
+        selected = len(rows) >= 1
+        to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
+        self.paste.props.sensitive = not selected and to_paste
 
     def _reset_search(self):
         self.search.set_active(False)
@@ -137,17 +192,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search.grab_focus()
 
     def _on_row_selected(self, widget):
-        rows = self.list.get_selected_rows()
-        selected = len(rows) >= 1
-        single = len(rows) == 1
-
-        self.rename.props.sensitive = single
-        self.delete.props.sensitive = selected
-
-        if selected:
-            self.action_stack.set_visible_child(self.selection_box)
-        else:
-            self.action_stack.set_visible_child(self.navigation_box)
+        self._update_tools()
+        self._update_navigation()
+        self._update_action_stack()
 
     def _on_row_activated(self, widget, row):
         if row is None:
@@ -178,24 +225,31 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._reset_search()
         
     def _on_rename_toggled(self, button):
-        toggled = self.rename.get_active()
         row = self.list.get_selected_row()
-        deactivated = not toggled
+        active = self.rename.get_active()
+        sensitive = not active
 
         # XXX find a better way to disallow selection
         for child in self.list.get_children():
             if child  == row:
                 continue
-            child.props.sensitive = deactivated
+            child.props.sensitive = sensitive
 
-        # Disallow navigation
-        if toggled:
-            self._update_navigation(deactivated)
+        self._update_search()
+        self._update_multi_selection()
+        self._update_tools()
+
+        if active:
+            row.new_name.grab_focus()
         else:
-            self._update_navigation()
+            new_name = row.new_name.get_text()
+            directory = os.path.dirname(row.path)
+            new_path = os.path.join(directory, new_name)
+            os.rename(row.path, new_path)
             self.search.grab_focus()
+            self.list.unselect_all()
 
-        row.set_rename_mode(toggled)
+        row.toggle_mode()
 
     def _on_delete_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -209,21 +263,87 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         popup = PortfolioPopup(
             description,
-            self.on_popup_confirmed,
-            self.on_popup_cancelled,
+            self.on_delete_confirmed,
+            None,
             rows)
         popup.props.reveal_child = True
 
         self.popup_box.add(popup)
 
-    def on_popup_confirmed(self, button, popup, rows):
+    def _on_cut_clicked(self, button):
+        print('_on_cut_clicked')
+        rows = self.list.get_selected_rows()
+        self._to_cut = [row.path for row in rows]
+        self._to_copy = []
+
+        if len(rows) == 1:
+            name = os.path.basename(rows[0].path)
+        else:
+            name = f'{len(rows)} files'
+
+        popup = PortfolioPopup(
+            f"{name} will be cut",
+            None,
+            None,
+            None)
+        popup.props.reveal_child = True
+        self.popup_box.add(popup)
+
+        self.list.unselect_all()
+
+
+    def _on_copy_clicked(self, button):
+        rows = self.list.get_selected_rows()
+        self._to_copy = [row.path for row in rows]
+        self._to_cut = []
+
+        if len(rows) == 1:
+            name = os.path.basename(rows[0].path)
+        else:
+            name = f'{len(rows)} files'
+
+        popup = PortfolioPopup(
+            f"{name} will be copied",
+            None,
+            None,
+            None)
+        popup.props.reveal_child = True
+        self.popup_box.add(popup)
+
+        self.list.unselect_all()
+
+    def _on_paste_clicked(self, button):
+        directory = self._history[self._index]
+
+        for path in self._to_cut:
+            name = os.path.basename(path)
+            destination = os.path.join(directory, name)
+            shutil.move(path, destination)
+
+        for path in self._to_copy:
+            if os.path.isdir(path):
+                name = os.path.basename(path)
+                destination = os.path.join(directory, name)
+                shutil.copytree(path, destination)
+            else:
+                shutil.copy(path, directory)
+
+        self._to_cut = []
+        self._to_copy = []
+        self._refresh()
+
+        self.list.unselect_all()
+
+    def on_delete_confirmed(self, button, popup, rows):
         for row in rows:
-            row.delete()
+            if os.path.isdir(row.path):
+                shutil.rmtree(row.path)
+            else:
+                os.unlink(row.path)
             row.destroy()
         popup.destroy()
 
-    def on_popup_cancelled(self, button, popup, rows):
-        popup.destroy()
+        self.list.unselect_all()
 
     def _on_select_all(self, button):
         self.list.select_all()

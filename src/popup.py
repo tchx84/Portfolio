@@ -30,5 +30,19 @@ class PortfolioPopup(Gtk.Revealer):
         super().__init__()
 
         self.description.set_text(description)
+
+        if on_confirm is None and on_cancel is None:
+            self.cancel_button.props.visible = False
+
+        if on_confirm is None:
+            on_confirm = self._on_default_callback
+
+        if on_cancel is None:
+            on_cancel = self._on_default_callback
+
         self.confirm_button.connect('clicked', on_confirm, self, data)
         self.cancel_button.connect('clicked', on_cancel, self, data)
+
+    def _on_default_callback(self, button, popup, data):
+        self.destroy()
+

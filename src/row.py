@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import shutil
 
 from gi.repository import GLib, Gtk
 
@@ -46,31 +45,17 @@ class PortfolioRow(Gtk.ListBoxRow):
         self._list = None
         super().destroy()
 
-    def delete(self):
-        if os.path.isdir(self.path):
-            shutil.rmtree(self.path)
-        else:
-            os.unlink(self.path)
-
-    def set_rename_mode(self, mode=False):
-        if mode is True:
+    def toggle_mode(self):
+        if self.stack.get_visible_child() == self.name:
             self.new_name.set_text(self.name.get_text())
-            self.new_name.grab_focus()
             self.stack.set_visible_child(self.new_name)
         else:
+            directory = os.path.dirname(self.path)
+            self.name.set_text(self.new_name.get_text())
+            self.path = os.path.join(directory, self.name.get_text())
             self.stack.set_visible_child(self.name)
 
-            new_name = self.new_name.get_text()
-            if self.name.get_text() == new_name:
-                return
 
-            directory = os.path.dirname(self.path)
-            new_path = os.path.join(directory, new_name)
-
-            os.rename(self.path, new_path)
-
-            self.path = new_path
-            self.name.set_text(new_name)
 
     def _on_long_pressed(self, gesture, x, y):
         self._list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)

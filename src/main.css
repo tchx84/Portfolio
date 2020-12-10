@@ -41,9 +41,8 @@
     border-bottom-left-radius: 0px;
 }
 
-.delete-button {
-  background-color: @error_color;
-  margin-right: 5px;
+.tool-button {
+  margin-left: 5px;
 }
 
 .confirm-button {
