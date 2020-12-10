@@ -55,11 +55,12 @@ class PortfolioRow(Gtk.ListBoxRow):
             self.path = os.path.join(directory, self.name.get_text())
             self.stack.set_visible_child(self.name)
 
-
-
-    def _on_long_pressed(self, gesture, x, y):
+    def select(self):
         self._list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
         self._list.select_row(self)
+
+    def _on_long_pressed(self, gesture, x, y):
+        self.select()
 
     def _on_row_selected(self, widget, row):
         self.props.activatable = False

@@ -18,6 +18,7 @@
 import os
 import shutil
 
+from pathlib import Path
 from gi.repository import Gtk, Gio, GObject
 
 from .row import PortfolioRow
@@ -41,7 +42,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     menu = Gtk.Template.Child()
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
-
+    new_folder = Gtk.Template.Child()
 
     directory_box = Gtk.Template.Child()
     directory = Gtk.Template.Child()
@@ -50,8 +51,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     stack = Gtk.Template.Child()
     popup_box = Gtk.Template.Child()
     action_stack = Gtk.Template.Child()
+    tools_stack = Gtk.Template.Child()
     navigation_box = Gtk.Template.Child()
     selection_box = Gtk.Template.Child()
+    selection_tools = Gtk.Template.Child()
+    navigation_tools = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -84,6 +88,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.paste.connect('clicked', self._on_paste_clicked)
         self.select_all.connect('clicked', self._on_select_all)
         self.select_none.connect('clicked', self._on_select_none)
+        self.new_folder.connect('clicked', self._on_new_folder)
 
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
@@ -119,6 +124,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             self._index += 1
 
         self._update_navigation()
+        self._update_navigation_tools()
         self.directory.set_text(directory)
         self._reset_search()
 
@@ -150,18 +156,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.previous.props.sensitive = True if self._index > 0 else False
         self.next.props.sensitive = True if len(self._history) - 1 > self._index else False
 
-    def _update_tools(self):
-        rows = self.list.get_selected_rows()
-        sensitive = len(rows) >= 1 and not self.rename.props.active
-
-        self.delete.props.sensitive = sensitive
-        self.cut.props.sensitive = sensitive
-        self.copy.props.sensitive = sensitive
-        self.paste.props.sensitive = sensitive
-
-        self._update_rename()
-        self._update_paste()
-
     def _update_multi_selection(self):
         sensitive = not self.rename.props.active
 
@@ -174,16 +168,32 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         child = self.selection_box if selected else self.navigation_box
         self.action_stack.set_visible_child(child)
 
-    def _update_rename(self):
+    def _update_tools_stack(self):
         rows = self.list.get_selected_rows()
-        single = len(rows) == 1
-        self.rename.props.sensitive = single
+        selected = len(rows) >= 1
+        child = self.selection_tools if selected else self.navigation_tools
+        self.tools_stack.set_visible_child(child)
 
-    def _update_paste(self):
+    def _update_selection_tools(self):
+        rows = self.list.get_selected_rows()
+        sensitive = len(rows) >= 1 and not self.rename.props.active
+
+        self.delete.props.sensitive = sensitive
+        self.cut.props.sensitive = sensitive
+        self.copy.props.sensitive = sensitive
+
+        self._update_rename()
+
+    def _update_navigation_tools(self):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
         self.paste.props.sensitive = not selected and to_paste
+
+    def _update_rename(self):
+        rows = self.list.get_selected_rows()
+        single = len(rows) == 1
+        self.rename.props.sensitive = single
 
     def _reset_search(self):
         self.search.set_active(False)
@@ -192,9 +202,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search.grab_focus()
 
     def _on_row_selected(self, widget):
-        self._update_tools()
         self._update_navigation()
+        self._update_navigation_tools()
+        self._update_selection_tools()
         self._update_action_stack()
+        self._update_tools_stack()
 
     def _on_row_activated(self, widget, row):
         if row is None:
@@ -237,7 +249,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self._update_search()
         self._update_multi_selection()
-        self._update_tools()
+        self._update_selection_tools()
 
         if active:
             row.new_name.grab_focus()
@@ -350,3 +362,23 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_select_none(self, button):
         self.list.unselect_all()
+
+    def _on_new_folder(self, button):
+        directory = self._history[self._index]
+
+        counter = 1
+        folder_name = "New Folder"
+        while os.path.exists(os.path.join(directory, folder_name)):
+            folder_name = folder_name.split('(')[0]
+            folder_name = f'{folder_name}({counter})'
+            counter += 1
+
+        path = os.path.join(directory, folder_name)
+
+        Path(path).mkdir(parents=False, exist_ok=True)
+        icon_name = self._find_icon(path)
+
+        row = PortfolioRow(self.list, path, icon_name, folder_name)
+        self.list.add(row)
+        row.select()
+        self.rename.props.active = True
