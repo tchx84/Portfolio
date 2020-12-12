@@ -17,12 +17,16 @@
 
 import os
 
-from gi.repository import GLib, Gtk
+from gi.repository import GLib, Gtk, GObject
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/row.ui')
 class PortfolioRow(Gtk.ListBoxRow):
     __gtype_name__ = 'PortfolioRow'
+
+    __gsignals__ = {
+        'edit-done': (GObject.SIGNAL_RUN_FIRST, None, ())
+    }
 
     icon = Gtk.Template.Child()
     name = Gtk.Template.Child()
@@ -35,6 +39,8 @@ class PortfolioRow(Gtk.ListBoxRow):
         self.path = path
         self.icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID)
         self.name.set_text(text)
+
+        self.new_name.connect('activate', self._on_enter_pressed)
 
         self.select_gesture = Gtk.GestureLongPress.new(self)
         self.select_gesture.connect('pressed', self._on_long_pressed)
@@ -68,3 +74,6 @@ class PortfolioRow(Gtk.ListBoxRow):
         if not rows:
             self._list.set_selection_mode(Gtk.SelectionMode.NONE)
             self.props.activatable = True
+
+    def _on_enter_pressed(self, entry):
+        self.emit('edit-done')

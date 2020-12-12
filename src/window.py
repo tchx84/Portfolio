@@ -139,6 +139,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             path = os.path.join(directory, file_name)
             icon_name = self._find_icon(path)
             row = PortfolioRow(self.list, path, icon_name, file_name)
+            row.connect('edit-done', self._on_row_edited)
             self.list.add(row)
 
         if directory not in self._history or not navigating:
@@ -405,3 +406,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.list.add(row)
         row.select()
         self.rename.props.active = True
+
+    def _on_row_edited(self, button):
+        self.rename.props.active = False
