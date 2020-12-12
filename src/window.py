@@ -65,6 +65,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         builder = Gtk.Builder.new_from_resource('/dev/tchx84/Portfolio/menu.ui')
         self.menu.set_menu_model(builder.get_object('menu'))
 
+        self._editing = False
         self._to_copy = []
         self._to_cut = []
         self._history = []
@@ -75,8 +76,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.list.set_sort_func(self._sort)
         self.list.set_filter_func(self._filter)
-        self.list.connect('selected-rows-changed', self._on_row_selected)
-        self.list.connect('row-activated', self._on_row_activated)
+        self.list.connect('selected-rows-changed', self._on_rows_selection_changed)
         self.list.set_placeholder(placeholder)
         self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -138,9 +138,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
                 continue
             path = os.path.join(directory, file_name)
             icon_name = self._find_icon(path)
-            row = PortfolioRow(self.list, path, icon_name, file_name)
-            row.connect('edit-done', self._on_row_edited)
-            self.list.add(row)
+            self._add_row(path, icon_name, file_name)
 
         if directory not in self._history or not navigating:
             del self._history[self._index + 1:]
@@ -152,6 +150,15 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.directory.set_text(directory)
         self._reset_search()
 
+    def _add_row(self, path, icon_name, file_name):
+        row = PortfolioRow(path, icon_name, file_name)
+        # The order matters
+        row.connect('edit-done', self._on_row_edited)
+        row.connect('activate-selection-mode', self._on_activated_selection_mode)
+        row.connect_after('clicked', self._on_row_clicked)
+        self.list.add(row)
+        return row
+
     def _move(self, path, navigating=False):
         if path is None:
             return
@@ -162,6 +169,17 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _refresh(self):
         self._move(self._history[self._index], True)
+
+    def _switch_to_navigation_mode(self):
+        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
+
+    def _switch_to_selection_mode(self):
+        self.list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
+
+    def _update_mode(self):
+        rows = self.list.get_selected_rows()
+        if not rows:
+            self._switch_to_navigation_mode()
 
     def _update_search(self):
         sensitive = not self.rename.props.active
@@ -225,17 +243,13 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.list.invalidate_filter()
         self.search.grab_focus()
 
-    def _on_row_selected(self, widget):
+    def _on_rows_selection_changed(self, widget):
         self._update_navigation()
         self._update_navigation_tools()
         self._update_selection_tools()
         self._update_action_stack()
         self._update_tools_stack()
-
-    def _on_row_activated(self, widget, row):
-        if row is None:
-            return
-        self._move(row.path)
+        self._update_mode()
 
     def _on_go_previous(self, button):
         self._index -= 1
@@ -276,8 +290,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._update_selection_tools()
 
         if active:
+            self._editing = True
+            self._switch_to_selection_mode()
             row.new_name.grab_focus()
         else:
+            self._editing = False
             new_name = row.new_name.get_text()
             directory = os.path.dirname(row.path)
             new_path = os.path.join(directory, new_name)
@@ -307,7 +324,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.popup_box.add(popup)
 
     def _on_cut_clicked(self, button):
-        print('_on_cut_clicked')
         rows = self.list.get_selected_rows()
         self._to_cut = [row.path for row in rows]
         self._to_copy = []
@@ -326,7 +342,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.popup_box.add(popup)
 
         self.list.unselect_all()
-
+        self._update_mode()
 
     def _on_copy_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -347,6 +363,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.popup_box.add(popup)
 
         self.list.unselect_all()
+        self._update_mode()
 
     def _on_paste_clicked(self, button):
         directory = self._history[self._index]
@@ -369,6 +386,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._refresh()
 
         self.list.unselect_all()
+        self._update_mode()
 
     def on_delete_confirmed(self, button, popup, rows):
         for row in rows:
@@ -380,12 +398,15 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         popup.destroy()
 
         self.list.unselect_all()
+        self._update_mode()
 
     def _on_select_all(self, button):
         self.list.select_all()
+        self._update_mode()
 
     def _on_select_none(self, button):
         self.list.unselect_all()
+        self._update_mode()
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
@@ -402,10 +423,32 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         Path(path).mkdir(parents=False, exist_ok=True)
         icon_name = self._find_icon(path)
 
-        row = PortfolioRow(self.list, path, icon_name, folder_name)
-        self.list.add(row)
-        row.select()
+        row = self._add_row(path, icon_name, folder_name)
+        self._switch_to_selection_mode()
+        self.list.select_row(row)
         self.rename.props.active = True
 
     def _on_row_edited(self, button):
         self.rename.props.active = False
+
+    def _on_activated_selection_mode(self, row):
+        self._switch_to_selection_mode()
+
+    def _on_row_clicked(self, row):
+        rows = self.list.get_selected_rows()
+        mode =  self.list.get_selection_mode()
+
+        # In navigation mode we move or activate
+        if mode == Gtk.SelectionMode.NONE:
+            self._move(row.path)
+
+        if self._editing:
+            return
+
+        # In selection mode we handle selections
+        if row in rows:
+            self.list.unselect_row(row)
+            row.props.selectable = False
+        else:
+            row.props.selectable = True
+            self.list.select_row(row)
