@@ -401,6 +401,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._update_mode()
 
     def _on_select_all(self, button):
+        # Make sure all rows are selectable
+        for row in self.list.get_children():
+            row.props.selectable = True
         self.list.select_all()
         self._update_mode()
 
