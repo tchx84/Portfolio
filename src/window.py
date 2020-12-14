@@ -275,7 +275,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._reset_search()
         
     def _on_rename_toggled(self, button):
-        row = self.list.get_selected_row()
+        row = self.list.get_selected_rows()[-1]
         active = self.rename.get_active()
         sensitive = not active
 
