@@ -29,7 +29,7 @@ class PortfolioWorker(threading.Thread, GObject.GObject):
         'started': (GObject.SIGNAL_RUN_FIRST, None, (int,)),
         'updated': (GObject.SIGNAL_RUN_FIRST, None, (int, int)),
         'finished': (GObject.SIGNAL_RUN_FIRST, None, (int,)),
-        'failed': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'failed': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
     }
 
     def __init__(self):
@@ -53,14 +53,18 @@ class PortfolioCopyWorker(PortfolioWorker):
         GLib.idle_add(self._emit_signal, 'started', total)
 
         for index, path in enumerate(self._paths):
-            if os.path.isdir(path):
-                name = os.path.basename(path)
-                destination = os.path.join(self._directory, name)
-                shutil.copytree(path, destination)
+            try:
+                if os.path.isdir(path):
+                    name = os.path.basename(path)
+                    destination = os.path.join(self._directory, name)
+                    shutil.copytree(path, destination)
+                else:
+                    shutil.copy(path, self._directory)
+            except:
+                GLib.idle_add(self._emit_signal, 'failed', path)
+                return
             else:
-                shutil.copy(path, self._directory)
-
-            GLib.idle_add(self._emit_signal, 'updated', index, total)
+                GLib.idle_add(self._emit_signal, 'updated', index, total)
 
         GLib.idle_add(self._emit_signal, 'finished', total)
 
@@ -73,11 +77,15 @@ class PortfolioCutWorker(PortfolioCopyWorker):
         GLib.idle_add(self._emit_signal, 'started', total)
 
         for index, path in enumerate(self._paths):
-            name = os.path.basename(path)
-            destination = os.path.join(self._directory, name)
-            shutil.move(path, destination)
-
-            GLib.idle_add(self._emit_signal, 'updated', index, total)
+            try:
+                name = os.path.basename(path)
+                destination = os.path.join(self._directory, name)
+                shutil.move(path, destination)
+            except:
+                GLib.idle_add(self._emit_signal, 'failed', path)
+                return
+            else:
+                GLib.idle_add(self._emit_signal, 'updated', index, total)
 
         GLib.idle_add(self._emit_signal, 'finished', total)
 
@@ -90,11 +98,15 @@ class PortfolioDeleteWorker(PortfolioCopyWorker):
         GLib.idle_add(self._emit_signal, 'started', total)
 
         for index, path in enumerate(self._paths):
-            if os.path.isdir(path):
-                shutil.rmtree(path)
+            try:
+                if os.path.isdir(path):
+                    shutil.rmtree(path)
+                else:
+                    os.unlink(path)
+            except:
+                GLib.idle_add(self._emit_signal, 'failed', path)
+                return
             else:
-                os.unlink(path)
-
-            GLib.idle_add(self._emit_signal, 'updated', index, total)
+                GLib.idle_add(self._emit_signal, 'updated', index, total)
 
         GLib.idle_add(self._emit_signal, 'finished', total)

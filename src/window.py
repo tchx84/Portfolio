@@ -383,6 +383,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._worker.connect('started', self._on_paste_started)
         self._worker.connect('updated', self._on_paste_updated)
         self._worker.connect('finished', self._on_paste_finished)
+        self._worker.connect('failed', self._on_paste_failed)
         self._worker.start()
 
     def _on_paste_started(self, worker, total):
@@ -425,6 +426,24 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.list.unselect_all()
         self._update_mode()
 
+    def _on_paste_failed(self, worker, path):
+        self._pasting = False
+
+        name = os.path.basename(path)
+
+        self._popup.set_description( f"Could not paste {name}")
+        self._popup.cancel_button.props.sensitive = True
+
+        self._to_cut = []
+        self._to_copy = []
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+        self.list.unselect_all()
+        self._update_mode()
+
     def _on_delete_confirmed(self, button, popup, rows):
         self._popup.destroy()
 
@@ -434,6 +453,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._worker.connect('started', self._on_delete_started)
         self._worker.connect('updated', self._on_delete_updated)
         self._worker.connect('finished', self._on_delete_finished)
+        self._worker.connect('failed', self._on_delete_failed)
         self._worker.start()
 
     def _on_delete_started(self, worker, total):
@@ -464,6 +484,21 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             description = f"{total} file"
 
         self._popup.set_description( f"Successfully deleted {description}")
+        self._popup.cancel_button.props.sensitive = True
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+        self.list.unselect_all()
+        self._update_mode()
+
+    def _on_delete_failed(self, worker, path):
+        self._deleting = False
+
+        name = os.path.basename(path)
+
+        self._popup.set_description( f"Could not delete {name}")
         self._popup.cancel_button.props.sensitive = True
 
         self._update_search()
