@@ -15,7 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
+
+
+DEFAULT_CLOSE_TIME = 3
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/popup.ui')
@@ -31,18 +34,25 @@ class PortfolioPopup(Gtk.Revealer):
 
         self.description.set_text(description)
 
+        if on_confirm is not None:
+            self.confirm_button.connect('clicked', on_confirm, self, data)
+        else:
+            self.confirm_button.props.visible = False
+
+        if on_cancel is not None:
+            self.cancel_button.connect('clicked', on_cancel, self, data)
+
         if on_confirm is None and on_cancel is None:
-            self.cancel_button.props.visible = False
+            self.cancel_button.connect('clicked', self._on_default_callback, self, data)
+            GLib.timeout_add_seconds(
+                DEFAULT_CLOSE_TIME ,
+                self._on_default_callback,
+                None,
+                None,
+                None)
 
-        if on_confirm is None:
-            on_confirm = self._on_default_callback
-
-        if on_cancel is None:
-            on_cancel = self._on_default_callback
-
-        self.confirm_button.connect('clicked', on_confirm, self, data)
-        self.cancel_button.connect('clicked', on_cancel, self, data)
+    def set_description(self, description):
+        self.description.set_text(description)
 
     def _on_default_callback(self, button, popup, data):
         self.destroy()
-

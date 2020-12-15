@@ -24,6 +24,9 @@ from gi.repository import Gtk, Gio, GObject
 from .row import PortfolioRow
 from .popup import PortfolioPopup
 from .placeholder import PortfolioPlaceholder
+from .worker import PortfolioCutWorker
+from .worker import PortfolioCopyWorker
+from .worker import PortfolioDeleteWorker
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
@@ -65,6 +68,10 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         builder = Gtk.Builder.new_from_resource('/dev/tchx84/Portfolio/menu.ui')
         self.menu.set_menu_model(builder.get_object('menu'))
 
+        self._popup = None
+        self._worker = None
+        self._deleting = False
+        self._pasting = False
         self._editing = False
         self._to_copy = []
         self._to_cut = []
@@ -182,7 +189,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             self._switch_to_navigation_mode()
 
     def _update_search(self):
-        sensitive = not self.rename.props.active
+        sensitive = not self.rename.props.active and not self._pasting and not self._deleting
         self.search.props.sensitive = sensitive
         self.search_entry.props.sensitive = sensitive
 
@@ -190,7 +197,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
 
-        if selected:
+        if selected or self._pasting or self._deleting:
             self.previous.props.sensitive = False
             self.next.props.sensitive = False
             return
@@ -230,7 +237,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
-        self.paste.props.sensitive = not selected and to_paste
+        self.paste.props.sensitive = (not selected and to_paste and not self._pasting and not self._deleting)
+        self.new_folder.props.sensitive = (not selected and not self._pasting and not self._deleting)
 
     def _update_rename(self):
         rows = self.list.get_selected_rows()
@@ -310,18 +318,17 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if len(rows) == 1:
             name = os.path.basename(rows[0].path)
         else:
-            name = f'{len(rows)} files'
+            name = f'these {len(rows)} files'
 
-        description = f'{name} will be deleted'
+        description = f'Delete {name}?'
 
-        popup = PortfolioPopup(
+        self._popup = PortfolioPopup(
             description,
-            self.on_delete_confirmed,
-            None,
+            self._on_delete_confirmed,
+            self._on_popup_closed,
             rows)
-        popup.props.reveal_child = True
-
-        self.popup_box.add(popup)
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
 
     def _on_cut_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -334,12 +341,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             name = f'{len(rows)} files'
 
         popup = PortfolioPopup(
-            f"{name} will be cut",
+            f"{name} will be moved",
             None,
             None,
             None)
-        popup.props.reveal_child = True
         self.popup_box.add(popup)
+        popup.props.reveal_child = True
 
         self.list.unselect_all()
         self._update_mode()
@@ -359,8 +366,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             None,
             None,
             None)
-        popup.props.reveal_child = True
         self.popup_box.add(popup)
+        popup.props.reveal_child = True
 
         self.list.unselect_all()
         self._update_mode()
@@ -368,37 +375,107 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_paste_clicked(self, button):
         directory = self._history[self._index]
 
-        for path in self._to_cut:
-            name = os.path.basename(path)
-            destination = os.path.join(directory, name)
-            shutil.move(path, destination)
+        if self._to_cut:
+            self._worker = PortfolioCutWorker(self._to_cut, directory)
+        elif self._to_copy:
+            self._worker = PortfolioCopyWorker(self._to_copy, directory)
 
-        for path in self._to_copy:
-            if os.path.isdir(path):
-                name = os.path.basename(path)
-                destination = os.path.join(directory, name)
-                shutil.copytree(path, destination)
-            else:
-                shutil.copy(path, directory)
+        self._worker.connect('started', self._on_paste_started)
+        self._worker.connect('updated', self._on_paste_updated)
+        self._worker.connect('finished', self._on_paste_finished)
+        self._worker.start()
+
+    def _on_paste_started(self, worker, total):
+        self._pasting = True
+
+        self._popup = PortfolioPopup(
+            f"Preparing to paste {total} files...",
+            None,
+            self._on_popup_closed,
+            None)
+        self._popup.cancel_button.props.sensitive = False
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+    def _on_paste_updated(self, worker, index, total):
+        self._popup.set_description( f"Pasting {index + 1} of {total} files")
+        self._refresh()
+
+    def _on_paste_finished(self, worker, total):
+        self._pasting = False
+
+        description = f"{total} files"
+        if total == 1:
+            description = f"{total} file"
+
+        self._popup.set_description( f"Successfully pasted {description}")
+        self._popup.cancel_button.props.sensitive = True
 
         self._to_cut = []
         self._to_copy = []
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+        self.list.unselect_all()
+        self._update_mode()
+
+    def _on_delete_confirmed(self, button, popup, rows):
+        self._popup.destroy()
+
+        to_delete = [row.path for row in rows]
+
+        self._worker = PortfolioDeleteWorker(to_delete)
+        self._worker.connect('started', self._on_delete_started)
+        self._worker.connect('updated', self._on_delete_updated)
+        self._worker.connect('finished', self._on_delete_finished)
+        self._worker.start()
+
+    def _on_delete_started(self, worker, total):
+        self._deleting = True
+
+        self._popup = PortfolioPopup(
+            f"Preparing to delete {total} files...",
+            None,
+            self._on_popup_closed,
+            None)
+        self._popup.cancel_button.props.sensitive = False
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+    def _on_delete_updated(self, worker, index, total):
+        self._popup.set_description( f"Deleting {index + 1} of {total} files")
         self._refresh()
 
+    def _on_delete_finished(self, worker, total):
+        self._deleting = False
+
+        description = f"{total} files"
+        if total == 1:
+            description = f"{total} file"
+
+        self._popup.set_description( f"Successfully deleted {description}")
+        self._popup.cancel_button.props.sensitive = True
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
         self.list.unselect_all()
         self._update_mode()
 
-    def on_delete_confirmed(self, button, popup, rows):
-        for row in rows:
-            if os.path.isdir(row.path):
-                shutil.rmtree(row.path)
-            else:
-                os.unlink(row.path)
-            row.destroy()
-        popup.destroy()
-
-        self.list.unselect_all()
-        self._update_mode()
+    def _on_popup_closed(self, button, popup, data):
+        self._popup.destroy()
+        self._popup = None
 
     def _on_select_all(self, button):
         # Make sure all rows are selectable

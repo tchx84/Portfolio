@@ -33,6 +33,7 @@ portfolio_sources = [
   'about.py',
   'popup.py',
   'placeholder.py',
+  'worker.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)
