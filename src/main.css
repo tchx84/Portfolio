@@ -1,3 +1,5 @@
+/* app */
+
 .directory-box {
     background-color: @theme_base_color;
     border-style: solid;
@@ -92,4 +94,11 @@
 
 window .menu.background label {
     padding: 7.5px 0px;
+}
+
+/* rows magic */
+
+.preselected {
+    color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
 }

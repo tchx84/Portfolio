@@ -33,6 +33,8 @@ class PortfolioRow(Gtk.ListBoxRow):
         'clicked': (GObject.SIGNAL_RUN_FIRST, None, ())
     }
 
+    PRESELECTED_STYLE_CLASS = 'preselected'
+
     icon = Gtk.Template.Child()
     name = Gtk.Template.Child()
     new_name = Gtk.Template.Child()
@@ -49,6 +51,17 @@ class PortfolioRow(Gtk.ListBoxRow):
         self.new_name.connect('activate', self._on_enter_pressed)
         self.select_gesture.connect('pressed', self._on_long_pressed)
         self.connect_after('button-release-event', self._on_button_released)
+
+
+    def preselect(self):
+        context = self.get_style_context()
+        if not context.has_class(self.PRESELECTED_STYLE_CLASS):
+           context.add_class(self.PRESELECTED_STYLE_CLASS)
+
+    def deselect(self):
+        context = self.get_style_context()
+        if context.has_class(self.PRESELECTED_STYLE_CLASS):
+            context.remove_class(self.PRESELECTED_STYLE_CLASS)
 
     def rename(self):
         self.new_name.set_text(self.name.get_text())

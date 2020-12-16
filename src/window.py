@@ -630,6 +630,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_activated_selection_mode(self, row):
         self._switch_to_selection_mode()
+        row.preselect()
 
     def _on_row_clicked(self, row):
         rows = self.list.get_selected_rows()
@@ -649,3 +650,4 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         else:
             row.props.selectable = True
             self.list.select_row(row)
+            row.deselect()
