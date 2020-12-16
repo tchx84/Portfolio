@@ -25,7 +25,10 @@ class PortfolioRow(Gtk.ListBoxRow):
     __gtype_name__ = 'PortfolioRow'
 
     __gsignals__ = {
-        'edit-done': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'rename-started': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'rename-updated': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'rename-finished': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'rename-failed': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
         'activate-selection-mode': (GObject.SIGNAL_RUN_FIRST, None, ()),
         'clicked': (GObject.SIGNAL_RUN_FIRST, None, ())
     }
@@ -47,21 +50,29 @@ class PortfolioRow(Gtk.ListBoxRow):
         self.select_gesture.connect('pressed', self._on_long_pressed)
         self.connect_after('button-release-event', self._on_button_released)
 
-    def toggle_mode(self):
-        if self.stack.get_visible_child() == self.name:
-            self.new_name.set_text(self.name.get_text())
-            self.stack.set_visible_child(self.new_name)
-        else:
-            directory = os.path.dirname(self.path)
-            self.name.set_text(self.new_name.get_text())
-            self.path = os.path.join(directory, self.name.get_text())
-            self.stack.set_visible_child(self.name)
+    def rename(self):
+        self.new_name.set_text(self.name.get_text())
+        self.stack.set_visible_child(self.new_name)
+        self.new_name.grab_focus()
+        self.emit('rename-started')
 
     def _on_long_pressed(self, gesture, x, y):
         self.emit('activate-selection-mode')
 
     def _on_enter_pressed(self, entry):
-        self.emit('edit-done')
+        directory = os.path.dirname(self.path)
+        new_name = self.new_name.get_text()
+        path = os.path.join(directory, new_name)
+
+        try:
+            os.rename(self.path, path)
+            self.emit('rename-updated')
+            self.name.set_text(new_name)
+            self.path = path
+            self.stack.set_visible_child(self.name)
+            self.emit('rename-finished')
+        except:
+            self.emit('rename-failed', new_name)
 
     def _on_button_released(self, row, data=None):
         self.emit('clicked');

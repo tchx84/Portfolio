@@ -269,7 +269,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToggleButton" id="rename">
+                              <object class="GtkButton" id="rename">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
@@ -280,9 +280,6 @@
                                     <property name="icon-name">document-edit-symbolic</property>
                                   </object>
                                 </child>
-                                <style>
-                                  <class name="tool-button"/>
-                                </style>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

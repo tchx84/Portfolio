@@ -91,7 +91,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.previous.connect('clicked', self._on_go_previous)
         self.next.connect('clicked', self._on_go_next)
-        self.rename.connect('toggled', self._on_rename_toggled)
+        self.rename.connect('clicked', self._on_rename_clicked)
         self.delete.connect('clicked', self._on_delete_clicked)
         self.cut.connect('clicked', self._on_cut_clicked)
         self.copy.connect('clicked', self._on_copy_clicked)
@@ -148,7 +148,10 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _add_row(self, path, icon_name, file_name):
         row = PortfolioRow(path, icon_name, file_name)
         # The order matters
-        row.connect('edit-done', self._on_row_edited)
+        row.connect('rename-started', self._on_rename_started)
+        row.connect('rename-updated', self._on_rename_updated)
+        row.connect('rename-finished', self._on_rename_finished)
+        row.connect('rename-failed', self._on_rename_failed)
         row.connect('activate-selection-mode', self._on_activated_selection_mode)
         row.connect_after('clicked', self._on_row_clicked)
         self.list.add(row)
@@ -159,10 +162,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             return
         elif os.path.isdir(path):
             self._populate(path)
-            if path not in self._history or not navigating:
-                del self._history[self._index + 1:]
-                self._history.append(path)
-                self._index += 1
+            self._update_history(path, navigating)
         else:
             Gio.AppInfo.launch_default_for_uri(f'file://{path}')
 
@@ -180,9 +180,15 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if not rows:
             self._switch_to_navigation_mode()
 
+    def _update_history(self, path, navigating):
+        if path not in self._history or not navigating:
+            del self._history[self._index + 1:]
+            self._history.append(path)
+            self._index += 1
+
     def _update_search(self):
         sensitive = (
-                not self.rename.props.active and
+                not self._editing and
                 not self._pasting and
                 not self._deleting and
                 not self._loading
@@ -203,7 +209,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.next.props.sensitive = True if len(self._history) - 1 > self._index else False
 
     def _update_multi_selection(self):
-        sensitive = not self.rename.props.active
+        sensitive = not self._editing
 
         self.select_all.props.sensitive = sensitive
         self.select_none.props.sensitive = sensitive
@@ -222,7 +228,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _update_selection_tools(self):
         rows = self.list.get_selected_rows()
-        sensitive = len(rows) >= 1 and not self.rename.props.active
+        sensitive = len(rows) >= 1 and not self._editing
 
         self.delete.props.sensitive = sensitive
         self.cut.props.sensitive = sensitive
@@ -248,8 +254,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _update_rename(self):
         rows = self.list.get_selected_rows()
-        single = len(rows) == 1
-        self.rename.props.sensitive = single
+        sensitive = len(rows) == 1 and not self._editing
+        self.rename.props.sensitive = sensitive
 
     def _reset_search(self):
         self.search.set_active(False)
@@ -330,36 +336,48 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_search_stopped(self, entry):
         self._reset_search()
-        
-    def _on_rename_toggled(self, button):
-        row = self.list.get_selected_rows()[-1]
-        active = self.rename.get_active()
-        sensitive = not active
 
-        # XXX find a better way to disallow selection
-        for child in self.list.get_children():
-            if child  == row:
-                continue
-            child.props.sensitive = sensitive
+    def _on_rename_clicked(self, button):
+        row = self.list.get_selected_rows()[-1]
+        row.rename()
+
+    def _on_rename_started(self, row):
+        self._editing = True
 
         self._update_search()
         self._update_multi_selection()
         self._update_selection_tools()
 
-        if active:
-            self._editing = True
-            self._switch_to_selection_mode()
-            row.new_name.grab_focus()
-        else:
-            self._editing = False
-            new_name = row.new_name.get_text()
-            directory = os.path.dirname(row.path)
-            new_path = os.path.join(directory, new_name)
-            os.rename(row.path, new_path)
-            self.search.grab_focus()
-            self.list.unselect_all()
+    def _on_rename_updated(self, row):
+        # remove this folder from history
+        self._history = [
+            path
+            for path
+            in self._history
+            if not path.startswith(row.path)
+        ]
 
-        row.toggle_mode()
+    def _on_rename_finished(self, row):
+        self._editing = False
+
+        self.search.grab_focus()
+        self.list.unselect_all()
+
+        self._update_search()
+        self._update_multi_selection()
+        self._update_selection_tools()
+
+    def _on_rename_failed(self, row, name):
+        if self._popup is not None:
+            self._popup.destroy()
+
+        self._popup = PortfolioPopup(
+            f"{name} already exists",
+            None,
+            None,
+            None)
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
 
     def _on_delete_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -600,10 +618,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row = self._add_row(path, icon_name, folder_name)
         self._switch_to_selection_mode()
         self.list.select_row(row)
-        self.rename.props.active = True
-
-    def _on_row_edited(self, button):
-        self.rename.props.active = False
+        row.rename()
 
     def _on_activated_selection_mode(self, row):
         self._switch_to_selection_mode()
