@@ -75,6 +75,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._deleting = False
         self._pasting = False
         self._editing = False
+        self._to_load = []
         self._to_copy = []
         self._to_cut = []
         self._history = []
@@ -154,7 +155,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.connect('rename-failed', self._on_rename_failed)
         row.connect('activate-selection-mode', self._on_activated_selection_mode)
         row.connect_after('clicked', self._on_row_clicked)
-        self.list.add(row)
         return row
 
     def _move(self, path, navigating=False):
@@ -265,6 +265,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_load_started(self, worker, directory):
         self._loading = True
+        self._to_load = []
 
         for row in self.list.get_children():
             row.destroy()
@@ -285,13 +286,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._update_navigation()
         self._update_navigation_tools()
 
-    def _on_load_updated(self, worker, directory, path, name, index, total):
-        icon = self._find_icon(path)
-        self._add_row(path, icon, name)
+    def _on_load_updated(self, worker, directory, found, index, total):
+        for path, name in found:
+            icon = self._find_icon(path)
+            row = self._add_row(path, icon, name)
+            self._to_load.append(row)
         self._popup.set_description(f"Loading {index + 1} of {total} files")
 
     def _on_load_finished(self, worker, directory):
         self._loading = False
+
+        for row in self._to_load:
+            self.list.add(row)
+        self._to_load = []
 
         self._popup.destroy()
 
@@ -617,6 +624,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         row = self._add_row(path, icon_name, folder_name)
         self._switch_to_selection_mode()
+        self.list.add(row)
         self.list.select_row(row)
         row.rename()
 
