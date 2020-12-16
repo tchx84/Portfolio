@@ -78,6 +78,9 @@ class PortfolioRow(Gtk.ListBoxRow):
         path = os.path.join(directory, new_name)
 
         try:
+            # XXX respect empty folders
+            if self.path != path and os.path.exists(path):
+                raise FileExistsError()
             os.rename(self.path, path)
             self.emit('rename-updated')
             self.name.set_text(new_name)
