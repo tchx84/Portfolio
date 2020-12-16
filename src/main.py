@@ -32,9 +32,13 @@ class Application(Gtk.Application):
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
 
     def _setup_actions(self):
+        help_action = Gio.SimpleAction(name='help', state=None)
+        help_action.connect('activate', self._on_help_activated)
+
         about_action = Gio.SimpleAction(name='about', state=None)
         about_action.connect('activate', self._on_about_activated)
 
+        self.add_action(help_action)
         self.add_action(about_action)
 
     def _setup_styles(self):
@@ -55,6 +59,9 @@ class Application(Gtk.Application):
         about = PortfolioAbout()
         about.set_transient_for(self.props.active_window)
         about.present()
+
+    def _on_help_activated(self, action, data):
+        Gio.AppInfo.launch_default_for_uri('https://github.com/tchx84/Portfolio', None)
 
 
 def main(version):

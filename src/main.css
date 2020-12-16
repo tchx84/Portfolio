@@ -87,3 +87,9 @@
     margin-top: 10px;
     font-size: small;
 }
+
+/* menu */
+
+window .menu.background label {
+    padding: 7.5px 0px;
+}

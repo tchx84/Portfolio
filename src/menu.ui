@@ -3,6 +3,10 @@
   <menu id="menu">
     <section>
       <item>
+        <attribute name="action">app.help</attribute>
+        <attribute name="label" translatable="yes">Help</attribute>
+      </item>
+      <item>
         <attribute name="action">app.about</attribute>
         <attribute name="label" translatable="yes">About Portfolio</attribute>
       </item>
