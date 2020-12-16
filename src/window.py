@@ -498,6 +498,16 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         to_delete = [row.path for row in rows]
 
+        # clean history entries from deleted paths
+        directory = self._history[self._index]
+        self._history = [
+            path
+            for path
+            in self._history
+            if not path.startswith(directory)
+            or path == directory
+        ]
+
         self._worker = PortfolioDeleteWorker(to_delete)
         self._worker.connect('started', self._on_delete_started)
         self._worker.connect('updated', self._on_delete_updated)
