@@ -56,3 +56,34 @@
     margin: 10px;
     font-size: 20px;
 }
+
+/* custom about */
+
+.about-container {
+    margin: 10px 20px;
+}
+.about-container .name-label {
+    margin-top: 10px;
+    font-size: medium;
+    font-weight: bold;
+}
+.about-container .version-label {
+    margin-top: 10px;
+    font-size: medium;
+}
+.about-container .description-label {
+    margin-top: 15px;
+    font-size: medium;
+}
+.about-container .website-label {
+    margin-top: 10px;
+    font-size: medium;
+}
+.about-container .author-label {
+    margin-top: 10px;
+    font-size: small;
+}
+.about-container .license-label {
+    margin-top: 10px;
+    font-size: small;
+}

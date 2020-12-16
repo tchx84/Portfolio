@@ -19,7 +19,7 @@ from gi.repository import Gtk
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/about.ui')
-class PortfolioAbout(Gtk.AboutDialog):
+class PortfolioAbout(Gtk.Window):
     __gtype_name__ = 'PortfolioAbout'
 
     def __init__(self, **kargs):

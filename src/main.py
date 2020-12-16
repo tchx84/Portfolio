@@ -53,6 +53,7 @@ class Application(Gtk.Application):
 
     def _on_about_activated(self, action, data):
         about = PortfolioAbout()
+        about.set_transient_for(self.props.active_window)
         about.present()
 
 
