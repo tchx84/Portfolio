@@ -27,6 +27,7 @@ from .placeholder import PortfolioPlaceholder
 from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
 from .worker import PortfolioDeleteWorker
+from .worker import PortfolioLoadWorker
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
@@ -70,6 +71,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self._popup = None
         self._worker = None
+        self._loading = False
         self._deleting = False
         self._pasting = False
         self._editing = False
@@ -102,7 +104,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search_entry.connect('search-changed', self._on_search_changed)
         self.search_entry.connect('stop-search', self._on_search_stopped)
 
-        self._populate(os.path.expanduser('~'))
+        self._move(os.path.expanduser('~'))
 
     def _find_icon(self, path):
         if os.path.isdir(path):
@@ -135,27 +137,13 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         return 0
 
-    def _populate(self, directory, navigating=False):
-        for row in self.list.get_children():
-            row.destroy()
-
-        for file_name in os.listdir(directory):
-            # XXX ignore these until I can add some filters
-            if file_name.startswith('.'):
-                continue
-            path = os.path.join(directory, file_name)
-            icon_name = self._find_icon(path)
-            self._add_row(path, icon_name, file_name)
-
-        if directory not in self._history or not navigating:
-            del self._history[self._index + 1:]
-            self._history.append(directory)
-            self._index += 1
-
-        self._update_navigation()
-        self._update_navigation_tools()
-        self.directory.set_text(directory)
-        self._reset_search()
+    def _populate(self, directory):
+        self._worker = PortfolioLoadWorker(directory)
+        self._worker.connect('started', self._on_load_started)
+        self._worker.connect('updated', self._on_load_updated)
+        self._worker.connect('finished', self._on_load_finished)
+        self._worker.connect('failed', self._on_load_failed)
+        self._worker.start()
 
     def _add_row(self, path, icon_name, file_name):
         row = PortfolioRow(path, icon_name, file_name)
@@ -170,7 +158,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if path is None:
             return
         elif os.path.isdir(path):
-            self._populate(path, navigating)
+            self._populate(path)
+            if path not in self._history or not navigating:
+                del self._history[self._index + 1:]
+                self._history.append(path)
+                self._index += 1
         else:
             Gio.AppInfo.launch_default_for_uri(f'file://{path}')
 
@@ -189,7 +181,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             self._switch_to_navigation_mode()
 
     def _update_search(self):
-        sensitive = not self.rename.props.active and not self._pasting and not self._deleting
+        sensitive = (
+                not self.rename.props.active and
+                not self._pasting and
+                not self._deleting and
+                not self._loading
+        )
         self.search.props.sensitive = sensitive
         self.search_entry.props.sensitive = sensitive
 
@@ -197,7 +194,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
 
-        if selected or self._pasting or self._deleting:
+        if selected or self._pasting or self._deleting or self._loading:
             self.previous.props.sensitive = False
             self.next.props.sensitive = False
             return
@@ -237,8 +234,17 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
-        self.paste.props.sensitive = (not selected and to_paste and not self._pasting and not self._deleting)
-        self.new_folder.props.sensitive = (not selected and not self._pasting and not self._deleting)
+        self.paste.props.sensitive = (
+            not selected and
+            to_paste and
+            not self._pasting and
+            not self._deleting and
+            not self._loading)
+        self.new_folder.props.sensitive = (
+            not selected and
+            not self._pasting and
+            not self._deleting and
+            not self._loading)
 
     def _update_rename(self):
         rows = self.list.get_selected_rows()
@@ -250,6 +256,49 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search_entry.set_text('')
         self.list.invalidate_filter()
         self.search.grab_focus()
+
+    def _on_load_started(self, worker, directory):
+        self._loading = True
+
+        for row in self.list.get_children():
+            row.destroy()
+
+        if self._popup is not None:
+            self._popup.destroy()
+
+        self._popup = PortfolioPopup(
+            f"Preparing to load {directory}...",
+            None,
+            self._on_popup_closed,
+            None)
+        self._popup.cancel_button.props.sensitive = False
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+    def _on_load_updated(self, worker, directory, path, name, index, total):
+        icon = self._find_icon(path)
+        self._add_row(path, icon, name)
+        self._popup.set_description(f"Loading {index + 1} of {total} files")
+
+    def _on_load_finished(self, worker, directory):
+        self._loading = False
+
+        self._popup.destroy()
+
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+
+        self.directory.set_text(directory)
+
+        self._reset_search()
+
+    def _on_load_failed(self, worker, directory):
+        pass
 
     def _on_rows_selection_changed(self, widget):
         self._update_navigation()
@@ -404,7 +453,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_paste_updated(self, worker, index, total):
         self._popup.set_description( f"Pasting {index + 1} of {total} files")
-        self._refresh()
 
     def _on_paste_finished(self, worker, total):
         self._pasting = False
@@ -425,6 +473,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.list.unselect_all()
         self._update_mode()
+        self._refresh()
 
     def _on_paste_failed(self, worker, path):
         self._pasting = False
@@ -474,7 +523,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_delete_updated(self, worker, index, total):
         self._popup.set_description( f"Deleting {index + 1} of {total} files")
-        self._refresh()
 
     def _on_delete_finished(self, worker, total):
         self._deleting = False
@@ -492,6 +540,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.list.unselect_all()
         self._update_mode()
+        self._refresh()
 
     def _on_delete_failed(self, worker, path):
         self._deleting = False

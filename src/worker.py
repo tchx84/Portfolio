@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import time
 import shutil
 import threading
 
@@ -25,23 +26,23 @@ from gi.repository import GObject, GLib
 class PortfolioWorker(threading.Thread, GObject.GObject):
     __gtype_name__ = 'PortfolioWorker'
 
-    __gsignals__ = {
-        'started': (GObject.SIGNAL_RUN_FIRST, None, (int,)),
-        'updated': (GObject.SIGNAL_RUN_FIRST, None, (int, int)),
-        'finished': (GObject.SIGNAL_RUN_FIRST, None, (int,)),
-        'failed': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
-    }
-
     def __init__(self):
-        GObject.GObject.__init__(self)
         threading.Thread.__init__(self)
+        GObject.GObject.__init__(self)
 
-    def _emit_signal(self, signal, *args):
-        self.emit(signal, *args)
+    def emit(self, *args):
+         GLib.idle_add(GObject.GObject.emit, self, *args)
 
 
 class PortfolioCopyWorker(PortfolioWorker):
     __gtype_name__ = 'PortfolioCopyWorker'
+
+    __gsignals__ = {
+        'started': (GObject.SIGNAL_RUN_LAST, None, (int,)),
+        'updated': (GObject.SIGNAL_RUN_LAST, None, (int, int)),
+        'finished': (GObject.SIGNAL_RUN_LAST, None, (int,)),
+        'failed': (GObject.SIGNAL_RUN_LAST, None, (str,)),
+    }
 
     def __init__(self, paths, directory=None):
         super().__init__()
@@ -50,7 +51,7 @@ class PortfolioCopyWorker(PortfolioWorker):
 
     def run(self):
         total = len(self._paths)
-        GLib.idle_add(self._emit_signal, 'started', total)
+        self.emit('started', total)
 
         for index, path in enumerate(self._paths):
             try:
@@ -61,12 +62,12 @@ class PortfolioCopyWorker(PortfolioWorker):
                 else:
                     shutil.copy(path, self._directory)
             except:
-                GLib.idle_add(self._emit_signal, 'failed', path)
+                self.emit('failed', path)
                 return
             else:
-                GLib.idle_add(self._emit_signal, 'updated', index, total)
+                self.emit('updated', index, total)
 
-        GLib.idle_add(self._emit_signal, 'finished', total)
+        self.emit('finished', total)
 
 
 class PortfolioCutWorker(PortfolioCopyWorker):
@@ -74,7 +75,7 @@ class PortfolioCutWorker(PortfolioCopyWorker):
 
     def run(self):
         total = len(self._paths)
-        GLib.idle_add(self._emit_signal, 'started', total)
+        self.emit('started', total)
 
         for index, path in enumerate(self._paths):
             try:
@@ -82,12 +83,12 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 destination = os.path.join(self._directory, name)
                 shutil.move(path, destination)
             except:
-                GLib.idle_add(self._emit_signal, 'failed', path)
+                self.emit('failed', path)
                 return
             else:
-                GLib.idle_add(self._emit_signal, 'updated', index, total)
+                self.emit('updated', index, total)
 
-        GLib.idle_add(self._emit_signal, 'finished', total)
+        self.emit('finished', total)
 
 
 class PortfolioDeleteWorker(PortfolioCopyWorker):
@@ -95,7 +96,7 @@ class PortfolioDeleteWorker(PortfolioCopyWorker):
 
     def run(self):
         total = len(self._paths)
-        GLib.idle_add(self._emit_signal, 'started', total)
+        self.emit('started', total)
 
         for index, path in enumerate(self._paths):
             try:
@@ -104,9 +105,45 @@ class PortfolioDeleteWorker(PortfolioCopyWorker):
                 else:
                     os.unlink(path)
             except:
-                GLib.idle_add(self._emit_signal, 'failed', path)
+                self.emit('failed', path)
                 return
             else:
-                GLib.idle_add(self._emit_signal, 'updated', index, total)
+                self.emit('updated', index, total)
 
-        GLib.idle_add(self._emit_signal, 'finished', total)
+        self.emit('finished', total)
+
+
+class PortfolioLoadWorker(PortfolioWorker):
+    __gtype_name__ = 'PortfolioLoadWorker'
+
+    __gsignals__ = {
+        'started': (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        'updated': (GObject.SIGNAL_RUN_LAST, None, (str, str, str, int, int)),
+        'finished': (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        'failed': (GObject.SIGNAL_RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self, directory):
+        super().__init__()
+        self._directory = directory
+
+    def run(self):
+        self.emit('started', self._directory)
+
+        paths = os.listdir(self._directory)
+        total = len(paths)
+
+        for index, name in enumerate(paths):
+            try:
+                if name.startswith('.'):
+                    continue
+                path = os.path.join(self._directory, name)
+            except:
+                self.emit('failed', self._directory)
+                return
+            else:
+                self.emit('updated', self._directory, path, name, index, total)
+                # allow the main thread to process all these signals
+                time.sleep(0.01)
+
+        self.emit('finished', self._directory)
