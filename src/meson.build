@@ -34,6 +34,7 @@ portfolio_sources = [
   'popup.py',
   'placeholder.py',
   'worker.py',
+  'places.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)

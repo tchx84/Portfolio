@@ -19,7 +19,7 @@ import os
 import shutil
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, GObject
+from gi.repository import Gtk, Gio, GObject, GLib
 
 from .row import PortfolioRow
 from .popup import PortfolioPopup
@@ -28,6 +28,7 @@ from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
 from .worker import PortfolioDeleteWorker
 from .worker import PortfolioLoadWorker
+from .places import PortfolioPlaces
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
@@ -60,15 +61,13 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     selection_box = Gtk.Template.Child()
     selection_tools = Gtk.Template.Child()
     navigation_tools = Gtk.Template.Child()
+    places_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._setup()
 
     def _setup(self):
-        builder = Gtk.Builder.new_from_resource('/dev/tchx84/Portfolio/menu.ui')
-        self.menu.set_menu_model(builder.get_object('menu'))
-
         self._popup = None
         self._worker = None
         self._loading = False
@@ -104,6 +103,10 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
         self.search_entry.connect('stop-search', self._on_search_stopped)
+
+        places = PortfolioPlaces()
+        places.connect('updated', self._on_places_updated)
+        self.places_box.add(places)
 
         self._move(os.path.expanduser('~'))
 
@@ -276,6 +279,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search_entry.set_text('')
         self.list.invalidate_filter()
         self.search.grab_focus()
+
+    def _on_menu_started(self, button):
+        pass
 
     def _on_load_started(self, worker, directory):
         self._loading = True
@@ -659,3 +665,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             row.props.selectable = True
             self.list.select_row(row)
             row.deselect()
+
+    def _on_places_updated(self, button, path):
+        self._history = []
+        self._index = -1
+        self._move(path, False)

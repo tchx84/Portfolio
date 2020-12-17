@@ -92,8 +92,15 @@
 
 /* menu */
 
-window .menu.background label {
-    padding: 7.5px 0px;
+.menu-box {
+    margin: 10px 5px 2.5px 5px;
+}
+.menu-box .menu-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.menu-box .menu-item {
+    padding: 5px 10px;
 }
 
 /* rows magic */
