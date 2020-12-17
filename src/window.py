@@ -86,6 +86,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.list.set_sort_func(self._sort)
         self.list.set_filter_func(self._filter)
         self.list.connect('selected-rows-changed', self._on_rows_selection_changed)
+        self.list.connect('row-activated', self._on_row_activated)
         self.list.set_placeholder(placeholder)
         self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -157,7 +158,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.connect('rename-finished', self._on_rename_finished)
         row.connect('rename-failed', self._on_rename_failed)
         row.connect('activate-selection-mode', self._on_activated_selection_mode)
-        row.connect_after('clicked', self._on_row_clicked)
         row.props.selectable = False
         return row
 
@@ -619,6 +619,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_select_none(self, button):
         self.list.unselect_all()
         self._update_mode()
+        for row in self.list.get_children():
+            row.props.selectable = False
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
@@ -643,12 +645,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.rename()
 
     def _on_activated_selection_mode(self, row):
+        if self._editing:
+            return
         self._switch_to_selection_mode()
         row.preselect()
 
-    def _on_row_clicked(self, row):
+        # XXX ugh...
+        row.props.selectable = True
+        self.list.select_row(row)
+        row.props.selectable = False
+
+    def _on_row_activated(self, list, row):
         rows = self.list.get_selected_rows()
-        mode =  self.list.get_selection_mode()
+        mode = self.list.get_selection_mode()
 
         # In navigation mode we move or activate
         if mode == Gtk.SelectionMode.NONE:

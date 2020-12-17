@@ -30,7 +30,6 @@ class PortfolioRow(Gtk.ListBoxRow):
         'rename-finished': (GObject.SIGNAL_RUN_FIRST, None, ()),
         'rename-failed': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
         'activate-selection-mode': (GObject.SIGNAL_RUN_FIRST, None, ()),
-        'clicked': (GObject.SIGNAL_RUN_FIRST, None, ())
     }
 
     PRESELECTED_STYLE_CLASS = 'preselected'
@@ -50,7 +49,6 @@ class PortfolioRow(Gtk.ListBoxRow):
         # The order matters
         self.new_name.connect('activate', self._on_enter_pressed)
         self.select_gesture.connect('pressed', self._on_long_pressed)
-        self.connect_after('button-release-event', self._on_button_released)
 
 
     def preselect(self):
@@ -89,6 +87,3 @@ class PortfolioRow(Gtk.ListBoxRow):
             self.emit('rename-finished')
         except:
             self.emit('rename-failed', new_name)
-
-    def _on_button_released(self, row, data=None):
-        self.emit('clicked');
