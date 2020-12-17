@@ -155,6 +155,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.connect('rename-failed', self._on_rename_failed)
         row.connect('activate-selection-mode', self._on_activated_selection_mode)
         row.connect_after('clicked', self._on_row_clicked)
+        row.props.selectable = False
         return row
 
     def _move(self, path, navigating=False):
@@ -369,6 +370,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.search.grab_focus()
         self.list.unselect_all()
+
+        row.props.selectable = False
 
         self._update_search()
         self._update_multi_selection()
@@ -623,6 +626,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         icon_name = self._find_icon(path)
 
         row = self._add_row(path, icon_name, folder_name)
+        row.props.selectable = True
         self._switch_to_selection_mode()
         self.list.add(row)
         self.list.select_row(row)
