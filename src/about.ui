@@ -107,7 +107,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">A minimalist file manager for Linux mobile devices.</property>
+                <property name="label" translatable="yes">A minimalist file manager for those who want to use Linux mobile devices.</property>
                 <property name="justify">center</property>
                 <property name="wrap">True</property>
                 <style>
