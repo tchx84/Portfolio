@@ -29,7 +29,7 @@ class PortfolioPopup(Gtk.Revealer):
     confirm_button = Gtk.Template.Child()
     cancel_button = Gtk.Template.Child()
 
-    def __init__(self, description, on_confirm, on_cancel, data):
+    def __init__(self, description, on_confirm, on_cancel, autoclose, data):
         super().__init__()
 
         self.description.set_text(description)
@@ -41,8 +41,11 @@ class PortfolioPopup(Gtk.Revealer):
 
         if on_cancel is not None:
             self.cancel_button.connect('clicked', on_cancel, self, data)
+        else:
+            self.cancel_button.props.sensitive = False
 
-        if on_confirm is None and on_cancel is None:
+        if autoclose is True:
+            self.cancel_button.props.sensitive = True
             self.cancel_button.connect('clicked', self._on_default_callback, self, data)
             GLib.timeout_add_seconds(
                 DEFAULT_CLOSE_TIME ,

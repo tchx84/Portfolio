@@ -176,6 +176,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _switch_to_selection_mode(self):
         self.list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 
+    def _notify(self, description, on_confirm, on_cancel, autoclose, data):
+        if self._popup is not None:
+            self._popup.destroy()
+
+        self._popup = PortfolioPopup(
+            description,
+            on_confirm,
+            on_cancel,
+            autoclose,
+            data)
+        self.popup_box.add(self._popup)
+        self._popup.props.reveal_child = True
+
     def _update_mode(self):
         rows = self.list.get_selected_rows()
         if not rows:
@@ -271,17 +284,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         for row in self.list.get_children():
             row.destroy()
 
-        if self._popup is not None:
-            self._popup.destroy()
-
-        self._popup = PortfolioPopup(
+        self._notify(
             f"Preparing to load {directory}...",
             None,
-            self._on_popup_closed,
+            None,
+            False,
             None)
-        self._popup.cancel_button.props.sensitive = False
-        self.popup_box.add(self._popup)
-        self._popup.props.reveal_child = True
 
         self._update_search()
         self._update_navigation()
@@ -292,7 +300,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             icon = self._find_icon(path)
             row = self._add_row(path, icon, name)
             self._to_load.append(row)
-        self._popup.set_description(f"Loading {index + 1} of {total} files")
+        self._popup.set_description(f"Loading {index + 1} of {total} files.")
 
     def _on_load_finished(self, worker, directory):
         self._loading = False
@@ -378,16 +386,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._update_selection_tools()
 
     def _on_rename_failed(self, row, name):
-        if self._popup is not None:
-            self._popup.destroy()
-
-        self._popup = PortfolioPopup(
-            f"{name} already exists",
+        self._notify(
+            f"{name} already exists.",
             None,
-            None,
+            self._on_popup_closed,
+            True,
             None)
-        self.popup_box.add(self._popup)
-        self._popup.props.reveal_child = True
 
     def _on_delete_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -399,13 +403,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         description = f'Delete {name}?'
 
-        self._popup = PortfolioPopup(
+        self._notify(
             description,
             self._on_delete_confirmed,
             self._on_popup_closed,
+            False,
             rows)
-        self.popup_box.add(self._popup)
-        self._popup.props.reveal_child = True
 
     def _on_cut_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -417,13 +420,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         else:
             name = f'{len(rows)} files'
 
-        popup = PortfolioPopup(
-            f"{name} will be moved",
+        self._notify(
+            f"{name} will be moved.",
             None,
             None,
+            True,
             None)
-        self.popup_box.add(popup)
-        popup.props.reveal_child = True
 
         self.list.unselect_all()
         self._update_mode()
@@ -438,13 +440,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         else:
             name = f'{len(rows)} files'
 
-        popup = PortfolioPopup(
-            f"{name} will be copied",
+        self._notify(
+            f"{name} will be copied.",
             None,
             None,
+            True,
             None)
-        self.popup_box.add(popup)
-        popup.props.reveal_child = True
 
         self.list.unselect_all()
         self._update_mode()
@@ -466,21 +467,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_paste_started(self, worker, total):
         self._pasting = True
 
-        self._popup = PortfolioPopup(
+        self._notify(
             f"Preparing to paste {total} files...",
             None,
-            self._on_popup_closed,
+            None,
+            False,
             None)
-        self._popup.cancel_button.props.sensitive = False
-        self.popup_box.add(self._popup)
-        self._popup.props.reveal_child = True
 
         self._update_search()
         self._update_navigation()
         self._update_navigation_tools()
 
     def _on_paste_updated(self, worker, index, total):
-        self._popup.set_description( f"Pasting {index + 1} of {total} files")
+        self._popup.set_description( f"Pasting {index + 1} of {total} files.")
 
     def _on_paste_finished(self, worker, total):
         self._pasting = False
@@ -489,8 +488,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if total == 1:
             description = f"{total} file"
 
-        self._popup.set_description( f"Successfully pasted {description}")
-        self._popup.cancel_button.props.sensitive = True
+        self._popup.set_description( f"Successfully pasted {description}.")
 
         self._to_cut = []
         self._to_copy = []
@@ -508,8 +506,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         name = os.path.basename(path)
 
-        self._popup.set_description( f"Could not paste {name}")
-        self._popup.cancel_button.props.sensitive = True
+        self._notify(
+            f"Could not paste {name}.",
+            None,
+            self._on_popup_closed,
+            True,
+            None)
 
         self._to_cut = []
         self._to_copy = []
@@ -546,21 +548,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_delete_started(self, worker, total):
         self._deleting = True
 
-        self._popup = PortfolioPopup(
+        self._notify(
             f"Preparing to delete {total} files...",
             None,
-            self._on_popup_closed,
+            None,
+            False,
             None)
-        self._popup.cancel_button.props.sensitive = False
-        self.popup_box.add(self._popup)
-        self._popup.props.reveal_child = True
 
         self._update_search()
         self._update_navigation()
         self._update_navigation_tools()
 
     def _on_delete_updated(self, worker, index, total):
-        self._popup.set_description( f"Deleting {index + 1} of {total} files")
+        self._popup.set_description( f"Deleting {index + 1} of {total} files.")
 
     def _on_delete_finished(self, worker, total):
         self._deleting = False
@@ -569,7 +569,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         if total == 1:
             description = f"{total} file"
 
-        self._popup.set_description( f"Successfully deleted {description}")
+        self._popup.set_description( f"Successfully deleted {description}.")
         self._popup.cancel_button.props.sensitive = True
 
         self._update_search()
@@ -585,8 +585,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         name = os.path.basename(path)
 
-        self._popup.set_description( f"Could not delete {name}")
-        self._popup.cancel_button.props.sensitive = True
+        self._notify(
+            f"Could not delete {name}.",
+            None,
+            self._on_popup_closed,
+            True,
+            None)
 
         self._update_search()
         self._update_navigation()
