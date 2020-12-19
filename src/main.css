@@ -132,4 +132,5 @@
     color: @insensitive_fg_color;
     margin: 10px;
     font-size: small;
+    font-weight: bold;
 }
