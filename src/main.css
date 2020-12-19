@@ -115,9 +115,6 @@
 .loading-bar {
     margin: 10px 10px;
 }
-.loading-button {
-    margin: 5px;
-}
 .loading-bar trough,
 .loading-bar trough progress {
     min-height: 5px;

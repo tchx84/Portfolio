@@ -66,9 +66,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     selection_tools = Gtk.Template.Child()
     navigation_tools = Gtk.Template.Child()
     places_box = Gtk.Template.Child()
-    main_stack = Gtk.Template.Child()
-    overlay = Gtk.Template.Child()
+    content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
+    content_box = Gtk.Template.Child()
+    close_box = Gtk.Template.Child()
+    close_tools = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -77,9 +79,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _setup(self):
         self._popup = None
         self._worker = None
-        self._loading = False
-        self._deleting = False
-        self._pasting = False
+        self._busy = False
         self._editing = False
         self._to_load = []
         self._to_copy = []
@@ -211,12 +211,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             self._history.append(path)
             self._index += 1
 
+    def _update_all(self):
+        self._update_search()
+        self._update_navigation()
+        self._update_navigation_tools()
+        self._update_selection()
+        self._update_selection_tools()
+        self._update_action_stack()
+        self._update_tools_stack()
+
     def _update_search(self):
         sensitive = (
                 not self._editing and
-                not self._pasting and
-                not self._deleting and
-                not self._loading
+                not self._busy
         )
         self.search.props.sensitive = sensitive
         self.search_entry.props.sensitive = sensitive
@@ -225,7 +232,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
 
-        if selected or self._pasting or self._deleting or self._loading:
+        if selected or self._busy:
             self.previous.props.sensitive = False
             self.next.props.sensitive = False
             return
@@ -233,8 +240,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.previous.props.sensitive = True if self._index > 0 else False
         self.next.props.sensitive = True if len(self._history) - 1 > self._index else False
 
-    def _update_multi_selection(self):
-        sensitive = not self._editing
+    def _update_selection(self):
+        sensitive = not self._editing and not self._busy
 
         self.select_all.props.sensitive = sensitive
         self.select_none.props.sensitive = sensitive
@@ -253,7 +260,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _update_selection_tools(self):
         rows = self.list.get_selected_rows()
-        sensitive = len(rows) >= 1 and not self._editing
+        sensitive = len(rows) >= 1 and not self._editing and not self._busy
 
         self.delete.props.sensitive = sensitive
         self.cut.props.sensitive = sensitive
@@ -268,18 +275,14 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.paste.props.sensitive = (
             not selected and
             to_paste and
-            not self._pasting and
-            not self._deleting and
-            not self._loading)
+            not self._busy)
         self.new_folder.props.sensitive = (
             not selected and
-            not self._pasting and
-            not self._deleting and
-            not self._loading)
+            not self._busy)
 
     def _update_rename(self):
         rows = self.list.get_selected_rows()
-        sensitive = len(rows) == 1 and not self._editing
+        sensitive = len(rows) == 1 and not self._editing and not self._busy
         self.rename.props.sensitive = sensitive
 
     def _reset_search(self):
@@ -292,7 +295,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         pass
 
     def _on_load_started(self, worker, directory):
-        self._loading = True
+        self._busy = True
         self._to_load = []
 
         for row in self.list.get_children():
@@ -300,11 +303,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self.loading_label.set_text("Loading")
         self.loading_bar.set_fraction(0.0)
-        self.main_stack.set_visible_child(self.loading_box)
+        self.content_stack.set_visible_child(self.loading_box)
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
     def _on_load_updated(self, worker, directory, path, name, index, total):
         icon = self._find_icon(path)
@@ -313,17 +314,15 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
-        self._loading = False
+        self._busy = False
 
         for row in self._to_load:
             self.list.add(row)
         self._to_load = []
 
-        self.main_stack.set_visible_child(self.overlay)
+        self.content_stack.set_visible_child(self.content_box)
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
         self.directory.set_text(directory)
 
@@ -333,11 +332,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         pass
 
     def _on_rows_selection_changed(self, widget):
-        self._update_navigation()
-        self._update_navigation_tools()
-        self._update_selection_tools()
-        self._update_action_stack()
-        self._update_tools_stack()
+        self._update_all()
         self._update_mode()
 
     def _on_go_previous(self, button):
@@ -371,7 +366,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._editing = True
 
         self._update_search()
-        self._update_multi_selection()
+        self._update_selection()
         self._update_selection_tools()
 
     def _on_rename_updated(self, row):
@@ -392,7 +387,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         row.props.selectable = False
 
         self._update_search()
-        self._update_multi_selection()
+        self._update_selection()
         self._update_selection_tools()
 
     def _on_rename_failed(self, row, name):
@@ -475,51 +470,42 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._worker.start()
 
     def _on_paste_started(self, worker, total):
-        self._pasting = True
+        self._busy = True
 
         self.loading_label.set_text("Pasting")
         self.loading_bar.set_fraction(0.0)
-        self.main_stack.set_visible_child(self.loading_box)
+        self.content_stack.set_visible_child(self.loading_box)
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
     def _on_paste_updated(self, worker, index, total):
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_paste_finished(self, worker, total):
-        self._pasting = False
+        self._busy = False
 
-        self.main_stack.set_visible_child(self.overlay)
+        self.content_stack.set_visible_child(self.content_box)
 
         self._to_cut = []
         self._to_copy = []
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
         self.list.unselect_all()
         self._update_mode()
         self._refresh()
 
     def _on_paste_failed(self, worker, path):
-        self._pasting = False
+        self._busy = False
+        self._to_cut = []
+        self._to_copy = []
 
         name = os.path.basename(path)
         self.loading_description.set_text(f"Could not paste {name}.")
         self.loading_button.props.visible = True
 
-        self._to_cut = []
-        self._to_copy = []
-
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
-
-        self.list.unselect_all()
-        self._update_mode()
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_delete_confirmed(self, button, popup, rows):
         self._popup.destroy()
@@ -544,53 +530,50 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._worker.start()
 
     def _on_delete_started(self, worker, total):
-        self._deleting = True
+        self._busy = True
 
         self.loading_label.set_text("Deleting")
         self.loading_bar.set_fraction(0.0)
-        self.main_stack.set_visible_child(self.loading_box)
+        self.content_stack.set_visible_child(self.loading_box)
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
     def _on_delete_updated(self, worker, index, total):
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
-        self._deleting = False
+        self._busy = False
 
-        self.main_stack.set_visible_child(self.overlay)
+        self.content_stack.set_visible_child(self.content_box)
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
+        self._update_all()
 
         self.list.unselect_all()
         self._update_mode()
         self._refresh()
 
     def _on_delete_failed(self, worker, path):
-        self._deleting = False
+        self._busy = False
 
         name = os.path.basename(path)
         self.loading_description.set_text(f"Could not delete {name}.")
         self.loading_button.props.visible = True
 
-        self._update_search()
-        self._update_navigation()
-        self._update_navigation_tools()
-
-        self.list.unselect_all()
-        self._update_mode()
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_popup_closed(self, button, popup, data):
         self._popup.destroy()
         self._popup = None
 
     def _on_loading_closed(self, button):
+        self._update_all()
+
+        self.list.unselect_all()
+        self._update_mode()
         self._refresh()
-        self.main_stack.set_visible_child(self.overlay)
+
+        self.content_stack.set_visible_child(self.content_box)
         self.loading_button.props.visible = False
         self.loading_description.set_text("");
 
