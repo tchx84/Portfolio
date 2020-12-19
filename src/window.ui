@@ -780,66 +780,23 @@
             <child>
               <object class="GtkBox" id="directory_box">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkLabel" id="directory">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="icon-name">folder-symbolic</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
                     <style>
-                      <class name="image-box"/>
+                      <class name="directory-label"/>
                     </style>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child>
-                      <object class="GtkLabel" id="directory">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="ellipsize">start</property>
-                        <property name="single-line-mode">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <style>
-                      <class name="label-box"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <style>
-                  <class name="directory-box"/>
-                </style>
               </object>
               <packing>
                 <property name="name">page0</property>

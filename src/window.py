@@ -306,6 +306,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         for row in self.list.get_children():
             row.destroy()
 
+        name = os.path.basename(directory)
+        self.directory.set_text(name)
+
         self.loading_label.set_text("Loading")
         self.loading_bar.set_fraction(0.0)
         self.content_stack.set_visible_child(self.loading_box)
@@ -328,8 +331,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.content_stack.set_visible_child(self.content_box)
 
         self._update_all()
-
-        self.directory.set_text(directory)
 
         self._reset_search()
 
