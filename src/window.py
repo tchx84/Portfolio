@@ -48,6 +48,10 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
     new_folder = Gtk.Template.Child()
+    loading_label = Gtk.Template.Child()
+    loading_bar = Gtk.Template.Child()
+    loading_description= Gtk.Template.Child()
+    loading_button = Gtk.Template.Child()
 
     directory_box = Gtk.Template.Child()
     directory = Gtk.Template.Child()
@@ -62,6 +66,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     selection_tools = Gtk.Template.Child()
     navigation_tools = Gtk.Template.Child()
     places_box = Gtk.Template.Child()
+    main_stack = Gtk.Template.Child()
+    overlay = Gtk.Template.Child()
+    loading_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -100,6 +107,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.select_all.connect('clicked', self._on_select_all)
         self.select_none.connect('clicked', self._on_select_none)
         self.new_folder.connect('clicked', self._on_new_folder)
+        self.loading_button.connect('clicked', self._on_loading_closed)
 
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
@@ -290,23 +298,19 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         for row in self.list.get_children():
             row.destroy()
 
-        self._notify(
-            f"Preparing to load {directory}...",
-            None,
-            None,
-            False,
-            None)
+        self.loading_label.set_text("Loading")
+        self.loading_bar.set_fraction(0.0)
+        self.main_stack.set_visible_child(self.loading_box)
 
         self._update_search()
         self._update_navigation()
         self._update_navigation_tools()
 
-    def _on_load_updated(self, worker, directory, found, index, total):
-        for path, name in found:
-            icon = self._find_icon(path)
-            row = self._add_row(path, icon, name)
-            self._to_load.append(row)
-        self._popup.set_description(f"Loading {index + 1} of {total} files.")
+    def _on_load_updated(self, worker, directory, path, name, index, total):
+        icon = self._find_icon(path)
+        row = self._add_row(path, icon, name)
+        self._to_load.append(row)
+        self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
         self._loading = False
@@ -315,7 +319,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
             self.list.add(row)
         self._to_load = []
 
-        self._popup.destroy()
+        self.main_stack.set_visible_child(self.overlay)
 
         self._update_search()
         self._update_navigation()
@@ -473,28 +477,21 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_paste_started(self, worker, total):
         self._pasting = True
 
-        self._notify(
-            f"Preparing to paste {total} files...",
-            None,
-            None,
-            False,
-            None)
+        self.loading_label.set_text("Pasting")
+        self.loading_bar.set_fraction(0.0)
+        self.main_stack.set_visible_child(self.loading_box)
 
         self._update_search()
         self._update_navigation()
         self._update_navigation_tools()
 
     def _on_paste_updated(self, worker, index, total):
-        self._popup.set_description( f"Pasting {index + 1} of {total} files.")
+        self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_paste_finished(self, worker, total):
         self._pasting = False
 
-        description = f"{total} files"
-        if total == 1:
-            description = f"{total} file"
-
-        self._popup.set_description( f"Successfully pasted {description}.")
+        self.main_stack.set_visible_child(self.overlay)
 
         self._to_cut = []
         self._to_copy = []
@@ -511,13 +508,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._pasting = False
 
         name = os.path.basename(path)
-
-        self._notify(
-            f"Could not paste {name}.",
-            None,
-            self._on_popup_closed,
-            True,
-            None)
+        self.loading_description.set_text(f"Could not paste {name}.")
+        self.loading_button.props.visible = True
 
         self._to_cut = []
         self._to_copy = []
@@ -554,29 +546,21 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_delete_started(self, worker, total):
         self._deleting = True
 
-        self._notify(
-            f"Preparing to delete {total} files...",
-            None,
-            None,
-            False,
-            None)
+        self.loading_label.set_text("Deleting")
+        self.loading_bar.set_fraction(0.0)
+        self.main_stack.set_visible_child(self.loading_box)
 
         self._update_search()
         self._update_navigation()
         self._update_navigation_tools()
 
     def _on_delete_updated(self, worker, index, total):
-        self._popup.set_description( f"Deleting {index + 1} of {total} files.")
+        self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
         self._deleting = False
 
-        description = f"{total} files"
-        if total == 1:
-            description = f"{total} file"
-
-        self._popup.set_description( f"Successfully deleted {description}.")
-        self._popup.cancel_button.props.sensitive = True
+        self.main_stack.set_visible_child(self.overlay)
 
         self._update_search()
         self._update_navigation()
@@ -590,13 +574,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._deleting = False
 
         name = os.path.basename(path)
-
-        self._notify(
-            f"Could not delete {name}.",
-            None,
-            self._on_popup_closed,
-            True,
-            None)
+        self.loading_description.set_text(f"Could not delete {name}.")
+        self.loading_button.props.visible = True
 
         self._update_search()
         self._update_navigation()
@@ -608,6 +587,12 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     def _on_popup_closed(self, button, popup, data):
         self._popup.destroy()
         self._popup = None
+
+    def _on_loading_closed(self, button):
+        self._refresh()
+        self.main_stack.set_visible_child(self.overlay)
+        self.loading_button.props.visible = False
+        self.loading_description.set_text("");
 
     def _on_select_all(self, button):
         # Make sure all rows are selectable

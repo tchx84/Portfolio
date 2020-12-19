@@ -118,12 +118,10 @@ class PortfolioLoadWorker(PortfolioWorker):
 
     __gsignals__ = {
         'started': (GObject.SIGNAL_RUN_LAST, None, (str,)),
-        'updated': (GObject.SIGNAL_RUN_LAST, None, (str, object, int, int)),
+        'updated': (GObject.SIGNAL_RUN_LAST, None, (str, str, str, int, int)),
         'finished': (GObject.SIGNAL_RUN_LAST, None, (str,)),
         'failed': (GObject.SIGNAL_RUN_LAST, None, (str,)),
     }
-
-    BUFFER = 75
 
     def __init__(self, directory):
         super().__init__()
@@ -138,17 +136,15 @@ class PortfolioLoadWorker(PortfolioWorker):
 
         for index, name in enumerate(paths):
             try:
-                if not name.startswith('.'):
-                    path = os.path.join(self._directory, name)
-                    found.append([path, name])
+                if name.startswith('.'):
+                    continue
+                path = os.path.join(self._directory, name)
+                found.append([path, name])
             except:
                 self.emit('failed', self._directory)
                 return
-
-            if len(found) >= self.BUFFER or index + 1 == total:
-                self.emit('updated', self._directory, found, index, total)
-                found = []
-                # allow the main thread to process all these signals
-                time.sleep(0.05)
+            else:
+                self.emit('updated', self._directory, path, name, index, total)
+                time.sleep(0.005)
 
         self.emit('finished', self._directory)
