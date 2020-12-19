@@ -100,6 +100,16 @@ scrolledwindow.frame {
 .menu-box .menu-item {
     padding: 5px 10px;
 }
+.menu-box .places-box .menu-item label {
+    padding-left: 25px;
+    background: -gtk-icontheme("user-home-symbolic") left no-repeat;
+    background-size: 16px;
+}
+.menu-box .places-box .menu-item.mount label {
+    padding-left: 25px;
+    background: -gtk-icontheme("drive-removable-media-symbolic") left no-repeat;
+    background-size: 16px;
+}
 
 /* rows magic */
 

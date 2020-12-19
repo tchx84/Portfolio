@@ -39,15 +39,16 @@ class PortfolioPlaces(Gtk.Box):
         self._manager.connect('mount-added', self._on_mount_added)
         self._manager.connect('mount-removed', self._on_mount_removed)
 
-        self._add_button("Home", os.path.expanduser('~'))
+        self._add_button("Home", os.path.expanduser('~'), 'home')
         for mount in self._manager.get_mounts():
-            self._add_button(mount.get_name(), mount.get_root().get_path())
+            self._add_button(mount.get_name(), mount.get_root().get_path(), 'mount')
 
-    def _add_button(self, name, path):
+    def _add_button(self, name, path, style):
         button = Gtk.ModelButton()
         button.props.text = name
-        button.props.centered = True
+        button.props.can_focus = False
         button.props.visible = True
+        button.get_style_context().add_class(style)
         button.connect('clicked', self._on_button_clicked)
 
         context = button.get_style_context()
@@ -60,7 +61,7 @@ class PortfolioPlaces(Gtk.Box):
         self.emit('updated', button.path)
 
     def _on_mount_added(self, monitor, mount):
-        self._add_button(mount.get_name(), mount.get_root().get_path())
+        self._add_button(mount.get_name(), mount.get_root().get_path(), 'mount')
 
     def _on_mount_removed(self, monitor, mount):
         for button in self.get_children():

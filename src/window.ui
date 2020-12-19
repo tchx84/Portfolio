@@ -926,6 +926,9 @@
                     <property name="position">0</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="places-box"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
