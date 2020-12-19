@@ -654,6 +654,9 @@
                                     <property name="icon-name">document-edit-symbolic</property>
                                   </object>
                                 </child>
+                                <style>
+                                  <class name="tool-button"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
