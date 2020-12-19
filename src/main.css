@@ -1,5 +1,10 @@
 /* app */
 
+scrolledwindow.frame {
+    border: none;
+    border-width: 0px;
+}
+
 .directory-label {
     font-weight: bold;
 }
