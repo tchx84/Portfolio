@@ -51,7 +51,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     loading_label = Gtk.Template.Child()
     loading_bar = Gtk.Template.Child()
     loading_description= Gtk.Template.Child()
-    loading_button = Gtk.Template.Child()
+    close_button = Gtk.Template.Child()
+    help_button = Gtk.Template.Child()
+    about_button = Gtk.Template.Child()
 
     directory_box = Gtk.Template.Child()
     directory = Gtk.Template.Child()
@@ -69,6 +71,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
+    about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
 
@@ -107,7 +110,9 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.select_all.connect('clicked', self._on_select_all)
         self.select_none.connect('clicked', self._on_select_none)
         self.new_folder.connect('clicked', self._on_new_folder)
-        self.loading_button.connect('clicked', self._on_loading_closed)
+        self.close_button.connect('clicked', self._on_button_closed)
+        self.help_button.connect('clicked', self._on_help_clicked)
+        self.about_button.connect('clicked', self._on_about_clicked)
 
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
@@ -502,7 +507,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         name = os.path.basename(path)
         self.loading_description.set_text(f"Could not paste {name}.")
-        self.loading_button.props.visible = True
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -557,7 +561,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         name = os.path.basename(path)
         self.loading_description.set_text(f"Could not delete {name}.")
-        self.loading_button.props.visible = True
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -566,7 +569,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._popup.destroy()
         self._popup = None
 
-    def _on_loading_closed(self, button):
+    def _on_button_closed(self, button):
         self._update_all()
 
         self.list.unselect_all()
@@ -574,7 +577,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._refresh()
 
         self.content_stack.set_visible_child(self.content_box)
-        self.loading_button.props.visible = False
         self.loading_description.set_text("");
 
     def _on_select_all(self, button):
@@ -647,3 +649,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._history = []
         self._index = -1
         self._move(path, False)
+
+    def _on_help_clicked(self, button):
+        Gio.AppInfo.launch_default_for_uri('https://github.com/tchx84/Portfolio', None)
+
+    def _on_about_clicked(self, button):
+        self.content_stack.set_visible_child(self.about_box)
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)

@@ -25,23 +25,12 @@ gi.require_version('Gio', '2.0')
 from gi.repository import Gdk, Gtk, Gio
 
 from .window import PortfolioWindow
-from .about import PortfolioAbout
 
 
 class Application(Gtk.Application):
     def __init__(self):
         super().__init__(application_id='dev.tchx84.Portfolio',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
-
-    def _setup_actions(self):
-        help_action = Gio.SimpleAction(name='help', state=None)
-        help_action.connect('activate', self._on_help_activated)
-
-        about_action = Gio.SimpleAction(name='about', state=None)
-        about_action.connect('activate', self._on_about_activated)
-
-        self.add_action(help_action)
-        self.add_action(about_action)
 
     def _setup_styles(self):
         provider = Gtk.CssProvider();
@@ -53,17 +42,8 @@ class Application(Gtk.Application):
         win = self.props.active_window
         if not win:
             win = PortfolioWindow(application=self)
-            self._setup_actions()
             self._setup_styles()
         win.present()
-
-    def _on_about_activated(self, action, data):
-        about = PortfolioAbout()
-        about.set_transient_for(self.props.active_window)
-        about.present()
-
-    def _on_help_activated(self, action, data):
-        Gio.AppInfo.launch_default_for_uri('https://github.com/tchx84/Portfolio', None)
 
 
 def main(version):

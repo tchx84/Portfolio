@@ -3,7 +3,6 @@
   <gresource prefix="/dev/tchx84/Portfolio">
     <file>window.ui</file>
     <file>row.ui</file>
-    <file>about.ui</file>
     <file>popup.ui</file>
     <file>placeholder.ui</file>
     <file>main.css</file>

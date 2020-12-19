@@ -59,33 +59,33 @@
     font-size: 20px;
 }
 
-/* custom about */
+/* about */
 
-.about-container {
+.about-box {
     margin: 10px 20px;
 }
-.about-container .name-label {
+.about-box .name-label {
     margin-top: 10px;
     font-size: medium;
     font-weight: bold;
 }
-.about-container .version-label {
+.about-box .version-label {
     margin-top: 10px;
     font-size: medium;
 }
-.about-container .description-label {
+.about-box .description-label {
     margin-top: 15px;
     font-size: medium;
 }
-.about-container .website-label {
+.about-box .website-label {
     margin-top: 10px;
     font-size: medium;
 }
-.about-container .author-label {
+.about-box .author-label {
     margin-top: 10px;
     font-size: small;
 }
-.about-container .license-label {
+.about-box .license-label {
     margin-top: 10px;
     font-size: small;
 }
