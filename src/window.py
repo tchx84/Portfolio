@@ -124,12 +124,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self._move(os.path.expanduser('~'))
 
-    def _find_icon(self, path):
-        if os.path.isdir(path):
-            return 'inode-directory-symbolic'
-        else:
-            return 'folder-documents-symbolic'
-
     def _filter(self, row):
         text = self.search_entry.get_text()
         if not text:
@@ -163,9 +157,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._worker.connect('failed', self._on_load_failed)
         self._worker.start()
 
-    def _add_row(self, path, icon_name, file_name):
-        row = PortfolioRow(path, icon_name, file_name)
-        # The order matters
+    def _add_row(self, path):
+        row = PortfolioRow(path)
         row.connect('rename-started', self._on_rename_started)
         row.connect('rename-updated', self._on_rename_updated)
         row.connect('rename-finished', self._on_rename_finished)
@@ -316,8 +309,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._update_all()
 
     def _on_load_updated(self, worker, directory, path, name, index, total):
-        icon = self._find_icon(path)
-        row = self._add_row(path, icon, name)
+        row = self._add_row(path)
         self._to_load.append(row)
         self.loading_bar.set_fraction((index + 1) / total)
 
@@ -608,7 +600,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         Path(path).mkdir(parents=False, exist_ok=True)
         icon_name = self._find_icon(path)
 
-        row = self._add_row(path, icon_name, folder_name)
+        row = self._add_row(path)
         row.props.selectable = True
         self._switch_to_selection_mode()
         self.list.add(row)

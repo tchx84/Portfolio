@@ -20,6 +20,7 @@ import os
 from gi.repository import GLib, Gtk, GObject
 
 
+
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/row.ui')
 class PortfolioRow(Gtk.ListBoxRow):
     __gtype_name__ = 'PortfolioRow'
@@ -34,22 +35,28 @@ class PortfolioRow(Gtk.ListBoxRow):
 
     PRESELECTED_STYLE_CLASS = 'preselected'
 
-    icon = Gtk.Template.Child()
     name = Gtk.Template.Child()
     new_name = Gtk.Template.Child()
     stack = Gtk.Template.Child()
+    icon = Gtk.Template.Child()
 
-    def __init__(self, path, icon_name, text):
+    def __init__(self, path):
         super().__init__()
-        self.path = path
-        self.icon.set_from_icon_name(icon_name, Gtk.IconSize.INVALID)
-        self.name.set_text(text)
-        self.select_gesture = Gtk.GestureLongPress.new(self)
+        self._setup(path)
 
-        # The order matters
+    def _setup(self, path):
+        self.path = path
+        self.name.set_text(os.path.basename(self.path))
+
+        context = self.icon.get_style_context()
+        if os.path.isdir(self.path):
+            context.add_class('folder')
+        else:
+            context.add_class('file')
+
+        self.select_gesture = Gtk.GestureLongPress.new(self)
         self.new_name.connect('activate', self._on_enter_pressed)
         self.select_gesture.connect('pressed', self._on_long_pressed)
-
 
     def preselect(self):
         context = self.get_style_context()

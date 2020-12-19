@@ -4,12 +4,19 @@
     font-weight: bold;
 }
 
-.files-box .image-box {
-    margin: 0px 7.5px;
+.files-box .icon-label {
+    margin-left: 10px;
+    min-height: 30px;
+    min-width: 30px;
+    background: -gtk-icontheme("text-x-generic-symbolic") center no-repeat;
+}
+.files-box .icon-label.folder {
+    background: -gtk-icontheme("folder-symbolic") center no-repeat;
 }
 
 .files-box .name-box {
-    margin: 0px 5px;
+    margin-left: 10px;
+    font-size: medium;
 }
 
 .select-all-button,

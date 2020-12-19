@@ -11,20 +11,18 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="icon_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkImage" id="icon">
+              <object class="GtkLabel" id="icon">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="pixel-size">40</property>
-                <property name="icon-name">folder-documents-symbolic</property>
-                <property name="icon_size">0</property>
+                <style>
+                  <class name="icon-label"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -33,7 +31,7 @@
               </packing>
             </child>
             <style>
-              <class name="image-box"/>
+              <class name="icon-box"/>
             </style>
           </object>
           <packing>
