@@ -995,7 +995,7 @@
             <child>
               <object class="GtkModelButton" id="help_button">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="yes">Help</property>
                 <property name="centered">True</property>
@@ -1012,7 +1012,7 @@
             <child>
               <object class="GtkModelButton" id="about_button">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
+                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="yes">About Portfolio</property>
                 <property name="centered">True</property>
