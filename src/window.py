@@ -321,8 +321,15 @@ class PortfolioWindow(ApplicationWindow):
     def _on_load_finished(self, worker, directory):
         self._busy = False
 
+        # remove functions to speedup
+        self.list.set_sort_func(None)
+        self.list.set_filter_func(None)
+
         for row in self._to_load:
             self.list.add(row)
+
+        self.list.set_sort_func(self._sort)
+        self.list.set_filter_func(self._filter)
 
         self._to_load = []
         self._update_all()
@@ -457,10 +464,17 @@ class PortfolioWindow(ApplicationWindow):
     def _on_paste_finished(self, worker, total):
         self._busy = False
 
+        # remove functions to speedup
+        self.list.set_sort_func(None)
+        self.list.set_filter_func(None)
+
         to_paste = self._to_copy if self._to_copy else self._to_cut
         for path in to_paste:
             row = self._add_row(path)
             self.list.add(row)
+
+        self.list.set_sort_func(self._sort)
+        self.list.set_filter_func(self._filter)
 
         self._to_cut = []
         self._to_copy = []
@@ -517,9 +531,16 @@ class PortfolioWindow(ApplicationWindow):
     def _on_delete_finished(self, worker, total):
         self._busy = False
 
+        # remove functions to speedup
+        self.list.set_sort_func(None)
+        self.list.set_filter_func(None)
+
         rows = self.list.get_selected_rows()
         for row in rows:
             row.destroy()
+
+        self.list.set_sort_func(self._sort)
+        self.list.set_filter_func(self._filter)
 
         self.list.unselect_all()
 
