@@ -332,11 +332,11 @@ class PortfolioWindow(ApplicationWindow):
 
         for row in self._to_load:
             self.list.add(row)
+
         self._to_load = []
+        self._update_all()
 
         self.content_stack.set_visible_child(self.content_box)
-
-        self._update_all()
 
     def _on_load_failed(self, worker, directory):
         pass
@@ -391,9 +391,7 @@ class PortfolioWindow(ApplicationWindow):
 
         row.props.selectable = False
 
-        self._update_search()
-        self._update_selection()
-        self._update_selection_tools()
+        self._update_all()
 
     def _on_rename_failed(self, row, name):
         self._notify(
@@ -489,16 +487,19 @@ class PortfolioWindow(ApplicationWindow):
     def _on_paste_finished(self, worker, total):
         self._busy = False
 
-        self.content_stack.set_visible_child(self.content_box)
+        to_paste = self._to_copy if self._to_copy else self._to_cut
+        for path in to_paste:
+            row = self._add_row(path)
+            self.list.add(row)
 
         self._to_cut = []
         self._to_copy = []
+        self.list.unselect_all()
+
+        self.content_stack.set_visible_child(self.content_box)
 
         self._update_all()
-
-        self.list.unselect_all()
         self._update_mode()
-        self._refresh()
 
     def _on_paste_failed(self, worker, path):
         self._busy = False
@@ -548,13 +549,16 @@ class PortfolioWindow(ApplicationWindow):
     def _on_delete_finished(self, worker, total):
         self._busy = False
 
+        rows = self.list.get_selected_rows()
+        for row in rows:
+            row.destroy()
+
+        self.list.unselect_all()
+
         self.content_stack.set_visible_child(self.content_box)
 
         self._update_all()
-
-        self.list.unselect_all()
         self._update_mode()
-        self._refresh()
 
     def _on_delete_failed(self, worker, path):
         self._busy = False
@@ -570,14 +574,13 @@ class PortfolioWindow(ApplicationWindow):
         self._popup = None
 
     def _on_button_closed(self, button):
-        self._update_all()
-
         self.list.unselect_all()
+
+        self._update_all()
         self._update_mode()
         self._refresh()
 
         self.content_stack.set_visible_child(self.content_box)
-        self.loading_description.set_text("");
 
     def _on_select_all(self, button):
         # Make sure all rows are selectable
