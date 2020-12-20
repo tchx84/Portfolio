@@ -21,10 +21,10 @@ from gi.repository import Gio, Gtk, GObject
 
 
 class PortfolioPlaces(Gtk.Box):
-    __gtype_name__ = 'PortfolioPlaces'
+    __gtype_name__ = "PortfolioPlaces"
 
     __gsignals__ = {
-        'updated': (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        "updated": (GObject.SIGNAL_RUN_LAST, None, (str,)),
     }
 
     def __init__(self, **kargs):
@@ -36,12 +36,12 @@ class PortfolioPlaces(Gtk.Box):
         self.props.visible = True
 
         self._manager = Gio.VolumeMonitor.get()
-        self._manager.connect('mount-added', self._on_mount_added)
-        self._manager.connect('mount-removed', self._on_mount_removed)
+        self._manager.connect("mount-added", self._on_mount_added)
+        self._manager.connect("mount-removed", self._on_mount_removed)
 
-        self._add_button("Home", os.path.expanduser('~'), 'home')
+        self._add_button("Home", os.path.expanduser("~"), "home")
         for mount in self._manager.get_mounts():
-            self._add_button(mount.get_name(), mount.get_root().get_path(), 'mount')
+            self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
 
     def _add_button(self, name, path, style):
         button = Gtk.ModelButton()
@@ -49,19 +49,19 @@ class PortfolioPlaces(Gtk.Box):
         button.props.can_focus = False
         button.props.visible = True
         button.get_style_context().add_class(style)
-        button.connect('clicked', self._on_button_clicked)
+        button.connect("clicked", self._on_button_clicked)
 
         context = button.get_style_context()
-        context.add_class('menu-item')
+        context.add_class("menu-item")
 
-        setattr(button, 'path', path)
+        setattr(button, "path", path)
         self.add(button)
 
     def _on_button_clicked(self, button):
-        self.emit('updated', button.path)
+        self.emit("updated", button.path)
 
     def _on_mount_added(self, monitor, mount):
-        self._add_button(mount.get_name(), mount.get_root().get_path(), 'mount')
+        self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
 
     def _on_mount_removed(self, monitor, mount):
         for button in self.get_children():

@@ -33,9 +33,9 @@ from .worker import PortfolioLoadWorker
 from .places import PortfolioPlaces
 
 
-@Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
+@Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
 class PortfolioWindow(ApplicationWindow):
-    __gtype_name__ = 'PortfolioWindow'
+    __gtype_name__ = "PortfolioWindow"
 
     list = Gtk.Template.Child()
     previous = Gtk.Template.Child()
@@ -53,7 +53,7 @@ class PortfolioWindow(ApplicationWindow):
     new_folder = Gtk.Template.Child()
     loading_label = Gtk.Template.Child()
     loading_bar = Gtk.Template.Child()
-    loading_description= Gtk.Template.Child()
+    loading_description = Gtk.Template.Child()
     close_button = Gtk.Template.Child()
     help_button = Gtk.Template.Child()
     about_button = Gtk.Template.Child()
@@ -96,42 +96,42 @@ class PortfolioWindow(ApplicationWindow):
         self._history = []
         self._index = -1
 
-        self.deck.connect('notify::visible-child', self._on_deck_child_changed)
+        self.deck.connect("notify::visible-child", self._on_deck_child_changed)
 
         placeholder = PortfolioPlaceholder()
         placeholder.show_all()
 
         self.list.set_sort_func(self._sort)
         self.list.set_filter_func(self._filter)
-        self.list.connect('selected-rows-changed', self._on_rows_selection_changed)
-        self.list.connect('row-activated', self._on_row_activated)
+        self.list.connect("selected-rows-changed", self._on_rows_selection_changed)
+        self.list.connect("row-activated", self._on_row_activated)
         self.list.set_placeholder(placeholder)
         self.list.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        self.previous.connect('clicked', self._on_go_previous)
-        self.next.connect('clicked', self._on_go_next)
-        self.rename.connect('clicked', self._on_rename_clicked)
-        self.delete.connect('clicked', self._on_delete_clicked)
-        self.cut.connect('clicked', self._on_cut_clicked)
-        self.copy.connect('clicked', self._on_copy_clicked)
-        self.paste.connect('clicked', self._on_paste_clicked)
-        self.select_all.connect('clicked', self._on_select_all)
-        self.select_none.connect('clicked', self._on_select_none)
-        self.new_folder.connect('clicked', self._on_new_folder)
-        self.close_button.connect('clicked', self._on_button_closed)
-        self.help_button.connect('clicked', self._on_help_clicked)
-        self.about_button.connect('clicked', self._on_about_clicked)
+        self.previous.connect("clicked", self._on_go_previous)
+        self.next.connect("clicked", self._on_go_next)
+        self.rename.connect("clicked", self._on_rename_clicked)
+        self.delete.connect("clicked", self._on_delete_clicked)
+        self.cut.connect("clicked", self._on_cut_clicked)
+        self.copy.connect("clicked", self._on_copy_clicked)
+        self.paste.connect("clicked", self._on_paste_clicked)
+        self.select_all.connect("clicked", self._on_select_all)
+        self.select_none.connect("clicked", self._on_select_none)
+        self.new_folder.connect("clicked", self._on_new_folder)
+        self.close_button.connect("clicked", self._on_button_closed)
+        self.help_button.connect("clicked", self._on_help_clicked)
+        self.about_button.connect("clicked", self._on_about_clicked)
 
-        self.search.connect('toggled', self._on_search_toggled)
-        self.search_entry.connect('search-changed', self._on_search_changed)
-        self.search_entry.connect('stop-search', self._on_search_stopped)
-        self.back.connect('clicked', self._on_back_clicked)
+        self.search.connect("toggled", self._on_search_toggled)
+        self.search_entry.connect("search-changed", self._on_search_changed)
+        self.search_entry.connect("stop-search", self._on_search_stopped)
+        self.back.connect("clicked", self._on_back_clicked)
 
         places = PortfolioPlaces()
-        places.connect('updated', self._on_places_updated)
+        places.connect("updated", self._on_places_updated)
         self.places_box.add(places)
 
-        self._move(os.path.expanduser('~'))
+        self._move(os.path.expanduser("~"))
 
     def _filter(self, row):
         text = self.search_entry.get_text()
@@ -160,19 +160,19 @@ class PortfolioWindow(ApplicationWindow):
 
     def _populate(self, directory):
         self._worker = PortfolioLoadWorker(directory)
-        self._worker.connect('started', self._on_load_started)
-        self._worker.connect('updated', self._on_load_updated)
-        self._worker.connect('finished', self._on_load_finished)
-        self._worker.connect('failed', self._on_load_failed)
+        self._worker.connect("started", self._on_load_started)
+        self._worker.connect("updated", self._on_load_updated)
+        self._worker.connect("finished", self._on_load_finished)
+        self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
 
     def _add_row(self, path):
         row = PortfolioRow(path)
-        row.connect('rename-started', self._on_rename_started)
-        row.connect('rename-updated', self._on_rename_updated)
-        row.connect('rename-finished', self._on_rename_finished)
-        row.connect('rename-failed', self._on_rename_failed)
-        row.connect('activate-selection-mode', self._on_activated_selection_mode)
+        row.connect("rename-started", self._on_rename_started)
+        row.connect("rename-updated", self._on_rename_updated)
+        row.connect("rename-finished", self._on_rename_finished)
+        row.connect("rename-failed", self._on_rename_failed)
+        row.connect("activate-selection-mode", self._on_activated_selection_mode)
         row.props.selectable = False
         return row
 
@@ -183,7 +183,7 @@ class PortfolioWindow(ApplicationWindow):
             self._populate(path)
             self._update_history(path, navigating)
         else:
-            Gio.AppInfo.launch_default_for_uri(f'file://{path}')
+            Gio.AppInfo.launch_default_for_uri(f"file://{path}")
 
     def _refresh(self):
         self._move(self._history[self._index], True)
@@ -199,11 +199,8 @@ class PortfolioWindow(ApplicationWindow):
             self._popup.destroy()
 
         self._popup = PortfolioPopup(
-            description,
-            on_confirm,
-            on_cancel,
-            autoclose,
-            data)
+            description, on_confirm, on_cancel, autoclose, data
+        )
         self.popup_box.add(self._popup)
         self._popup.props.reveal_child = True
 
@@ -214,7 +211,7 @@ class PortfolioWindow(ApplicationWindow):
 
     def _update_history(self, path, navigating):
         if path not in self._history or not navigating:
-            del self._history[self._index + 1:]
+            del self._history[self._index + 1 :]
             self._history.append(path)
             self._index += 1
 
@@ -228,10 +225,7 @@ class PortfolioWindow(ApplicationWindow):
         self._update_tools_stack()
 
     def _update_search(self):
-        sensitive = (
-                not self._editing and
-                not self._busy
-        )
+        sensitive = not self._editing and not self._busy
         self.search.props.sensitive = sensitive
         self.search_entry.props.sensitive = sensitive
 
@@ -245,7 +239,9 @@ class PortfolioWindow(ApplicationWindow):
             return
 
         self.previous.props.sensitive = True if self._index > 0 else False
-        self.next.props.sensitive = True if len(self._history) - 1 > self._index else False
+        self.next.props.sensitive = (
+            True if len(self._history) - 1 > self._index else False
+        )
 
     def _update_selection(self):
         sensitive = not self._editing and not self._busy
@@ -279,13 +275,8 @@ class PortfolioWindow(ApplicationWindow):
         rows = self.list.get_selected_rows()
         selected = len(rows) >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
-        self.paste.props.sensitive = (
-            not selected and
-            to_paste and
-            not self._busy)
-        self.new_folder.props.sensitive = (
-            not selected and
-            not self._busy)
+        self.paste.props.sensitive = not selected and to_paste and not self._busy
+        self.new_folder.props.sensitive = not selected and not self._busy
 
     def _update_rename(self):
         rows = self.list.get_selected_rows()
@@ -299,7 +290,7 @@ class PortfolioWindow(ApplicationWindow):
 
     def _reset_search(self):
         self.search.set_active(False)
-        self.search_entry.set_text('')
+        self.search_entry.set_text("")
         self.list.invalidate_filter()
         self.search.grab_focus()
 
@@ -377,10 +368,7 @@ class PortfolioWindow(ApplicationWindow):
     def _on_rename_updated(self, row):
         # remove this folder from history
         self._history = [
-            path
-            for path
-            in self._history
-            if not path.startswith(row.path)
+            path for path in self._history if not path.startswith(row.path)
         ]
 
     def _on_rename_finished(self, row):
@@ -394,12 +382,7 @@ class PortfolioWindow(ApplicationWindow):
         self._update_all()
 
     def _on_rename_failed(self, row, name):
-        self._notify(
-            f"{name} already exists.",
-            None,
-            self._on_popup_closed,
-            True,
-            None)
+        self._notify(f"{name} already exists.", None, self._on_popup_closed, True, None)
 
     def _on_delete_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -407,16 +390,13 @@ class PortfolioWindow(ApplicationWindow):
         if len(rows) == 1:
             name = os.path.basename(rows[0].path)
         else:
-            name = f'these {len(rows)} files'
+            name = f"these {len(rows)} files"
 
-        description = f'Delete {name}?'
+        description = f"Delete {name}?"
 
         self._notify(
-            description,
-            self._on_delete_confirmed,
-            self._on_popup_closed,
-            False,
-            rows)
+            description, self._on_delete_confirmed, self._on_popup_closed, False, rows
+        )
 
     def _on_cut_clicked(self, button):
         rows = self.list.get_selected_rows()
@@ -426,14 +406,9 @@ class PortfolioWindow(ApplicationWindow):
         if len(rows) == 1:
             name = os.path.basename(rows[0].path)
         else:
-            name = f'{len(rows)} files'
+            name = f"{len(rows)} files"
 
-        self._notify(
-            f"{name} will be moved.",
-            None,
-            None,
-            True,
-            None)
+        self._notify(f"{name} will be moved.", None, None, True, None)
 
         self.list.unselect_all()
         self._update_mode()
@@ -446,14 +421,9 @@ class PortfolioWindow(ApplicationWindow):
         if len(rows) == 1:
             name = os.path.basename(rows[0].path)
         else:
-            name = f'{len(rows)} files'
+            name = f"{len(rows)} files"
 
-        self._notify(
-            f"{name} will be copied.",
-            None,
-            None,
-            True,
-            None)
+        self._notify(f"{name} will be copied.", None, None, True, None)
 
         self.list.unselect_all()
         self._update_mode()
@@ -466,10 +436,10 @@ class PortfolioWindow(ApplicationWindow):
         elif self._to_copy:
             self._worker = PortfolioCopyWorker(self._to_copy, directory)
 
-        self._worker.connect('started', self._on_paste_started)
-        self._worker.connect('updated', self._on_paste_updated)
-        self._worker.connect('finished', self._on_paste_finished)
-        self._worker.connect('failed', self._on_paste_failed)
+        self._worker.connect("started", self._on_paste_started)
+        self._worker.connect("updated", self._on_paste_updated)
+        self._worker.connect("finished", self._on_paste_finished)
+        self._worker.connect("failed", self._on_paste_failed)
         self._worker.start()
 
     def _on_paste_started(self, worker, total):
@@ -521,17 +491,15 @@ class PortfolioWindow(ApplicationWindow):
         directory = self._history[self._index]
         self._history = [
             path
-            for path
-            in self._history
-            if not path.startswith(directory)
-            or path == directory
+            for path in self._history
+            if not path.startswith(directory) or path == directory
         ]
 
         self._worker = PortfolioDeleteWorker(to_delete)
-        self._worker.connect('started', self._on_delete_started)
-        self._worker.connect('updated', self._on_delete_updated)
-        self._worker.connect('finished', self._on_delete_finished)
-        self._worker.connect('failed', self._on_delete_failed)
+        self._worker.connect("started", self._on_delete_started)
+        self._worker.connect("updated", self._on_delete_updated)
+        self._worker.connect("finished", self._on_delete_finished)
+        self._worker.connect("failed", self._on_delete_failed)
         self._worker.start()
 
     def _on_delete_started(self, worker, total):
@@ -601,8 +569,8 @@ class PortfolioWindow(ApplicationWindow):
         counter = 1
         folder_name = "New Folder"
         while os.path.exists(os.path.join(directory, folder_name)):
-            folder_name = folder_name.split('(')[0]
-            folder_name = f'{folder_name}({counter})'
+            folder_name = folder_name.split("(")[0]
+            folder_name = f"{folder_name}({counter})"
             counter += 1
 
         path = os.path.join(directory, folder_name)
@@ -653,7 +621,7 @@ class PortfolioWindow(ApplicationWindow):
         self._move(path, False)
 
     def _on_help_clicked(self, button):
-        Gio.AppInfo.launch_default_for_uri('https://github.com/tchx84/Portfolio', None)
+        Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
 
     def _on_about_clicked(self, button):
         self.deck.set_visible_child(self.about_box)
@@ -664,7 +632,7 @@ class PortfolioWindow(ApplicationWindow):
     def _on_deck_child_changed(self, check, child):
         child = self.deck.get_visible_child()
         if child == self.about_box:
-            self.headerbar.set_title('About')
+            self.headerbar.set_title("About")
             self.headerbar_stack.set_visible_child(self.back)
         else:
             self._update_directory_title()

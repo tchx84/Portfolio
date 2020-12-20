@@ -30,14 +30,16 @@ from .window import PortfolioWindow
 
 class Application(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id='dev.tchx84.Portfolio',
-                         flags=Gio.ApplicationFlags.FLAGS_NONE)
+        super().__init__(
+            application_id="dev.tchx84.Portfolio", flags=Gio.ApplicationFlags.FLAGS_NONE
+        )
 
     def _setup_styles(self):
-        provider = Gtk.CssProvider();
-        provider.load_from_resource('/dev/tchx84/Portfolio/main.css');
-        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
-            provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        provider = Gtk.CssProvider()
+        provider.load_from_resource("/dev/tchx84/Portfolio/main.css")
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
 
     def do_activate(self):
         win = self.props.active_window

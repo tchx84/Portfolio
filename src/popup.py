@@ -21,9 +21,9 @@ from gi.repository import GLib, Gtk
 DEFAULT_CLOSE_TIME = 3
 
 
-@Gtk.Template(resource_path='/dev/tchx84/Portfolio/popup.ui')
+@Gtk.Template(resource_path="/dev/tchx84/Portfolio/popup.ui")
 class PortfolioPopup(Gtk.Revealer):
-    __gtype_name__ = 'PortfolioPopup'
+    __gtype_name__ = "PortfolioPopup"
 
     description = Gtk.Template.Child()
     confirm_button = Gtk.Template.Child()
@@ -35,24 +35,21 @@ class PortfolioPopup(Gtk.Revealer):
         self.description.set_text(description)
 
         if on_confirm is not None:
-            self.confirm_button.connect('clicked', on_confirm, self, data)
+            self.confirm_button.connect("clicked", on_confirm, self, data)
         else:
             self.confirm_button.props.visible = False
 
         if on_cancel is not None:
-            self.cancel_button.connect('clicked', on_cancel, self, data)
+            self.cancel_button.connect("clicked", on_cancel, self, data)
         else:
             self.cancel_button.props.sensitive = False
 
         if autoclose is True:
             self.cancel_button.props.sensitive = True
-            self.cancel_button.connect('clicked', self._on_default_callback, self, data)
+            self.cancel_button.connect("clicked", self._on_default_callback, self, data)
             GLib.timeout_add_seconds(
-                DEFAULT_CLOSE_TIME ,
-                self._on_default_callback,
-                None,
-                None,
-                None)
+                DEFAULT_CLOSE_TIME, self._on_default_callback, None, None, None
+            )
 
     def set_description(self, description):
         self.description.set_text(description)

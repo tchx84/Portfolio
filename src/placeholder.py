@@ -18,9 +18,9 @@
 from gi.repository import Gtk
 
 
-@Gtk.Template(resource_path='/dev/tchx84/Portfolio/placeholder.ui')
+@Gtk.Template(resource_path="/dev/tchx84/Portfolio/placeholder.ui")
 class PortfolioPlaceholder(Gtk.Box):
-    __gtype_name__ = 'PortfolioPlaceholder'
+    __gtype_name__ = "PortfolioPlaceholder"
 
     def __init__(self, **kargs):
         super().__init__(**kargs)

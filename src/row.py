@@ -20,20 +20,19 @@ import os
 from gi.repository import GLib, Gtk, GObject
 
 
-
-@Gtk.Template(resource_path='/dev/tchx84/Portfolio/row.ui')
+@Gtk.Template(resource_path="/dev/tchx84/Portfolio/row.ui")
 class PortfolioRow(Gtk.ListBoxRow):
-    __gtype_name__ = 'PortfolioRow'
+    __gtype_name__ = "PortfolioRow"
 
     __gsignals__ = {
-        'rename-started': (GObject.SIGNAL_RUN_FIRST, None, ()),
-        'rename-updated': (GObject.SIGNAL_RUN_FIRST, None, ()),
-        'rename-finished': (GObject.SIGNAL_RUN_FIRST, None, ()),
-        'rename-failed': (GObject.SIGNAL_RUN_FIRST, None, (str,)),
-        'activate-selection-mode': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        "rename-started": (GObject.SIGNAL_RUN_FIRST, None, ()),
+        "rename-updated": (GObject.SIGNAL_RUN_FIRST, None, ()),
+        "rename-finished": (GObject.SIGNAL_RUN_FIRST, None, ()),
+        "rename-failed": (GObject.SIGNAL_RUN_FIRST, None, (str,)),
+        "activate-selection-mode": (GObject.SIGNAL_RUN_FIRST, None, ()),
     }
 
-    PRESELECTED_STYLE_CLASS = 'preselected'
+    PRESELECTED_STYLE_CLASS = "preselected"
 
     name = Gtk.Template.Child()
     new_name = Gtk.Template.Child()
@@ -50,18 +49,18 @@ class PortfolioRow(Gtk.ListBoxRow):
 
         context = self.icon.get_style_context()
         if os.path.isdir(self.path):
-            context.add_class('folder')
+            context.add_class("folder")
         else:
-            context.add_class('file')
+            context.add_class("file")
 
         self.select_gesture = Gtk.GestureLongPress.new(self)
-        self.new_name.connect('activate', self._on_enter_pressed)
-        self.select_gesture.connect('pressed', self._on_long_pressed)
+        self.new_name.connect("activate", self._on_enter_pressed)
+        self.select_gesture.connect("pressed", self._on_long_pressed)
 
     def preselect(self):
         context = self.get_style_context()
         if not context.has_class(self.PRESELECTED_STYLE_CLASS):
-           context.add_class(self.PRESELECTED_STYLE_CLASS)
+            context.add_class(self.PRESELECTED_STYLE_CLASS)
 
     def deselect(self):
         context = self.get_style_context()
@@ -72,10 +71,10 @@ class PortfolioRow(Gtk.ListBoxRow):
         self.new_name.set_text(self.name.get_text())
         self.stack.set_visible_child(self.new_name)
         self.new_name.grab_focus()
-        self.emit('rename-started')
+        self.emit("rename-started")
 
     def _on_long_pressed(self, gesture, x, y):
-        self.emit('activate-selection-mode')
+        self.emit("activate-selection-mode")
 
     def _on_enter_pressed(self, entry):
         directory = os.path.dirname(self.path)
@@ -87,10 +86,10 @@ class PortfolioRow(Gtk.ListBoxRow):
             if self.path != path and os.path.exists(path):
                 raise FileExistsError()
             os.rename(self.path, path)
-            self.emit('rename-updated')
+            self.emit("rename-updated")
             self.name.set_text(new_name)
             self.path = path
             self.stack.set_visible_child(self.name)
-            self.emit('rename-finished')
+            self.emit("rename-finished")
         except:
-            self.emit('rename-failed', new_name)
+            self.emit("rename-failed", new_name)
