@@ -19,7 +19,9 @@ import os
 import shutil
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, GObject, GLib
+from gi.repository import Gtk, Gio, GObject, GLib, Handy
+
+from gi.repository.Handy import Deck, ApplicationWindow, HeaderBar, SearchBar
 
 from .row import PortfolioRow
 from .popup import PortfolioPopup
@@ -32,13 +34,14 @@ from .places import PortfolioPlaces
 
 
 @Gtk.Template(resource_path='/dev/tchx84/Portfolio/window.ui')
-class PortfolioWindow(Gtk.ApplicationWindow):
+class PortfolioWindow(ApplicationWindow):
     __gtype_name__ = 'PortfolioWindow'
 
     list = Gtk.Template.Child()
     previous = Gtk.Template.Child()
     next = Gtk.Template.Child()
     search = Gtk.Template.Child()
+    back = Gtk.Template.Child()
     rename = Gtk.Template.Child()
     delete = Gtk.Template.Child()
     cut = Gtk.Template.Child()
@@ -55,11 +58,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     help_button = Gtk.Template.Child()
     about_button = Gtk.Template.Child()
 
-    directory_box = Gtk.Template.Child()
-    directory = Gtk.Template.Child()
     search_box = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
-    stack = Gtk.Template.Child()
     popup_box = Gtk.Template.Child()
     action_stack = Gtk.Template.Child()
     tools_stack = Gtk.Template.Child()
@@ -74,12 +74,18 @@ class PortfolioWindow(Gtk.ApplicationWindow):
     about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
+    deck = Gtk.Template.Child()
+    headerbar = Gtk.Template.Child()
+    headerbar_stack = Gtk.Template.Child()
+    overlay = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._setup()
 
     def _setup(self):
+        Handy.init()
+
         self._popup = None
         self._worker = None
         self._busy = False
@@ -89,6 +95,8 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._to_cut = []
         self._history = []
         self._index = -1
+
+        self.deck.connect('notify::visible-child', self._on_deck_child_changed)
 
         placeholder = PortfolioPlaceholder()
         placeholder.show_all()
@@ -117,6 +125,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self.search.connect('toggled', self._on_search_toggled)
         self.search_entry.connect('search-changed', self._on_search_changed)
         self.search_entry.connect('stop-search', self._on_search_stopped)
+        self.back.connect('clicked', self._on_back_clicked)
 
         places = PortfolioPlaces()
         places.connect('updated', self._on_places_updated)
@@ -283,6 +292,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         sensitive = len(rows) == 1 and not self._editing and not self._busy
         self.rename.props.sensitive = sensitive
 
+    def _update_directory_title(self):
+        directory = self._history[self._index]
+        name = os.path.basename(directory)
+        self.headerbar.set_title(name)
+
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text('')
@@ -296,11 +310,11 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         self._busy = True
         self._to_load = []
 
+        self._update_directory_title()
+        self._reset_search()
+
         for row in self.list.get_children():
             row.destroy()
-
-        name = os.path.basename(directory)
-        self.directory.set_text(name)
 
         self.loading_label.set_text("Loading")
         self.loading_bar.set_fraction(0.0)
@@ -324,8 +338,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
         self._update_all()
 
-        self._reset_search()
-
     def _on_load_failed(self, worker, directory):
         pass
 
@@ -343,12 +355,7 @@ class PortfolioWindow(Gtk.ApplicationWindow):
 
     def _on_search_toggled(self, button):
         toggled = self.search.get_active()
-        if toggled:
-            self.stack.set_visible_child(self.search_box)
-            self.search_entry.grab_focus()
-        else:
-            self.stack.set_visible_child(self.directory_box)
-            self._reset_search()
+        self.search_box.props.search_mode_enabled = toggled
 
     def _on_search_changed(self, entry):
         self.list.invalidate_filter()
@@ -598,7 +605,6 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         path = os.path.join(directory, folder_name)
 
         Path(path).mkdir(parents=False, exist_ok=True)
-        icon_name = self._find_icon(path)
 
         row = self._add_row(path)
         row.props.selectable = True
@@ -647,6 +653,16 @@ class PortfolioWindow(Gtk.ApplicationWindow):
         Gio.AppInfo.launch_default_for_uri('https://github.com/tchx84/Portfolio', None)
 
     def _on_about_clicked(self, button):
-        self.content_stack.set_visible_child(self.about_box)
-        self.action_stack.set_visible_child(self.close_box)
-        self.tools_stack.set_visible_child(self.close_tools)
+        self.deck.set_visible_child(self.about_box)
+
+    def _on_back_clicked(self, button):
+        self.deck.set_visible_child(self.overlay)
+
+    def _on_deck_child_changed(self, check, child):
+        child = self.deck.get_visible_child()
+        if child == self.about_box:
+            self.headerbar.set_title('About')
+            self.headerbar_stack.set_visible_child(self.back)
+        else:
+            self._update_directory_title()
+            self.headerbar_stack.set_visible_child(self.search)

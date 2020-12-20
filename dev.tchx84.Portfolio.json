@@ -25,6 +25,28 @@
     ],
     "modules" : [
         {
+            "name": "libhandy",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dgtk_doc=false",
+                "-Dtests=false",
+                "-Dexamples=false",
+                "-Dvapi=false",
+                "-Dglade_catalog=disabled"
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libhandy/1.0/libhandy-1.0.2.tar.xz",
+                    "sha256": "3ad78d0594165c7e8150f662506d386552825e693aa3679744af96bd94dc1c2d"
+                }
+            ]
+        },
+        {
             "name" : "portfolio",
             "builddir" : true,
             "buildsystem" : "meson",

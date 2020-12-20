@@ -18,11 +18,12 @@
 import sys
 import gi
 
-gi.require_version('Gdk', '3.0')
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gio', '2.0')
+gi.require_version("Gdk", "3.0")
+gi.require_version("Gtk", "3.0")
+gi.require_version("Gio", "2.0")
+gi.require_version("Handy", "1")
 
-from gi.repository import Gdk, Gtk, Gio
+from gi.repository import Gdk, Gtk, Gio, Handy
 
 from .window import PortfolioWindow
 

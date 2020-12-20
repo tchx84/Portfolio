@@ -5,10 +5,6 @@ scrolledwindow.frame {
     border-width: 0px;
 }
 
-.directory-label {
-    font-weight: bold;
-}
-
 .files-box .icon-label {
     margin-left: 10px;
     min-height: 30px;
