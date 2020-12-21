@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.0] 2020-12-20
 
 - Added support for browsing HOME and external volumes directories.
 - Added support for opening files.
