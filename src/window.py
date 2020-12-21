@@ -468,9 +468,12 @@ class PortfolioWindow(ApplicationWindow):
         self.list.set_sort_func(None)
         self.list.set_filter_func(None)
 
-        to_paste = self._to_copy if self._to_copy else self._to_cut
-        for path in to_paste:
-            row = self._add_row(path)
+        directory = self._history[self._index]
+        paths = self._to_copy if self._to_copy else self._to_cut
+        for path in paths:
+            name = os.path.basename(path)
+            new_path = os.path.join(directory, name)
+            row = self._add_row(new_path)
             self.list.add(row)
 
         self.list.set_sort_func(self._sort)
