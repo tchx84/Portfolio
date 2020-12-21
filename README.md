@@ -1,6 +1,12 @@
 # Portfolio
 
+<img height="100" src="https://github.com/tchx84/Portfolio/blob/master/data/dev.tchx84.Portfolio.svg">
+
 A minimalist file manager for those who want to use Linux mobile devices.
+
+## Usage
+
+Tap to activate and press to select.
 
 ## Build it yourself
 
