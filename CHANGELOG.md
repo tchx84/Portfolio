@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.1] 2020-12-21
 
 - Fixed assigning old paths to copied rows.
 
