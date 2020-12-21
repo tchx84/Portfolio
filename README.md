@@ -6,7 +6,7 @@ A minimalist file manager for those who want to use Linux mobile devices.
 
 ## Usage
 
-Tap to activate and press to select.
+Tap to activate and press to select, to browse, open, copy, move, delete, or edit your files. 
 
 ## Build it yourself
 
@@ -17,6 +17,12 @@ $ flatpak-builder --force-clean --repo=repo build dev.tchx84.Portfolio.json
 $ flatpak build-bundle repo portfolio.flatpak dev.tchx84.Portfolio
 $ flatpak install portfolio.flatpak
 ```
+
+Or just use [Builder](https://flathub.org/apps/details/org.gnome.Builder).
+
+## Contribute
+
+If you are interested in contributing to this project just send a pull request to [this](https://github.com/tchx84/Portfolio) repo.
 
 ## Disclaimer
 
