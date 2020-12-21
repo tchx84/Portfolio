@@ -8,6 +8,10 @@ A minimalist file manager for those who want to use Linux mobile devices.
 
 Tap to activate and press to select, to browse, open, copy, move, delete, or edit your files. 
 
+## Get it
+
+[<img width="240" src="https://flathub.org/assets/badges/flathub-badge-i-en.png">](https://flathub.org/apps/details/dev.tchx84.Portfolio)
+
 ## Build it yourself
 
 ```
