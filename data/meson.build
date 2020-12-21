@@ -29,7 +29,7 @@ install_data('dev.tchx84.Portfolio.svg',
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
   test('Validate appstream file', appstream_util,
-    args: ['validate', appstream_file]
+    args: ['validate', '--nonet', appstream_file]
   )
 endif
 
