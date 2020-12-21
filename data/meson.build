@@ -19,7 +19,7 @@ appstream_file = i18n.merge_file(
   output: 'dev.tchx84.Portfolio.appdata.xml',
   po_dir: '../po',
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'appdata')
+  install_dir: join_paths(get_option('datadir'), 'metainfo')
 )
 
 install_data('dev.tchx84.Portfolio.svg',
