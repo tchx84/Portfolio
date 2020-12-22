@@ -945,6 +945,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="halign">start</property>
                     <property name="label" translatable="yes">Places</property>
                     <style>
                       <class name="menu-title"/>
@@ -961,7 +962,7 @@
                 </style>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -998,7 +999,6 @@
                 <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="yes">Help</property>
-                <property name="centered">True</property>
                 <style>
                   <class name="menu-item"/>
                 </style>
@@ -1015,7 +1015,6 @@
                 <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="yes">About Portfolio</property>
-                <property name="centered">True</property>
                 <style>
                   <class name="menu-item"/>
                 </style>

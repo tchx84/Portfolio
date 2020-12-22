@@ -91,7 +91,7 @@ scrolledwindow.frame {
 }
 .menu-box .menu-title {
     font-weight: bold;
-    margin-bottom: 5px;
+    padding: 5px 10px;
 }
 .menu-box .menu-item {
     padding: 5px 10px;
