@@ -29,9 +29,7 @@ portfolio_sources = [
   '__init__.py',
   'main.py',
   'window.py',
-  'row.py',
   'popup.py',
-  'placeholder.py',
   'worker.py',
   'places.py',
 ]

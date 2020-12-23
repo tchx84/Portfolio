@@ -145,6 +145,6 @@ class PortfolioLoadWorker(PortfolioWorker):
                 return
             else:
                 self.emit("updated", self._directory, path, name, index, total)
-                time.sleep(0.005)
+                time.sleep(0.001)
 
         self.emit("finished", self._directory)

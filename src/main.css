@@ -5,21 +5,6 @@ scrolledwindow.frame {
     border-width: 0px;
 }
 
-.files-box .icon-label {
-    margin-left: 10px;
-    min-height: 30px;
-    min-width: 30px;
-    background: -gtk-icontheme("text-x-generic-symbolic") center no-repeat;
-}
-.files-box .icon-label.folder {
-    background: -gtk-icontheme("folder-symbolic") center no-repeat;
-}
-
-.files-box .name-box {
-    margin-left: 10px;
-    font-size: medium;
-}
-
 .select-all-button,
 .previous-button {
     padding-right: 12.5px;
@@ -45,8 +30,11 @@ scrolledwindow.frame {
   margin-right: 5px;
 }
 
+/* placeholder */
+
 .placeholder {
     color: @insensitive_fg_color;
+    background-color: @theme_base_color;
 }
 .placeholder label {
     margin: 10px;
@@ -107,15 +95,11 @@ scrolledwindow.frame {
     background-size: 16px;
 }
 
-/* rows magic */
-
-.preselected {
-    color: @theme_selected_fg_color;
-    background-color: @theme_selected_bg_color;
-}
-
 /* loading */
 
+.loading {
+    background-color: @theme_base_color;
+}
 .loading-bar {
     margin: 10px 10px;
 }
