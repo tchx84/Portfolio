@@ -19,13 +19,11 @@ import os
 import shutil
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, GObject, GLib, Handy
+from gi.repository import Gdk, Gtk, Gio, GObject, GLib, Handy
 
 from gi.repository.Handy import Deck, ApplicationWindow, HeaderBar, SearchBar
 
-from .row import PortfolioRow
 from .popup import PortfolioPopup
-from .placeholder import PortfolioPlaceholder
 from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
 from .worker import PortfolioDeleteWorker
@@ -37,7 +35,13 @@ from .places import PortfolioPlaces
 class PortfolioWindow(ApplicationWindow):
     __gtype_name__ = "PortfolioWindow"
 
-    list = Gtk.Template.Child()
+    name_column = Gtk.Template.Child()
+    name_cell = Gtk.Template.Child()
+    sorted = Gtk.Template.Child()
+    filtered = Gtk.Template.Child()
+    selection = Gtk.Template.Child()
+    liststore = Gtk.Template.Child()
+    treeview = Gtk.Template.Child()
     previous = Gtk.Template.Child()
     next = Gtk.Template.Child()
     search = Gtk.Template.Child()
@@ -78,6 +82,7 @@ class PortfolioWindow(ApplicationWindow):
     deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
     overlay = Gtk.Template.Child()
+    placeholder_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -93,18 +98,24 @@ class PortfolioWindow(ApplicationWindow):
         self._to_load = []
         self._to_copy = []
         self._to_cut = []
+        self._last_clicked = None
+        self._force_select = False
         self._history = []
         self._index = -1
 
-        placeholder = PortfolioPlaceholder()
-        placeholder.show_all()
+        self.gesture = Gtk.GestureLongPress.new(self.treeview)
+        self.gesture.connect("pressed", self._on_long_pressed)
 
-        self.list.set_sort_func(self._sort)
-        self.list.set_filter_func(self._filter)
-        self.list.connect("selected-rows-changed", self._on_rows_selection_changed)
-        self.list.connect("row-activated", self._on_row_activated)
-        self.list.set_placeholder(placeholder)
-        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.filtered.set_visible_func(self._filter, data=None)
+        self.sorted.set_default_sort_func(self._sort, None)
+        self.selection.connect("changed", self._on_selection_changed)
+        self.selection.set_select_function(self._on_select)
+        self.treeview.connect("row-activated", self._on_row_activated)
+        self.treeview.connect("button-press-event", self._on_clicked)
+
+        self.name_cell.connect("editing-started", self._on_rename_started)
+        self.name_cell.connect("editing-canceled", self._on_rename_finished)
+        self.name_cell.connect("edited", self._on_rename_updated)
 
         self.previous.connect("clicked", self._on_go_previous)
         self.next.connect("clicked", self._on_go_next)
@@ -131,23 +142,27 @@ class PortfolioWindow(ApplicationWindow):
 
         self._move(os.path.expanduser("~"))
 
-    def _filter(self, row):
+    def _filter(self, model, row, data=None):
+        path = model[row][2]
         text = self.search_entry.get_text()
         if not text:
             return True
-        return text.lower() in os.path.basename(row.path.lower())
+        return text.lower() in os.path.basename(path).lower()
 
-    def _sort(self, row1, row2):
-        row1_is_dir = os.path.isdir(row1.path)
-        row2_is_dir = os.path.isdir(row2.path)
+    def _sort(self, model, row1, row2, data=None):
+        path1 = model[row1][2]
+        path2 = model[row2][2]
+
+        row1_is_dir = os.path.isdir(path1)
+        row2_is_dir = os.path.isdir(path2)
 
         if row1_is_dir and not row2_is_dir:
             return -1
         elif not row1_is_dir and row2_is_dir:
             return 1
 
-        path1 = row1.path.lower()
-        path2 = row2.path.lower()
+        path1 = path1.lower()
+        path2 = path2.lower()
 
         if path1 < path2:
             return -1
@@ -155,6 +170,21 @@ class PortfolioWindow(ApplicationWindow):
             return 1
 
         return 0
+
+    def _select_all(self):
+        self._force_select = True
+        self.selection.select_all()
+        self._force_select = False
+
+    def _unselect_all(self):
+        self._force_select = True
+        self.selection.unselect_all()
+        self._force_select = False
+
+    def _select_row(self, row):
+        self._force_select = True
+        self.selection.select_iter(row)
+        self._force_select = False
 
     def _populate(self, directory):
         self._worker = PortfolioLoadWorker(directory)
@@ -164,15 +194,23 @@ class PortfolioWindow(ApplicationWindow):
         self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
 
-    def _add_row(self, path):
-        row = PortfolioRow(path)
-        row.connect("rename-started", self._on_rename_started)
-        row.connect("rename-updated", self._on_rename_updated)
-        row.connect("rename-finished", self._on_rename_finished)
-        row.connect("rename-failed", self._on_rename_failed)
-        row.connect("activate-selection-mode", self._on_activated_selection_mode)
-        row.props.selectable = False
-        return row
+    def _get_row(self, model, treepath):
+        return model.get_iter(treepath)
+
+    def _get_path(self, model, treepath):
+        return model[model.get_iter(treepath)][2]
+
+    def _go_to_selection(self):
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        self.treeview.set_cursor_on_cell(
+            treepath, self.name_column, self.name_cell, False
+        )
+        self.treeview.scroll_to_cell(treepath, None, False, 0, 0)
+
+    def _go_to_top(self):
+        if len(self.sorted) >= 1:
+            self.treeview.scroll_to_cell(0, None, False, 0, 0)
 
     def _move(self, path, navigating=False):
         if path is None:
@@ -187,10 +225,10 @@ class PortfolioWindow(ApplicationWindow):
         self._move(self._history[self._index], True)
 
     def _switch_to_navigation_mode(self):
-        self.list.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.selection.set_mode(Gtk.SelectionMode.NONE)
 
     def _switch_to_selection_mode(self):
-        self.list.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
+        self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def _notify(self, description, on_confirm, on_cancel, autoclose, data):
         if self._popup is not None:
@@ -202,9 +240,15 @@ class PortfolioWindow(ApplicationWindow):
         self.popup_box.add(self._popup)
         self._popup.props.reveal_child = True
 
+    def _find_icon(self, path):
+        if os.path.isdir(path):
+            return "folder-symbolic"
+        else:
+            return "text-x-generic-symbolic"
+
     def _update_mode(self):
-        rows = self.list.get_selected_rows()
-        if not rows:
+        count = self.selection.count_selected_rows()
+        if count == 0:
             self._switch_to_navigation_mode()
 
     def _update_history(self, path, navigating):
@@ -215,6 +259,7 @@ class PortfolioWindow(ApplicationWindow):
 
     def _update_all(self):
         self._update_search()
+        self._update_content_stack()
         self._update_navigation()
         self._update_navigation_tools()
         self._update_selection()
@@ -225,11 +270,19 @@ class PortfolioWindow(ApplicationWindow):
     def _update_search(self):
         sensitive = not self._editing and not self._busy
         self.search.props.sensitive = sensitive
-        self.search_entry.props.sensitive = sensitive
+        self.search_entry.sensitive = sensitive
+
+    def _update_content_stack(self):
+        if self._busy:
+            return
+        elif len(self.sorted) == 0:
+            self.content_stack.set_visible_child(self.placeholder_box)
+        else:
+            self.content_stack.set_visible_child(self.content_box)
 
     def _update_navigation(self):
-        rows = self.list.get_selected_rows()
-        selected = len(rows) >= 1
+        count = self.selection.count_selected_rows()
+        selected = count >= 1
 
         if selected or self._busy:
             self.previous.props.sensitive = False
@@ -248,20 +301,20 @@ class PortfolioWindow(ApplicationWindow):
         self.select_none.props.sensitive = sensitive
 
     def _update_action_stack(self):
-        rows = self.list.get_selected_rows()
-        selected = len(rows) >= 1
+        count = self.selection.count_selected_rows()
+        selected = count >= 1
         child = self.selection_box if selected else self.navigation_box
         self.action_stack.set_visible_child(child)
 
     def _update_tools_stack(self):
-        rows = self.list.get_selected_rows()
-        selected = len(rows) >= 1
+        count = self.selection.count_selected_rows()
+        selected = count >= 1
         child = self.selection_tools if selected else self.navigation_tools
         self.tools_stack.set_visible_child(child)
 
     def _update_selection_tools(self):
-        rows = self.list.get_selected_rows()
-        sensitive = len(rows) >= 1 and not self._editing and not self._busy
+        count = self.selection.count_selected_rows()
+        sensitive = count >= 1 and not self._editing and not self._busy
 
         self.delete.props.sensitive = sensitive
         self.cut.props.sensitive = sensitive
@@ -270,15 +323,15 @@ class PortfolioWindow(ApplicationWindow):
         self._update_rename()
 
     def _update_navigation_tools(self):
-        rows = self.list.get_selected_rows()
-        selected = len(rows) >= 1
+        count = self.selection.count_selected_rows()
+        selected = count >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
         self.paste.props.sensitive = not selected and to_paste and not self._busy
         self.new_folder.props.sensitive = not selected and not self._busy
 
     def _update_rename(self):
-        rows = self.list.get_selected_rows()
-        sensitive = len(rows) == 1 and not self._editing and not self._busy
+        count = self.selection.count_selected_rows()
+        sensitive = count == 1 and not self._editing and not self._busy
         self.rename.props.sensitive = sensitive
 
     def _update_directory_title(self):
@@ -289,11 +342,8 @@ class PortfolioWindow(ApplicationWindow):
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text("")
-        self.list.invalidate_filter()
+        self.filtered.refilter()
         self.search.grab_focus()
-
-    def _on_menu_started(self, button):
-        pass
 
     def _on_load_started(self, worker, directory):
         self._busy = True
@@ -302,8 +352,7 @@ class PortfolioWindow(ApplicationWindow):
         self._update_directory_title()
         self._reset_search()
 
-        for row in self.list.get_children():
-            row.destroy()
+        self.liststore.clear()
 
         self.loading_label.set_text("Loading")
         self.loading_bar.set_fraction(0.0)
@@ -312,32 +361,42 @@ class PortfolioWindow(ApplicationWindow):
         self._update_all()
 
     def _on_load_updated(self, worker, directory, path, name, index, total):
-        row = self._add_row(path)
-        self._to_load.append(row)
+        icon = self._find_icon(path)
+        self.liststore.append([icon, name, path])
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
         self._busy = False
-
-        # remove functions to speedup
-        self.list.set_sort_func(None)
-        self.list.set_filter_func(None)
-
-        for row in self._to_load:
-            self.list.add(row)
-
-        self.list.set_sort_func(self._sort)
-        self.list.set_filter_func(self._filter)
-
-        self._to_load = []
+        self._go_to_top()
         self._update_all()
-
-        self.content_stack.set_visible_child(self.content_box)
 
     def _on_load_failed(self, worker, directory):
         pass
 
-    def _on_rows_selection_changed(self, widget):
+    def _on_clicked(self, treeview, event):
+        treepath, column, x, y = self.treeview.get_path_at_pos(event.x, event.y)
+        self._last_clicked = treepath
+
+    def _on_select(self, selection, model, treepath, selected, data=None):
+        should_select = False
+
+        if self._force_select is True:
+            should_select = True
+        elif treepath != self._last_clicked and selected:
+            should_select = False
+        elif treepath != self._last_clicked and not selected:
+            should_select = False
+        elif treepath == self._last_clicked and not selected:
+            should_select = True
+        elif treepath == self._last_clicked and selected:
+            should_select = True
+
+        if treepath == self._last_clicked:
+            self._last_clicked = None
+
+        return should_select
+
+    def _on_selection_changed(self, selection):
         self._update_all()
         self._update_mode()
 
@@ -354,83 +413,121 @@ class PortfolioWindow(ApplicationWindow):
         self.search_box.props.search_mode_enabled = toggled
 
     def _on_search_changed(self, entry):
-        self.list.invalidate_filter()
+        self.filtered.refilter()
+        self._update_content_stack()
 
     def _on_search_stopped(self, entry):
         self._reset_search()
 
     def _on_rename_clicked(self, button):
-        row = self.list.get_selected_rows()[-1]
-        row.rename()
+        self.name_cell.props.editable = True
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        self.treeview.set_cursor_on_cell(
+            treepath, self.name_column, self.name_cell, True
+        )
 
-    def _on_rename_started(self, row):
+    def _on_rename_started(self, cell_name, treepath, data=None):
         self._editing = True
 
         self._update_search()
         self._update_selection()
         self._update_selection_tools()
 
-    def _on_rename_updated(self, row):
+    def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
+        directory = self._history[self._index]
+        new_path = os.path.join(directory, new_name)
+        old_path = self._get_path(self.sorted, treepath)
+
+        if new_path == old_path:
+            self._on_rename_finished()
+            return
+
+        try:
+            # respect empty folders
+            if os.path.exists(new_path):
+                raise FileExistsError()
+
+            os.rename(old_path, new_path)
+
+            _treepath = Gtk.TreePath.new_from_string(treepath)
+            _treepath = self.sorted.convert_path_to_child_path(_treepath)
+            _treepath = self.filtered.convert_path_to_child_path(_treepath)
+
+            row = self.liststore.get_iter(_treepath)
+            self.liststore.set_value(row, 2, new_path)
+            self.liststore.set_value(row, 1, new_name)
+        except:
+            self._notify(
+                f"{new_name} already exists.", None, self._on_popup_closed, True, None
+            )
+            self._on_rename_clicked(None)
+            return
+
         # remove this folder from history
         self._history = [
-            path for path in self._history if not path.startswith(row.path)
+            path for path in self._history if not path.startswith(old_path)
         ]
 
-    def _on_rename_finished(self, row):
+        # take the user to the new position
+        self._on_rename_finished()
+        self._go_to_selection()
+
+    def _on_rename_finished(self, *args):
+        self.name_cell.props.editable = False
         self._editing = False
-
-        self.search.grab_focus()
-        self.list.unselect_all()
-
-        row.props.selectable = False
-
         self._update_all()
 
-    def _on_rename_failed(self, row, name):
-        self._notify(f"{name} already exists.", None, self._on_popup_closed, True, None)
-
     def _on_delete_clicked(self, button):
-        rows = self.list.get_selected_rows()
+        model, treepaths = self.selection.get_selected_rows()
+        paths = [self._get_path(model, treepath) for treepath in treepaths]
+        count = len(paths)
 
-        if len(rows) == 1:
-            name = os.path.basename(rows[0].path)
+        if count == 1:
+            name = os.path.basename(paths[0])
         else:
-            name = f"these {len(rows)} files"
+            name = f"these {count} files"
 
         description = f"Delete {name}?"
 
         self._notify(
-            description, self._on_delete_confirmed, self._on_popup_closed, False, rows
+            description, self._on_delete_confirmed, self._on_popup_closed, False, paths
         )
 
     def _on_cut_clicked(self, button):
-        rows = self.list.get_selected_rows()
-        self._to_cut = [row.path for row in rows]
+        model, treepaths = self.selection.get_selected_rows()
+        paths = [self._get_path(model, treepath) for treepath in treepaths]
+        count = len(paths)
+
+        self._to_cut = paths
         self._to_copy = []
 
-        if len(rows) == 1:
-            name = os.path.basename(rows[0].path)
+        if count == 1:
+            name = os.path.basename(paths[0])
         else:
-            name = f"{len(rows)} files"
+            name = f"{count} files"
 
         self._notify(f"{name} will be moved.", None, None, True, None)
 
-        self.list.unselect_all()
+        self._unselect_all()
         self._update_mode()
 
     def _on_copy_clicked(self, button):
-        rows = self.list.get_selected_rows()
-        self._to_copy = [row.path for row in rows]
+        model, treepaths = self.selection.get_selected_rows()
+        paths = [self._get_path(model, treepath) for treepath in treepaths]
+        count = len(paths)
+
+        self._to_copy = paths
         self._to_cut = []
 
-        if len(rows) == 1:
-            name = os.path.basename(rows[0].path)
+        if count == 1:
+            name = os.path.basename(paths[0])
         else:
-            name = f"{len(rows)} files"
+            name = f"{count} files"
 
         self._notify(f"{name} will be copied.", None, None, True, None)
 
-        self.list.unselect_all()
+        self._unselect_all()
         self._update_mode()
 
     def _on_paste_clicked(self, button):
@@ -457,31 +554,25 @@ class PortfolioWindow(ApplicationWindow):
         self._update_all()
 
     def _on_paste_updated(self, worker, index, total):
+        directory = self._history[self._index]
+        to_paste = self._to_copy if self._to_copy else self._to_cut
+        source_path = to_paste[index]
+
+        icon = self._find_icon(source_path)
+        name = os.path.basename(source_path)
+        path = os.path.join(directory, name)
+
+        self.liststore.append([icon, name, path])
+
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_paste_finished(self, worker, total):
         self._busy = False
 
-        # remove functions to speedup
-        self.list.set_sort_func(None)
-        self.list.set_filter_func(None)
-
-        directory = self._history[self._index]
-        paths = self._to_copy if self._to_copy else self._to_cut
-        for path in paths:
-            name = os.path.basename(path)
-            new_path = os.path.join(directory, name)
-            row = self._add_row(new_path)
-            self.list.add(row)
-
-        self.list.set_sort_func(self._sort)
-        self.list.set_filter_func(self._filter)
-
         self._to_cut = []
         self._to_copy = []
-        self.list.unselect_all()
 
-        self.content_stack.set_visible_child(self.content_box)
+        self._unselect_all()
 
         self._update_all()
         self._update_mode()
@@ -497,10 +588,8 @@ class PortfolioWindow(ApplicationWindow):
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
 
-    def _on_delete_confirmed(self, button, popup, rows):
+    def _on_delete_confirmed(self, button, popup, to_delete):
         self._popup.destroy()
-
-        to_delete = [row.path for row in rows]
 
         # clean history entries from deleted paths
         directory = self._history[self._index]
@@ -527,28 +616,16 @@ class PortfolioWindow(ApplicationWindow):
         self._update_all()
 
     def _on_delete_updated(self, worker, index, total):
+        # XXX delete here instead of refreshing later
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
         self._busy = False
-
-        # remove functions to speedup
-        self.list.set_sort_func(None)
-        self.list.set_filter_func(None)
-
-        rows = self.list.get_selected_rows()
-        for row in rows:
-            row.destroy()
-
-        self.list.set_sort_func(self._sort)
-        self.list.set_filter_func(self._filter)
-
-        self.list.unselect_all()
-
-        self.content_stack.set_visible_child(self.content_box)
+        self._unselect_all()
 
         self._update_all()
         self._update_mode()
+        self._refresh()
 
     def _on_delete_failed(self, worker, path):
         self._busy = False
@@ -564,26 +641,17 @@ class PortfolioWindow(ApplicationWindow):
         self._popup = None
 
     def _on_button_closed(self, button):
-        self.list.unselect_all()
-
+        self._unselect_all()
         self._update_all()
         self._update_mode()
         self._refresh()
 
-        self.content_stack.set_visible_child(self.content_box)
-
     def _on_select_all(self, button):
-        # Make sure all rows are selectable
-        for row in self.list.get_children():
-            row.props.selectable = True
-        self.list.select_all()
+        self._select_all()
         self._update_mode()
 
     def _on_select_none(self, button):
-        self.list.unselect_all()
-        self._update_mode()
-        for row in self.list.get_children():
-            row.props.selectable = False
+        self._unselect_all()
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
@@ -596,46 +664,24 @@ class PortfolioWindow(ApplicationWindow):
             counter += 1
 
         path = os.path.join(directory, folder_name)
-
         Path(path).mkdir(parents=False, exist_ok=True)
 
-        row = self._add_row(path)
-        row.props.selectable = True
         self._switch_to_selection_mode()
-        self.list.add(row)
-        self.list.select_row(row)
-        row.rename()
 
-    def _on_activated_selection_mode(self, row):
-        if self._editing:
-            return
-        self._switch_to_selection_mode()
-        row.preselect()
+        icon = self._find_icon(path)
+        row = self.liststore.append([icon, folder_name, path])
+        _, row = self.filtered.convert_child_iter_to_iter(row)
+        _, row = self.sorted.convert_child_iter_to_iter(row)
 
-        # XXX ugh...
-        row.props.selectable = True
-        self.list.select_row(row)
-        row.props.selectable = False
+        self._select_row(row)
 
-    def _on_row_activated(self, list, row):
-        rows = self.list.get_selected_rows()
-        mode = self.list.get_selection_mode()
+        self._go_to_selection()
+        self._on_rename_clicked(None)
 
-        # In navigation mode we move or activate
-        if mode == Gtk.SelectionMode.NONE:
-            self._move(row.path)
-
-        if self._editing:
-            return
-
-        # In selection mode we handle selections
-        if row in rows:
-            self.list.unselect_row(row)
-            row.props.selectable = False
-        else:
-            row.props.selectable = True
-            self.list.select_row(row)
-            row.deselect()
+    def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
+        if self.selection.get_mode() == Gtk.SelectionMode.NONE:
+            path = self._get_path(self.sorted, treepath)
+            self._move(path)
 
     def _on_places_updated(self, button, path):
         self._history = []
@@ -650,3 +696,9 @@ class PortfolioWindow(ApplicationWindow):
 
     def _on_back_clicked(self, button):
         self.deck.set_visible_child(self.app_box)
+
+    def _on_long_pressed(self, gesture, x, y):
+        if self.selection.get_mode() != Gtk.SelectionMode.MULTIPLE:
+            self._switch_to_selection_mode()
+            treepath = self.treeview.get_path_at_pos(x, y)[0]
+            self.selection.select_path(treepath)
