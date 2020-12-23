@@ -71,12 +71,12 @@ class PortfolioWindow(ApplicationWindow):
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
+    app_box = Gtk.Template.Child()
     about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
     deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
-    headerbar_stack = Gtk.Template.Child()
     overlay = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
@@ -95,8 +95,6 @@ class PortfolioWindow(ApplicationWindow):
         self._to_cut = []
         self._history = []
         self._index = -1
-
-        self.deck.connect("notify::visible-child", self._on_deck_child_changed)
 
         placeholder = PortfolioPlaceholder()
         placeholder.show_all()
@@ -651,13 +649,4 @@ class PortfolioWindow(ApplicationWindow):
         self.deck.set_visible_child(self.about_box)
 
     def _on_back_clicked(self, button):
-        self.deck.set_visible_child(self.overlay)
-
-    def _on_deck_child_changed(self, check, child):
-        child = self.deck.get_visible_child()
-        if child == self.about_box:
-            self.headerbar.set_title("About")
-            self.headerbar_stack.set_visible_child(self.back)
-        else:
-            self._update_directory_title()
-            self.headerbar_stack.set_visible_child(self.search)
+        self.deck.set_visible_child(self.app_box)
