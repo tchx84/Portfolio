@@ -82,6 +82,8 @@ class PortfolioWindow(ApplicationWindow):
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
 
+    SEARCH_DELAY = 500
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._setup()
@@ -100,6 +102,7 @@ class PortfolioWindow(ApplicationWindow):
         self._force_select = False
         self._history = []
         self._index = -1
+        self._search_delay_handler_id = 0
 
         self.gesture = Gtk.GestureLongPress.new(self.treeview)
         self.gesture.connect("pressed", self._on_long_pressed)
@@ -337,6 +340,13 @@ class PortfolioWindow(ApplicationWindow):
         name = os.path.basename(directory)
         self.headerbar.set_title(name)
 
+    def _update_filter(self):
+        self.filtered.refilter()
+        self._update_content_stack()
+
+        self._search_delay_handler_id = 0
+        return GLib.SOURCE_REMOVE
+
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text("")
@@ -410,8 +420,11 @@ class PortfolioWindow(ApplicationWindow):
         self.search_box.props.search_mode_enabled = toggled
 
     def _on_search_changed(self, entry):
-        self.filtered.refilter()
-        self._update_content_stack()
+        if self._search_delay_handler_id != 0:
+            GLib.Source.remove(self._search_delay_handler_id)
+        self._search_delay_handler_id = GLib.timeout_add(
+            self.SEARCH_DELAY, self._update_filter
+        )
 
     def _on_search_stopped(self, entry):
         self._reset_search()
