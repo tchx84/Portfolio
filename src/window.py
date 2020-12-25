@@ -16,12 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import shutil
 
 from pathlib import Path
-from gi.repository import Gdk, Gtk, Gio, GObject, GLib, Handy
+from gi.repository import Gtk, Gio, Handy
 
-from gi.repository.Handy import Deck, ApplicationWindow, HeaderBar, SearchBar
+from gi.repository.Handy import ApplicationWindow
 
 from .popup import PortfolioPopup
 from .worker import PortfolioCutWorker
