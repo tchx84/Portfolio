@@ -113,38 +113,41 @@ class PortfolioDeleteWorker(PortfolioCopyWorker):
         self.emit("finished", total)
 
 
-class PortfolioLoadWorker(PortfolioWorker):
+class PortfolioLoadWorker(GObject.GObject):
     __gtype_name__ = "PortfolioLoadWorker"
 
     __gsignals__ = {
         "started": (GObject.SIGNAL_RUN_LAST, None, (str,)),
-        "updated": (GObject.SIGNAL_RUN_LAST, None, (str, str, str, int, int)),
+        "updated": (GObject.SIGNAL_RUN_LAST, None, (str, object, int, int)),
         "finished": (GObject.SIGNAL_RUN_LAST, None, (str,)),
-        "failed": (GObject.SIGNAL_RUN_LAST, None, (str,)),
     }
+
+    BUFFER = 75
 
     def __init__(self, directory):
         super().__init__()
         self._directory = directory
 
-    def run(self):
+    def start(self):
         self.emit("started", self._directory)
+        self._paths = os.listdir(self._directory)
+        self._total = len(self._paths)
+        self._index = 0
+        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
 
-        paths = os.listdir(self._directory)
-        total = len(paths)
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", self._directory)
+            return
+
         found = []
+        for index in range(0, self.BUFFER):
+            if self._index + index < self._total:
+                name = self._paths[self._index + index]
+                if not name.startswith("."):
+                    path = os.path.join(self._directory, name)
+                    found.append((name, path))
 
-        for index, name in enumerate(paths):
-            try:
-                if name.startswith("."):
-                    continue
-                path = os.path.join(self._directory, name)
-                found.append([path, name])
-            except:
-                self.emit("failed", self._directory)
-                return
-            else:
-                self.emit("updated", self._directory, path, name, index, total)
-                time.sleep(0.001)
-
-        self.emit("finished", self._directory)
+        self._index += self.BUFFER
+        self.emit("updated", self._directory, found, self._index, self._total)
+        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
