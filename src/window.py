@@ -340,7 +340,6 @@ class PortfolioWindow(ApplicationWindow):
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text("")
-        self.filtered.refilter()
         self.search.grab_focus()
 
     def _on_load_started(self, worker, directory):
