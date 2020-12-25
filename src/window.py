@@ -641,6 +641,7 @@ class PortfolioWindow(ApplicationWindow):
         self._popup = None
 
     def _on_button_closed(self, button):
+        self.loading_description.set_text("")
         self._unselect_all()
         self._update_all()
         self._update_mode()
