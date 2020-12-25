@@ -1,5 +1,5 @@
 data/dev.tchx84.Portfolio.desktop.in
-data/dev.tchx84.Portfolio.appdata.xml.in
+data/dev.tchx84.Portfolio.metainfo.xml.in
 data/dev.tchx84.Portfolio.gschema.xml
 src/window.ui
 src/main.py
