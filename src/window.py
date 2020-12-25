@@ -191,7 +191,6 @@ class PortfolioWindow(ApplicationWindow):
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
-        self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
 
     def _get_row(self, model, treepath):
@@ -216,8 +215,8 @@ class PortfolioWindow(ApplicationWindow):
         if path is None:
             return
         elif os.path.isdir(path):
-            self._populate(path)
             self._update_history(path, navigating)
+            self._populate(path)
         else:
             Gio.AppInfo.launch_default_for_uri(f"file://{path}")
 
@@ -366,9 +365,10 @@ class PortfolioWindow(ApplicationWindow):
 
         self._update_all()
 
-    def _on_load_updated(self, worker, directory, path, name, index, total):
-        icon = self._find_icon(path)
-        self.liststore.append([icon, name, path])
+    def _on_load_updated(self, worker, directory, found, index, total):
+        for name, path in found:
+            icon = self._find_icon(path)
+            self.liststore.append([icon, name, path])
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
