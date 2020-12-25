@@ -6,19 +6,18 @@ pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.proje
 moduledir = join_paths(python_dir, meson.project_name())
 gnome = import('gnome')
 
-conf = configuration_data()
-conf.set('PYTHON', python.find_installation('python3').path())
-conf.set('VERSION', meson.project_version())
-conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
-conf.set('pkgdatadir', pkgdatadir)
-
-
 gnome.compile_resources('portfolio',
   'portfolio.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
 )
+
+conf = configuration_data()
+conf.set('PYTHON', python.find_installation('python3').path())
+conf.set('VERSION', meson.project_version())
+conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
+conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
   input: 'portfolio.in',
@@ -32,9 +31,7 @@ portfolio_sources = [
   '__init__.py',
   'main.py',
   'window.py',
-  'row.py',
   'popup.py',
-  'placeholder.py',
   'worker.py',
   'places.py',
 ]
