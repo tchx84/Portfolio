@@ -380,7 +380,10 @@ class PortfolioWindow(ApplicationWindow):
         pass
 
     def _on_clicked(self, treeview, event):
-        treepath, column, x, y = self.treeview.get_path_at_pos(event.x, event.y)
+        result = self.treeview.get_path_at_pos(event.x, event.y)
+        if result is None:
+            return
+        treepath, column, x, y = result
         self._last_clicked = treepath
 
     def _on_select(self, selection, model, treepath, selected, data=None):
