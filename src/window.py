@@ -51,7 +51,6 @@ class PortfolioWindow(ApplicationWindow):
     cut = Gtk.Template.Child()
     copy = Gtk.Template.Child()
     paste = Gtk.Template.Child()
-    menu = Gtk.Template.Child()
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
     new_folder = Gtk.Template.Child()
@@ -81,7 +80,6 @@ class PortfolioWindow(ApplicationWindow):
     close_tools = Gtk.Template.Child()
     deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
-    overlay = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
