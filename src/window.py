@@ -96,7 +96,6 @@ class PortfolioWindow(ApplicationWindow):
         self._worker = None
         self._busy = False
         self._editing = False
-        self._to_load = []
         self._to_copy = []
         self._to_cut = []
         self._last_clicked = None
@@ -357,7 +356,6 @@ class PortfolioWindow(ApplicationWindow):
 
     def _on_load_started(self, worker, directory):
         self._busy = True
-        self._to_load = []
 
         self._update_directory_title()
         self._reset_search()
