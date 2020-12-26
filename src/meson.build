@@ -1,5 +1,9 @@
+python = import('python')
+python_bin = python.find_installation('python3')
+python_dir = join_paths(get_option('prefix'), python_bin.get_install_dir())
+
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-moduledir = join_paths(pkgdatadir, 'portfolio')
+moduledir = join_paths(python_dir, meson.project_name())
 gnome = import('gnome')
 
 gnome.compile_resources('portfolio',
@@ -8,8 +12,6 @@ gnome.compile_resources('portfolio',
   install: true,
   install_dir: pkgdatadir,
 )
-
-python = import('python')
 
 conf = configuration_data()
 conf.set('PYTHON', python.find_installation('python3').path())
