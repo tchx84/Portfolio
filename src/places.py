@@ -17,7 +17,7 @@
 
 import os
 
-from gi.repository import Gio, Gtk, GObject
+from gi.repository import GLib, Gio, Gtk, GObject
 
 
 class PortfolioPlaces(Gtk.Box):
@@ -26,6 +26,8 @@ class PortfolioPlaces(Gtk.Box):
     __gsignals__ = {
         "updated": (GObject.SIGNAL_RUN_LAST, None, (str,)),
     }
+
+    FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
 
     def __init__(self, **kargs):
         super().__init__(**kargs)
@@ -39,9 +41,31 @@ class PortfolioPlaces(Gtk.Box):
         self._manager.connect("mount-added", self._on_mount_added)
         self._manager.connect("mount-removed", self._on_mount_removed)
 
-        self._add_button("Home", os.path.expanduser("~"), "home")
+        if self._has_permission_for("host"):
+            self._add_button("System", os.path.abspath(os.sep), "system")
+        if self._has_permission_for("home"):
+            self._add_button("Home", os.path.expanduser("~"), "home")
+
         for mount in self._manager.get_mounts():
             self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
+
+    def _has_permission_for(self, permission):
+        # not using flatpak, so access to all
+        if not os.path.exists(self.FLATPAK_INFO):
+            return True
+
+        info = GLib.KeyFile()
+        info.load_from_file(self.FLATPAK_INFO, GLib.KeyFileFlags.NONE)
+        permissions = info.get_value("Context", "filesystems")
+
+        if permissions is None:
+            return False
+        if f"!{permission}" in permissions:
+            return False
+        if permission in permissions:
+            return True
+
+        return False
 
     def _add_button(self, name, path, style):
         button = Gtk.ModelButton()

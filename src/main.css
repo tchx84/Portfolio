@@ -94,6 +94,11 @@ scrolledwindow.frame {
     background: -gtk-icontheme("drive-removable-media-symbolic") left no-repeat;
     background-size: 16px;
 }
+.menu-box .places-box .menu-item.system label {
+    padding-left: 25px;
+    background: -gtk-icontheme("drive-harddisk-symbolic") left no-repeat;
+    background-size: 16px;
+}
 
 /* loading */
 
