@@ -20,8 +20,8 @@ conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
-  input: 'portfolio.in',
-  output: 'portfolio',
+  input: 'dev.tchx84.Portfolio.in',
+  output: 'dev.tchx84.Portfolio',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir')
