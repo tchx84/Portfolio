@@ -15,11 +15,11 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-  input: 'dev.tchx84.Portfolio.appdata.xml.in',
-  output: 'dev.tchx84.Portfolio.appdata.xml',
+  input: 'dev.tchx84.Portfolio.metainfo.xml.in',
+  output: 'dev.tchx84.Portfolio.metainfo.xml',
   po_dir: '../po',
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'appdata')
+  install_dir: join_paths(get_option('datadir'), 'metainfo')
 )
 
 install_data('dev.tchx84.Portfolio.svg',
