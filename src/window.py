@@ -18,7 +18,7 @@
 import os
 
 from pathlib import Path
-from gi.repository import Gtk, Gio, Handy
+from gi.repository import Gtk, GLib, Gio, Handy
 
 from gi.repository.Handy import ApplicationWindow
 
