@@ -213,7 +213,7 @@ class PortfolioWindow(ApplicationWindow):
 
     def _go_to_top(self):
         if len(self.sorted) >= 1:
-            self.treeview.scroll_to_cell(0, None, False, 0, 0)
+            self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
     def _move(self, path, navigating=False):
         if path is None:
