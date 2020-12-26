@@ -84,6 +84,13 @@ scrolledwindow.frame {
 .menu-box .menu-item {
     padding: 5px 10px;
 }
+.menu-box .menu-item.check-item {
+    padding: 9px 6px;
+}
+.menu-box .menu-item.check-item check {
+    padding: 0px;
+    margin-right: 9px;
+}
 .menu-box .places-box .menu-item label {
     padding-left: 25px;
     background: -gtk-icontheme("user-home-symbolic") left no-repeat;
