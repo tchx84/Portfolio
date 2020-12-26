@@ -210,6 +210,7 @@
     <property name="window-position">center</property>
     <property name="default-width">360</property>
     <property name="default-height">600</property>
+    <property name="title">Portfolio</property>
     <child>
       <object class="HdyDeck" id="deck">
         <property name="visible">True</property>
