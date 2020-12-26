@@ -8,6 +8,8 @@
 - Fixed issues with OSK ocluding action bar.
 - Added auto-scroll to newly created folder or renamed file.
 - Added no-results page for search.
+- Added show hidden files menu filter.
+- Added show OS root directory in places.
 
 ## [0.9.1] 2020-12-21
 
