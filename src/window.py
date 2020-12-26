@@ -60,6 +60,7 @@ class PortfolioWindow(ApplicationWindow):
     close_button = Gtk.Template.Child()
     help_button = Gtk.Template.Child()
     about_button = Gtk.Template.Child()
+    show_hidden_button = Gtk.Template.Child()
 
     search_box = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
@@ -131,6 +132,7 @@ class PortfolioWindow(ApplicationWindow):
         self.close_button.connect("clicked", self._on_button_closed)
         self.help_button.connect("clicked", self._on_help_clicked)
         self.about_button.connect("clicked", self._on_about_clicked)
+        self.show_hidden_button.connect("toggled", self._on_hidden_toggled)
 
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
@@ -188,7 +190,9 @@ class PortfolioWindow(ApplicationWindow):
         self._force_select = False
 
     def _populate(self, directory):
-        self._worker = PortfolioLoadWorker(directory)
+        self._worker = PortfolioLoadWorker(
+            directory, self.show_hidden_button.props.active
+        )
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
@@ -716,3 +720,6 @@ class PortfolioWindow(ApplicationWindow):
             self._switch_to_selection_mode()
             treepath = self.treeview.get_path_at_pos(x, y)[0]
             self.selection.select_path(treepath)
+
+    def _on_hidden_toggled(self, button):
+        self._refresh()

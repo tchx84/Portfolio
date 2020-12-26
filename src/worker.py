@@ -124,9 +124,10 @@ class PortfolioLoadWorker(GObject.GObject):
 
     BUFFER = 75
 
-    def __init__(self, directory):
+    def __init__(self, directory, hidden=False):
         super().__init__()
         self._directory = directory
+        self._hidden = hidden
 
     def start(self):
         self.emit("started", self._directory)
@@ -144,9 +145,10 @@ class PortfolioLoadWorker(GObject.GObject):
         for index in range(0, self.BUFFER):
             if self._index + index < self._total:
                 name = self._paths[self._index + index]
-                if not name.startswith("."):
-                    path = os.path.join(self._directory, name)
-                    found.append((name, path))
+                if not self._hidden and name.startswith("."):
+                    continue
+                path = os.path.join(self._directory, name)
+                found.append((name, path))
 
         self._index += self.BUFFER
         self.emit("updated", self._directory, found, self._index, self._total)
