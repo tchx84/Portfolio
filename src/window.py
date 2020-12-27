@@ -677,7 +677,18 @@ class PortfolioWindow(Handy.ApplicationWindow):
             counter += 1
 
         path = os.path.join(directory, folder_name)
-        Path(path).mkdir(parents=False, exist_ok=True)
+
+        try:
+            Path(path).mkdir(parents=False, exist_ok=True)
+        except PermissionError:
+            self._notify(
+                "No permissions on this directory.",
+                None,
+                self._on_popup_closed,
+                True,
+                None,
+            )
+            return
 
         self._switch_to_selection_mode()
 
