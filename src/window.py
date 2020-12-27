@@ -16,12 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import shutil
 
 from pathlib import Path
-from gi.repository import Gdk, Gtk, Gio, GObject, GLib, Handy
-
-from gi.repository.Handy import Deck, ApplicationWindow, HeaderBar, SearchBar
+from gi.repository import Gtk, GLib, Gio, Handy
 
 from .popup import PortfolioPopup
 from .worker import PortfolioCutWorker
@@ -32,7 +29,7 @@ from .places import PortfolioPlaces
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
-class PortfolioWindow(ApplicationWindow):
+class PortfolioWindow(Handy.ApplicationWindow):
     __gtype_name__ = "PortfolioWindow"
 
     name_column = Gtk.Template.Child()
