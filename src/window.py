@@ -471,7 +471,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.liststore.set_value(row, 1, new_name)
         except:
             self._notify(
-                f"{new_name} already exists.", None, self._on_popup_closed, True, None
+                f"{new_name} already exists", None, self._on_popup_closed, True, None
             )
             self._on_rename_clicked(None)
             return
@@ -519,7 +519,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             name = f"{count} files"
 
-        self._notify(f"{name} will be moved.", None, None, True, None)
+        self._notify(f"{name} will be moved", None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -537,7 +537,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             name = f"{count} files"
 
-        self._notify(f"{name} will be copied.", None, None, True, None)
+        self._notify(f"{name} will be copied", None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -595,7 +595,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_copy = []
 
         name = os.path.basename(path)
-        self.loading_description.set_text(f"Could not paste {name}.")
+        self.loading_description.set_text(f"Could not paste {name}")
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -643,7 +643,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._busy = False
 
         name = os.path.basename(path)
-        self.loading_description.set_text(f"Could not delete {name}.")
+        self.loading_description.set_text(f"Could not delete {name}")
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -682,7 +682,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             Path(path).mkdir(parents=False, exist_ok=True)
         except PermissionError:
             self._notify(
-                "No permissions on this directory.",
+                "No permissions on this directory",
                 None,
                 self._on_popup_closed,
                 True,
