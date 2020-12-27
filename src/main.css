@@ -134,3 +134,10 @@ scrolledwindow.frame {
     font-size: small;
     font-weight: bold;
 }
+
+/* files */
+
+treeview.view {
+    padding-left: 0px;
+    -GtkTreeView-horizontal-separator: 0px;
+}
