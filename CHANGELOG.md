@@ -7,6 +7,7 @@
 - Fixed about "dialog" headerbar "weirdness".
 - Fixed issues with OSK ocluding action bar.
 - Fixed icon not showing on Phosh.
+- Fixed notifications on missing permissions.
 - Added auto-scroll to newly created folder or renamed file.
 - Added no-results page for search.
 - Added show hidden files menu filter.
