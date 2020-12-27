@@ -252,7 +252,7 @@ class PortfolioWindow(ApplicationWindow):
 
     def _update_history(self, path, navigating):
         if path not in self._history or not navigating:
-            del self._history[self._index + 1:]
+            del self._history[self._index + 1 :]
             self._history.append(path)
             self._index += 1
 
