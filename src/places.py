@@ -24,7 +24,7 @@ class PortfolioPlaces(Gtk.Box):
     __gtype_name__ = "PortfolioPlaces"
 
     __gsignals__ = {
-        "updated": (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")

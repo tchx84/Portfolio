@@ -37,10 +37,10 @@ class PortfolioCopyWorker(PortfolioWorker):
     __gtype_name__ = "PortfolioCopyWorker"
 
     __gsignals__ = {
-        "started": (GObject.SIGNAL_RUN_LAST, None, (int,)),
-        "updated": (GObject.SIGNAL_RUN_LAST, None, (int, int)),
-        "finished": (GObject.SIGNAL_RUN_LAST, None, (int,)),
-        "failed": (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self, paths, directory=None):
@@ -116,9 +116,9 @@ class PortfolioLoadWorker(GObject.GObject):
     __gtype_name__ = "PortfolioLoadWorker"
 
     __gsignals__ = {
-        "started": (GObject.SIGNAL_RUN_LAST, None, (str,)),
-        "updated": (GObject.SIGNAL_RUN_LAST, None, (str, object, int, int)),
-        "finished": (GObject.SIGNAL_RUN_LAST, None, (str,)),
+        "started": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     BUFFER = 75
