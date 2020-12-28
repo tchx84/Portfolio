@@ -1,23 +1,19 @@
-name: qa
-
-on: [push, pull_request]
-
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: CI
 jobs:
-  qa:
+  flatpak-builder:
+    name: "Flatpak Builder"
     runs-on: ubuntu-latest
+    container:
+      image: docker.io/bilelmoussaoui/flatpak-github-actions
+      options: --privileged
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Python 3
-      uses: actions/setup-python@v1
+    - uses: actions/checkout@master
+    - uses: bilelmoussaoui/flatpak-github-actions@v2
       with:
-        python-version: 3.x
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip wheel
-        python -m pip install -r qa-requirements.txt
-
-    - name: QA
-      run: |
-        bash -ex qa.sh
-
+        bundle: "portfolio-dev.flatpak"
+        manifest-path: "dev.tchx84.Portfolio.json"
+        run-tests: "true"
