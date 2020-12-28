@@ -12,6 +12,7 @@
 - Added no-results page for search.
 - Added show hidden files menu filter.
 - Added show OS root directory in places.
+- Added tests, tests, tests.
 
 ## [0.9.1] 2020-12-21
 
