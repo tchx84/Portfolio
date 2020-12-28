@@ -1,0 +1,256 @@
+import os
+import sys
+import shutil
+
+ROOT_DIR = "@source_dir@"
+sys.path.append(ROOT_DIR)
+
+RESOURCE_DIR = os.path.join("@resource_dir@")
+
+TEST_HOME_DIR = os.path.join(ROOT_DIR, "tests/root/home/tchx84")
+TEST_HOME_FILE = os.path.join(TEST_HOME_DIR, "file")
+TEST_HOME_FOLDER = os.path.join(TEST_HOME_DIR, "folder")
+TEST_HOME_SUB_FILE = os.path.join(TEST_HOME_DIR, "folder", "file")
+TEST_NEW_FILE = "file"
+TEST_NEW_FOLDER = "New Folder"
+TEST_NEW_FOLDER_RENAMED = "Renamed"
+
+resource = None
+window = None
+
+
+def update_gtk():
+    from gi.repository import Gtk
+
+    while Gtk.events_pending():
+        Gtk.main_iteration()
+
+
+def setup_module():
+    global resource
+
+    import gi
+
+    gi.require_version("Gdk", "3.0")
+    gi.require_version("Gtk", "3.0")
+    gi.require_version("Gio", "2.0")
+    gi.require_version("Handy", "1")
+
+    from gi.repository import Gio
+
+    resource = Gio.Resource.load(os.path.join(RESOURCE_DIR, "portfolio.gresource"))
+    resource._register()
+
+    from gi.repository import Gtk
+
+    Gtk.init(None)
+
+    os.environ["PORTFOLIO_HOME_DIR"] = TEST_HOME_DIR
+    shutil.rmtree(os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER), ignore_errors=True)
+    shutil.rmtree(os.path.join(TEST_HOME_FOLDER, TEST_NEW_FOLDER), ignore_errors=True)
+
+
+def test_create_window():
+    global window
+    from src.window import PortfolioWindow
+
+    window = PortfolioWindow()
+    update_gtk()
+
+    assert window is not None
+
+
+def test_load_all():
+    # should list only "folder" and "file"
+    assert len(window.sorted) == 2
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert window.sorted[1][window.PATH_COLUMN] == TEST_HOME_FILE
+
+
+def test_default_selection():
+    # nothing should be selected by default
+    _, treepaths = window.selection.get_selected_rows()
+
+    assert len(treepaths) == 0
+
+
+def test_select_all():
+    # "folder" and "file" should be selected
+    window._switch_to_selection_mode()
+    window._select_all()
+    update_gtk()
+    model, treepaths = window.selection.get_selected_rows()
+
+    assert len(treepaths) == 2
+    assert model[treepaths[0]][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert model[treepaths[1]][window.PATH_COLUMN] == TEST_HOME_FILE
+
+
+def test_unselect_all():
+    # nothing should be selected
+    window._switch_to_selection_mode()
+    window._unselect_all()
+    update_gtk()
+    _, treepaths = window.selection.get_selected_rows()
+
+    assert len(treepaths) == 0
+
+
+def test_new_folder():
+    # "New Folder" should be created and selected
+    window._unselect_all()
+    update_gtk()
+    window._on_new_folder(None)
+    model, treepaths = window.selection.get_selected_rows()
+
+    assert len(window.sorted) == 3
+    assert model[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert model[1][window.PATH_COLUMN] == os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER)
+    assert model[2][window.PATH_COLUMN] == TEST_HOME_FILE
+    assert len(treepaths) == 1
+    assert model[treepaths[0]][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_DIR, TEST_NEW_FOLDER
+    )
+
+
+def test_open_folder():
+    # "New Folder" should be opened and must be empty
+    window._unselect_all()
+    window._on_row_activated(None, 1, None, None)
+    update_gtk()
+
+    assert len(window.sorted) == 0
+
+
+def test_navigation_previous():
+    # go back to "folder"
+    window._on_go_previous(None)
+    update_gtk()
+
+    assert len(window.sorted) == 3
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert window.sorted[1][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_DIR, TEST_NEW_FOLDER
+    )
+    assert window.sorted[2][window.PATH_COLUMN] == TEST_HOME_FILE
+
+
+def test_copy():
+    # "file" should be selected and copied
+    window._switch_to_selection_mode()
+    window._select_row(window.sorted[2].iter)
+    window._on_copy_clicked(None)
+
+    assert len(window._to_copy) == 1
+    assert window._to_copy[0] == TEST_HOME_FILE
+
+
+def test_navigation_next():
+    # go back to the "New Folder" and must still be empty
+    window._on_go_next(None)
+    update_gtk()
+
+    assert len(window.sorted) == 0
+
+
+def test_copy_paste():
+    # paste "file" and it should be listed
+    window._on_paste_clicked(None)
+    window._worker.join()
+    update_gtk()
+
+    assert len(window.sorted) == 1
+    assert window.sorted[0][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_DIR, TEST_NEW_FOLDER, TEST_NEW_FILE
+    )
+
+
+def test_delete_all():
+    # select all and delete, nothing should remain
+    window._switch_to_selection_mode()
+    window._select_all()
+    window._on_delete_clicked(None)
+    update_gtk()
+    window._popup.confirm_button.emit("clicked")
+    window._worker.join()
+    update_gtk()
+
+    assert len(window.sorted) == 0
+
+
+def test_original_file_untouched():
+    # go to "folder" and the original "file" is intact
+    window._on_go_previous(None)
+    update_gtk()
+
+    assert len(window.sorted) == 3
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert window.sorted[1][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_DIR, TEST_NEW_FOLDER
+    )
+    assert window.sorted[2][window.PATH_COLUMN] == TEST_HOME_FILE
+
+
+def test_cut():
+    # "New Folder" is selected and cut
+    window._switch_to_selection_mode()
+    window._select_row(window.sorted[1].iter)
+    window._on_cut_clicked(None)
+
+    assert len(window._to_cut) == 1
+    assert window._to_cut[0] == os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER)
+
+
+def test_cut_paste():
+    # go to "folder" and paste "New Folder"
+    window._unselect_all()
+    window._on_row_activated(None, 0, None, None)
+    update_gtk()
+    window._on_paste_clicked(None)
+    window._worker.join()
+    update_gtk()
+
+    assert len(window.sorted) == 2
+    assert window.sorted[0][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_FOLDER, TEST_NEW_FOLDER
+    )
+    assert window.sorted[1][window.PATH_COLUMN] == TEST_HOME_SUB_FILE
+
+
+def test_rename():
+    window._switch_to_selection_mode()
+    window._select_row(window.sorted[0].iter)
+    window.rename.emit("clicked")
+    update_gtk()
+
+    window.name_cell.emit("edited", 0, TEST_NEW_FOLDER_RENAMED)
+    update_gtk()
+
+    model, treepaths = window.selection.get_selected_rows()
+    assert model[treepaths[0]][window.PATH_COLUMN] == os.path.join(
+        TEST_HOME_FOLDER, TEST_NEW_FOLDER_RENAMED
+    )
+
+
+def test_delete_one():
+    # select "Renamed" folder and delete it
+    window._switch_to_selection_mode()
+    window._select_row(window.sorted[0].iter)
+    window._on_delete_clicked(None)
+    update_gtk()
+    window._popup.confirm_button.emit("clicked")
+    window._worker.join()
+    update_gtk()
+
+    assert len(window.sorted) == 1
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_SUB_FILE
+
+
+def test_new_folder_gone():
+    # "New Folder" must be gone
+    window._on_go_previous(None)
+    update_gtk()
+
+    assert len(window.sorted) == 2
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
+    assert window.sorted[1][window.PATH_COLUMN] == TEST_HOME_FILE
