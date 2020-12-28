@@ -1,4 +1,4 @@
-# Portfolio
+# Portfolio ![CI](https://github.com/tchx84/Portfolio/workflows/CI/badge.svg)
 
 <img height="100" src="https://github.com/tchx84/Portfolio/blob/master/data/dev.tchx84.Portfolio.svg">
 
