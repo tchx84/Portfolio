@@ -31,8 +31,6 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 gettext.install('portfolio', localedir)
 
 if __name__ == '__main__':
-    import gi
-
     from gi.repository import Gio
     resource = Gio.Resource.load(os.path.join(pkgdatadir, 'portfolio.gresource'))
     resource._register()
