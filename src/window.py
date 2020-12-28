@@ -80,6 +80,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
 
+    ICON_COLUMN = 0
+    NAME_COLUMN = 1
+    PATH_COLUMN = 2
     SEARCH_DELAY = 500
 
     def __init__(self, **kwargs):
@@ -142,15 +145,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._move(os.path.expanduser("~"))
 
     def _filter(self, model, row, data=None):
-        path = model[row][2]
+        path = model[row][self.PATH_COLUMN]
         text = self.search_entry.get_text()
         if not text:
             return True
         return text.lower() in os.path.basename(path).lower()
 
     def _sort(self, model, row1, row2, data=None):
-        path1 = model[row1][2]
-        path2 = model[row2][2]
+        path1 = model[row1][self.PATH_COLUMN]
+        path2 = model[row2][self.PATH_COLUMN]
 
         row1_is_dir = os.path.isdir(path1)
         row2_is_dir = os.path.isdir(path2)
@@ -198,7 +201,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         return model.get_iter(treepath)
 
     def _get_path(self, model, treepath):
-        return model[model.get_iter(treepath)][2]
+        return model[model.get_iter(treepath)][self.PATH_COLUMN]
 
     def _go_to_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -467,8 +470,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             _treepath = self.filtered.convert_path_to_child_path(_treepath)
 
             row = self.liststore.get_iter(_treepath)
-            self.liststore.set_value(row, 2, new_path)
-            self.liststore.set_value(row, 1, new_name)
+            self.liststore.set_value(row, self.PATH_COLUMN, new_path)
+            self.liststore.set_value(row, self.NAME_COLUMN, new_name)
         except:
             self._notify(
                 f"{new_name} already exists", None, self._on_popup_closed, True, None
