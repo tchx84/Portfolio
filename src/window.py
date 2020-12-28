@@ -142,7 +142,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("updated", self._on_places_updated)
         self.places_box.add(places)
 
-        self._move(os.path.expanduser("~"))
+        self._move(os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~")))
 
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
