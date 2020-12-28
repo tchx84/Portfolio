@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.2] 2020-12-28
 
 - Fixed performance issues with big folders.
 - Fixed styling issues with menu items.

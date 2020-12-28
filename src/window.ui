@@ -1033,7 +1033,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">0.9.1</property>
+                                <property name="label" translatable="yes">0.9.2</property>
                                 <property name="wrap">True</property>
                                 <style>
                                   <class name="version-label"/>
