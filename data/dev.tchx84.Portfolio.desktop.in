@@ -7,4 +7,4 @@ Categories=Utility;
 Icon=dev.tchx84.Portfolio
 StartupNotify=true
 X-Purism-FormFactor=Mobile;
-Keywords=folder;manager;explore;disk;filesystem;
+Keywords=folder;file;manager;explore;browse;disk;filesystem;
