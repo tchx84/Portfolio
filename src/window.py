@@ -58,6 +58,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     help_button = Gtk.Template.Child()
     about_button = Gtk.Template.Child()
     show_hidden_button = Gtk.Template.Child()
+    a_to_z_button = Gtk.Template.Child()
 
     search_box = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
@@ -132,6 +133,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.help_button.connect("clicked", self._on_help_clicked)
         self.about_button.connect("clicked", self._on_about_clicked)
         self.show_hidden_button.connect("toggled", self._on_hidden_toggled)
+        self.a_to_z_button.connect("toggled", self._on_sort_toggled)
 
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
@@ -151,6 +153,28 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return True
         return text.lower() in os.path.basename(path).lower()
 
+    def _sort_by_last_modified(self, path1, path2):
+        st_mtime1 = os.path.getmtime(path1)
+        st_mtime2 = os.path.getmtime(path2)
+
+        if st_mtime1 < st_mtime2:
+            return 1
+        elif st_mtime1 > st_mtime2:
+            return -1
+
+        return 0
+
+    def _sort_by_a_to_z(self, path1, path2):
+        path1 = path1.lower()
+        path2 = path2.lower()
+
+        if path1 < path2:
+            return -1
+        elif path1 > path2:
+            return 1
+
+        return 0
+
     def _sort(self, model, row1, row2, data=None):
         path1 = model[row1][self.PATH_COLUMN]
         path2 = model[row2][self.PATH_COLUMN]
@@ -163,15 +187,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         elif not row1_is_dir and row2_is_dir:
             return 1
 
-        path1 = path1.lower()
-        path2 = path2.lower()
-
-        if path1 < path2:
-            return -1
-        elif path1 > path2:
-            return 1
-
-        return 0
+        if self.a_to_z_button.props.active:
+            return self._sort_by_a_to_z(path1, path2)
+        else:
+            return self._sort_by_last_modified(path1, path2)
 
     def _select_all(self):
         self._force_select = True
@@ -731,4 +750,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.selection.select_path(treepath)
 
     def _on_hidden_toggled(self, button):
+        self._refresh()
+
+    def _on_sort_toggled(self, button):
         self._refresh()

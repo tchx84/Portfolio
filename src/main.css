@@ -91,6 +91,13 @@ scrolledwindow.frame {
     padding: 0px;
     margin-right: 9px;
 }
+.menu-box .menu-item.radio-item {
+    padding: 7.5px 6px;
+}
+.menu-box .menu-item.radio-item radio {
+    padding: 0px;
+    margin-right: 9px;
+}
 .menu-box .places-box .menu-item label {
     padding-left: 25px;
     background: -gtk-icontheme("user-home-symbolic") left no-repeat;
