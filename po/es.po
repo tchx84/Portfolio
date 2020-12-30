@@ -1,0 +1,184 @@
+# Spanish translations for portfolio package.
+# Copyright (C) 2020 THE portfolio'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# Automatically generated, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"PO-Revision-Date: 2020-12-30 12:55-0300\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
+#: src/window.ui:1112
+msgid "Portfolio"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "carpeta;administrador;explorar;disco;archivo;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Administre archivos sobre la marcha"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Un administrador de archivos minimalista para aquellos que desean utilizar "
+"dispositivos móviles Linux."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr ""
+
+#: src/window.ui:44
+msgid "Places"
+msgstr "Lugares"
+
+#: src/window.ui:101
+msgid "Filter"
+msgstr "Filtrar"
+
+#: src/window.ui:124
+msgid "Show Hidden Files"
+msgstr "Mostrar archivos ocultos"
+
+#: src/window.ui:173
+msgid "Sort"
+msgstr "Ordenar"
+
+#: src/window.ui:196
+msgid "A-Z"
+msgstr ""
+
+#: src/window.ui:222
+msgid "Last Modified"
+msgstr "Última modificación"
+
+#: src/window.ui:271
+msgid "Help"
+msgstr "Ayuda"
+
+#: src/window.ui:287
+msgid "About Portfolio"
+msgstr "Acerca de Portfolio"
+
+#: src/window.ui:624
+msgid "No files found"
+msgstr "No se encontraron archivos"
+
+#: src/window.ui:1034
+msgid "About"
+msgstr "Acerca de"
+
+#: src/window.ui:1194
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Sitio web</a>"
+
+#: src/window.ui:1249
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Este programa no provee absolutamente ninguna garantía. Consulte la <a href="
+"\"https://www.gnu.org/licenses/gpl-3.0.html\">Licencia pública general GNU, "
+"versión 3 o en adelante</a> para obtener más detalles."
+
+#: src/window.ui:1278
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"El logotipo de Portfolio es una versión modificada del trabajo de Jorgen "
+"Carlberg. La versión original se puede encontrar <a href=\"https://commons."
+"wikimedia.org/wiki/File:Portfolio.svg\">aquí</a>, bajo licencia <a href="
+"\"https://creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
+
+#: src/places.py:47
+msgid "System"
+msgstr "Sistema"
+
+#: src/places.py:49
+msgid "Home"
+msgstr "Hogar"
+
+#: src/window.py:386
+msgid "Loading"
+msgstr "Cargando"
+
+#: src/window.py:498
+#, python-format
+msgid "%s already exists"
+msgstr "%s ya existe"
+
+#: src/window.py:529
+#, python-format
+msgid "these %d files"
+msgstr "estos %d archivos"
+
+#: src/window.py:531
+#, python-format
+msgid "Delete %s?"
+msgstr "¿Eliminar %s?"
+
+#: src/window.py:547
+#, python-format
+msgid "%s will be moved"
+msgstr "%s se moverá"
+
+#: src/window.py:549
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d archivos se moverán"
+
+#: src/window.py:566
+#, python-format
+msgid "%s will be copied"
+msgstr "%s se copiará"
+
+#: src/window.py:568
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d archivos se copiarán"
+
+#: src/window.py:592
+msgid "Pasting"
+msgstr "Pegando"
+
+#: src/window.py:628
+#, python-format
+msgid "Could not paste %s"
+msgstr "No se pudo pegar %s"
+
+#: src/window.py:654
+msgid "Deleting"
+msgstr "Eliminando"
+
+#: src/window.py:676
+#, python-format
+msgid "Could not delete %s"
+msgstr "No se pudo eliminar %s"
+
+#: src/window.py:703
+msgid "New Folder"
+msgstr "Nueva carpeta"
+
+#: src/window.py:715
+msgid "No permissions on this directory"
+msgstr "Sin permisos en este directorio"
