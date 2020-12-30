@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased]
+
+- Added Spanish translation.
+- Added i18n support.
+- Added sorting options to the menu.
+- Added enhanced logo by @bertob.
+
 ## [0.9.2] 2020-12-28
 
 - Fixed performance issues with big folders.
