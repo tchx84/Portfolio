@@ -26,6 +26,10 @@ install_data('dev.tchx84.Portfolio.svg',
   install_dir: join_paths(get_option('datadir'), 'icons/hicolor/scalable/apps')
 )
 
+install_data('dev.tchx84.Portfolio-symbolic.svg',
+  install_dir: join_paths(get_option('datadir'), 'icons/hicolor/symbolic/apps')
+)
+
 appstream_util = find_program('appstream-util', required: false)
 if appstream_util.found()
   test('Validate appstream file', appstream_util,
