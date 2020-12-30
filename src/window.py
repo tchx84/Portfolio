@@ -102,6 +102,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_copy = []
         self._to_cut = []
         self._last_clicked = None
+        self._dont_activate = False
         self._force_select = False
         self._history = []
         self._index = -1
@@ -426,6 +427,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if treepath == self._last_clicked:
             self._last_clicked = None
+            self._dont_activate = True
 
         return should_select
 
@@ -733,6 +735,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._on_rename_clicked(None)
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
+        if self._dont_activate is True:
+            self._dont_activate = False
+            return
         if self.selection.get_mode() == Gtk.SelectionMode.NONE:
             path = self._get_path(self.sorted, treepath)
             self._move(path)
@@ -756,6 +761,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._switch_to_selection_mode()
             treepath = self.treeview.get_path_at_pos(x, y)[0]
             self.selection.select_path(treepath)
+            # because of the custom selection rules, is not guaranteed
+            # that this will actually be selected so always update mode.
+            self._update_mode()
 
     def _on_hidden_toggled(self, button):
         self._refresh()
