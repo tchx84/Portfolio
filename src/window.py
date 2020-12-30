@@ -18,6 +18,8 @@
 import os
 
 from pathlib import Path
+from locale import gettext as _
+
 from gi.repository import Gtk, GLib, Gio, Handy
 
 from .popup import PortfolioPopup
@@ -381,7 +383,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.liststore.clear()
 
-        self.loading_label.set_text("Loading")
+        self.loading_label.set_text(_("Loading"))
         self.loading_bar.set_fraction(0.0)
         self.content_stack.set_visible_child(self.loading_box)
 
@@ -493,7 +495,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.liststore.set_value(row, self.NAME_COLUMN, new_name)
         except:
             self._notify(
-                f"{new_name} already exists", None, self._on_popup_closed, True, None
+                _("%s already exists") % new_name,
+                None,
+                self._on_popup_closed,
+                True,
+                None,
             )
             self._on_rename_clicked(None)
             return
@@ -520,9 +526,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if count == 1:
             name = os.path.basename(paths[0])
         else:
-            name = f"these {count} files"
+            name = _("these %d files") % count
 
-        description = f"Delete {name}?"
+        description = _("Delete %s?") % name
 
         self._notify(
             description, self._on_delete_confirmed, self._on_popup_closed, False, paths
@@ -538,10 +544,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if count == 1:
             name = os.path.basename(paths[0])
+            description = _("%s will be moved") % name
         else:
-            name = f"{count} files"
+            description = _("%d files will be moved") % count
 
-        self._notify(f"{name} will be moved", None, None, True, None)
+        self._notify(description, None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -556,10 +563,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if count == 1:
             name = os.path.basename(paths[0])
+            description = _("%s will be copied") % name
         else:
-            name = f"{count} files"
+            description = _("%d files will be copied") % count
 
-        self._notify(f"{name} will be copied", None, None, True, None)
+        self._notify(description, None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -581,7 +589,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_paste_started(self, worker, total):
         self._busy = True
 
-        self.loading_label.set_text("Pasting")
+        self.loading_label.set_text(_("Pasting"))
         self.loading_bar.set_fraction(0.0)
         self.content_stack.set_visible_child(self.loading_box)
 
@@ -617,7 +625,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_copy = []
 
         name = os.path.basename(path)
-        self.loading_description.set_text(f"Could not paste {name}")
+        self.loading_description.set_text(_("Could not paste %s") % name)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -643,7 +651,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_started(self, worker, total):
         self._busy = True
 
-        self.loading_label.set_text("Deleting")
+        self.loading_label.set_text(_("Deleting"))
         self.loading_bar.set_fraction(0.0)
         self.content_stack.set_visible_child(self.loading_box)
 
@@ -665,7 +673,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._busy = False
 
         name = os.path.basename(path)
-        self.loading_description.set_text(f"Could not delete {name}")
+        self.loading_description.set_text(_("Could not delete %s") % name)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -692,7 +700,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         directory = self._history[self._index]
 
         counter = 1
-        folder_name = "New Folder"
+        folder_name = _("New Folder")
         while os.path.exists(os.path.join(directory, folder_name)):
             folder_name = folder_name.split("(")[0]
             folder_name = f"{folder_name}({counter})"
@@ -704,7 +712,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             Path(path).mkdir(parents=False, exist_ok=True)
         except PermissionError:
             self._notify(
-                "No permissions on this directory",
+                _("No permissions on this directory"),
                 None,
                 self._on_popup_closed,
                 True,
@@ -716,8 +724,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         icon = self._find_icon(path)
         row = self.liststore.append([icon, folder_name, path])
-        _, row = self.filtered.convert_child_iter_to_iter(row)
-        _, row = self.sorted.convert_child_iter_to_iter(row)
+        result, row = self.filtered.convert_child_iter_to_iter(row)
+        result, row = self.sorted.convert_child_iter_to_iter(row)
 
         self._select_row(row)
 

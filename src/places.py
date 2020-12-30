@@ -17,6 +17,8 @@
 
 import os
 
+from locale import gettext as _
+
 from gi.repository import GLib, Gio, Gtk, GObject
 
 
@@ -42,9 +44,9 @@ class PortfolioPlaces(Gtk.Box):
         self._manager.connect("mount-removed", self._on_mount_removed)
 
         if self._has_permission_for("host"):
-            self._add_button("System", os.path.abspath(os.sep), "system")
+            self._add_button(_("System"), os.path.abspath(os.sep), "system")
         if self._has_permission_for("home"):
-            self._add_button("Home", os.path.expanduser("~"), "home")
+            self._add_button(_("Home"), os.path.expanduser("~"), "home")
 
         for mount in self._manager.get_mounts():
             self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")

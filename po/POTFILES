@@ -3,5 +3,5 @@ data/dev.tchx84.Portfolio.metainfo.xml.in
 data/dev.tchx84.Portfolio.gschema.xml
 src/window.ui
 src/main.py
+src/places.py
 src/window.py
-
