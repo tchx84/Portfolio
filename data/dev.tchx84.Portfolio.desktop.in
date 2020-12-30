@@ -1,9 +1,11 @@
 [Desktop Entry]
+# TRANSLATORS: Don't translate this text
 Name=Portfolio
 Exec=dev.tchx84.Portfolio
 Terminal=false
 Type=Application
 Categories=Utility;
+# TRANSLATORS: Don't translate this text
 Icon=dev.tchx84.Portfolio
 StartupNotify=true
 X-Purism-FormFactor=Mobile;

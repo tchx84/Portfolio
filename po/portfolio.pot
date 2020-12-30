@@ -1,0 +1,175 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
+#: src/window.ui:1112
+msgid "Portfolio"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr ""
+
+#: src/window.ui:44
+msgid "Places"
+msgstr ""
+
+#: src/window.ui:101
+msgid "Filter"
+msgstr ""
+
+#: src/window.ui:124
+msgid "Show Hidden Files"
+msgstr ""
+
+#: src/window.ui:173
+msgid "Sort"
+msgstr ""
+
+#: src/window.ui:196
+msgid "A-Z"
+msgstr ""
+
+#: src/window.ui:222
+msgid "Last Modified"
+msgstr ""
+
+#: src/window.ui:271
+msgid "Help"
+msgstr ""
+
+#: src/window.ui:287
+msgid "About Portfolio"
+msgstr ""
+
+#: src/window.ui:624
+msgid "No files found"
+msgstr ""
+
+#: src/window.ui:1034
+msgid "About"
+msgstr ""
+
+#: src/window.ui:1194
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr ""
+
+#: src/window.ui:1249
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+
+#: src/window.ui:1278
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+
+#: src/places.py:47
+msgid "System"
+msgstr ""
+
+#: src/places.py:49
+msgid "Home"
+msgstr ""
+
+#: src/window.py:386
+msgid "Loading"
+msgstr ""
+
+#: src/window.py:498
+#, python-format
+msgid "%s already exists"
+msgstr ""
+
+#: src/window.py:529
+#, python-format
+msgid "these %d files"
+msgstr ""
+
+#: src/window.py:531
+#, python-format
+msgid "Delete %s?"
+msgstr ""
+
+#: src/window.py:547
+#, python-format
+msgid "%s will be moved"
+msgstr ""
+
+#: src/window.py:549
+#, python-format
+msgid "%d files will be moved"
+msgstr ""
+
+#: src/window.py:566
+#, python-format
+msgid "%s will be copied"
+msgstr ""
+
+#: src/window.py:568
+#, python-format
+msgid "%d files will be copied"
+msgstr ""
+
+#: src/window.py:592
+msgid "Pasting"
+msgstr ""
+
+#: src/window.py:628
+#, python-format
+msgid "Could not paste %s"
+msgstr ""
+
+#: src/window.py:654
+msgid "Deleting"
+msgstr ""
+
+#: src/window.py:676
+#, python-format
+msgid "Could not delete %s"
+msgstr ""
+
+#: src/window.py:703
+msgid "New Folder"
+msgstr ""
+
+#: src/window.py:715
+msgid "No permissions on this directory"
+msgstr ""

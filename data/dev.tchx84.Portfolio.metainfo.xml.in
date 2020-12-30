@@ -7,6 +7,7 @@
   <releases>
     <release date="2020-12-28" version="0.9.2"/>
   </releases>
+  <!-- TRANSLATORS: Don't translate this text -->
   <name>Portfolio</name>
   <summary>Manage files on the go</summary>
 	<description>
@@ -25,6 +26,7 @@
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/3.png</image>
     </screenshot>
   </screenshots>
+  <!-- TRANSLATORS: Don't translate this text -->
   <developer_name>Martin Abente Lahaye</developer_name>
   <update_contact>martin.abente.lahaye@gmail.com</update_contact>
   <url type="homepage">https://github.com/tchx84/Portfolio</url>
