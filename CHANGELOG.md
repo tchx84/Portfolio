@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+- Fixed regression where last unselected row would unexpectedly activate.
 - Added Spanish translation.
 - Added i18n support.
 - Added sorting options to the menu.
