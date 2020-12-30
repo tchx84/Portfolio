@@ -22,7 +22,7 @@ $ flatpak build-bundle repo portfolio.flatpak dev.tchx84.Portfolio
 $ flatpak install portfolio.flatpak
 ```
 
-Or just use [Builder](https://flathub.org/apps/details/org.gnome.Builder).
+This app is powered by [Builder](https://flathub.org/apps/details/org.gnome.Builder) and [Glade](https://flathub.org/apps/details/org.gnome.Glade).
 
 ## Contribute
 
