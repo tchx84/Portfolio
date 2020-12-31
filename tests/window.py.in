@@ -142,7 +142,7 @@ def test_copy():
     window._on_copy_clicked(None)
 
     assert len(window._to_copy) == 1
-    assert window._to_copy[0] == TEST_HOME_FILE
+    assert window._to_copy[0][0] == TEST_HOME_FILE
 
 
 def test_navigation_next():
@@ -198,7 +198,7 @@ def test_cut():
     window._on_cut_clicked(None)
 
     assert len(window._to_cut) == 1
-    assert window._to_cut[0] == os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER)
+    assert window._to_cut[0][0] == os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER)
 
 
 def test_cut_paste():
