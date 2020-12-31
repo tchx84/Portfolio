@@ -333,6 +333,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             return "text-x-generic-symbolic"
 
+    def _clean_workers(self):
+        del self._worker
+        self._worker = None
+
     def _update_mode(self):
         count = self.selection.count_selected_rows()
         if count == 0:
@@ -464,11 +468,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_load_finished(self, worker, directory):
         self._busy = False
+        self._clean_workers()
+
         self._go_to_top()
         self._update_all()
 
     def _on_load_failed(self, worker, directory):
-        pass
+        self._clean_workers()
 
     def _on_clicked(self, treeview, event):
         result = self.treeview.get_path_at_pos(event.x, event.y)
@@ -669,6 +675,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_finished(self, worker, total):
         self._busy = False
+        self._clean_workers()
 
         self._to_cut = []
         self._to_copy = []
@@ -680,6 +687,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_failed(self, worker, path):
         self._busy = False
+        self._clean_workers()
+
         self._to_cut = []
         self._to_copy = []
 
@@ -722,13 +731,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_delete_finished(self, worker, total):
         self._busy = False
-        self._unselect_all()
+        self._clean_workers()
 
+        self._unselect_all()
         self._update_all()
         self._update_mode()
 
     def _on_delete_failed(self, worker, path):
         self._busy = False
+        self._clean_workers()
 
         name = os.path.basename(path)
         self.loading_description.set_text(_("Could not delete %s") % name)
