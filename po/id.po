@@ -1,0 +1,185 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"PO-Revision-Date: 2020-12-31 10:36+0700\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: id_ID\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
+#: src/window.ui:1112
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "folder;pengelola;jelajahi;diska;sistem berkas;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Kelola berkas di mana saja"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Pengelola berkas minimalis bagi mereka yang ingin menggunakan perangkat "
+"seluler Linux."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/window.ui:44
+msgid "Places"
+msgstr "Lokasi"
+
+#: src/window.ui:101
+msgid "Filter"
+msgstr "Saring"
+
+#: src/window.ui:124
+msgid "Show Hidden Files"
+msgstr "Tampilkan Berkas Tersembunyi"
+
+#: src/window.ui:173
+msgid "Sort"
+msgstr "Urutkan"
+
+#: src/window.ui:196
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/window.ui:222
+msgid "Last Modified"
+msgstr "Terakhir Diubah"
+
+#: src/window.ui:271
+msgid "Help"
+msgstr "Bantuan"
+
+#: src/window.ui:287
+msgid "About Portfolio"
+msgstr "Tentang Portofolio"
+
+#: src/window.ui:624
+msgid "No files found"
+msgstr "Tak ada berkas yang ditemukan"
+
+#: src/window.ui:1034
+msgid "About"
+msgstr "Tentang"
+
+#: src/window.ui:1194
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Situs Web</a>"
+
+#: src/window.ui:1249
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Program ini sama sekali tidak memiliki garansi. Lihat <a href=\"https://www."
+"gnu.org/licenses/gpl-3.0.html\">GNU General Public License, versi 3 atau "
+"yang lebih baru</a> untuk detailnya."
+
+#: src/window.ui:1278
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Logo portofolio adalah versi modifikasi dari karya Jorgen Carlberg. Versi "
+"asli dapat ditemukan di <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\">sini</a>, dilisensikan dibawah <a href=\"https://"
+"creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
+
+#: src/places.py:47
+msgid "System"
+msgstr "Sistem"
+
+#: src/places.py:49
+msgid "Home"
+msgstr "Beranda"
+
+#: src/window.py:386
+msgid "Loading"
+msgstr "Memuat"
+
+#: src/window.py:498
+#, python-format
+msgid "%s already exists"
+msgstr "%s sudah ada"
+
+#: src/window.py:529
+#, python-format
+msgid "these %d files"
+msgstr "%d berkas ini"
+
+#: src/window.py:531
+#, python-format
+msgid "Delete %s?"
+msgstr "Hapus %s?"
+
+#: src/window.py:547
+#, python-format
+msgid "%s will be moved"
+msgstr "%s akan dipindahkan"
+
+#: src/window.py:549
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d berkas akan dipindahkan"
+
+#: src/window.py:566
+#, python-format
+msgid "%s will be copied"
+msgstr "%s akan disalin"
+
+#: src/window.py:568
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d berkas akan disalin"
+
+#: src/window.py:592
+msgid "Pasting"
+msgstr "Menempel"
+
+#: src/window.py:628
+#, python-format
+msgid "Could not paste %s"
+msgstr "Tak bisa menempelkan %s"
+
+#: src/window.py:654
+msgid "Deleting"
+msgstr "Menghapus"
+
+#: src/window.py:676
+#, python-format
+msgid "Could not delete %s"
+msgstr "Tak bisa menghapus %s"
+
+#: src/window.py:703
+msgid "New Folder"
+msgstr "Folder Baru"
+
+#: src/window.py:715
+msgid "No permissions on this directory"
+msgstr "Tak ada izin pada direktori ini"
