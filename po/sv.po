@@ -1,0 +1,185 @@
+# Swedish translation for Portfolio.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"PO-Revision-Date: 2020-12-31 08:13+0100\n"
+"Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sv\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
+#: src/window.ui:1112
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "mapp;hanterare:utforska;disk;filsystem;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Hantera filer på språng"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"En minimalistisk filhanterare för de som vill använda mobila enheter med "
+"Linux."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/window.ui:44
+msgid "Places"
+msgstr "Platser"
+
+#: src/window.ui:101
+msgid "Filter"
+msgstr "Filter"
+
+#: src/window.ui:124
+msgid "Show Hidden Files"
+msgstr "Visa dolda filer"
+
+#: src/window.ui:173
+msgid "Sort"
+msgstr "Sortera"
+
+#: src/window.ui:196
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/window.ui:222
+msgid "Last Modified"
+msgstr "Ändrad"
+
+#: src/window.ui:271
+msgid "Help"
+msgstr "Hjälp"
+
+#: src/window.ui:287
+msgid "About Portfolio"
+msgstr "Om Portfolio"
+
+#: src/window.ui:624
+msgid "No files found"
+msgstr "Inga filer hittades"
+
+#: src/window.ui:1034
+msgid "About"
+msgstr "Om"
+
+#: src/window.ui:1194
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Webbplats</a>"
+
+#: src/window.ui:1249
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Detta program ges ut utan någon som helst garanti. Se <a href=\"https://www."
+"gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 eller "
+"senare</a> för detaljerad info."
+
+#: src/window.ui:1278
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Portfolios logotyp är en modifierad version av Jorgen Carlbergs arbete. "
+"Originalversionen kan hittas <a href=\"https://commons.wikimedia.org/wiki/"
+"File:Portfolio.svg\"> här </a>, licensierad under <a href=\"https://"
+"creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+
+#: src/places.py:47
+msgid "System"
+msgstr "System"
+
+#: src/places.py:49
+msgid "Home"
+msgstr "Hem"
+
+#: src/window.py:386
+msgid "Loading"
+msgstr "Läser in"
+
+#: src/window.py:498
+#, python-format
+msgid "%s already exists"
+msgstr "%s finns redan"
+
+#: src/window.py:529
+#, python-format
+msgid "these %d files"
+msgstr "dessa %d filer"
+
+#: src/window.py:531
+#, python-format
+msgid "Delete %s?"
+msgstr "Vill du ta bort %s?"
+
+#: src/window.py:547
+#, python-format
+msgid "%s will be moved"
+msgstr "%s kommer att flyttas"
+
+#: src/window.py:549
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d filer kommer att flyttas"
+
+#: src/window.py:566
+#, python-format
+msgid "%s will be copied"
+msgstr "%s kommer att kopieras"
+
+#: src/window.py:568
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d filer kommer att kopieras"
+
+#: src/window.py:592
+msgid "Pasting"
+msgstr "Klistrar in"
+
+#: src/window.py:628
+#, python-format
+msgid "Could not paste %s"
+msgstr "Kunde inte klistra in %s"
+
+#: src/window.py:654
+msgid "Deleting"
+msgstr "Tar bort"
+
+#: src/window.py:676
+#, python-format
+msgid "Could not delete %s"
+msgstr "Kunde inte ta bort %s"
+
+#: src/window.py:703
+msgid "New Folder"
+msgstr "Ny mapp"
+
+#: src/window.py:715
+msgid "No permissions on this directory"
+msgstr "Du saknar rättigheter i den här mappen"
