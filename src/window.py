@@ -300,6 +300,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
     def _move(self, path, navigating=False):
+        self._clean_popups()
+
         if path is None:
             return
         elif os.path.isdir(path):
@@ -318,8 +320,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def _notify(self, description, on_confirm, on_cancel, autoclose, data):
-        if self._popup is not None:
-            self._popup.destroy()
+        self._clean_popups()
 
         self._popup = PortfolioPopup(
             description, on_confirm, on_cancel, autoclose, data
@@ -336,6 +337,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _clean_workers(self):
         del self._worker
         self._worker = None
+
+    def _clean_popups(self):
+        if self._popup is None:
+            return
+        self._popup.destroy()
+        self._popup = None
 
     def _update_mode(self):
         count = self.selection.count_selected_rows()
@@ -652,7 +659,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._cut_and_paste()
 
     def _on_cut_and_paste_confirmed(self, button, popup, data=None):
-        self._popup.destroy()
+        self._clean_popups()
         self._paste(PortfolioCutWorker, self._to_cut)
 
     def _on_paste_started(self, worker, total):
@@ -699,7 +706,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_delete_confirmed(self, button, popup, selection):
-        self._popup.destroy()
+        self._clean_popups()
 
         # clean history entries from deleted paths
         directory = self._history[self._index]
@@ -748,8 +755,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_popup_closed(self, button, popup, data):
-        self._popup.destroy()
-        self._popup = None
+        self._clean_popups()
 
     def _on_button_closed(self, button):
         self.loading_description.set_text("")
