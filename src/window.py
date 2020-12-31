@@ -22,6 +22,7 @@ from locale import gettext as _
 
 from gi.repository import Gtk, GLib, Gio, Handy
 
+from . import utils
 from .popup import PortfolioPopup
 from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
@@ -597,15 +598,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
-    def _on_paste_updated(self, worker, index, total):
-        directory = self._history[self._index]
-        to_paste = self._to_copy if self._to_copy else self._to_cut
-        source_path = to_paste[index]
-
-        icon = self._find_icon(source_path)
-        name = os.path.basename(source_path)
-        path = os.path.join(directory, name)
-
+    def _on_paste_updated(self, worker, path, index, total):
+        icon = self._find_icon(path)
+        name = os.path.basename(path)
         self.liststore.append([icon, name, path])
 
         self.loading_bar.set_fraction((index + 1) / total)
@@ -659,7 +654,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
-    def _on_delete_updated(self, worker, index, total):
+    def _on_delete_updated(self, worker, path, index, total):
         # XXX delete here instead of refreshing later
         self.loading_bar.set_fraction((index + 1) / total)
 
@@ -700,14 +695,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
-
-        counter = 1
-        folder_name = _("New Folder")
-        while os.path.exists(os.path.join(directory, folder_name)):
-            folder_name = folder_name.split("(")[0]
-            folder_name = f"{folder_name}({counter})"
-            counter += 1
-
+        folder_name = utils.find_new_name(directory, _("New Folder"))
         path = os.path.join(directory, folder_name)
 
         try:

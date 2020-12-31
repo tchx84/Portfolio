@@ -21,6 +21,8 @@ import threading
 
 from gi.repository import GObject, GLib
 
+from . import utils
+
 
 class PortfolioWorker(threading.Thread, GObject.GObject):
     __gtype_name__ = "PortfolioWorker"
@@ -38,7 +40,7 @@ class PortfolioCopyWorker(PortfolioWorker):
 
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
-        "updated": (GObject.SignalFlags.RUN_LAST, None, (int, int)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
@@ -53,18 +55,23 @@ class PortfolioCopyWorker(PortfolioWorker):
         self.emit("started", total)
 
         for index, path in enumerate(self._paths):
+            name = os.path.basename(path)
+            destination = os.path.join(self._directory, name)
+
+            if os.path.exists(destination):
+                name = utils.find_new_name(self._directory, name)
+                destination = os.path.join(self._directory, name)
+
             try:
                 if os.path.isdir(path):
-                    name = os.path.basename(path)
-                    destination = os.path.join(self._directory, name)
                     shutil.copytree(path, destination)
                 else:
-                    shutil.copy(path, self._directory)
+                    shutil.copyfile(path, destination)
             except:
-                self.emit("failed", path)
+                self.emit("failed", destination)
                 return
             else:
-                self.emit("updated", index, total)
+                self.emit("updated", destination, index, total)
 
         self.emit("finished", total)
 
@@ -77,15 +84,20 @@ class PortfolioCutWorker(PortfolioCopyWorker):
         self.emit("started", total)
 
         for index, path in enumerate(self._paths):
-            try:
-                name = os.path.basename(path)
+            name = os.path.basename(path)
+            destination = os.path.join(self._directory, name)
+
+            if os.path.exists(destination):
+                name = utils.find_new_name(self._directory, name)
                 destination = os.path.join(self._directory, name)
+
+            try:
                 shutil.move(path, destination)
             except:
                 self.emit("failed", path)
                 return
             else:
-                self.emit("updated", index, total)
+                self.emit("updated", destination, index, total)
 
         self.emit("finished", total)
 
@@ -107,7 +119,7 @@ class PortfolioDeleteWorker(PortfolioCopyWorker):
                 self.emit("failed", path)
                 return
             else:
-                self.emit("updated", index, total)
+                self.emit("updated", path, index, total)
 
         self.emit("finished", total)
 
