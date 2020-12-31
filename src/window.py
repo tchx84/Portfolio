@@ -22,6 +22,7 @@ from locale import gettext as _
 
 from gi.repository import Gtk, GLib, Gio, Handy
 
+from . import utils
 from .popup import PortfolioPopup
 from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
@@ -210,6 +211,27 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.selection.select_iter(row)
         self._force_select = False
 
+    def _get_selection(self):
+        model, treepaths = self.selection.get_selected_rows()
+        selection = [
+            (
+                model[treepath][self.PATH_COLUMN],
+                Gtk.TreeRowReference.new(model, treepath),
+            )
+            for treepath in treepaths
+        ]
+        return selection
+
+    def _remove_row(self, ref):
+        if ref is None or not ref.valid():
+            return
+
+        treepath = ref.get_path()
+        treepath = self.sorted.convert_path_to_child_path(treepath)
+        treepath = self.filtered.convert_path_to_child_path(treepath)
+
+        self.liststore.remove(self.liststore.get_iter(treepath))
+
     def _populate(self, directory):
         self._worker = PortfolioLoadWorker(
             directory, self.show_hidden_button.props.active
@@ -218,6 +240,45 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
         self._worker.start()
+
+    def _paste(self, Worker, to_paste):
+        directory = self._history[self._index]
+
+        self._worker = Worker(to_paste, directory)
+        self._worker.connect("started", self._on_paste_started)
+        self._worker.connect("updated", self._on_paste_updated)
+        self._worker.connect("finished", self._on_paste_finished)
+        self._worker.connect("failed", self._on_paste_failed)
+        self._worker.start()
+
+    def _copy_and_paste(self):
+        if not self._to_copy:
+            return
+        self._paste(PortfolioCopyWorker, self._to_copy)
+
+    def _cut_and_paste(self):
+        if not self._to_cut:
+            return
+
+        directory = self._history[self._index]
+        should_warn = any(
+            [
+                os.path.exists(os.path.join(directory, os.path.basename(path)))
+                for path, ref in self._to_cut
+            ]
+        )
+
+        if not should_warn:
+            self._paste(PortfolioCutWorker, self._to_cut)
+            return
+
+        self._notify(
+            _("Files will be overwritten, proceed?"),
+            self._on_cut_and_paste_confirmed,
+            self._on_popup_closed,
+            False,
+            None,
+        )
 
     def _get_row(self, model, treepath):
         return model.get_iter(treepath)
@@ -521,31 +582,33 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_all()
 
     def _on_delete_clicked(self, button):
-        model, treepaths = self.selection.get_selected_rows()
-        paths = [self._get_path(model, treepath) for treepath in treepaths]
-        count = len(paths)
+        selection = self._get_selection()
+        count = len(selection)
 
         if count == 1:
-            name = os.path.basename(paths[0])
+            name = os.path.basename(selection[0][0])
         else:
             name = _("these %d files") % count
 
         description = _("Delete %s?") % name
 
         self._notify(
-            description, self._on_delete_confirmed, self._on_popup_closed, False, paths
+            description,
+            self._on_delete_confirmed,
+            self._on_popup_closed,
+            False,
+            selection,
         )
 
     def _on_cut_clicked(self, button):
-        model, treepaths = self.selection.get_selected_rows()
-        paths = [self._get_path(model, treepath) for treepath in treepaths]
-        count = len(paths)
+        selection = self._get_selection()
+        count = len(selection)
 
-        self._to_cut = paths
+        self._to_cut = selection
         self._to_copy = []
 
         if count == 1:
-            name = os.path.basename(paths[0])
+            name = os.path.basename(selection[0][0])
             description = _("%s will be moved") % name
         else:
             description = _("%d files will be moved") % count
@@ -556,15 +619,14 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _on_copy_clicked(self, button):
-        model, treepaths = self.selection.get_selected_rows()
-        paths = [self._get_path(model, treepath) for treepath in treepaths]
-        count = len(paths)
+        selection = self._get_selection()
+        count = len(selection)
 
-        self._to_copy = paths
+        self._to_copy = selection
         self._to_cut = []
 
         if count == 1:
-            name = os.path.basename(paths[0])
+            name = os.path.basename(selection[0][0])
             description = _("%s will be copied") % name
         else:
             description = _("%d files will be copied") % count
@@ -575,18 +637,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _on_paste_clicked(self, button):
-        directory = self._history[self._index]
+        self._copy_and_paste()
+        self._cut_and_paste()
 
-        if self._to_cut:
-            self._worker = PortfolioCutWorker(self._to_cut, directory)
-        elif self._to_copy:
-            self._worker = PortfolioCopyWorker(self._to_copy, directory)
-
-        self._worker.connect("started", self._on_paste_started)
-        self._worker.connect("updated", self._on_paste_updated)
-        self._worker.connect("finished", self._on_paste_finished)
-        self._worker.connect("failed", self._on_paste_failed)
-        self._worker.start()
+    def _on_cut_and_paste_confirmed(self, button, popup, data=None):
+        self._popup.destroy()
+        self._paste(PortfolioCutWorker, self._to_cut)
 
     def _on_paste_started(self, worker, total):
         self._busy = True
@@ -597,16 +653,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
-    def _on_paste_updated(self, worker, index, total):
-        directory = self._history[self._index]
-        to_paste = self._to_copy if self._to_copy else self._to_cut
-        source_path = to_paste[index]
-
-        icon = self._find_icon(source_path)
-        name = os.path.basename(source_path)
-        path = os.path.join(directory, name)
-
-        self.liststore.append([icon, name, path])
+    def _on_paste_updated(self, worker, path, overwritten, index, total):
+        # XXX this approach won't allow me to put stat info in liststore
+        if not overwritten:
+            icon = self._find_icon(path)
+            name = os.path.basename(path)
+            self.liststore.append([icon, name, path])
 
         self.loading_bar.set_fraction((index + 1) / total)
 
@@ -632,7 +684,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
 
-    def _on_delete_confirmed(self, button, popup, to_delete):
+    def _on_delete_confirmed(self, button, popup, selection):
         self._popup.destroy()
 
         # clean history entries from deleted paths
@@ -643,7 +695,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             if not path.startswith(directory) or path == directory
         ]
 
-        self._worker = PortfolioDeleteWorker(to_delete)
+        self._worker = PortfolioDeleteWorker(selection)
         self._worker.connect("started", self._on_delete_started)
         self._worker.connect("updated", self._on_delete_updated)
         self._worker.connect("finished", self._on_delete_finished)
@@ -659,8 +711,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
-    def _on_delete_updated(self, worker, index, total):
-        # XXX delete here instead of refreshing later
+    def _on_delete_updated(self, worker, path, ref, index, total):
+        self._remove_row(ref)
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
@@ -669,7 +721,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
         self._update_mode()
-        self._refresh()
 
     def _on_delete_failed(self, worker, path):
         self._busy = False
@@ -689,7 +740,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._unselect_all()
         self._update_all()
         self._update_mode()
-        self._refresh()
 
     def _on_select_all(self, button):
         self._select_all()
@@ -700,14 +750,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
-
-        counter = 1
-        folder_name = _("New Folder")
-        while os.path.exists(os.path.join(directory, folder_name)):
-            folder_name = folder_name.split("(")[0]
-            folder_name = f"{folder_name}({counter})"
-            counter += 1
-
+        folder_name = utils.find_new_name(directory, _("New Folder"))
         path = os.path.join(directory, folder_name)
 
         try:
