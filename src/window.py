@@ -83,6 +83,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
+    menu_box = Gtk.Template.Child()
 
     ICON_COLUMN = 0
     NAME_COLUMN = 1
@@ -352,6 +353,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_selection_tools()
         self._update_action_stack()
         self._update_tools_stack()
+        self._update_menu()
 
     def _update_search(self):
         sensitive = not self._editing and not self._busy
@@ -431,6 +433,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._search_delay_handler_id = 0
         return GLib.SOURCE_REMOVE
+
+    def _update_menu(self):
+        self.menu_box.props.sensitive = not self._busy
 
     def _reset_search(self):
         self.search.set_active(False)
