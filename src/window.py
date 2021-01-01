@@ -147,9 +147,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
+        places.connect("removed", self._on_places_removed)
         self.places_box.add(places)
 
-        self._move(os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~")))
+        self._move(PortfolioPlaces.PORTFOLIO_HOME_DIR)
 
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -280,6 +281,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._populate(path)
         else:
             Gio.AppInfo.launch_default_for_uri(f"file://{path}")
+
+    def _reset_to_path(self, path):
+        self._history = []
+        self._index = -1
+        self._move(path, False)
 
     def _refresh(self):
         self._move(self._history[self._index], True)
@@ -801,9 +807,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._move(path)
 
     def _on_places_updated(self, button, path):
-        self._history = []
-        self._index = -1
-        self._move(path, False)
+        self._reset_to_path(path)
+
+    def _on_places_removed(self, button, path):
+        directory = self._history[self._index]
+        if not directory.startswith(path):
+            return
+        self._reset_to_path(PortfolioPlaces.PORTFOLIO_HOME_DIR)
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)

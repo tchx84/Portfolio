@@ -27,9 +27,12 @@ class PortfolioPlaces(Gtk.Box):
 
     __gsignals__ = {
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
+    PORTFOLIO_SYSTEM_DIR = os.path.abspath(os.sep)
+    PORTFOLIO_HOME_DIR = os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~"))
 
     def __init__(self, **kargs):
         super().__init__(**kargs)
@@ -44,9 +47,9 @@ class PortfolioPlaces(Gtk.Box):
         self._manager.connect("mount-removed", self._on_mount_removed)
 
         if self._has_permission_for("host"):
-            self._add_button(_("System"), os.path.abspath(os.sep), "system")
+            self._add_button(_("System"), self.PORTFOLIO_SYSTEM_DIR, "system")
         if self._has_permission_for("home"):
-            self._add_button(_("Home"), os.path.expanduser("~"), "home")
+            self._add_button(_("Home"), self.PORTFOLIO_HOME_DIR, "home")
 
         for mount in self._manager.get_mounts():
             self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
@@ -92,4 +95,5 @@ class PortfolioPlaces(Gtk.Box):
     def _on_mount_removed(self, monitor, mount):
         for button in self.get_children():
             if button.path == mount.get_root().get_path():
+                self.emit("removed", button.path)
                 button.destroy()
