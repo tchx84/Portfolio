@@ -22,6 +22,7 @@ import threading
 from gi.repository import GObject, GLib
 
 from . import utils
+from . import logger
 
 
 class PortfolioWorker(threading.Thread, GObject.GObject):
@@ -72,7 +73,7 @@ class PortfolioCopyWorker(PortfolioWorker):
                 else:
                     shutil.copyfile(path, destination)
             except Exception as e:
-                print(e)
+                logger.debug(e)
                 self.emit("failed", destination)
                 return
             else:
@@ -99,7 +100,8 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 if overwritten and os.path.isdir(path):
                     shutil.rmtree(destination)
                 shutil.move(path, destination)
-            except:
+            except Exception as e:
+                logger.debug(e)
                 self.emit("failed", path)
                 return
             else:
@@ -132,7 +134,8 @@ class PortfolioDeleteWorker(PortfolioWorker):
                     shutil.rmtree(path)
                 else:
                     os.unlink(path)
-            except:
+            except Exception as e:
+                logger.debug(e)
                 self.emit("failed", path)
                 return
             else:

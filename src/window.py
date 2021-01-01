@@ -23,6 +23,7 @@ from locale import gettext as _
 from gi.repository import Gtk, GLib, Gio, Handy
 
 from . import utils
+from . import logger
 from .popup import PortfolioPopup
 from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
@@ -540,7 +541,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         try:
             # respect empty folders
             if os.path.exists(new_path):
-                raise FileExistsError()
+                raise FileExistsError(_("%s already exists") % new_path)
 
             os.rename(old_path, new_path)
 
@@ -551,7 +552,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             row = self.liststore.get_iter(_treepath)
             self.liststore.set_value(row, self.PATH_COLUMN, new_path)
             self.liststore.set_value(row, self.NAME_COLUMN, new_name)
-        except:
+        except Exception as e:
+            logger.debug(e)
             self._notify(
                 _("%s already exists") % new_name,
                 None,
@@ -776,7 +778,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         try:
             Path(path).mkdir(parents=False, exist_ok=True)
-        except PermissionError:
+        except Exception as e:
+            logger.debug(e)
             self._notify(
                 _("No permissions on this directory"),
                 None,
