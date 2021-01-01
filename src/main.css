@@ -148,3 +148,16 @@ treeview.view {
     padding-left: 0px;
     -GtkTreeView-horizontal-separator: 0px;
 }
+
+/* go to top button */
+
+.go-top-button {
+    border: none;
+    box-shadow: none;
+    border-radius: 9999px;
+    -gtk-outline-radius: 9999px;
+    margin: 12px;
+    padding: 5px;
+    min-width: 30px;
+    min-height: 30px;
+}
