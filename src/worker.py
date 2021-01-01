@@ -57,13 +57,17 @@ class PortfolioCopyWorker(PortfolioWorker):
         for index, (path, ref) in enumerate(self._selection):
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
+            overwritten = os.path.exists(destination)
 
-            if os.path.exists(destination):
+            if path == destination:
                 name = utils.find_new_name(self._directory, name)
                 destination = os.path.join(self._directory, name)
+                overwritten = False
 
             try:
                 if os.path.isdir(path):
+                    if overwritten and os.path.isdir(path):
+                        shutil.rmtree(destination)
                     shutil.copytree(path, destination)
                 else:
                     shutil.copyfile(path, destination)
@@ -72,7 +76,7 @@ class PortfolioCopyWorker(PortfolioWorker):
                 self.emit("failed", destination)
                 return
             else:
-                self.emit("updated", destination, False, index, total)
+                self.emit("updated", destination, overwritten, index, total)
 
         self.emit("finished", total)
 

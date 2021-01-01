@@ -252,35 +252,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("failed", self._on_paste_failed)
         self._worker.start()
 
-    def _copy_and_paste(self):
-        if not self._to_copy:
-            return
-        self._paste(PortfolioCopyWorker, self._to_copy)
-
-    def _cut_and_paste(self):
-        if not self._to_cut:
-            return
-
-        directory = self._history[self._index]
-        should_warn = any(
-            [
-                os.path.exists(os.path.join(directory, os.path.basename(path)))
-                for path, ref in self._to_cut
-            ]
-        )
-
-        if not should_warn:
-            self._paste(PortfolioCutWorker, self._to_cut)
-            return
-
-        self._notify(
-            _("Files will be overwritten, proceed?"),
-            self._on_cut_and_paste_confirmed,
-            self._on_popup_closed,
-            False,
-            None,
-        )
-
     def _get_row(self, model, treepath):
         return model.get_iter(treepath)
 
@@ -655,12 +626,34 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _on_paste_clicked(self, button):
-        self._copy_and_paste()
-        self._cut_and_paste()
+        to_paste = self._to_copy if self._to_copy else self._to_cut
+        Worker = PortfolioCopyWorker if self._to_copy else PortfolioCutWorker
 
-    def _on_cut_and_paste_confirmed(self, button, popup, data=None):
+        directory = self._history[self._index]
+        should_warn = any(
+            [
+                os.path.dirname(path) != directory
+                and os.path.exists(os.path.join(directory, os.path.basename(path)))
+                for path, ref in to_paste
+            ]
+        )
+
+        if not should_warn:
+            self._paste(Worker, to_paste)
+            return
+
+        self._notify(
+            _("Files will be overwritten, proceed?"),
+            self._on_paste_confirmed,
+            self._on_popup_closed,
+            False,
+            (to_paste, Worker),
+        )
+
+    def _on_paste_confirmed(self, button, popup, data):
+        to_paste, Worker = data
         self._clean_popups()
-        self._paste(PortfolioCutWorker, self._to_cut)
+        self._paste(Worker, to_paste)
 
     def _on_paste_started(self, worker, total):
         self._busy = True
