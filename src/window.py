@@ -63,6 +63,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     about_button = Gtk.Template.Child()
     show_hidden_button = Gtk.Template.Child()
     a_to_z_button = Gtk.Template.Child()
+    go_top_button = Gtk.Template.Child()
 
     search_box = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
@@ -85,6 +86,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
     menu_box = Gtk.Template.Child()
+    content_scroll = Gtk.Template.Child()
+    go_top_revealer = Gtk.Template.Child()
 
     ICON_COLUMN = 0
     NAME_COLUMN = 1
@@ -140,6 +143,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.about_button.connect("clicked", self._on_about_clicked)
         self.show_hidden_button.connect("toggled", self._on_hidden_toggled)
         self.a_to_z_button.connect("toggled", self._on_sort_toggled)
+        self.go_top_button.connect("clicked", self._go_to_top)
+
+        self._adjustment = self.content_scroll.get_vadjustment()
+        self._adjustment.connect("value-changed", self._update_go_top_button)
 
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
@@ -268,7 +275,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
         self.treeview.scroll_to_cell(treepath, None, False, 0, 0)
 
-    def _go_to_top(self):
+    def _go_to_top(self, *args):
         if len(self.sorted) >= 1:
             self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
@@ -343,6 +350,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_action_stack()
         self._update_tools_stack()
         self._update_menu()
+        self._update_go_top_button()
 
     def _update_search(self):
         sensitive = not self._editing and not self._busy
@@ -425,6 +433,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_menu(self):
         self.menu_box.props.sensitive = not self._busy
+
+    def _update_go_top_button(self, *args):
+        alloc = self.get_allocation()
+        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._editing
+        self.go_top_revealer.props.reveal_child = reveal
 
     def _reset_search(self):
         self.search.set_active(False)
@@ -528,6 +541,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_search()
         self._update_selection()
         self._update_selection_tools()
+        self._update_go_top_button()
 
     def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
         directory = self._history[self._index]
