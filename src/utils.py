@@ -31,3 +31,20 @@ def find_new_name(directory, name):
         counter += 1
 
     return name
+
+
+def flatten_walk(path, topdown=True):
+    paths = []
+
+    if os.path.isdir(path):
+        for directory, _, files in os.walk(path, topdown=topdown):
+            if topdown is True:
+                paths.append(directory)
+            for file in files:
+                paths.append(os.path.join(directory, file))
+            if topdown is False:
+                paths.append(directory)
+    else:
+        paths.append(path)
+
+    return paths

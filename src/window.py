@@ -686,9 +686,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
-    def _on_paste_updated(self, worker, path, overwritten, index, total):
+    def _on_paste_updated(self, worker, path, overwritten, ignore, index, total):
         # XXX this approach won't allow me to put stat info in liststore
-        if not overwritten:
+        if not overwritten and not ignore:
             icon = self._find_icon(path)
             name = os.path.basename(path)
             self.liststore.append([icon, name, path])
