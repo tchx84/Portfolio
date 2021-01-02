@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"POT-Creation-Date: 2021-01-01 21:31-0300\n"
 "PO-Revision-Date: 2020-12-30 12:55-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -19,8 +19,8 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
-#: src/window.ui:1112
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
+#: src/window.ui:1124
 msgid "Portfolio"
 msgstr ""
 
@@ -32,7 +32,7 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 msgid "Manage files on the go"
 msgstr "Administre archivos sobre la marcha"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -44,51 +44,51 @@ msgstr ""
 msgid "Martin Abente Lahaye"
 msgstr ""
 
-#: src/window.ui:44
+#: src/window.ui:49
 msgid "Places"
 msgstr "Lugares"
 
-#: src/window.ui:101
+#: src/window.ui:106
 msgid "Filter"
 msgstr "Filtrar"
 
-#: src/window.ui:124
+#: src/window.ui:129
 msgid "Show Hidden Files"
 msgstr "Mostrar archivos ocultos"
 
-#: src/window.ui:173
+#: src/window.ui:178
 msgid "Sort"
 msgstr "Ordenar"
 
-#: src/window.ui:196
+#: src/window.ui:201
 msgid "A-Z"
 msgstr ""
 
-#: src/window.ui:222
+#: src/window.ui:227
 msgid "Last Modified"
 msgstr "Última modificación"
 
-#: src/window.ui:271
+#: src/window.ui:283
 msgid "Help"
 msgstr "Ayuda"
 
-#: src/window.ui:287
+#: src/window.ui:299
 msgid "About Portfolio"
 msgstr "Acerca de Portfolio"
 
-#: src/window.ui:624
+#: src/window.ui:636
 msgid "No files found"
 msgstr "No se encontraron archivos"
 
-#: src/window.ui:1034
+#: src/window.ui:1046
 msgid "About"
 msgstr "Acerca de"
 
-#: src/window.ui:1194
+#: src/window.ui:1206
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Sitio web</a>"
 
-#: src/window.ui:1249
+#: src/window.ui:1261
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -98,7 +98,7 @@ msgstr ""
 "\"https://www.gnu.org/licenses/gpl-3.0.html\">Licencia pública general GNU, "
 "versión 3 o en adelante</a> para obtener más detalles."
 
-#: src/window.ui:1278
+#: src/window.ui:1290
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -110,75 +110,79 @@ msgstr ""
 "wikimedia.org/wiki/File:Portfolio.svg\">aquí</a>, bajo licencia <a href="
 "\"https://creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
 
-#: src/places.py:47
+#: src/places.py:50
 msgid "System"
 msgstr "Sistema"
 
-#: src/places.py:49
+#: src/places.py:52
 msgid "Home"
 msgstr "Hogar"
 
-#: src/window.py:386
+#: src/window.py:442
 msgid "Loading"
 msgstr "Cargando"
 
-#: src/window.py:498
+#: src/window.py:544 src/window.py:558
 #, python-format
 msgid "%s already exists"
 msgstr "%s ya existe"
 
-#: src/window.py:529
+#: src/window.py:588
 #, python-format
 msgid "these %d files"
 msgstr "estos %d archivos"
 
-#: src/window.py:531
+#: src/window.py:590
 #, python-format
 msgid "Delete %s?"
 msgstr "¿Eliminar %s?"
 
-#: src/window.py:547
+#: src/window.py:609
 #, python-format
 msgid "%s will be moved"
 msgstr "%s se moverá"
 
-#: src/window.py:549
+#: src/window.py:611
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d archivos se moverán"
 
-#: src/window.py:566
+#: src/window.py:627
 #, python-format
 msgid "%s will be copied"
 msgstr "%s se copiará"
 
-#: src/window.py:568
+#: src/window.py:629
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d archivos se copiarán"
 
-#: src/window.py:592
+#: src/window.py:654
+msgid "Files will be overwritten, proceed?"
+msgstr "Sobrescribirá archivos, ¿continuar?"
+
+#: src/window.py:669
 msgid "Pasting"
 msgstr "Pegando"
 
-#: src/window.py:628
+#: src/window.py:704
 #, python-format
 msgid "Could not paste %s"
 msgstr "No se pudo pegar %s"
 
-#: src/window.py:654
+#: src/window.py:730
 msgid "Deleting"
 msgstr "Eliminando"
 
-#: src/window.py:676
+#: src/window.py:753
 #, python-format
 msgid "Could not delete %s"
 msgstr "No se pudo eliminar %s"
 
-#: src/window.py:703
+#: src/window.py:776
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: src/window.py:715
+#: src/window.py:784
 msgid "No permissions on this directory"
 msgstr "Sin permisos en este directorio"
