@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-30 14:30-0300\n"
+"POT-Creation-Date: 2021-01-01 21:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,8 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:331
-#: src/window.ui:1112
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
+#: src/window.ui:1124
 msgid "Portfolio"
 msgstr ""
 
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Manage files on the go"
 msgstr ""
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1166
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -42,58 +42,58 @@ msgstr ""
 msgid "Martin Abente Lahaye"
 msgstr ""
 
-#: src/window.ui:44
+#: src/window.ui:49
 msgid "Places"
 msgstr ""
 
-#: src/window.ui:101
+#: src/window.ui:106
 msgid "Filter"
 msgstr ""
 
-#: src/window.ui:124
+#: src/window.ui:129
 msgid "Show Hidden Files"
 msgstr ""
 
-#: src/window.ui:173
+#: src/window.ui:178
 msgid "Sort"
 msgstr ""
 
-#: src/window.ui:196
+#: src/window.ui:201
 msgid "A-Z"
 msgstr ""
 
-#: src/window.ui:222
+#: src/window.ui:227
 msgid "Last Modified"
 msgstr ""
 
-#: src/window.ui:271
+#: src/window.ui:283
 msgid "Help"
 msgstr ""
 
-#: src/window.ui:287
+#: src/window.ui:299
 msgid "About Portfolio"
 msgstr ""
 
-#: src/window.ui:624
+#: src/window.ui:636
 msgid "No files found"
 msgstr ""
 
-#: src/window.ui:1034
+#: src/window.ui:1046
 msgid "About"
 msgstr ""
 
-#: src/window.ui:1194
+#: src/window.ui:1206
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr ""
 
-#: src/window.ui:1249
+#: src/window.ui:1261
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
 "later</a> for details."
 msgstr ""
 
-#: src/window.ui:1278
+#: src/window.ui:1290
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -101,75 +101,79 @@ msgid ""
 "org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 msgstr ""
 
-#: src/places.py:47
+#: src/places.py:50
 msgid "System"
 msgstr ""
 
-#: src/places.py:49
+#: src/places.py:52
 msgid "Home"
 msgstr ""
 
-#: src/window.py:386
+#: src/window.py:442
 msgid "Loading"
 msgstr ""
 
-#: src/window.py:498
+#: src/window.py:544 src/window.py:558
 #, python-format
 msgid "%s already exists"
 msgstr ""
 
-#: src/window.py:529
+#: src/window.py:588
 #, python-format
 msgid "these %d files"
 msgstr ""
 
-#: src/window.py:531
+#: src/window.py:590
 #, python-format
 msgid "Delete %s?"
 msgstr ""
 
-#: src/window.py:547
+#: src/window.py:609
 #, python-format
 msgid "%s will be moved"
 msgstr ""
 
-#: src/window.py:549
+#: src/window.py:611
 #, python-format
 msgid "%d files will be moved"
 msgstr ""
 
-#: src/window.py:566
+#: src/window.py:627
 #, python-format
 msgid "%s will be copied"
 msgstr ""
 
-#: src/window.py:568
+#: src/window.py:629
 #, python-format
 msgid "%d files will be copied"
 msgstr ""
 
-#: src/window.py:592
+#: src/window.py:654
+msgid "Files will be overwritten, proceed?"
+msgstr ""
+
+#: src/window.py:669
 msgid "Pasting"
 msgstr ""
 
-#: src/window.py:628
+#: src/window.py:704
 #, python-format
 msgid "Could not paste %s"
 msgstr ""
 
-#: src/window.py:654
+#: src/window.py:730
 msgid "Deleting"
 msgstr ""
 
-#: src/window.py:676
+#: src/window.py:753
 #, python-format
 msgid "Could not delete %s"
 msgstr ""
 
-#: src/window.py:703
+#: src/window.py:776
 msgid "New Folder"
 msgstr ""
 
-#: src/window.py:715
+#: src/window.py:784
 msgid "No permissions on this directory"
 msgstr ""
