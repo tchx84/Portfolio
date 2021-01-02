@@ -22,7 +22,7 @@ msgstr ""
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
 #: src/window.ui:1124
 msgid "Portfolio"
-msgstr ""
+msgstr "Portafolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:13
 msgid "folder;manager;explore;disk;filesystem;"
@@ -30,13 +30,13 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
 msgid "Manage files on the go"
-msgstr "Administre archivos sobre la marcha"
+msgstr "Un gestor de archivos móvil "
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
-"Un administrador de archivos minimalista para aquellos que desean utilizar "
+"Un gestor de archivos minimalista para aquellos que desean utilizar "
 "dispositivos móviles Linux."
 
 #. TRANSLATORS: Don't translate this text
@@ -74,7 +74,7 @@ msgstr "Ayuda"
 
 #: src/window.ui:299
 msgid "About Portfolio"
-msgstr "Acerca de Portfolio"
+msgstr "Acerca de Portafolio"
 
 #: src/window.ui:636
 msgid "No files found"
@@ -105,7 +105,7 @@ msgid ""
 "Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
 "org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 msgstr ""
-"El logotipo de Portfolio es una versión modificada del trabajo de Jorgen "
+"El logotipo de Portafolio es una versión modificada del trabajo de Jorgen "
 "Carlberg. La versión original se puede encontrar <a href=\"https://commons."
 "wikimedia.org/wiki/File:Portfolio.svg\">aquí</a>, bajo licencia <a href="
 "\"https://creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
