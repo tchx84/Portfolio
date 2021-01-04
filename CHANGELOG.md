@@ -2,11 +2,18 @@
 
 ## [unreleased]
 
-- Fixed regression where last unselected row would unexpectedly activate.
-- Added Spanish translation.
-- Added i18n support.
+- Fixed regression where the last unselected row would unexpectedly activate.
+- Fixed to kick-back to HOME when the external drive is unmounted.
+- Fixed page will no longer do full reload after deleting only a few files.
 - Added sorting options to the menu.
-- Added enhanced logo by @bertob.
+- Added floating button to go back to the top and to save multiple swipes.
+- Added enhanced icon by @bertob.
+- Added i18n support.
+- Added Spanish translation.
+- Added Swedish translation by @eson57.
+- Added Indonesian translation by @cho2.
+- Added Dutch translation by @vistaus.
+- Changed paste to behave like other commonly used file managers.
 
 ## [0.9.2] 2020-12-28
 
