@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.3] 2021-01-04
 
 - Fixed regression where the last unselected row would unexpectedly activate.
 - Fixed to kick-back to HOME when the external drive is unmounted.
