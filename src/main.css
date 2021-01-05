@@ -72,6 +72,18 @@ scrolledwindow.frame {
     font-size: small;
 }
 
+/* credits */
+
+.credits-grid {
+    font-size: small;
+    margin: 20px 0px;
+}
+
+.credits-grid .credits-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
 /* menu */
 
 .menu-box {
