@@ -22,7 +22,7 @@ msgstr ""
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
 #: src/window.ui:1124
 msgid "Portfolio"
-msgstr "Portafolio"
+msgstr ""
 
 #: data/dev.tchx84.Portfolio.desktop.in:13
 msgid "folder;manager;explore;disk;filesystem;"
@@ -30,14 +30,13 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
 msgid "Manage files on the go"
-msgstr "Un gestor de archivos móvil "
+msgstr ""
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
-"Un gestor de archivos minimalista para aquellos que desean utilizar "
-"dispositivos móviles Linux."
+"Un gestor de archivos minimalista para dispositivos móviles Linux."
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:30
@@ -74,7 +73,7 @@ msgstr "Ayuda"
 
 #: src/window.ui:299
 msgid "About Portfolio"
-msgstr "Acerca de Portafolio"
+msgstr "Acerca de"
 
 #: src/window.ui:636
 msgid "No files found"
