@@ -110,6 +110,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._last_clicked = None
         self._dont_activate = False
         self._force_select = False
+        self._force_go_home = False
         self._history = []
         self._index = -1
         self._search_delay_handler_id = 0
@@ -249,6 +250,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
+        self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
 
     def _paste(self, Worker, to_paste):
@@ -476,7 +478,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_all()
 
     def _on_load_failed(self, worker, directory):
+        self._busy = False
         self._clean_workers()
+
+        name = os.path.basename(directory)
+        self.loading_description.set_text(_("Could not load %s") % name)
+
+        self._force_go_home = True
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_clicked(self, treeview, event):
         result = self.treeview.get_path_at_pos(event.x, event.y)
@@ -794,6 +804,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._unselect_all()
         self._update_all()
         self._update_mode()
+
+        if self._force_go_home is False:
+            return
+
+        self._force_go_home = False
+        self._reset_to_path(PortfolioPlaces.PORTFOLIO_HOME_DIR)
 
     def _on_select_all(self, button):
         self._select_all()
