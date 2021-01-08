@@ -45,6 +45,7 @@ scrolledwindow.frame {
 
 .about-box {
     margin: 10px 20px;
+    margin-top: 60px;
 }
 .about-box .name-label {
     margin-top: 10px;
