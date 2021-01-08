@@ -177,6 +177,7 @@ class PortfolioLoadWorker(GObject.GObject):
         "started": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     BUFFER = 75
@@ -188,7 +189,14 @@ class PortfolioLoadWorker(GObject.GObject):
 
     def start(self):
         self.emit("started", self._directory)
-        self._paths = os.listdir(self._directory)
+
+        try:
+            self._paths = os.listdir(self._directory)
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", self._directory)
+            return
+
         self._total = len(self._paths)
         self._index = 0
         GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
