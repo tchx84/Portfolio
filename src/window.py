@@ -256,6 +256,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._worker = Worker(to_paste, directory)
         self._worker.connect("started", self._on_paste_started)
+        self._worker.connect("pre-update", self._on_paste_pre_updated)
         self._worker.connect("updated", self._on_paste_updated)
         self._worker.connect("finished", self._on_paste_finished)
         self._worker.connect("failed", self._on_paste_failed)
@@ -328,6 +329,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
         self._popup.destroy()
         self._popup = None
+
+    def _clean_progress(self):
+        self.loading_description.set_text("")
 
     def _update_mode(self):
         count = self.selection.count_selected_rows()
@@ -686,6 +690,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
+    def _on_paste_pre_updated(self, worker, path):
+        name = os.path.basename(path)
+        self.loading_description.set_text(name)
+
     def _on_paste_updated(self, worker, path, overwritten, index, total):
         # XXX this approach won't allow me to put stat info in liststore
         if not overwritten:
@@ -698,6 +706,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_paste_finished(self, worker, total):
         self._busy = False
         self._clean_workers()
+        self._clean_progress()
 
         self._to_cut = []
         self._to_copy = []
@@ -710,6 +719,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_paste_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
+        self._clean_progress()
 
         self._to_cut = []
         self._to_copy = []
@@ -733,6 +743,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._worker = PortfolioDeleteWorker(selection)
         self._worker.connect("started", self._on_delete_started)
+        self._worker.connect("pre-update", self._on_delete_pre_updated)
         self._worker.connect("updated", self._on_delete_updated)
         self._worker.connect("finished", self._on_delete_finished)
         self._worker.connect("failed", self._on_delete_failed)
@@ -747,6 +758,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
+    def _on_delete_pre_updated(self, worker, path):
+        name = os.path.basename(path)
+        self.loading_description.set_text(name)
+
     def _on_delete_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
         self.loading_bar.set_fraction((index + 1) / total)
@@ -754,6 +769,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_finished(self, worker, total):
         self._busy = False
         self._clean_workers()
+        self._clean_progress()
 
         self._unselect_all()
         self._update_all()
@@ -762,6 +778,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
+        self._clean_progress()
 
         name = os.path.basename(path)
         self.loading_description.set_text(_("Could not delete %s") % name)
@@ -773,7 +790,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_popups()
 
     def _on_button_closed(self, button):
-        self.loading_description.set_text("")
+        self._clean_progress()
         self._unselect_all()
         self._update_all()
         self._update_mode()

@@ -41,6 +41,7 @@ class PortfolioCopyWorker(PortfolioWorker):
 
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, bool, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -52,10 +53,11 @@ class PortfolioCopyWorker(PortfolioWorker):
         self._directory = directory
 
     def run(self):
-        total = len(self._selection)
+        count = 0
+        total = sum([utils.count(path) for path, ref in self._selection])
         self.emit("started", total)
 
-        for index, (path, ref) in enumerate(self._selection):
+        for path, ref in self._selection:
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
             overwritten = os.path.exists(destination)
@@ -65,11 +67,19 @@ class PortfolioCopyWorker(PortfolioWorker):
                 destination = os.path.join(self._directory, name)
                 overwritten = False
 
+            def _callback(_path, _destination):
+                nonlocal count, total
+                self.emit("pre-update", _destination)
+                shutil.copy2(_path, _destination)
+                self.emit("updated", _destination, True, count, total)
+                count += 1
+
             try:
+                self.emit("pre-update", destination)
                 if os.path.isdir(path):
                     if overwritten and os.path.isdir(path):
                         shutil.rmtree(destination)
-                    shutil.copytree(path, destination)
+                    shutil.copytree(path, destination, copy_function=_callback)
                 else:
                     shutil.copyfile(path, destination)
             except Exception as e:
@@ -77,7 +87,8 @@ class PortfolioCopyWorker(PortfolioWorker):
                 self.emit("failed", destination)
                 return
             else:
-                self.emit("updated", destination, overwritten, index, total)
+                self.emit("updated", destination, overwritten, count, total)
+                count += 1
 
         self.emit("finished", total)
 
@@ -86,26 +97,36 @@ class PortfolioCutWorker(PortfolioCopyWorker):
     __gtype_name__ = "PortfolioCutWorker"
 
     def run(self):
-        total = len(self._selection)
+        count = 0
+        total = sum([utils.count(path) for path, ref in self._selection])
         self.emit("started", total)
 
-        for index, (path, ref) in enumerate(self._selection):
+        for path, ref in self._selection:
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
             overwritten = os.path.exists(destination)
 
+            def _callback(_path, _destination):
+                nonlocal count, total
+                self.emit("pre-update", _destination)
+                shutil.copy2(_path, _destination)
+                self.emit("updated", _destination, True, count, total)
+                count += 1
+
             try:
+                self.emit("pre-update", destination)
                 if destination == path:
                     continue
                 if overwritten and os.path.isdir(path):
                     shutil.rmtree(destination)
-                shutil.move(path, destination)
+                shutil.move(path, destination, copy_function=_callback)
             except Exception as e:
                 logger.debug(e)
                 self.emit("failed", path)
                 return
             else:
-                self.emit("updated", destination, overwritten, index, total)
+                self.emit("updated", destination, overwritten, count, total)
+                count += 1
 
         self.emit("finished", total)
 
@@ -115,6 +136,7 @@ class PortfolioDeleteWorker(PortfolioWorker):
 
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -125,13 +147,17 @@ class PortfolioDeleteWorker(PortfolioWorker):
         self._selection = selection
 
     def run(self):
-        total = len(self._selection)
+        paths = sum([utils.flatten_walk(path) for path, ref in self._selection], [])
+        refs = dict(self._selection)
+
+        total = len(paths)
         self.emit("started", total)
 
-        for index, (path, ref) in enumerate(self._selection):
+        for index, path in enumerate(paths):
             try:
+                self.emit("pre-update", path)
                 if os.path.isdir(path):
-                    shutil.rmtree(path)
+                    os.rmdir(path)
                 else:
                     os.unlink(path)
             except Exception as e:
@@ -139,7 +165,7 @@ class PortfolioDeleteWorker(PortfolioWorker):
                 self.emit("failed", path)
                 return
             else:
-                self.emit("updated", path, ref, index, total)
+                self.emit("updated", path, refs.get(path), index, total)
 
         self.emit("finished", total)
 

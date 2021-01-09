@@ -31,3 +31,27 @@ def find_new_name(directory, name):
         counter += 1
 
     return name
+
+
+def count(path):
+    _count = 1
+
+    if os.path.isdir(path):
+        for directory, _, files in os.walk(path):
+            _count += len(files)
+
+    return _count
+
+
+def flatten_walk(path):
+    _paths = []
+
+    if os.path.isdir(path):
+        for directory, _, files in os.walk(path, topdown=False):
+            for file in files:
+                _paths += [os.path.join(directory, file)]
+            _paths += [directory]
+    else:
+        _paths += [path]
+
+    return _paths

@@ -616,7 +616,8 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="justify">center</property>
-                                    <property name="wrap">True</property>
+                                    <property name="ellipsize">end</property>
+                                    <property name="single-line-mode">True</property>
                                     <style>
                                       <class name="loading-description"/>
                                     </style>
