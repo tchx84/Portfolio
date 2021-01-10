@@ -2,9 +2,15 @@ conf = configuration_data()
 conf.set('resource_dir', join_paths(meson.build_root(), 'src'))
 conf.set('source_dir', meson.source_root())
 
-test_file = configure_file(
+test_window_file = configure_file(
   input: 'window.py.in',
   output: 'window.py',
+  configuration: conf,
+)
+
+test_worker_file = configure_file(
+  input: 'worker.py.in',
+  output: 'worker.py',
   configuration: conf,
 )
 
@@ -14,17 +20,18 @@ tests_dir = join_paths(meson.source_root(), 'tests')
 pyflakes = find_program('pyflakes', required: false)
 if pyflakes.found()
   test('pyflakes', pyflakes,
-    args: [src_dir, test_file])
+    args: [src_dir, test_window_file, test_worker_file])
 endif
 
 black = find_program('black', required: false)
 if black.found()
   test('black', black,
-    args: [src_dir, test_file])
+    args: [src_dir, test_window_file, test_worker_file])
 endif
 
 tests = [
-    test_file,
+    test_window_file,
+    test_worker_file,
 ]
 
 pytest = find_program('pytest', required: false)
