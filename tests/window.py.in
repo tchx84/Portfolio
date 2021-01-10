@@ -46,6 +46,9 @@ def setup_module():
     Gtk.init(None)
 
     os.environ["PORTFOLIO_HOME_DIR"] = TEST_HOME_DIR
+
+
+def teardown_module():
     shutil.rmtree(os.path.join(TEST_HOME_DIR, TEST_NEW_FOLDER), ignore_errors=True)
     shutil.rmtree(os.path.join(TEST_HOME_FOLDER, TEST_NEW_FOLDER), ignore_errors=True)
 
