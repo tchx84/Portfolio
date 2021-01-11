@@ -5,6 +5,7 @@
 - Fixed catching permissions errors while loading by @Avolpe.
 - Added more detailed feedback to pasting and deleting screens.
 - Added credits section to about "dialog".
+- Added more tests, tests, tests.
 
 ## [0.9.3] 2021-01-04
 
