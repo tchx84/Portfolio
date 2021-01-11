@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed catching permissions errors while loading by @Avolpe.
+- Added more detailed feedback to pasting and deleting screens.
+- Added credits section to about "dialog".
+
 ## [0.9.3] 2021-01-04
 
 - Fixed regression where the last unselected row would unexpectedly activate.
