@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.4] 2021-01-11
 
 - Fixed catching permissions errors while loading by @Avolpe.
 - Added more detailed feedback to pasting and deleting screens.

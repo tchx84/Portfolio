@@ -1178,7 +1178,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label">0.9.3</property>
+                                <property name="label">0.9.4</property>
                                 <property name="wrap">True</property>
                                 <style>
                                   <class name="version-label"/>
