@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-12 08:58-0300\n"
+"POT-Creation-Date: 2021-01-12 08:47-0300\n"
 "PO-Revision-Date: 2020-12-30 12:55-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -110,19 +110,19 @@ msgstr ""
 
 #: src/window.ui:1358
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #: src/window.ui:1389
 msgid "Artwork by"
-msgstr ""
+msgstr "Arte por"
 
 #: src/window.ui:1420
 msgid "Translated by"
-msgstr ""
+msgstr "Traducido por"
 
 #: src/window.ui:1452
 msgid "Contributions by"
-msgstr ""
+msgstr "Contribuciones por"
 
 #: src/places.py:50
 msgid "System"
@@ -137,9 +137,8 @@ msgid "Loading"
 msgstr "Cargando"
 
 #: src/window.py:485
-#, fuzzy, python-format
 msgid "Could not load %s"
-msgstr "No se pudo pegar %s"
+msgstr "No se pudo cargar %s"
 
 #: src/window.py:572 src/window.py:586
 #, python-format
