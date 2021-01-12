@@ -1,21 +1,21 @@
 # Swedish translation for Portfolio.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2020.
+# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2020, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-12 08:58-0300\n"
-"PO-Revision-Date: 2020-12-31 08:13+0100\n"
+"PO-Revision-Date: 2021-01-12 14:11+0100\n"
 "Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
 "Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -113,19 +113,19 @@ msgstr ""
 
 #: src/window.ui:1358
 msgid "Created by"
-msgstr ""
+msgstr "Skapad av"
 
 #: src/window.ui:1389
 msgid "Artwork by"
-msgstr ""
+msgstr "Bildkonst av"
 
 #: src/window.ui:1420
 msgid "Translated by"
-msgstr ""
+msgstr "Översatt av"
 
 #: src/window.ui:1452
 msgid "Contributions by"
-msgstr ""
+msgstr "Kodbidrag av"
 
 #: src/places.py:50
 msgid "System"
@@ -140,9 +140,9 @@ msgid "Loading"
 msgstr "Läser in"
 
 #: src/window.py:485
-#, fuzzy, python-format
+#, python-format
 msgid "Could not load %s"
-msgstr "Kunde inte klistra in %s"
+msgstr "Kunde inte läsa in %s"
 
 #: src/window.py:572 src/window.py:586
 #, python-format
