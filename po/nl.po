@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-12 08:58-0300\n"
-"PO-Revision-Date: 2020-12-30 21:19+0100\n"
+"PO-Revision-Date: 2021-01-12 14:12+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -113,19 +113,19 @@ msgstr ""
 
 #: src/window.ui:1358
 msgid "Created by"
-msgstr ""
+msgstr "Gemaakt door"
 
 #: src/window.ui:1389
 msgid "Artwork by"
-msgstr ""
+msgstr "Vormgegeven door"
 
 #: src/window.ui:1420
 msgid "Translated by"
-msgstr ""
+msgstr "Vertaald door"
 
 #: src/window.ui:1452
 msgid "Contributions by"
-msgstr ""
+msgstr "Met bijdragen van"
 
 #: src/places.py:50
 msgid "System"
@@ -140,9 +140,9 @@ msgid "Loading"
 msgstr "Bezig met laden"
 
 #: src/window.py:485
-#, fuzzy, python-format
+#, python-format
 msgid "Could not load %s"
-msgstr "Kan %s niet plakken"
+msgstr "Kan %s niet laden"
 
 #: src/window.py:572 src/window.py:586
 #, python-format
