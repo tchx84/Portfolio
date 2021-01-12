@@ -46,8 +46,11 @@ def count(path):
 def flatten_walk(path):
     _paths = []
 
+    def _callback(error):
+        raise error
+
     if os.path.isdir(path):
-        for directory, _, files in os.walk(path, topdown=False):
+        for directory, _, files in os.walk(path, topdown=False, onerror=_callback):
             for file in files:
                 _paths += [os.path.join(directory, file)]
             _paths += [directory]

@@ -759,7 +759,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("failed", self._on_delete_failed)
         self._worker.start()
 
-    def _on_delete_started(self, worker, total):
+    def _on_delete_started(self, worker):
         self._busy = True
 
         self.loading_label.set_text(_("Deleting"))
