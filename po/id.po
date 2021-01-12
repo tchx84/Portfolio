@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-12 08:58-0300\n"
-"PO-Revision-Date: 2020-12-31 10:36+0700\n"
+"PO-Revision-Date: 2021-01-12 22:10+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -113,19 +113,19 @@ msgstr ""
 
 #: src/window.ui:1358
 msgid "Created by"
-msgstr ""
+msgstr "Dibuat oleh"
 
 #: src/window.ui:1389
 msgid "Artwork by"
-msgstr ""
+msgstr "Karya Seni oleh"
 
 #: src/window.ui:1420
 msgid "Translated by"
-msgstr ""
+msgstr "Diterjemahkan oleh"
 
 #: src/window.ui:1452
 msgid "Contributions by"
-msgstr ""
+msgstr "Kontribusi oleh"
 
 #: src/places.py:50
 msgid "System"
@@ -140,9 +140,9 @@ msgid "Loading"
 msgstr "Memuat"
 
 #: src/window.py:485
-#, fuzzy, python-format
+#, python-format
 msgid "Could not load %s"
-msgstr "Tak bisa menempelkan %s"
+msgstr "Tak bisa memuat %s"
 
 #: src/window.py:572 src/window.py:586
 #, python-format
