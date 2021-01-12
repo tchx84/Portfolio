@@ -135,7 +135,7 @@ class PortfolioDeleteWorker(PortfolioWorker):
     __gtype_name__ = "PortfolioDeleteWorker"
 
     __gsignals__ = {
-        "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "started": (GObject.SignalFlags.RUN_LAST, None, ()),
         "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
@@ -147,11 +147,19 @@ class PortfolioDeleteWorker(PortfolioWorker):
         self._selection = selection
 
     def run(self):
-        paths = sum([utils.flatten_walk(path) for path, ref in self._selection], [])
-        refs = dict(self._selection)
+        self.emit("started")
 
+        try:
+            paths = []
+            for path, ref in self._selection:
+                paths += utils.flatten_walk(path)
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", path)
+            return
+
+        refs = dict(self._selection)
         total = len(paths)
-        self.emit("started", total)
 
         for index, path in enumerate(paths):
             try:
