@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-01 21:31-0300\n"
+"POT-Creation-Date: 2021-01-12 08:58-0300\n"
 "PO-Revision-Date: 2020-12-30 12:55-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -20,7 +20,7 @@ msgstr ""
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
-#: src/window.ui:1124
+#: src/window.ui:1154
 msgid "Portfolio"
 msgstr ""
 
@@ -32,11 +32,10 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 msgid "Manage files on the go"
 msgstr "Gestiona archivos en móviles"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1208
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
-msgstr ""
-"Un gestor de archivos minimalista para dispositivos móviles Linux."
+msgstr "Un gestor de archivos minimalista para dispositivos móviles Linux."
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:30
@@ -75,19 +74,19 @@ msgstr "Ayuda"
 msgid "About Portfolio"
 msgstr "Acerca de Portfolio"
 
-#: src/window.ui:636
+#: src/window.ui:684
 msgid "No files found"
 msgstr "No se encontraron archivos"
 
-#: src/window.ui:1046
+#: src/window.ui:1076
 msgid "About"
 msgstr "Acerca de"
 
-#: src/window.ui:1206
+#: src/window.ui:1236
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Sitio web</a>"
 
-#: src/window.ui:1261
+#: src/window.ui:1291
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -97,7 +96,7 @@ msgstr ""
 "\"https://www.gnu.org/licenses/gpl-3.0.html\">Licencia pública general GNU, "
 "versión 3 o en adelante</a> para obtener más detalles."
 
-#: src/window.ui:1290
+#: src/window.ui:1320
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -109,6 +108,22 @@ msgstr ""
 "wikimedia.org/wiki/File:Portfolio.svg\">aquí</a>, bajo licencia <a href="
 "\"https://creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
 
+#: src/window.ui:1358
+msgid "Created by"
+msgstr ""
+
+#: src/window.ui:1389
+msgid "Artwork by"
+msgstr ""
+
+#: src/window.ui:1420
+msgid "Translated by"
+msgstr ""
+
+#: src/window.ui:1452
+msgid "Contributions by"
+msgstr ""
+
 #: src/places.py:50
 msgid "System"
 msgstr "Sistema"
@@ -117,71 +132,76 @@ msgstr "Sistema"
 msgid "Home"
 msgstr "Hogar"
 
-#: src/window.py:442
+#: src/window.py:461
 msgid "Loading"
 msgstr "Cargando"
 
-#: src/window.py:544 src/window.py:558
+#: src/window.py:485
+#, fuzzy, python-format
+msgid "Could not load %s"
+msgstr "No se pudo pegar %s"
+
+#: src/window.py:572 src/window.py:586
 #, python-format
 msgid "%s already exists"
 msgstr "%s ya existe"
 
-#: src/window.py:588
+#: src/window.py:616
 #, python-format
 msgid "these %d files"
 msgstr "estos %d archivos"
 
-#: src/window.py:590
+#: src/window.py:618
 #, python-format
 msgid "Delete %s?"
 msgstr "¿Eliminar %s?"
 
-#: src/window.py:609
+#: src/window.py:637
 #, python-format
 msgid "%s will be moved"
 msgstr "%s se moverá"
 
-#: src/window.py:611
+#: src/window.py:639
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d archivos se moverán"
 
-#: src/window.py:627
+#: src/window.py:655
 #, python-format
 msgid "%s will be copied"
 msgstr "%s se copiará"
 
-#: src/window.py:629
+#: src/window.py:657
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d archivos se copiarán"
 
-#: src/window.py:654
+#: src/window.py:682
 msgid "Files will be overwritten, proceed?"
 msgstr "Sobrescribirá archivos, ¿continuar?"
 
-#: src/window.py:669
+#: src/window.py:697
 msgid "Pasting"
 msgstr "Pegando"
 
-#: src/window.py:704
+#: src/window.py:738
 #, python-format
 msgid "Could not paste %s"
 msgstr "No se pudo pegar %s"
 
-#: src/window.py:730
+#: src/window.py:765
 msgid "Deleting"
 msgstr "Eliminando"
 
-#: src/window.py:753
+#: src/window.py:794
 #, python-format
 msgid "Could not delete %s"
 msgstr "No se pudo eliminar %s"
 
-#: src/window.py:776
+#: src/window.py:823
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: src/window.py:784
+#: src/window.py:831
 msgid "No permissions on this directory"
 msgstr "Sin permisos en este directorio"
