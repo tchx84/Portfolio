@@ -30,14 +30,13 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
 msgid "Manage files on the go"
-msgstr "Administre archivos sobre la marcha"
+msgstr "Gestiona archivos en móviles"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1178
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
-"Un administrador de archivos minimalista para aquellos que desean utilizar "
-"dispositivos móviles Linux."
+"Un gestor de archivos minimalista para dispositivos móviles Linux."
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:30
