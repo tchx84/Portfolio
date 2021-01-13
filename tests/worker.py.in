@@ -136,7 +136,7 @@ def test_copy_worker_default():
     assert os.path.exists(os.path.join(target, "file"))
 
 
-def test_copy_worker_overwrite():
+def test_copy_worker_nonidempotent():
     from src.worker import PortfolioCopyWorker
 
     source = TEST_COPY_DIR
@@ -161,6 +161,38 @@ def test_copy_worker_overwrite():
     assert os.path.exists(os.path.join(target, "folder(1)", "file"))
     assert os.path.exists(os.path.join(target, "folder(1)"))
     assert os.path.exists(os.path.join(target, "file(1)"))
+
+
+def test_copy_worker_overwrite():
+    from src.worker import PortfolioCopyWorker
+
+    source = TEST_COPY_DIR
+    target = TEST_HOME_DIR
+
+    # to differenciate from the source content
+    pathlib.Path(os.path.join(target, "folder", "different")).touch()
+    assert os.path.exists(os.path.join(target, "folder", "different"))
+
+    selection = [
+        (os.path.join(source, "folder"), None),
+        (os.path.join(source, "file"), None),
+    ]
+
+    worker = PortfolioCopyWorker(selection, target)
+    worker.start()
+    worker.join()
+
+    assert len(os.listdir(source)) == 4
+    assert len(os.listdir(target)) == 4
+
+    assert os.path.exists(os.path.join(source, "folder", "file"))
+    assert os.path.exists(os.path.join(source, "folder"))
+    assert os.path.exists(os.path.join(source, "file"))
+
+    assert not os.path.exists(os.path.join(target, "folder", "different"))
+    assert os.path.exists(os.path.join(target, "folder", "file"))
+    assert os.path.exists(os.path.join(target, "folder"))
+    assert os.path.exists(os.path.join(target, "file"))
 
 
 def test_delete_worker_default():
@@ -239,9 +271,9 @@ def test_cut_worker_overwrite():
     source = TEST_CUT_DIR
     target = TEST_HOME_DIR
 
-    # change folder's content to check it's really overwritten
-    os.remove(os.path.join(source, "folder", "file"))
-    assert os.path.exists(os.path.join(target, "folder", "file"))
+    # to differenciate from the source content
+    pathlib.Path(os.path.join(target, "folder", "different")).touch()
+    assert os.path.exists(os.path.join(target, "folder", "different"))
 
     selection = [
         (os.path.join(source, "folder"), None),
@@ -255,8 +287,8 @@ def test_cut_worker_overwrite():
     assert len(os.listdir(source)) == 0
     assert len(os.listdir(target)) == 5
 
-    assert not os.path.exists(os.path.join(target, "folder", "file"))
     assert os.path.exists(os.path.join(target, "folder"))
+    assert not os.path.exists(os.path.join(target, "folder", "different"))
     assert os.path.exists(os.path.join(target, "file"))
     assert os.path.exists(os.path.join(target, ".hidden"))
     assert os.path.exists(os.path.join(target, "copy"))
