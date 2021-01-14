@@ -12,8 +12,7 @@ Tap to activate and press to select, to browse, open, copy, move, delete, or edi
 
 [<img width="240" src="https://flathub.org/assets/badges/flathub-badge-i-en.png">](https://flathub.org/apps/details/dev.tchx84.Portfolio)
 
-## Build it yourself
-
+## Flatpak build
 ```
 $ git clone https://github.com/tchx84/Portfolio.git
 $ cd Portfolio
@@ -21,7 +20,13 @@ $ flatpak-builder --force-clean --repo=repo build dev.tchx84.Portfolio.json
 $ flatpak build-bundle repo portfolio.flatpak dev.tchx84.Portfolio
 $ flatpak install portfolio.flatpak
 ```
-
+## Meson build
+```bash
+$ git clone https://github.com/tchx84/Portfolio.git
+$ cd Portfolio
+$ meson builddir 
+# ninja -C builddir install
+```
 This app is powered by [Builder](https://flathub.org/apps/details/org.gnome.Builder) and [Glade](https://flathub.org/apps/details/org.gnome.Glade).
 
 ## Contribute
