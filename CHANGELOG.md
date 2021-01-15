@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed catching an edge-case permission error, while deleting.
+- Updated all translations by @vistaus, @cho2, @eson57 and @GNUuser.
+- Added more tests, tests, tests.
+
 ## [0.9.4] 2021-01-11
 
 - Fixed catching permissions errors while loading by @Avolpe.
