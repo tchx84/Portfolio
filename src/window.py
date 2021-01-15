@@ -29,6 +29,7 @@ from .worker import PortfolioCutWorker
 from .worker import PortfolioCopyWorker
 from .worker import PortfolioDeleteWorker
 from .worker import PortfolioLoadWorker
+from .worker import PortfolioOpenWorker
 from .places import PortfolioPlaces
 
 
@@ -291,7 +292,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._update_history(path, navigating)
             self._populate(path)
         else:
-            Gio.AppInfo.launch_default_for_uri(f"file://{path}")
+            self._open(path)
+
+    def _open(self, path):
+        self._worker = PortfolioOpenWorker(path)
+        self._worker.connect("started", self._on_open_started)
+        self._worker.connect("updated", self._on_open_updated)
+        self._worker.connect("finished", self._on_open_finished)
+        self._worker.connect("failed", self._on_open_failed)
+        self._worker.start()
 
     def _reset_to_path(self, path):
         self._history = []
@@ -449,6 +458,33 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.search.set_active(False)
         self.search_entry.set_text("")
         self.search.grab_focus()
+
+    def _on_open_started(self, worker):
+        self._busy = True
+
+        self.loading_label.set_text(_("Opening"))
+        self.loading_bar.set_fraction(0.0)
+        self.content_stack.set_visible_child(self.loading_box)
+
+        self._update_all()
+
+    def _on_open_updated(self, worker):
+        self.loading_bar.pulse()
+
+    def _on_open_finished(self, worker):
+        self._busy = False
+        self._clean_workers()
+        self._update_all()
+
+    def _on_open_failed(self, worker, path):
+        self._busy = False
+        self._clean_workers()
+
+        name = os.path.basename(path)
+        self.loading_description.set_text(_("Could not open %s") % name)
+
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_load_started(self, worker, directory):
         self._busy = True

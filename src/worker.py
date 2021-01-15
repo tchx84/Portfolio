@@ -19,7 +19,7 @@ import os
 import shutil
 import threading
 
-from gi.repository import GObject, GLib
+from gi.repository import Gio, GObject, GLib
 
 from . import utils
 from . import logger
@@ -226,3 +226,40 @@ class PortfolioLoadWorker(GObject.GObject):
         self._index += self.BUFFER
         self.emit("updated", self._directory, found, self._index, self._total)
         GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+
+
+class PortfolioOpenWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioOpenWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self, path):
+        super().__init__()
+        self._path = path
+        self._timeout_handler_id = None
+
+    def start(self):
+        self.emit("started")
+        Gio.AppInfo.launch_default_for_uri_async(
+            f"file://{self._path}", None, None, self._on_launch_finished, None
+        )
+        self._timeout_handler_id = GLib.timeout_add(100, self._on_step)
+
+    def _on_step(self):
+        self.emit("updated")
+        return True
+
+    def _on_launch_finished(self, worker, result, data=None):
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+
+        if result.had_error():
+            self.emit("failed", self._path)
+        else:
+            self.emit("finished")
