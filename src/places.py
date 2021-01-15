@@ -52,7 +52,11 @@ class PortfolioPlaces(Gtk.Box):
             self._add_button(_("Home"), self.PORTFOLIO_HOME_DIR, "home")
 
         for mount in self._manager.get_mounts():
-            self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
+            if mount.get_root().get_path() not in [
+                self.PORTFOLIO_SYSTEM_DIR,
+                self.PORTFOLIO_HOME_DIR,
+            ]:
+                self._add_button(mount.get_name(), mount.get_root().get_path(), "mount")
 
     def _has_permission_for(self, permission):
         # not using flatpak, so access to all
