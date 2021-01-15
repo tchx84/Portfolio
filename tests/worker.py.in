@@ -19,6 +19,7 @@ import os
 import sys
 import shutil
 import pathlib
+import pytest
 
 ROOT_DIR = "@source_dir@"
 sys.path.append(ROOT_DIR)
@@ -293,3 +294,48 @@ def test_cut_worker_overwrite():
     assert os.path.exists(os.path.join(target, ".hidden"))
     assert os.path.exists(os.path.join(target, "copy"))
     assert os.path.exists(os.path.join(target, "cut"))
+
+
+@pytest.mark.timeout(5)
+@pytest.mark.skip(reason="no editor available")
+def test_open_worker_default():
+    from src.worker import PortfolioOpenWorker
+
+    path_to_file = os.path.join(TEST_HOME_DIR, "file")
+    finished = False
+
+    def _callback(worker):
+        nonlocal finished
+        finished = True
+
+    worker = PortfolioOpenWorker(path_to_file)
+    worker.connect("finished", _callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert finished is True
+
+
+@pytest.mark.timeout(5)
+def test_open_worker_error():
+    from src.worker import PortfolioOpenWorker
+
+    path_to_nowhere = "/path/to/no/where"
+    path = None
+    finished = False
+
+    def _callback(worker, _path):
+        nonlocal path, finished
+        path = _path
+        finished = True
+
+    worker = PortfolioOpenWorker(path_to_nowhere)
+    worker.connect("failed", _callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert path == path_to_nowhere
