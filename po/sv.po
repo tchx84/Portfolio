@@ -141,7 +141,7 @@ msgstr "Öppnar"
 
 #: src/window.py:484
 msgid "Could not open %s"
-msgstr "Kunde inte öppna in %s"
+msgstr "Kunde inte öppna %s"
 
 #: src/window.py:497
 msgid "Loading"
