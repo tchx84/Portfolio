@@ -134,12 +134,11 @@ msgstr "Hogar"
 
 #: src/window.py:465
 msgid "Opening"
-msgstr ""
+msgstr "Abriendo"
 
 #: src/window.py:484
-#, fuzzy, python-format
 msgid "Could not open %s"
-msgstr "No se pudo pegar %s"
+msgstr "No se pudo abrir %s"
 
 #: src/window.py:497
 msgid "Loading"
