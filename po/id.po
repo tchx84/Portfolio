@@ -137,12 +137,11 @@ msgstr "Beranda"
 
 #: src/window.py:465
 msgid "Opening"
-msgstr ""
+msgstr "Membuka"
 
 #: src/window.py:484
-#, fuzzy, python-format
 msgid "Could not open %s"
-msgstr "Tak bisa menempelkan %s"
+msgstr "Tak bisa membuka %s"
 
 #: src/window.py:497
 msgid "Loading"
