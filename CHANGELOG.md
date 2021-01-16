@@ -2,8 +2,10 @@
 
 ## [unreleased]
 
+- Fixed repeated places.
 - Fixed catching an edge-case permission error, while deleting.
 - Updated all translations by @vistaus, @cho2, @eson57 and @GNUuser.
+- Added visual feedback when opening files.
 - Added more tests, tests, tests.
 
 ## [0.9.4] 2021-01-11
