@@ -137,12 +137,11 @@ msgstr "Hem"
 
 #: src/window.py:465
 msgid "Opening"
-msgstr ""
+msgstr "Öppnar"
 
 #: src/window.py:484
-#, fuzzy, python-format
 msgid "Could not open %s"
-msgstr "Kunde inte klistra in %s"
+msgstr "Kunde inte öppna in %s"
 
 #: src/window.py:497
 msgid "Loading"
