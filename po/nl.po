@@ -137,12 +137,11 @@ msgstr "Persoonlijke map"
 
 #: src/window.py:465
 msgid "Opening"
-msgstr ""
+msgstr "Openen"
 
 #: src/window.py:484
-#, fuzzy, python-format
 msgid "Could not open %s"
-msgstr "Kan %s niet plakken"
+msgstr "Kan %s niet openen"
 
 #: src/window.py:497
 msgid "Loading"
