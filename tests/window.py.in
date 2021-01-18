@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import pytest
 
 ROOT_DIR = "@source_dir@"
 sys.path.append(ROOT_DIR)
@@ -168,14 +169,27 @@ def test_copy_paste():
     )
 
 
+@pytest.mark.timeout(5)
 def test_delete_all():
     # select all and delete, nothing should remain
     window._switch_to_selection_mode()
     window._select_all()
     window._on_delete_clicked(None)
+
     update_gtk()
+
     window._popup.confirm_button.emit("clicked")
-    window._worker.join()
+
+    finished = False
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
+    window._worker.connect("finished", _callback)
+
+    while not finished:
+        update_gtk()
+
     update_gtk()
 
     assert len(window.sorted) == 0
@@ -235,14 +249,27 @@ def test_rename():
     )
 
 
+@pytest.mark.timeout(5)
 def test_delete_one():
     # select "Renamed" folder and delete it
     window._switch_to_selection_mode()
     window._select_row(window.sorted[0].iter)
     window._on_delete_clicked(None)
+
     update_gtk()
+
     window._popup.confirm_button.emit("clicked")
-    window._worker.join()
+
+    finished = False
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
+    window._worker.connect("finished", _callback)
+
+    while not finished:
+        update_gtk()
+
     update_gtk()
 
     assert len(window.sorted) == 1

@@ -131,7 +131,7 @@ class PortfolioCutWorker(PortfolioCopyWorker):
         self.emit("finished", total)
 
 
-class PortfolioDeleteWorker(PortfolioWorker):
+class PortfolioDeleteWorker(GObject.GObject):
     __gtype_name__ = "PortfolioDeleteWorker"
 
     __gsignals__ = {
@@ -146,7 +146,7 @@ class PortfolioDeleteWorker(PortfolioWorker):
         super().__init__()
         self._selection = selection
 
-    def run(self):
+    def start(self):
         self.emit("started")
 
         try:
@@ -158,24 +158,34 @@ class PortfolioDeleteWorker(PortfolioWorker):
             self.emit("failed", path)
             return
 
-        refs = dict(self._selection)
-        total = len(paths)
+        self._paths = paths
+        self._refs = dict(self._selection)
 
-        for index, path in enumerate(paths):
-            try:
-                self.emit("pre-update", path)
-                if os.path.isdir(path):
-                    os.rmdir(path)
-                else:
-                    os.unlink(path)
-            except Exception as e:
-                logger.debug(e)
-                self.emit("failed", path)
-                return
+        self._total = len(paths)
+        self._index = 0
+        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", self._total)
+            return
+
+        path = self._paths[self._index]
+
+        try:
+            self.emit("pre-update", path)
+            if os.path.isdir(path):
+                os.rmdir(path)
             else:
-                self.emit("updated", path, refs.get(path), index, total)
+                os.unlink(path)
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", path)
+            return
 
-        self.emit("finished", total)
+        self._index += 1
+        self.emit("updated", path, self._refs.get(path), self._index, self._total)
+        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
 
 
 class PortfolioLoadWorker(GObject.GObject):

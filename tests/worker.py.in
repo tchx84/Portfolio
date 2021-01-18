@@ -195,7 +195,7 @@ def test_copy_worker_overwrite():
     assert os.path.exists(os.path.join(target, "folder"))
     assert os.path.exists(os.path.join(target, "file"))
 
-
+@pytest.mark.timeout(5)
 def test_delete_worker_default():
     from src.worker import PortfolioDeleteWorker
 
@@ -206,9 +206,17 @@ def test_delete_worker_default():
         (os.path.join(source, "file(1)"), None),
     ]
 
+    finished = False
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
     worker = PortfolioDeleteWorker(selection)
+    worker.connect("finished", _callback)
     worker.start()
-    worker.join()
+
+    while not finished:
+        update_gtk()
 
     assert len(os.listdir(source)) == 2
 
