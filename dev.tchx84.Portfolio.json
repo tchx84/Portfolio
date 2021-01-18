@@ -49,7 +49,8 @@
                 "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} packaging",
                 "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} pyparsing",
                 "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} attrs",
-                "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} pytest"
+                "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} pytest",
+                "pip3 install --no-index --find-links \"file://${PWD}\" --prefix=${FLATPAK_DEST} pytest-timeout"
             ],
             "sources": [
                 {
@@ -151,6 +152,11 @@
                     "type": "file",
                     "url": "https://files.pythonhosted.org/packages/a3/98/a3dcf1b749aaddd5b6f01e8dc2a1da08dbaebc94d5c0c5bb8743316d4093/pytest-6.2.1.tar.gz",
                     "sha256": "66e419b1899bc27346cb2c993e12c5e5e8daba9073c1fbce33b9807abc95c306"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/fd/f2/4202dea92b48712481e46bc6fb9122fd76baac727333858c69be5d19dfc5/pytest-timeout-1.4.2.tar.gz",
+                    "sha256": "20b3113cf6e4e80ce2d403b6fb56e9e1b871b510259206d40ff8d609f48bda76"
                 }
             ]
         },
