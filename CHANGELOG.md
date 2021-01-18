@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.5] 2021-01-18
 
 - Fixed repeated places, e.g. "System" and "root".
 - Fixed catching an edge-case permission error, while deleting.
