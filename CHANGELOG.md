@@ -2,11 +2,12 @@
 
 ## [unreleased]
 
-- Fixed repeated places.
+- Fixed repeated places, e.g. "System" and "root".
 - Fixed catching an edge-case permission error, while deleting.
-- Updated all translations by @vistaus, @cho2, @eson57 and @GNUuser.
+- Fixed delete worker for smoother feedback, while deleting.
 - Added visual feedback when opening files.
 - Added more tests, tests, tests.
+- Updated all translations by @vistaus, @cho2, @eson57 and @GNUuser.
 
 ## [0.9.4] 2021-01-11
 
