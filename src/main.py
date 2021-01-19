@@ -31,7 +31,8 @@ from .window import PortfolioWindow
 class Application(Gtk.Application):
     def __init__(self):
         super().__init__(
-            application_id="dev.tchx84.Portfolio", flags=Gio.ApplicationFlags.FLAGS_NONE
+            application_id="dev.tchx84.Portfolio",
+            flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
 
     def _setup_styles(self):
@@ -40,6 +41,10 @@ class Application(Gtk.Application):
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
+
+    def do_open(self, files, hint, data):
+        self.activate()
+        self.props.active_window.open(files[0].get_path())
 
     def do_activate(self):
         win = self.props.active_window
