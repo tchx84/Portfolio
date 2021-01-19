@@ -10,3 +10,4 @@ Icon=dev.tchx84.Portfolio
 StartupNotify=true
 X-Purism-FormFactor=Mobile;
 Keywords=folder;manager;explore;disk;filesystem;
+MimeType=inode/directory;

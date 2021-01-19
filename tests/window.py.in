@@ -59,6 +59,7 @@ def test_create_window():
     from src.window import PortfolioWindow
 
     window = PortfolioWindow()
+    window.open()
     update_gtk()
 
     assert window is not None

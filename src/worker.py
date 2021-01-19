@@ -204,6 +204,7 @@ class PortfolioLoadWorker(GObject.GObject):
         super().__init__()
         self._directory = directory
         self._hidden = hidden
+        self._timeout_handler_id = None
 
     def start(self):
         self.emit("started", self._directory)
@@ -217,7 +218,9 @@ class PortfolioLoadWorker(GObject.GObject):
 
         self._total = len(self._paths)
         self._index = 0
-        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
 
     def step(self):
         if self._index >= self._total:
@@ -235,7 +238,15 @@ class PortfolioLoadWorker(GObject.GObject):
 
         self._index += self.BUFFER
         self.emit("updated", self._directory, found, self._index, self._total)
-        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is None:
+            return
+        GLib.Source.remove(self._timeout_handler_id)
+        self._timeout_handler_id = None
 
 
 class PortfolioOpenWorker(GObject.GObject):

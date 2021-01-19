@@ -160,7 +160,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("removed", self._on_places_removed)
         self.places_box.add(places)
 
-        self._move(PortfolioPlaces.PORTFOLIO_HOME_DIR)
+        self.open()
 
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -924,3 +924,19 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_sort_toggled(self, button):
         self._refresh()
+
+    def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR):
+        if not os.path.isdir(path):
+            logger.warning(_("could not open %s") % path)
+            return
+
+        # XXX no support for background workers yet
+        if self._busy and not isinstance(self._worker, PortfolioLoadWorker):
+            logger.warning(_("Could not open %s") % path)
+            return
+
+        if isinstance(self._worker, PortfolioLoadWorker):
+            self._worker.stop()
+            self._clean_workers()
+
+        self._reset_to_path(path)
