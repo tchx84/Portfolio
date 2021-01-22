@@ -347,3 +347,101 @@ def test_open_worker_error():
         update_gtk()
 
     assert path == path_to_nowhere
+
+
+@pytest.mark.timeout(5)
+def test_copy_worker_stopped():
+    from src.worker import PortfolioCopyWorker
+
+    source = TEST_HOME_DIR
+    target = TEST_COPY_DIR
+
+    assert len(os.listdir(source)) == 5
+    assert len(os.listdir(target)) == 0
+
+    selection = [
+        (os.path.join(source, "folder"), None),
+        (os.path.join(source, "file"), None),
+    ]
+
+    stopped = False
+    def _callback(worker):
+        nonlocal stopped
+        stopped = True
+
+    worker = PortfolioCopyWorker(selection, target)
+    worker.connect("stopped", _callback)
+    worker.stop()
+    worker.start()
+    worker.join()
+
+    while not stopped:
+        update_gtk()
+
+    assert stopped is True
+    assert len(os.listdir(source)) == 5
+    assert len(os.listdir(target)) == 0
+
+
+@pytest.mark.timeout(5)
+def test_cut_worker_stopped():
+    from src.worker import PortfolioCutWorker
+
+    source = TEST_HOME_DIR
+    target = TEST_COPY_DIR
+
+    assert len(os.listdir(source)) == 5
+    assert len(os.listdir(target)) == 0
+
+    selection = [
+        (os.path.join(source, "folder"), None),
+        (os.path.join(source, "file"), None),
+    ]
+
+    stopped = False
+    def _callback(worker):
+        nonlocal stopped
+        stopped = True
+
+    worker = PortfolioCutWorker(selection, target)
+    worker.connect("stopped", _callback)
+    worker.stop()
+    worker.start()
+    worker.join()
+
+    while not stopped:
+        update_gtk()
+
+    assert stopped is True
+    assert len(os.listdir(source)) == 5
+    assert len(os.listdir(target)) == 0
+
+
+@pytest.mark.timeout(5)
+def test_delete_worker_stopped():
+    from src.worker import PortfolioDeleteWorker
+
+    source = TEST_HOME_DIR
+
+    assert len(os.listdir(source)) == 5
+
+    selection = [
+        (os.path.join(source, "copy"), None),
+        (os.path.join(source, "cut"), None),
+    ]
+
+    stopped = False
+    def _callback(worker):
+        nonlocal stopped
+        stopped = True
+
+    worker = PortfolioDeleteWorker(selection)
+    worker.connect("stopped", _callback)
+    worker.start()
+    worker.stop()
+
+    while not stopped:
+        update_gtk()
+
+    assert stopped is True
+    assert len(os.listdir(source)) == 5

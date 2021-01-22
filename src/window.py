@@ -60,6 +60,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     loading_bar = Gtk.Template.Child()
     loading_description = Gtk.Template.Child()
     close_button = Gtk.Template.Child()
+    stop_button = Gtk.Template.Child()
     help_button = Gtk.Template.Child()
     about_button = Gtk.Template.Child()
     show_hidden_button = Gtk.Template.Child()
@@ -83,6 +84,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
+    stop_box = Gtk.Template.Child()
+    stop_tools = Gtk.Template.Child()
     deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
@@ -146,6 +149,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.show_hidden_button.connect("toggled", self._on_hidden_toggled)
         self.a_to_z_button.connect("toggled", self._on_sort_toggled)
         self.go_top_button.connect("clicked", self._go_to_top)
+        self.stop_button.connect("clicked", self._on_stop_clicked)
 
         self._adjustment = self.content_scroll.get_vadjustment()
         self._adjustment.connect("value-changed", self._update_go_top_button)
@@ -263,7 +267,30 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("updated", self._on_paste_updated)
         self._worker.connect("finished", self._on_paste_finished)
         self._worker.connect("failed", self._on_paste_failed)
+        self._worker.connect("stopped", self._on_paste_stopped)
         self._worker.start()
+
+    def _paste_finish(self):
+        self._busy = False
+        self._clean_workers()
+        self._clean_progress()
+
+        self._to_cut = []
+        self._to_copy = []
+
+        self._unselect_all()
+
+        self._update_all()
+        self._update_mode()
+
+    def _delete_finish(self):
+        self._busy = False
+        self._clean_workers()
+        self._clean_progress()
+
+        self._unselect_all()
+        self._update_all()
+        self._update_mode()
 
     def _get_row(self, model, treepath):
         return model.get_iter(treepath)
@@ -552,6 +579,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         return should_select
 
     def _on_selection_changed(self, selection):
+        if self._busy is True:
+            return
         self._update_all()
         self._update_mode()
 
@@ -736,6 +765,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
+        self.action_stack.set_visible_child(self.stop_box)
+        self.tools_stack.set_visible_child(self.stop_tools)
+
     def _on_paste_pre_updated(self, worker, path):
         name = os.path.basename(path)
         self.loading_description.set_text(name)
@@ -750,17 +782,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_paste_finished(self, worker, total):
-        self._busy = False
-        self._clean_workers()
-        self._clean_progress()
-
-        self._to_cut = []
-        self._to_copy = []
-
-        self._unselect_all()
-
-        self._update_all()
-        self._update_mode()
+        self._paste_finish()
 
     def _on_paste_failed(self, worker, path):
         self._busy = False
@@ -775,6 +797,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
+
+    def _on_paste_stopped(self, worker):
+        self._paste_finish()
 
     def _on_delete_confirmed(self, button, popup, selection):
         self._clean_popups()
@@ -793,6 +818,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("updated", self._on_delete_updated)
         self._worker.connect("finished", self._on_delete_finished)
         self._worker.connect("failed", self._on_delete_failed)
+        self._worker.connect("stopped", self._on_delete_stopped)
         self._worker.start()
 
     def _on_delete_started(self, worker):
@@ -804,6 +830,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._update_all()
 
+        self.action_stack.set_visible_child(self.stop_box)
+        self.tools_stack.set_visible_child(self.stop_tools)
+
     def _on_delete_pre_updated(self, worker, path):
         name = os.path.basename(path)
         self.loading_description.set_text(name)
@@ -813,13 +842,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
-        self._busy = False
-        self._clean_workers()
-        self._clean_progress()
-
-        self._unselect_all()
-        self._update_all()
-        self._update_mode()
+        self._delete_finish()
 
     def _on_delete_failed(self, worker, path):
         self._busy = False
@@ -831,6 +854,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
+
+    def _on_delete_stopped(self, worker):
+        self._delete_finish()
 
     def _on_popup_closed(self, button, popup, data):
         self._clean_popups()
@@ -846,6 +872,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._force_go_home = False
         self._reset_to_path(PortfolioPlaces.PORTFOLIO_HOME_DIR)
+
+    def _on_stop_clicked(self, button):
+        self.loading_label.set_text(_("Stopping"))
+        self._worker.stop()
 
     def _on_select_all(self, button):
         self._select_all()
