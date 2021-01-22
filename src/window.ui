@@ -862,6 +862,36 @@
                             <property name="position">2</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkBox" id="stop_box">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkButton" id="stop_button">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">media-playback-stop-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">page3</property>
+                            <property name="title" translatable="yes">page3</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">0</property>
@@ -1039,6 +1069,21 @@
                             <property name="name">page2</property>
                             <property name="title">page2</property>
                             <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="stop_tools">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">page3</property>
+                            <property name="title" translatable="yes">page3</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>

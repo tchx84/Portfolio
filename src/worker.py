@@ -25,12 +25,24 @@ from . import utils
 from . import logger
 
 
+class WorkerStoppedException(Exception):
+    pass
+
+
 class PortfolioWorker(threading.Thread, GObject.GObject):
     __gtype_name__ = "PortfolioWorker"
 
     def __init__(self):
         threading.Thread.__init__(self)
         GObject.GObject.__init__(self)
+        self._must_stop = False
+
+    def _stop_check(self):
+        if self._must_stop is True:
+            raise WorkerStoppedException()
+
+    def stop(self):
+        self._must_stop = True
 
     def emit(self, *args):
         GLib.idle_add(GObject.GObject.emit, self, *args)
@@ -45,6 +57,7 @@ class PortfolioCopyWorker(PortfolioWorker):
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, bool, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self, selection, directory=None):
@@ -69,12 +82,14 @@ class PortfolioCopyWorker(PortfolioWorker):
 
             def _callback(_path, _destination):
                 nonlocal count, total
+                self._stop_check()
                 self.emit("pre-update", _destination)
                 shutil.copy2(_path, _destination)
                 self.emit("updated", _destination, True, count, total)
                 count += 1
 
             try:
+                self._stop_check()
                 self.emit("pre-update", destination)
                 if os.path.isdir(path):
                     if overwritten and os.path.isdir(path):
@@ -82,6 +97,9 @@ class PortfolioCopyWorker(PortfolioWorker):
                     shutil.copytree(path, destination, copy_function=_callback)
                 else:
                     shutil.copyfile(path, destination)
+            except WorkerStoppedException:
+                self.emit("stopped")
+                return
             except Exception as e:
                 logger.debug(e)
                 self.emit("failed", destination)
@@ -108,18 +126,23 @@ class PortfolioCutWorker(PortfolioCopyWorker):
 
             def _callback(_path, _destination):
                 nonlocal count, total
+                self._stop_check()
                 self.emit("pre-update", _destination)
                 shutil.copy2(_path, _destination)
                 self.emit("updated", _destination, True, count, total)
                 count += 1
 
             try:
+                self._stop_check()
                 self.emit("pre-update", destination)
                 if destination == path:
                     continue
                 if overwritten and os.path.isdir(path):
                     shutil.rmtree(destination)
                 shutil.move(path, destination, copy_function=_callback)
+            except WorkerStoppedException:
+                self.emit("stopped")
+                return
             except Exception as e:
                 logger.debug(e)
                 self.emit("failed", path)
@@ -140,11 +163,13 @@ class PortfolioDeleteWorker(GObject.GObject):
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self, selection):
         super().__init__()
         self._selection = selection
+        self._timeout_handler_id = None
 
     def start(self):
         self.emit("started")
@@ -163,7 +188,9 @@ class PortfolioDeleteWorker(GObject.GObject):
 
         self._total = len(paths)
         self._index = 0
-        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
 
     def step(self):
         if self._index >= self._total:
@@ -185,7 +212,15 @@ class PortfolioDeleteWorker(GObject.GObject):
 
         self._index += 1
         self.emit("updated", path, self._refs.get(path), self._index, self._total)
-        GLib.idle_add(self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+        self.emit("stopped")
 
 
 class PortfolioLoadWorker(GObject.GObject):
