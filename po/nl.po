@@ -212,7 +212,7 @@ msgstr "Kan %s niet verwijderen"
 
 #: src/window.py:877
 msgid "Stopping"
-msgstr ""
+msgstr "Bezig met stoppen"
 
 #: src/window.py:889
 msgid "New Folder"

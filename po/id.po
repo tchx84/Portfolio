@@ -212,7 +212,7 @@ msgstr "Tak bisa menghapus %s"
 
 #: src/window.py:877
 msgid "Stopping"
-msgstr ""
+msgstr "Henti"
 
 #: src/window.py:889
 msgid "New Folder"
