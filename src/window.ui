@@ -888,7 +888,7 @@
                           </object>
                           <packing>
                             <property name="name">page3</property>
-                            <property name="title" translatable="yes">page3</property>
+                            <property name="title">page3</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -1082,7 +1082,7 @@
                           </object>
                           <packing>
                             <property name="name">page3</property>
-                            <property name="title" translatable="yes">page3</property>
+                            <property name="title">page3</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
