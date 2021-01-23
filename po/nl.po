@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 08:22-0300\n"
+"POT-Creation-Date: 2021-01-23 09:45-0300\n"
 "PO-Revision-Date: 2021-01-12 14:12+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -21,7 +21,7 @@ msgstr ""
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
-#: src/window.ui:1155
+#: src/window.ui:1200
 msgid "Portfolio"
 msgstr "Portfolio"
 
@@ -33,7 +33,7 @@ msgstr "map;beheerder;verkennen;schijf;bestandssysteem;"
 msgid "Manage files on the go"
 msgstr "Beheer onderweg je bestanden"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1209
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -81,15 +81,15 @@ msgstr "Over Portfolio"
 msgid "No files found"
 msgstr "Geen bestanden aangetroffen"
 
-#: src/window.ui:1077
+#: src/window.ui:1122
 msgid "About"
 msgstr "Over"
 
-#: src/window.ui:1237
+#: src/window.ui:1282
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 
-#: src/window.ui:1292
+#: src/window.ui:1337
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -99,7 +99,7 @@ msgstr ""
 "Lees voor meer informatie de <a href=\"https://www.gnu.org/licenses/gpl-3.0."
 "html\">GNU General Public License, versie 3 of hoger</a>."
 
-#: src/window.ui:1321
+#: src/window.ui:1366
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -111,19 +111,19 @@ msgstr ""
 "Portfolio.svg\"> hier </a> te vinden, uitgebracht onder de <a href=\"https://"
 "creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>-licentie."
 
-#: src/window.ui:1359
+#: src/window.ui:1404
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: src/window.ui:1390
+#: src/window.ui:1435
 msgid "Artwork by"
 msgstr "Vormgegeven door"
 
-#: src/window.ui:1421
+#: src/window.ui:1466
 msgid "Translated by"
 msgstr "Vertaald door"
 
-#: src/window.ui:1454
+#: src/window.ui:1499
 msgid "Contributions by"
 msgstr "Met bijdragen van"
 
@@ -135,84 +135,89 @@ msgstr "Systeem"
 msgid "Home"
 msgstr "Persoonlijke map"
 
-#: src/window.py:465
+#: src/window.py:492
 msgid "Opening"
 msgstr "Openen"
 
-#: src/window.py:484
+#: src/window.py:511 src/window.py:960 src/window.py:965
+#, python-format
 msgid "Could not open %s"
 msgstr "Kan %s niet openen"
 
-#: src/window.py:497
+#: src/window.py:524
 msgid "Loading"
 msgstr "Bezig met laden"
 
-#: src/window.py:521
+#: src/window.py:548
 #, python-format
 msgid "Could not load %s"
 msgstr "Kan %s niet laden"
 
-#: src/window.py:608 src/window.py:622
+#: src/window.py:637 src/window.py:651
 #, python-format
 msgid "%s already exists"
 msgstr "%s bestaat al"
 
-#: src/window.py:652
+#: src/window.py:681
 #, python-format
 msgid "these %d files"
 msgstr "deze %d bestanden"
 
-#: src/window.py:654
+#: src/window.py:683
 #, python-format
 msgid "Delete %s?"
 msgstr "Wil je '%s' verwijderen?"
 
-#: src/window.py:673
+#: src/window.py:702
 #, python-format
 msgid "%s will be moved"
 msgstr "%s wordt verplaatst"
 
-#: src/window.py:675
+#: src/window.py:704
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d bestanden worden verplaatst"
 
-#: src/window.py:691
+#: src/window.py:720
 #, python-format
 msgid "%s will be copied"
 msgstr "%s wordt gekopieerd"
 
-#: src/window.py:693
+#: src/window.py:722
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d bestanden worden gekopieerd"
 
-#: src/window.py:718
+#: src/window.py:747
 msgid "Files will be overwritten, proceed?"
 msgstr "Bestanden worden overschreven, doorgaan?"
 
-#: src/window.py:733
+#: src/window.py:762
 msgid "Pasting"
 msgstr "Bezig met plakken"
 
-#: src/window.py:774
+#: src/window.py:796
 #, python-format
 msgid "Could not paste %s"
 msgstr "Kan %s niet plakken"
 
-#: src/window.py:801
+#: src/window.py:827
 msgid "Deleting"
 msgstr "Bezig met verwijderen"
 
-#: src/window.py:830
+#: src/window.py:853
 #, python-format
 msgid "Could not delete %s"
 msgstr "Kan %s niet verwijderen"
 
-#: src/window.py:859
+#: src/window.py:877
+msgid "Stopping"
+msgstr ""
+
+#: src/window.py:889
 msgid "New Folder"
 msgstr "Nieuwe map"
 
-#: src/window.py:867
+#: src/window.py:897
 msgid "No permissions on this directory"
 msgstr "Je hebt geen rechten op deze map"

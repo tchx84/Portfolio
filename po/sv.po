@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 08:22-0300\n"
+"POT-Creation-Date: 2021-01-23 09:45-0300\n"
 "PO-Revision-Date: 2021-01-12 14:11+0100\n"
 "Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
 "Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
@@ -21,7 +21,7 @@ msgstr ""
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
-#: src/window.ui:1155
+#: src/window.ui:1200
 msgid "Portfolio"
 msgstr "Portfolio"
 
@@ -33,7 +33,7 @@ msgstr "mapp;hanterare:utforska;disk;filsystem;"
 msgid "Manage files on the go"
 msgstr "Hantera filer på språng"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1209
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -81,15 +81,15 @@ msgstr "Om Portfolio"
 msgid "No files found"
 msgstr "Inga filer hittades"
 
-#: src/window.ui:1077
+#: src/window.ui:1122
 msgid "About"
 msgstr "Om"
 
-#: src/window.ui:1237
+#: src/window.ui:1282
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Webbplats</a>"
 
-#: src/window.ui:1292
+#: src/window.ui:1337
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -99,7 +99,7 @@ msgstr ""
 "gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 eller "
 "senare</a> för detaljerad info."
 
-#: src/window.ui:1321
+#: src/window.ui:1366
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -111,19 +111,19 @@ msgstr ""
 "File:Portfolio.svg\"> här </a>, licensierad under <a href=\"https://"
 "creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 
-#: src/window.ui:1359
+#: src/window.ui:1404
 msgid "Created by"
 msgstr "Skapad av"
 
-#: src/window.ui:1390
+#: src/window.ui:1435
 msgid "Artwork by"
 msgstr "Bildkonst av"
 
-#: src/window.ui:1421
+#: src/window.ui:1466
 msgid "Translated by"
 msgstr "Översatt av"
 
-#: src/window.ui:1454
+#: src/window.ui:1499
 msgid "Contributions by"
 msgstr "Kodbidrag av"
 
@@ -135,84 +135,89 @@ msgstr "System"
 msgid "Home"
 msgstr "Hem"
 
-#: src/window.py:465
+#: src/window.py:492
 msgid "Opening"
 msgstr "Öppnar"
 
-#: src/window.py:484
+#: src/window.py:511 src/window.py:960 src/window.py:965
+#, python-format
 msgid "Could not open %s"
 msgstr "Kunde inte öppna %s"
 
-#: src/window.py:497
+#: src/window.py:524
 msgid "Loading"
 msgstr "Läser in"
 
-#: src/window.py:521
+#: src/window.py:548
 #, python-format
 msgid "Could not load %s"
 msgstr "Kunde inte läsa in %s"
 
-#: src/window.py:608 src/window.py:622
+#: src/window.py:637 src/window.py:651
 #, python-format
 msgid "%s already exists"
 msgstr "%s finns redan"
 
-#: src/window.py:652
+#: src/window.py:681
 #, python-format
 msgid "these %d files"
 msgstr "dessa %d filer"
 
-#: src/window.py:654
+#: src/window.py:683
 #, python-format
 msgid "Delete %s?"
 msgstr "Vill du ta bort %s?"
 
-#: src/window.py:673
+#: src/window.py:702
 #, python-format
 msgid "%s will be moved"
 msgstr "%s kommer att flyttas"
 
-#: src/window.py:675
+#: src/window.py:704
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d filer kommer att flyttas"
 
-#: src/window.py:691
+#: src/window.py:720
 #, python-format
 msgid "%s will be copied"
 msgstr "%s kommer att kopieras"
 
-#: src/window.py:693
+#: src/window.py:722
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d filer kommer att kopieras"
 
-#: src/window.py:718
+#: src/window.py:747
 msgid "Files will be overwritten, proceed?"
 msgstr "Filer kommer att skrivas över, fortsätt?"
 
-#: src/window.py:733
+#: src/window.py:762
 msgid "Pasting"
 msgstr "Klistrar in"
 
-#: src/window.py:774
+#: src/window.py:796
 #, python-format
 msgid "Could not paste %s"
 msgstr "Kunde inte klistra in %s"
 
-#: src/window.py:801
+#: src/window.py:827
 msgid "Deleting"
 msgstr "Tar bort"
 
-#: src/window.py:830
+#: src/window.py:853
 #, python-format
 msgid "Could not delete %s"
 msgstr "Kunde inte ta bort %s"
 
-#: src/window.py:859
+#: src/window.py:877
+msgid "Stopping"
+msgstr ""
+
+#: src/window.py:889
 msgid "New Folder"
 msgstr "Ny mapp"
 
-#: src/window.py:867
+#: src/window.py:897
 msgid "No permissions on this directory"
 msgstr "Du saknar rättigheter i den här mappen"
