@@ -800,6 +800,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_stopped(self, worker):
         self._paste_finish()
+        # XXX nuclear fix for when parent directorty doesn't get to be updated
+        self._refresh()
 
     def _on_delete_confirmed(self, button, popup, selection):
         self._clean_popups()
