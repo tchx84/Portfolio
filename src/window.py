@@ -957,7 +957,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR):
         if not os.path.isdir(path):
-            logger.warning(_("could not open %s") % path)
+            logger.warning(_("Could not open %s") % path)
             return
 
         # XXX no support for background workers yet
