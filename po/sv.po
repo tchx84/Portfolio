@@ -212,7 +212,7 @@ msgstr "Kunde inte ta bort %s"
 
 #: src/window.py:877
 msgid "Stopping"
-msgstr ""
+msgstr "Stannar"
 
 #: src/window.py:889
 msgid "New Folder"
