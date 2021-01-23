@@ -2,7 +2,9 @@
 
 ## [unreleased]
 
+- Added support for stopping paste and delete operations.
 - Added support for opening folders as CLI arguments.
+- Added more tests, tests, tests.
 
 ## [0.9.5] 2021-01-18
 
