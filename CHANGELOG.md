@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.6] 2021-01-25
 
 - Added support for stopping paste and delete operations.
 - Added support for opening folders as CLI arguments.
