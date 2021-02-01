@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed gradients in the application icon.
+
 ## [0.9.6] 2021-01-25
 
 - Added support for stopping paste and delete operations.
