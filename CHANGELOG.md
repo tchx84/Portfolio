@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.7] 2021-02-03
 
 - Fixed gradients in the application icon by @bertob.
 
