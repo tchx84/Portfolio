@@ -2,7 +2,7 @@
 
 ## [unreleased]
 
-- Fixed gradients in the application icon.
+- Fixed gradients in the application icon by @bertob.
 
 ## [0.9.6] 2021-01-25
 
