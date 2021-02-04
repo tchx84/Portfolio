@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.8] 2021-02-04
 
 - Fixed missing Exec field code in desktop file by @henry-nicolas.
 
