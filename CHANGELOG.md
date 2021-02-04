@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed missing Exec field code in desktop file by @henry-nicolas.
+
 ## [0.9.7] 2021-02-03
 
 - Fixed gradients in the application icon by @bertob.
