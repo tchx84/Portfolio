@@ -11,7 +11,8 @@
         "--socket=wayland",
         "--filesystem=home",
         "--filesystem=/media",
-        "--filesystem=/run/media"
+        "--filesystem=/run/media",
+        "--own-name=org.freedesktop.FileManager1"
     ],
     "cleanup" : [
         "/include",
@@ -186,6 +187,9 @@
             "name" : "portfolio",
             "builddir" : true,
             "buildsystem" : "meson",
+            "config-opts": [
+                "-Dservice_filename=org.freedesktop.FileManager1.service"
+             ],
             "sources" : [
                 {
                     "type" : "git",

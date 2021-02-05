@@ -959,7 +959,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._refresh()
 
     def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR):
+        # XXX so cheap !
+        path = path.replace("file://", "")
+
+        # if it's a file then use its parent folder
         if not os.path.isdir(path):
+            path = os.path.dirname(path)
+
+        # make sure it exists though !
+        if not os.path.exists(path):
             logger.warning(_("Could not open %s") % path)
             return
 

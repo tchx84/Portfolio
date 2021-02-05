@@ -41,6 +41,17 @@ install_data('dev.tchx84.Portfolio.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 
+conf = configuration_data()
+conf.set('prefix', get_option('prefix'))
+conf.set('bindir', get_option('bindir'))
+
+configure_file(
+  input: 'dev.tchx84.Portfolio.service.in',
+  output: get_option('service_filename'),
+  configuration: conf,
+  install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services')
+)
+
 compile_schemas = find_program('glib-compile-schemas', required: false)
 if compile_schemas.found()
   test('Validate schema file', compile_schemas,
