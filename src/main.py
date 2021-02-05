@@ -26,6 +26,7 @@ gi.require_version("Handy", "1")
 from gi.repository import Gdk, Gtk, Gio
 
 from .window import PortfolioWindow
+from .service import PortfolioService
 
 
 class Application(Gtk.Application):
@@ -34,6 +35,7 @@ class Application(Gtk.Application):
             application_id="dev.tchx84.Portfolio",
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
+        self._service = PortfolioService(self)
 
     def _setup_styles(self):
         provider = Gtk.CssProvider()
@@ -42,9 +44,12 @@ class Application(Gtk.Application):
             Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
-    def do_open(self, files, hint, data):
+    def open_path(self, path):
         self.activate()
-        self.props.active_window.open(files[0].get_path())
+        self.props.active_window.open(path)
+
+    def do_open(self, files, hint, data):
+        self.open_path(files[0].get_path())
 
     def do_activate(self):
         win = self.props.active_window
