@@ -111,6 +111,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._editing = False
         self._to_copy = []
         self._to_cut = []
+        self._to_select = None
+        self._to_select_row = None
         self._last_clicked = None
         self._dont_activate = False
         self._force_select = False
@@ -226,6 +228,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._force_select = True
         self.selection.select_iter(row)
         self._force_select = False
+
+    def _select_and_go(self, row):
+        result, row = self.filtered.convert_child_iter_to_iter(row)
+        result, row = self.sorted.convert_child_iter_to_iter(row)
+
+        self._select_row(row)
+        GLib.idle_add(self._go_to_selection)
 
     def _get_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -531,15 +540,26 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path in found:
             icon = self._find_icon(path)
-            self.liststore.append([icon, name, path])
+            row = self.liststore.append([icon, name, path])
+
+            if self._to_select == path:
+                self._to_select_row = row
+
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
         self._busy = False
         self._clean_workers()
 
-        self._go_to_top()
         self._update_all()
+
+        if self._to_select_row is not None:
+            self._switch_to_selection_mode()
+            self._select_and_go(self._to_select_row)
+            self._to_select_row = None
+            self._to_select = None
+        else:
+            self._go_to_top()
 
     def _on_load_failed(self, worker, directory):
         self._busy = False
@@ -548,6 +568,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         name = os.path.basename(directory)
         self.loading_description.set_text(_("Could not load %s") % name)
 
+        self._to_select_row = None
+        self._to_select = None
         self._force_go_home = True
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -909,12 +931,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         icon = self._find_icon(path)
         row = self.liststore.append([icon, folder_name, path])
-        result, row = self.filtered.convert_child_iter_to_iter(row)
-        result, row = self.sorted.convert_child_iter_to_iter(row)
-
-        self._select_row(row)
-
-        self._go_to_selection()
+        self._select_and_go(row)
         self._on_rename_clicked(None)
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
@@ -962,14 +979,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         # XXX so cheap !
         path = path.replace("file://", "")
 
-        # if it's a file then use its parent folder
-        if not os.path.isdir(path):
-            path = os.path.dirname(path)
-
         # make sure it exists though !
         if not os.path.exists(path):
             logger.warning(_("Could not open %s") % path)
             return
+
+        # if it's a file then use its parent folder
+        if not os.path.isdir(path):
+            self._to_select = path
+            path = os.path.dirname(path)
 
         # XXX no support for background workers yet
         if self._busy and not isinstance(self._worker, PortfolioLoadWorker):
