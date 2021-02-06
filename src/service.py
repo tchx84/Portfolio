@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 from gi.repository import Gio
 
 
@@ -24,7 +26,7 @@ class PortfolioService:
         self._dbus_id = None
         self._name_id = Gio.bus_own_name(
             Gio.BusType.SESSION,
-            "org.freedesktop.FileManager1",
+            os.environ.get("PORTFOLIO_SERVICE_NAME", "org.freedesktop.FileManager1"),
             Gio.BusNameOwnerFlags.NONE,
             self._on_bus_acquired,
             self._on_name_acquired,
@@ -32,7 +34,7 @@ class PortfolioService:
         )
 
     def __del__(self):
-        Gio.bus_unown_name(self._name_id)
+        self.shutdown()
 
     def _on_bus_acquired(self, connection, name):
         xml = (
@@ -61,3 +63,6 @@ class PortfolioService:
         paths, _ = params
         self._app.open_path(paths[-1])
         invocation.return_value(None)
+
+    def shutdown(self):
+        Gio.bus_unown_name(self._name_id)
