@@ -285,3 +285,14 @@ def test_new_folder_gone():
     assert len(window.sorted) == 2
     assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_FOLDER
     assert window.sorted[1][window.PATH_COLUMN] == TEST_HOME_FILE
+
+
+def test_open_file():
+    window.open(TEST_HOME_SUB_FILE)
+    update_gtk()
+
+    assert len(window.sorted) == 1
+    assert window.sorted[0][window.PATH_COLUMN] == TEST_HOME_SUB_FILE
+
+    model, treepaths = window.selection.get_selected_rows()
+    assert model[treepaths[0]][window.PATH_COLUMN] == TEST_HOME_SUB_FILE
