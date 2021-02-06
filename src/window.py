@@ -333,6 +333,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._history = []
         self._index = -1
         self._move(path, False)
+        self._update_mode()
 
     def _refresh(self):
         self._move(self._history[self._index], True)
