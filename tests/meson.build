@@ -38,8 +38,11 @@ endif
 tests = [
     test_window_file,
     test_worker_file,
-    test_service_file,
 ]
+
+if get_option('run_service_tests')
+  tests += test_service_file
+endif
 
 pytest = find_program('pytest', required: false)
 if pytest.found()
