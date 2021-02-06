@@ -1,0 +1,153 @@
+import os
+import sys
+import pytest
+
+ROOT_DIR = "@source_dir@"
+sys.path.append(ROOT_DIR)
+
+RESOURCE_DIR = os.path.join("@resource_dir@")
+
+TEST_HOME_DIR = os.path.join(ROOT_DIR, "tests/root/home/tchx84")
+TEST_HOME_DIR_URL = f"file://{TEST_HOME_DIR}"
+TEST_HOME_FILE_URL = f"file://{os.path.join(TEST_HOME_DIR, 'file')}"
+
+resource = None
+service = None
+app = None
+
+
+class MockApp:
+    def __init__(self):
+        self.called = False
+
+    def open_path(self, path):
+        self.called = True
+
+
+def update_gtk():
+    from gi.repository import Gtk
+
+    while Gtk.events_pending():
+        Gtk.main_iteration()
+
+
+def call_service(method, url):
+    from gi.repository import Gio, GLib
+
+    bus = None
+    finished = False
+    def callback(_gio, _task, _data):
+        nonlocal finished, bus
+        bus = Gio.bus_get_finish(_task)
+        finished = True
+
+    Gio.bus_get(
+        Gio.BusType.SESSION,
+        None,
+        callback,
+        None)
+
+    # wait until we get the bus
+    while not finished:
+        update_gtk()
+
+    proxy = None
+    finished = False
+    def callback(_proxy, _task, _data):
+        nonlocal finished, proxy
+        proxy = _proxy
+        finished = True
+
+    proxy = Gio.DBusProxy.new(
+        bus,
+        Gio.DBusProxyFlags.NONE,
+        None,
+        os.environ.get("PORTFOLIO_SERVICE_NAME"),
+        "/org/freedesktop/FileManager1",
+        "org.freedesktop.FileManager1",
+        None,
+        callback,
+        None,
+    )
+
+    # wait until proxy is set
+    while not finished:
+        update_gtk()
+
+    finished = False
+    def callback(_proxy, _task, _data):
+        nonlocal finished
+        finished = True
+
+    proxy.call(
+        method,
+        GLib.Variant("(ass)", ([url], "")),
+        Gio.DBusCallFlags.NO_AUTO_START,
+        500,
+        None,
+        callback,
+        None,
+    )
+
+    # wait until the callback finished
+    while not finished:
+        update_gtk()
+
+
+def setup_module():
+    global resource, service, app
+
+    app = MockApp()
+
+    import gi
+
+    gi.require_version("Gdk", "3.0")
+    gi.require_version("Gio", "2.0")
+    gi.require_version("Gtk", "3.0")
+
+    from gi.repository import Gio, GLib
+
+    resource = Gio.Resource.load(os.path.join(RESOURCE_DIR, "portfolio.gresource"))
+    resource._register()
+
+    from gi.repository import Gtk
+
+    Gtk.init(None)
+
+    os.environ["PORTFOLIO_SERVICE_NAME"] = "dev.tch84.Portfolio.test"
+
+    from src.service import PortfolioService
+    service = PortfolioService(app)
+
+
+def teardown_module(module):
+    global service
+    update_gtk()
+    service.shutdown()
+
+
+@pytest.mark.timeout(5)
+def test_show_folders():
+    app.called = False
+
+    call_service("ShowFolders", TEST_HOME_DIR_URL)
+
+    assert app.called is True
+
+
+@pytest.mark.timeout(5)
+def test_show_items():
+    app.called = False
+
+    call_service("ShowItems", TEST_HOME_FILE_URL)
+
+    assert app.called is True
+
+
+@pytest.mark.timeout(5)
+def test_show_item_properties():
+    app.called = False
+
+    call_service("ShowItemProperties", TEST_HOME_FILE_URL)
+
+    assert app.called is True

@@ -14,6 +14,12 @@ test_worker_file = configure_file(
   configuration: conf,
 )
 
+test_service_file = configure_file(
+  input: 'service.py.in',
+  output: 'service.py',
+  configuration: conf,
+)
+
 src_dir = join_paths(meson.source_root(), 'src')
 tests_dir = join_paths(meson.source_root(), 'tests')
 
@@ -32,6 +38,7 @@ endif
 tests = [
     test_window_file,
     test_worker_file,
+    test_service_file,
 ]
 
 pytest = find_program('pytest', required: false)
