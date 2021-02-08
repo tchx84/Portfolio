@@ -114,6 +114,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_select = None
         self._to_select_row = None
         self._last_clicked = None
+        self._last_vscroll_value = None
         self._dont_activate = False
         self._force_select = False
         self._force_go_home = False
@@ -229,12 +230,26 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.selection.select_iter(row)
         self._force_select = False
 
-    def _select_and_go(self, row):
+    def _select_and_go(self, row, edit=False):
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
         self._select_row(row)
         GLib.idle_add(self._go_to_selection)
+
+        if edit is True:
+            GLib.timeout_add(100, self._wait_and_edit)
+
+    def _wait_and_edit(self):
+        value = self._adjustment.get_value()
+
+        if value == self._last_vscroll_value:
+            self._on_rename_clicked(None)
+            self._last_vscroll_value = None
+            return False
+
+        self._last_vscroll_value = value
+        return True
 
     def _get_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -931,8 +946,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         icon = self._find_icon(path)
         row = self.liststore.append([icon, folder_name, path])
-        self._select_and_go(row)
-        self._on_rename_clicked(None)
+        self._select_and_go(row, edit=True)
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
         if self._dont_activate is True:
