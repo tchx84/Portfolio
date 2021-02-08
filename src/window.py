@@ -409,6 +409,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_all(self):
         self._update_search()
+        self._update_treeview()
         self._update_content_stack()
         self._update_navigation()
         self._update_navigation_tools()
@@ -423,6 +424,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         sensitive = not self._editing and not self._busy
         self.search.props.sensitive = sensitive
         self.search_entry.sensitive = sensitive
+
+    def _update_treeview(self):
+        sensitive = not self._busy
+        self.treeview.props.sensitive = sensitive
 
     def _update_content_stack(self):
         if self._busy:
