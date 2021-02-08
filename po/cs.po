@@ -1,0 +1,224 @@
+# Czech translation for portfolio package.
+# Copyright (C) 2021 THE portfolio'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+#
+# Daniel Rusek <mail@asciiwolf.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-23 09:45-0300\n"
+"PO-Revision-Date: 2021-02-06 23:24+0100\n"
+"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
+"Language-Team: none\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
+#: src/window.ui:1200
+msgid "Portfolio"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "složka;správce;prohlížet;disk;souborový systém;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Spravujte soubory na cestách"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Minimalistický správce souborů pro ty, kteří chtějí používat linuxová "
+"mobilní zařízení."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr ""
+
+#: src/window.ui:49
+msgid "Places"
+msgstr "Místa"
+
+#: src/window.ui:106
+msgid "Filter"
+msgstr "Filtr"
+
+#: src/window.ui:129
+msgid "Show Hidden Files"
+msgstr "Zobrazit skryté soubory"
+
+#: src/window.ui:178
+msgid "Sort"
+msgstr "Řadit podle"
+
+#: src/window.ui:201
+msgid "A-Z"
+msgstr "A-Ž"
+
+#: src/window.ui:227
+msgid "Last Modified"
+msgstr "Naposledy změněno"
+
+#: src/window.ui:283
+msgid "Help"
+msgstr "Nápověda"
+
+#: src/window.ui:299
+msgid "About Portfolio"
+msgstr "O aplikaci Portfolio"
+
+#: src/window.ui:685
+msgid "No files found"
+msgstr "Nenalezeny žádné soubory"
+
+#: src/window.ui:1122
+msgid "About"
+msgstr "O aplikaci"
+
+#: src/window.ui:1282
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Webová stránka</a>"
+
+#: src/window.ui:1337
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Tento program je šířen bez jakékoliv záruky. Pro bližší informace viz <a "
+"href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU General Public "
+"License, verze 3 nebo pozdější</a>."
+
+#: src/window.ui:1366
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Portfolio logo je upravená verze práce Jorgena Carlberga. Původní verze je k "
+"nalezení <a href=\"https://commons.wikimedia.org/wiki/File:Portfolio.svg\"> "
+"zde </a>, licencována pod <a href=\"https://creativecommons.org/licenses/"
+"by/3.0/deed.en\"> CC BY 3.0 </a>."
+
+#: src/window.ui:1404
+msgid "Created by"
+msgstr "Vytvořili"
+
+#: src/window.ui:1435
+msgid "Artwork by"
+msgstr "Grafika od"
+
+#: src/window.ui:1466
+msgid "Translated by"
+msgstr "Přeložili"
+
+#: src/window.ui:1499
+msgid "Contributions by"
+msgstr "Příspěvky od"
+
+#: src/places.py:50
+msgid "System"
+msgstr "Systém"
+
+#: src/places.py:52
+msgid "Home"
+msgstr "Domov"
+
+#: src/window.py:492
+msgid "Opening"
+msgstr "Otevírá se"
+
+#: src/window.py:511 src/window.py:960 src/window.py:965
+#, python-format
+msgid "Could not open %s"
+msgstr "Nelze otevřít %s"
+
+#: src/window.py:524
+msgid "Loading"
+msgstr "Načítá se"
+
+#: src/window.py:548
+#, python-format
+msgid "Could not load %s"
+msgstr "Nelze načíst %s"
+
+#: src/window.py:637 src/window.py:651
+#, python-format
+msgid "%s already exists"
+msgstr "%s již existuje"
+
+#: src/window.py:681
+#, python-format
+msgid "these %d files"
+msgstr "těchto %d souborů"
+
+#: src/window.py:683
+#, python-format
+msgid "Delete %s?"
+msgstr "Smazat %s?"
+
+#: src/window.py:702
+#, python-format
+msgid "%s will be moved"
+msgstr "%s bude přesunuto"
+
+#: src/window.py:704
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d souborů bude přesunuto"
+
+#: src/window.py:720
+#, python-format
+msgid "%s will be copied"
+msgstr "%s bude zkopírováno"
+
+#: src/window.py:722
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d souborů bude zkopírováno"
+
+#: src/window.py:747
+msgid "Files will be overwritten, proceed?"
+msgstr "Soubory budou přepsány, pokračovat?"
+
+#: src/window.py:762
+msgid "Pasting"
+msgstr "Vkládá se"
+
+#: src/window.py:796
+#, python-format
+msgid "Could not paste %s"
+msgstr "Nelze vložit %s"
+
+#: src/window.py:827
+msgid "Deleting"
+msgstr "Mazání"
+
+#: src/window.py:853
+#, python-format
+msgid "Could not delete %s"
+msgstr "Nelze smazat %s"
+
+#: src/window.py:877
+msgid "Stopping"
+msgstr "Zastavování"
+
+#: src/window.py:889
+msgid "New Folder"
+msgstr "Nová složka"
+
+#: src/window.py:897
+msgid "No permissions on this directory"
+msgstr "Žádná oprávnění na tomto adresáři"
