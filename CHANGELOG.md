@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed setting the proper selection mode while switching places.
+- Added support for org.freedesktop.FileManager1 interace.
+- Added Czech translation by @AsciiWolf.
+- Added more tests, tests, tests.
+
 ## [0.9.8] 2021-02-04
 
 - Fixed missing Exec field code in desktop file by @henry-nicolas.
