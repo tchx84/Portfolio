@@ -306,6 +306,9 @@ class PortfolioOpenWorker(GObject.GObject):
         )
         self._timeout_handler_id = GLib.timeout_add(100, self._on_step)
 
+    def stop(self):
+        pass
+
     def _on_step(self):
         self.emit("updated")
         return True
