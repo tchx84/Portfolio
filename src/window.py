@@ -273,6 +273,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.liststore.remove(self.liststore.get_iter(treepath))
 
     def _populate(self, directory):
+        if self._worker is not None:
+            self._worker.stop()
+
         self._worker = PortfolioLoadWorker(
             directory, self.show_hidden_button.props.active
         )
