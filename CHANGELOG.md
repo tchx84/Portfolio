@@ -2,8 +2,8 @@
 
 ## [unreleased]
 
-- Fixed setting the proper selection mode while switching places.
-- Added support for org.freedesktop.FileManager1 interace.
+- Fixed setting the proper selection mode while switching Places.
+- Added support for org.freedesktop.FileManager1 interface.
 - Added Czech translation by @AsciiWolf.
 - Added more tests, tests, tests.
 
