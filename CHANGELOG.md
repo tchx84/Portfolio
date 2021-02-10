@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.9] 2021-02-10
 
 - Fixed setting the proper selection mode while switching Places.
 - Added support for org.freedesktop.FileManager1 interface.

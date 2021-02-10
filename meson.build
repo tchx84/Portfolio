@@ -1,5 +1,5 @@
 project('portfolio',  
-          version: '0.9.8',
+          version: '0.9.9',
     meson_version: '>= 0.50.0',
   default_options: [ 'warning_level=2',
                    ],
