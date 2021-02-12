@@ -1,0 +1,224 @@
+# Brazilian Portuguese translation for portfolio.
+# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: https://github.com/tchx84/Portfolio/issues\n"
+"POT-Creation-Date: 2021-01-23 09:45-0300\n"
+"PO-Revision-Date: 2021-02-12 15:33-0300\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 3.38.0\n"
+"X-Project-Style: gnome\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
+#: src/window.ui:1200
+msgid "Portfolio"
+msgstr "Portfólio"
+
+#: data/dev.tchx84.Portfolio.desktop.in:13
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "pasta;gerenciador;explorar;disco;sistema de arquivos;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Gerencie arquivos em qualquer lugar"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Um gerenciador de arquivos minimalista para quem deseja usar dispositivos "
+"móveis Linux."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/window.ui:49
+msgid "Places"
+msgstr "Locais"
+
+#: src/window.ui:106
+msgid "Filter"
+msgstr "Filtro"
+
+#: src/window.ui:129
+msgid "Show Hidden Files"
+msgstr "Mostrar arquivos ocultos"
+
+#: src/window.ui:178
+msgid "Sort"
+msgstr "Ordenar"
+
+#: src/window.ui:201
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/window.ui:227
+msgid "Last Modified"
+msgstr "última modificação"
+
+#: src/window.ui:283
+msgid "Help"
+msgstr "Ajuda"
+
+#: src/window.ui:299
+msgid "About Portfolio"
+msgstr "Sobre o Portfólio"
+
+#: src/window.ui:685
+msgid "No files found"
+msgstr "Nenhum arquivo encontrado"
+
+#: src/window.ui:1122
+msgid "About"
+msgstr "Sobre"
+
+#: src/window.ui:1282
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Site</a>"
+
+#: src/window.ui:1337
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Este programa não vem com nenhuma garantia. Consulte a <a href=\"https://www."
+"gnu.org/licenses/gpl-3.0.html\">Licença Pública Geral GNU, versão 3 ou "
+"posterior</a> para obter detalhes."
+
+#: src/window.ui:1366
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"O logotipo do portfólio é uma versão modificada do trabalho de Jorgen "
+"Carlberg. A versão original pode ser encontrada <a href=\"https://commons."
+"wikimedia.org/wiki/File:Portfolio.svg\">aqui</a>, licenciada sob <a href="
+"\"https://creativecommons.org/licenses/by/3.0/deed.pt_BR\"> CC BY 3.0</a>."
+
+#: src/window.ui:1404
+msgid "Created by"
+msgstr "Criado por"
+
+#: src/window.ui:1435
+msgid "Artwork by"
+msgstr "Art por"
+
+#: src/window.ui:1466
+msgid "Translated by"
+msgstr "Traduzido por"
+
+#: src/window.ui:1499
+msgid "Contributions by"
+msgstr "Contribuições por"
+
+#: src/places.py:50
+msgid "System"
+msgstr "Sistema"
+
+#: src/places.py:52
+msgid "Home"
+msgstr "Home"
+
+#: src/window.py:492
+msgid "Opening"
+msgstr "Abrindo"
+
+#: src/window.py:511 src/window.py:960 src/window.py:965
+#, python-format
+msgid "Could not open %s"
+msgstr "Não foi possível abrir %s"
+
+#: src/window.py:524
+msgid "Loading"
+msgstr "Carregando"
+
+#: src/window.py:548
+#, python-format
+msgid "Could not load %s"
+msgstr "Não foi possível carregar %s"
+
+#: src/window.py:637 src/window.py:651
+#, python-format
+msgid "%s already exists"
+msgstr "%s já existe"
+
+#: src/window.py:681
+#, python-format
+msgid "these %d files"
+msgstr "esses %d arquivos"
+
+#: src/window.py:683
+#, python-format
+msgid "Delete %s?"
+msgstr "Excluir %s?"
+
+#: src/window.py:702
+#, python-format
+msgid "%s will be moved"
+msgstr "%s será movido"
+
+#: src/window.py:704
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d arquivos serão movidos"
+
+#: src/window.py:720
+#, python-format
+msgid "%s will be copied"
+msgstr "%s será copiado"
+
+#: src/window.py:722
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d arquivos serão copiados"
+
+#: src/window.py:747
+msgid "Files will be overwritten, proceed?"
+msgstr "Arquivos serão substituídos. Continuar?"
+
+#: src/window.py:762
+msgid "Pasting"
+msgstr "Colando"
+
+#: src/window.py:796
+#, python-format
+msgid "Could not paste %s"
+msgstr "Não foi possível colar %s"
+
+#: src/window.py:827
+msgid "Deleting"
+msgstr "Excluindo"
+
+#: src/window.py:853
+#, python-format
+msgid "Could not delete %s"
+msgstr "Não foi possível excluir %s"
+
+#: src/window.py:877
+msgid "Stopping"
+msgstr "Parando"
+
+#: src/window.py:889
+msgid "New Folder"
+msgstr "Nova pasta"
+
+#: src/window.py:897
+msgid "No permissions on this directory"
+msgstr "Nenhuma permissão neste diretório"
