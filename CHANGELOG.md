@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Added Brazilian Portuguese translation by @rffontenelle.
+
 ## [0.9.9] 2021-02-10
 
 - Fixed setting the proper selection mode while switching Places.
