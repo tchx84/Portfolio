@@ -174,3 +174,20 @@ treeview.view {
     min-width: 30px;
     min-height: 30px;
 }
+
+/* properties */
+
+.properties {
+    margin: 25px;
+}
+
+.properties .property {
+    margin: 10px;
+    font-size: medium;
+}
+
+.properties .value {
+    margin: 10px;
+    font-size: medium;
+    color: @insensitive_fg_color;
+}

@@ -61,7 +61,18 @@ class PortfolioService:
 
     def _on_called(self, connection, sender, path, iface, method, params, invocation):
         paths, _ = params
-        self._app.open_path(paths[-1])
+
+        if len(paths) == 0:
+            invocation.return_value(None)
+            return
+
+        last_path = paths[-1]
+
+        if method == "ShowItemProperties":
+            self._app.show_properties(last_path)
+        else:
+            self._app.open_path(last_path)
+
         invocation.return_value(None)
 
     def shutdown(self):
