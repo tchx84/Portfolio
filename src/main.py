@@ -44,6 +44,10 @@ class Application(Gtk.Application):
             Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
+    def show_properties(self, path):
+        self.activate()
+        self.props.active_window.show_properties(path)
+
     def open_path(self, path):
         self.activate()
         self.props.active_window.open(path)

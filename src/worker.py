@@ -17,12 +17,18 @@
 
 import os
 import shutil
+import locale
+import datetime
+import mimetypes
 import threading
 
+from locale import gettext as _
 from gi.repository import Gio, GObject, GLib
 
 from . import utils
 from . import logger
+
+mimetypes.init()
 
 
 class WorkerStoppedException(Exception):
@@ -322,3 +328,136 @@ class PortfolioOpenWorker(GObject.GObject):
             self.emit("failed", self._path)
         else:
             self.emit("finished")
+
+
+class PortfolioPropertiesWorker(GObject.GObject):
+    class InnerWorker(threading.Thread):
+        def __init__(self, worker):
+            super().__init__()
+            self._stop = False
+            self._worker = worker
+
+        def stop(self):
+            self._stop = True
+
+        def run(self):
+            size = 0
+
+            for directory, folders, files in os.walk(self._worker._path):
+                for filename in files:
+                    if self._stop:
+                        return
+                    try:
+                        size += os.path.getsize(os.path.join(directory, filename))
+                    except:
+                        pass
+
+            self._worker._size = self._worker._human_size(size)
+            GLib.idle_add(self._worker.notify, "size")
+
+    def __init__(self):
+        super().__init__()
+
+        self._path = ""
+        self._name = ""
+        self._location = ""
+        self._type = ""
+        self._size = ""
+        self._created = ""
+        self._modified = ""
+        self._accessed = ""
+
+        self._inner_worker = self.InnerWorker(self)
+
+    def _get_file_size(self):
+        return os.path.getsize(self._path)
+
+    def _update_size(self):
+        if os.path.isdir(self._path):
+            self._inner_worker = self.InnerWorker(self)
+            self._inner_worker.start()
+        else:
+            self._size = self._human_size(self._get_file_size())
+            self.notify("size")
+
+    # https://gist.github.com/cbwar/d2dfbc19b140bd599daccbe0fe925597
+    def _human_size(self, num):
+        for unit in ["", "k", "M", "G", "T", "P", "E", "Z"]:
+            if abs(num) < 1024.0:
+                return "%3.1f %s" % (num, unit)
+            num /= 1024.0
+        return "%.1f%s" % (num, "Yi")
+
+    def _get_human_time(self, timestamp):
+        fmt = locale.nl_langinfo(locale.D_T_FMT)
+        return datetime.datetime.fromtimestamp(timestamp).strftime(fmt)
+
+    def _get_type(self):
+        if os.path.isdir(self._path):
+            return "inode/directory"
+
+        _type = mimetypes.guess_type(self._path)[0]
+
+        if _type is None:
+            return _("Unknown")
+
+        return _type
+
+    @GObject.Property(type=str)
+    def name(self):
+        return self._name
+
+    @GObject.Property(type=str)
+    def location(self):
+        return self._location
+
+    @GObject.Property(type=str)
+    def type(self):
+        return self._type
+
+    @GObject.Property(type=str)
+    def size(self):
+        return self._size
+
+    @GObject.Property(type=str)
+    def created(self):
+        return self._created
+
+    @GObject.Property(type=str)
+    def modified(self):
+        return self._modified
+
+    @GObject.Property(type=str)
+    def accessed(self):
+        return self._accessed
+
+    @GObject.Property(type=str)
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self, path):
+        self._path = path
+
+        self._inner_worker.stop()
+
+        self._name = os.path.basename(self._path)
+        self._location = os.path.dirname(self._path)
+        self._type = self._get_type()
+        self._size = _("Calculating...")
+        self._created = self._get_human_time(os.path.getctime(self._path))
+        self._modified = self._get_human_time(os.path.getmtime(self._path))
+        self._accessed = self._get_human_time(os.path.getatime(self._path))
+
+        self.notify("name")
+        self.notify("location")
+        self.notify("type")
+        self.notify("size")
+        self.notify("created")
+        self.notify("modified")
+        self.notify("accessed")
+
+        self._update_size()
+
+    def stop(self):
+        self._inner_worker.stop()

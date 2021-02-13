@@ -20,6 +20,9 @@ class MockApp:
     def __init__(self):
         self.called = False
 
+    def show_properties(self, path):
+        self.called = True
+
     def open_path(self, path):
         self.called = True
 

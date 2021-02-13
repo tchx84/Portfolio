@@ -20,7 +20,7 @@ import os
 from pathlib import Path
 from locale import gettext as _
 
-from gi.repository import Gtk, GLib, Gio, Handy
+from gi.repository import Gtk, GLib, Gio, Handy, GObject
 
 from . import utils
 from . import logger
@@ -30,6 +30,7 @@ from .worker import PortfolioCopyWorker
 from .worker import PortfolioDeleteWorker
 from .worker import PortfolioLoadWorker
 from .worker import PortfolioOpenWorker
+from .worker import PortfolioPropertiesWorker
 from .places import PortfolioPlaces
 
 
@@ -47,8 +48,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     previous = Gtk.Template.Child()
     next = Gtk.Template.Child()
     search = Gtk.Template.Child()
-    back = Gtk.Template.Child()
     rename = Gtk.Template.Child()
+    detail = Gtk.Template.Child()
     delete = Gtk.Template.Child()
     cut = Gtk.Template.Child()
     copy = Gtk.Template.Child()
@@ -66,6 +67,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     show_hidden_button = Gtk.Template.Child()
     a_to_z_button = Gtk.Template.Child()
     go_top_button = Gtk.Template.Child()
+    about_back_button = Gtk.Template.Child()
+    properties_back_button = Gtk.Template.Child()
 
     search_box = Gtk.Template.Child()
     search_entry = Gtk.Template.Child()
@@ -92,6 +95,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
     menu_box = Gtk.Template.Child()
     content_scroll = Gtk.Template.Child()
     go_top_revealer = Gtk.Template.Child()
+    content_deck = Gtk.Template.Child()
+    properties_box = Gtk.Template.Child()
+    property_name = Gtk.Template.Child()
+    property_location = Gtk.Template.Child()
+    property_type = Gtk.Template.Child()
+    property_size = Gtk.Template.Child()
+    property_created = Gtk.Template.Child()
+    property_modified = Gtk.Template.Child()
+    property_accessed = Gtk.Template.Child()
 
     ICON_COLUMN = 0
     NAME_COLUMN = 1
@@ -139,6 +151,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.previous.connect("clicked", self._on_go_previous)
         self.next.connect("clicked", self._on_go_next)
         self.rename.connect("clicked", self._on_rename_clicked)
+        self.detail.connect("clicked", self._on_detail_clicked)
         self.delete.connect("clicked", self._on_delete_clicked)
         self.cut.connect("clicked", self._on_cut_clicked)
         self.copy.connect("clicked", self._on_copy_clicked)
@@ -153,6 +166,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.a_to_z_button.connect("toggled", self._on_sort_toggled)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
+        self.properties_back_button.connect("clicked", self._on_properties_back_clicked)
+        self.about_back_button.connect("clicked", self._on_about_back_clicked)
 
         self._adjustment = self.content_scroll.get_vadjustment()
         self._adjustment.connect("value-changed", self._update_go_top_button)
@@ -160,12 +175,58 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
         self.search_entry.connect("stop-search", self._on_search_stopped)
-        self.back.connect("clicked", self._on_back_clicked)
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
         places.connect("removed", self._on_places_removed)
         self.places_box.add(places)
+
+        self._properties = PortfolioPropertiesWorker()
+        self._properties.bind_property(
+            "name",
+            self.property_name,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "location",
+            self.property_location,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "type",
+            self.property_type,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "size",
+            self.property_size,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "created",
+            self.property_created,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "modified",
+            self.property_modified,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "accessed",
+            self.property_accessed,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+
+        self.content_deck.connect("notify::visible-child", self._on_properties_folded)
+        self.connect("destroy", self._on_shutdown)
 
         self.open()
 
@@ -481,6 +542,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.copy.props.sensitive = sensitive
 
         self._update_rename()
+        self._update_detail()
 
     def _update_navigation_tools(self):
         count = self.selection.count_selected_rows()
@@ -493,6 +555,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         count = self.selection.count_selected_rows()
         sensitive = count == 1 and not self._editing and not self._busy
         self.rename.props.sensitive = sensitive
+
+    def _update_detail(self):
+        count = self.selection.count_selected_rows()
+        sensitive = count == 1 and not self._editing and not self._busy
+        self.detail.props.sensitive = sensitive
 
     def _update_directory_title(self):
         directory = self._history[self._index]
@@ -651,6 +718,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_search_stopped(self, entry):
         self._reset_search()
+
+    def _on_detail_clicked(self, button):
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        path = model[treepath][self.PATH_COLUMN]
+        self.show_properties(path)
 
     def _on_rename_clicked(self, button):
         self.name_cell.props.editable = True
@@ -979,8 +1052,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_about_clicked(self, button):
         self.deck.set_visible_child(self.about_box)
 
-    def _on_back_clicked(self, button):
-        self.deck.set_visible_child(self.app_box)
+    def _on_about_back_clicked(self, button):
+        self.deck.set_visible_child(self.content_deck)
+
+    def _on_properties_back_clicked(self, button):
+        self.content_deck.set_visible_child(self.app_box)
 
     def _on_long_pressed(self, gesture, x, y):
         if self.selection.get_mode() != Gtk.SelectionMode.MULTIPLE:
@@ -996,6 +1072,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_sort_toggled(self, button):
         self._refresh()
+
+    def _on_properties_folded(self, deck, data=None):
+        visible = self.content_deck.get_visible_child() == self.properties_box
+        if not visible:
+            self._properties.stop()
+
+    def _on_shutdown(self, window):
+        if self._worker is not None:
+            self._worker.stop()
+        self._properties.stop()
 
     def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR):
         # XXX so cheap !
@@ -1021,3 +1107,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._clean_workers()
 
         self._reset_to_path(path)
+
+    def show_properties(self, path):
+        self._properties.props.path = path
+        self.content_deck.set_visible_child(self.properties_box)

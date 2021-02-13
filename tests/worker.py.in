@@ -457,3 +457,13 @@ def test_delete_worker_stopped():
 
     assert stopped is True
     assert len(os.listdir(source)) == 5
+
+
+def test_properties_worker_default():
+    from src.worker import PortfolioPropertiesWorker
+
+    worker = PortfolioPropertiesWorker()
+    worker.props.path = os.path.join(TEST_HOME_DIR, "file")
+
+    assert worker.props.name == "file"
+    assert worker.props.size == "8.0 "
