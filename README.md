@@ -6,7 +6,7 @@ A minimalist file manager for those who want to use Linux mobile devices.
 
 ## Usage
 
-Tap to activate and press to select, to browse, open, copy, move, delete, or edit your files. 
+Tap to activate and long press to select, to browse, open, copy, move, delete, or edit your files.
 
 ## Get it
 
