@@ -32,7 +32,7 @@ endif
 black = find_program('black', required: false)
 if black.found()
   test('black', black,
-    args: [src_dir, test_window_file, test_worker_file])
+    args: ['--check', src_dir, test_window_file, test_worker_file])
 endif
 
 tests = [
