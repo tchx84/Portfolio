@@ -182,6 +182,7 @@ def test_delete_all():
     window._popup.confirm_button.emit("clicked")
 
     finished = False
+
     def _callback(worker, total):
         nonlocal finished
         finished = True
@@ -262,6 +263,7 @@ def test_delete_one():
     window._popup.confirm_button.emit("clicked")
 
     finished = False
+
     def _callback(worker, total):
         nonlocal finished
         finished = True

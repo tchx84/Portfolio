@@ -31,6 +31,7 @@ TEST_CUT_DIR = os.path.join(TEST_HOME_DIR, "cut")
 
 def update_gtk():
     from gi.repository import Gtk
+
     while Gtk.events_pending():
         Gtk.main_iteration()
 
@@ -70,6 +71,7 @@ def test_load_worker_default():
     from src.worker import PortfolioLoadWorker
 
     paths = []
+
     def _callback(worker, directory, found, index, total):
         nonlocal paths
         paths += [path for name, path in found]
@@ -82,16 +84,19 @@ def test_load_worker_default():
 
     assert len(paths) == 2
 
-    assert set(paths) == set([
-        os.path.join(TEST_HOME_DIR, "folder"),
-        os.path.join(TEST_HOME_DIR, "file"),
-    ])
+    assert set(paths) == set(
+        [
+            os.path.join(TEST_HOME_DIR, "folder"),
+            os.path.join(TEST_HOME_DIR, "file"),
+        ]
+    )
 
 
 def test_load_worker_hidden():
     from src.worker import PortfolioLoadWorker
 
     paths = []
+
     def _callback(worker, directory, found, index, total):
         nonlocal paths
         paths += [path for name, path in found]
@@ -104,11 +109,13 @@ def test_load_worker_hidden():
 
     assert len(paths) == 3
 
-    assert set(paths) == set([
-        os.path.join(TEST_HOME_DIR, "folder"),
-        os.path.join(TEST_HOME_DIR, "file"),
-        os.path.join(TEST_HOME_DIR, ".hidden"),
-    ])
+    assert set(paths) == set(
+        [
+            os.path.join(TEST_HOME_DIR, "folder"),
+            os.path.join(TEST_HOME_DIR, "file"),
+            os.path.join(TEST_HOME_DIR, ".hidden"),
+        ]
+    )
 
 
 def test_copy_worker_default():
@@ -195,6 +202,7 @@ def test_copy_worker_overwrite():
     assert os.path.exists(os.path.join(target, "folder"))
     assert os.path.exists(os.path.join(target, "file"))
 
+
 @pytest.mark.timeout(5)
 def test_delete_worker_default():
     from src.worker import PortfolioDeleteWorker
@@ -207,6 +215,7 @@ def test_delete_worker_default():
     ]
 
     finished = False
+
     def _callback(worker, total):
         nonlocal finished
         finished = True
@@ -365,6 +374,7 @@ def test_copy_worker_stopped():
     ]
 
     stopped = False
+
     def _callback(worker):
         nonlocal stopped
         stopped = True
@@ -399,6 +409,7 @@ def test_cut_worker_stopped():
     ]
 
     stopped = False
+
     def _callback(worker):
         nonlocal stopped
         stopped = True
@@ -431,6 +442,7 @@ def test_delete_worker_stopped():
     ]
 
     stopped = False
+
     def _callback(worker):
         nonlocal stopped
         stopped = True

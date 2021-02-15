@@ -36,16 +36,13 @@ def call_service(method, url):
 
     bus = None
     finished = False
+
     def callback(_gio, _task, _data):
         nonlocal finished, bus
         bus = Gio.bus_get_finish(_task)
         finished = True
 
-    Gio.bus_get(
-        Gio.BusType.SESSION,
-        None,
-        callback,
-        None)
+    Gio.bus_get(Gio.BusType.SESSION, None, callback, None)
 
     # wait until we get the bus
     while not finished:
@@ -53,6 +50,7 @@ def call_service(method, url):
 
     proxy = None
     finished = False
+
     def callback(_proxy, _task, _data):
         nonlocal finished, proxy
         proxy = _proxy
@@ -75,6 +73,7 @@ def call_service(method, url):
         update_gtk()
 
     finished = False
+
     def callback(_proxy, _task, _data):
         nonlocal finished
         finished = True
@@ -117,6 +116,7 @@ def setup_module():
     os.environ["PORTFOLIO_SERVICE_NAME"] = "dev.tch84.Portfolio.test"
 
     from src.service import PortfolioService
+
     service = PortfolioService(app)
 
 
