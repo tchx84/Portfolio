@@ -80,37 +80,35 @@ msgstr "No se encontraron archivos"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Propiedades"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Lugar"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Tamaño"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Creado por"
+msgstr "Creado"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
-msgstr "Última modificación"
+msgstr "Modificado"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Accedido"
 
 #: src/window.ui:1566
 msgid "About"
@@ -255,8 +253,8 @@ msgstr "Sin permisos en este directorio"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Calculando..."
