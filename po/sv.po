@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-16 16:52-0300\n"
-"PO-Revision-Date: 2021-01-12 14:11+0100\n"
+"PO-Revision-Date: 2021-02-16 21:19+0100\n"
 "Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
 "Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
 "Language: sv\n"
@@ -83,37 +83,35 @@ msgstr "Inga filer hittades"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Egenskaper"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Plats"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Storlek"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Skapad av"
+msgstr "Skapad"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
 msgstr "Ändrad"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Öppnad"
 
 #: src/window.ui:1566
 msgid "About"
@@ -246,7 +244,7 @@ msgstr "Kunde inte ta bort %s"
 
 #: src/window.py:998
 msgid "Stopping"
-msgstr "Stannar"
+msgstr "Stoppar"
 
 #: src/window.py:1010
 msgid "New Folder"
@@ -258,8 +256,8 @@ msgstr "Du saknar rättigheter i den här mappen"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Okänt"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Beräknar..."
