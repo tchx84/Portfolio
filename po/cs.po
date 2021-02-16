@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-16 16:52-0300\n"
-"PO-Revision-Date: 2021-02-06 23:24+0100\n"
+"PO-Revision-Date: 2021-02-16 23:26+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
@@ -84,37 +84,35 @@ msgstr "Nenalezeny žádné soubory"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Vlastnosti"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Umístění"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Velikost"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Vytvořili"
+msgstr "Vytvořeno"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
-msgstr "Naposledy změněno"
+msgstr "Změněno"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Přístup"
 
 #: src/window.ui:1566
 msgid "About"
@@ -259,8 +257,8 @@ msgstr "Žádná oprávnění na tomto adresáři"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámé"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Počítá se..."
