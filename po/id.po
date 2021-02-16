@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-23 09:45-0300\n"
+"POT-Creation-Date: 2021-02-16 16:52-0300\n"
 "PO-Revision-Date: 2021-01-12 22:10+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
@@ -20,8 +20,8 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
-#: src/window.ui:1200
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:348
+#: src/window.ui:1644
 msgid "Portfolio"
 msgstr "Portfolio"
 
@@ -33,7 +33,7 @@ msgstr "folder;pengelola;jelajahi;diska;sistem berkas;"
 msgid "Manage files on the go"
 msgstr "Kelola berkas di mana saja"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1698
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -77,19 +77,53 @@ msgstr "Bantuan"
 msgid "About Portfolio"
 msgstr "Tentang Portofolio"
 
-#: src/window.ui:685
+#: src/window.ui:688
 msgid "No files found"
 msgstr "Tak ada berkas yang ditemukan"
 
-#: src/window.ui:1122
+#: src/window.ui:1145
+msgid "Properties"
+msgstr ""
+
+#: src/window.ui:1206
+msgid "Name"
+msgstr ""
+
+#: src/window.ui:1253
+msgid "Location"
+msgstr ""
+
+#: src/window.ui:1300
+msgid "Type"
+msgstr ""
+
+#: src/window.ui:1347
+msgid "Size"
+msgstr ""
+
+#: src/window.ui:1394
+#, fuzzy
+msgid "Created"
+msgstr "Dibuat oleh"
+
+#: src/window.ui:1441
+#, fuzzy
+msgid "Modified"
+msgstr "Terakhir Diubah"
+
+#: src/window.ui:1488
+msgid "Accessed"
+msgstr ""
+
+#: src/window.ui:1566
 msgid "About"
 msgstr "Tentang"
 
-#: src/window.ui:1282
+#: src/window.ui:1726
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Situs Web</a>"
 
-#: src/window.ui:1337
+#: src/window.ui:1781
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -99,7 +133,7 @@ msgstr ""
 "gnu.org/licenses/gpl-3.0.html\">GNU General Public License, versi 3 atau "
 "yang lebih baru</a> untuk detailnya."
 
-#: src/window.ui:1366
+#: src/window.ui:1810
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -111,19 +145,19 @@ msgstr ""
 "Portfolio.svg\">sini</a>, dilisensikan dibawah <a href=\"https://"
 "creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>."
 
-#: src/window.ui:1404
+#: src/window.ui:1848
 msgid "Created by"
 msgstr "Dibuat oleh"
 
-#: src/window.ui:1435
+#: src/window.ui:1879
 msgid "Artwork by"
 msgstr "Karya Seni oleh"
 
-#: src/window.ui:1466
+#: src/window.ui:1910
 msgid "Translated by"
 msgstr "Diterjemahkan oleh"
 
-#: src/window.ui:1499
+#: src/window.ui:1945
 msgid "Contributions by"
 msgstr "Kontribusi oleh"
 
@@ -135,89 +169,97 @@ msgstr "Sistem"
 msgid "Home"
 msgstr "Beranda"
 
-#: src/window.py:492
+#: src/window.py:592
 msgid "Opening"
 msgstr "Membuka"
 
-#: src/window.py:511 src/window.py:960 src/window.py:965
+#: src/window.py:611 src/window.py:1092 src/window.py:1102
 #, python-format
 msgid "Could not open %s"
 msgstr "Tak bisa membuka %s"
 
-#: src/window.py:524
+#: src/window.py:624
 msgid "Loading"
 msgstr "Memuat"
 
-#: src/window.py:548
+#: src/window.py:659
 #, python-format
 msgid "Could not load %s"
 msgstr "Tak bisa memuat %s"
 
-#: src/window.py:637 src/window.py:651
+#: src/window.py:756 src/window.py:770
 #, python-format
 msgid "%s already exists"
 msgstr "%s sudah ada"
 
-#: src/window.py:681
+#: src/window.py:800
 #, python-format
 msgid "these %d files"
 msgstr "%d berkas ini"
 
-#: src/window.py:683
+#: src/window.py:802
 #, python-format
 msgid "Delete %s?"
 msgstr "Hapus %s?"
 
-#: src/window.py:702
+#: src/window.py:821
 #, python-format
 msgid "%s will be moved"
 msgstr "%s akan dipindahkan"
 
-#: src/window.py:704
+#: src/window.py:823
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d berkas akan dipindahkan"
 
-#: src/window.py:720
+#: src/window.py:839
 #, python-format
 msgid "%s will be copied"
 msgstr "%s akan disalin"
 
-#: src/window.py:722
+#: src/window.py:841
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d berkas akan disalin"
 
-#: src/window.py:747
+#: src/window.py:866
 msgid "Files will be overwritten, proceed?"
 msgstr "File akan ditimpa, lanjutkan?"
 
-#: src/window.py:762
+#: src/window.py:881
 msgid "Pasting"
 msgstr "Menempel"
 
-#: src/window.py:796
+#: src/window.py:915
 #, python-format
 msgid "Could not paste %s"
 msgstr "Tak bisa menempelkan %s"
 
-#: src/window.py:827
+#: src/window.py:948
 msgid "Deleting"
 msgstr "Menghapus"
 
-#: src/window.py:853
+#: src/window.py:974
 #, python-format
 msgid "Could not delete %s"
 msgstr "Tak bisa menghapus %s"
 
-#: src/window.py:877
+#: src/window.py:998
 msgid "Stopping"
 msgstr "Henti"
 
-#: src/window.py:889
+#: src/window.py:1010
 msgid "New Folder"
 msgstr "Folder Baru"
 
-#: src/window.py:897
+#: src/window.py:1018
 msgid "No permissions on this directory"
 msgstr "Tak ada izin pada direktori ini"
+
+#: src/worker.py:402
+msgid "Unknown"
+msgstr ""
+
+#: src/worker.py:447
+msgid "Calculating..."
+msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-16 15:57-0300\n"
+"POT-Creation-Date: 2021-02-16 16:52-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,90 +157,90 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: src/window.py:591
+#: src/window.py:592
 msgid "Opening"
 msgstr ""
 
-#: src/window.py:610 src/window.py:1086 src/window.py:1096
+#: src/window.py:611 src/window.py:1092 src/window.py:1102
 #, python-format
 msgid "Could not open %s"
 msgstr ""
 
-#: src/window.py:623
+#: src/window.py:624
 msgid "Loading"
 msgstr ""
 
-#: src/window.py:658
+#: src/window.py:659
 #, python-format
 msgid "Could not load %s"
 msgstr ""
 
-#: src/window.py:755 src/window.py:769
+#: src/window.py:756 src/window.py:770
 #, python-format
 msgid "%s already exists"
 msgstr ""
 
-#: src/window.py:799
+#: src/window.py:800
 #, python-format
 msgid "these %d files"
 msgstr ""
 
-#: src/window.py:801
+#: src/window.py:802
 #, python-format
 msgid "Delete %s?"
 msgstr ""
 
-#: src/window.py:820
+#: src/window.py:821
 #, python-format
 msgid "%s will be moved"
 msgstr ""
 
-#: src/window.py:822
+#: src/window.py:823
 #, python-format
 msgid "%d files will be moved"
 msgstr ""
 
-#: src/window.py:838
+#: src/window.py:839
 #, python-format
 msgid "%s will be copied"
 msgstr ""
 
-#: src/window.py:840
+#: src/window.py:841
 #, python-format
 msgid "%d files will be copied"
 msgstr ""
 
-#: src/window.py:865
+#: src/window.py:866
 msgid "Files will be overwritten, proceed?"
 msgstr ""
 
-#: src/window.py:880
+#: src/window.py:881
 msgid "Pasting"
 msgstr ""
 
-#: src/window.py:914
+#: src/window.py:915
 #, python-format
 msgid "Could not paste %s"
 msgstr ""
 
-#: src/window.py:947
+#: src/window.py:948
 msgid "Deleting"
 msgstr ""
 
-#: src/window.py:973
+#: src/window.py:974
 #, python-format
 msgid "Could not delete %s"
 msgstr ""
 
-#: src/window.py:997
+#: src/window.py:998
 msgid "Stopping"
 msgstr ""
 
-#: src/window.py:1009
+#: src/window.py:1010
 msgid "New Folder"
 msgstr ""
 
-#: src/window.py:1017
+#: src/window.py:1018
 msgid "No permissions on this directory"
 msgstr ""
 
