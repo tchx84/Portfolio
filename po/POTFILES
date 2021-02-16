@@ -5,3 +5,4 @@ src/window.ui
 src/main.py
 src/places.py
 src/window.py
+src/worker.py

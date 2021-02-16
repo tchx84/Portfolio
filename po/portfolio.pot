@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-23 09:45-0300\n"
+"POT-Creation-Date: 2021-02-16 15:57-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,8 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:343
-#: src/window.ui:1200
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:348
+#: src/window.ui:1644
 msgid "Portfolio"
 msgstr ""
 
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Manage files on the go"
 msgstr ""
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1254
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1698
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -74,26 +74,58 @@ msgstr ""
 msgid "About Portfolio"
 msgstr ""
 
-#: src/window.ui:685
+#: src/window.ui:688
 msgid "No files found"
 msgstr ""
 
-#: src/window.ui:1122
+#: src/window.ui:1145
+msgid "Properties"
+msgstr ""
+
+#: src/window.ui:1206
+msgid "Name"
+msgstr ""
+
+#: src/window.ui:1253
+msgid "Location"
+msgstr ""
+
+#: src/window.ui:1300
+msgid "Type"
+msgstr ""
+
+#: src/window.ui:1347
+msgid "Size"
+msgstr ""
+
+#: src/window.ui:1394
+msgid "Created"
+msgstr ""
+
+#: src/window.ui:1441
+msgid "Modified"
+msgstr ""
+
+#: src/window.ui:1488
+msgid "Accessed"
+msgstr ""
+
+#: src/window.ui:1566
 msgid "About"
 msgstr ""
 
-#: src/window.ui:1282
+#: src/window.ui:1726
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr ""
 
-#: src/window.ui:1337
+#: src/window.ui:1781
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
 "later</a> for details."
 msgstr ""
 
-#: src/window.ui:1366
+#: src/window.ui:1810
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -101,19 +133,19 @@ msgid ""
 "org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 msgstr ""
 
-#: src/window.ui:1404
+#: src/window.ui:1848
 msgid "Created by"
 msgstr ""
 
-#: src/window.ui:1435
+#: src/window.ui:1879
 msgid "Artwork by"
 msgstr ""
 
-#: src/window.ui:1466
+#: src/window.ui:1910
 msgid "Translated by"
 msgstr ""
 
-#: src/window.ui:1499
+#: src/window.ui:1945
 msgid "Contributions by"
 msgstr ""
 
@@ -125,89 +157,97 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: src/window.py:492
+#: src/window.py:591
 msgid "Opening"
 msgstr ""
 
-#: src/window.py:511 src/window.py:960 src/window.py:965
+#: src/window.py:610 src/window.py:1086 src/window.py:1096
 #, python-format
 msgid "Could not open %s"
 msgstr ""
 
-#: src/window.py:524
+#: src/window.py:623
 msgid "Loading"
 msgstr ""
 
-#: src/window.py:548
+#: src/window.py:658
 #, python-format
 msgid "Could not load %s"
 msgstr ""
 
-#: src/window.py:637 src/window.py:651
+#: src/window.py:755 src/window.py:769
 #, python-format
 msgid "%s already exists"
 msgstr ""
 
-#: src/window.py:681
+#: src/window.py:799
 #, python-format
 msgid "these %d files"
 msgstr ""
 
-#: src/window.py:683
+#: src/window.py:801
 #, python-format
 msgid "Delete %s?"
 msgstr ""
 
-#: src/window.py:702
+#: src/window.py:820
 #, python-format
 msgid "%s will be moved"
 msgstr ""
 
-#: src/window.py:704
+#: src/window.py:822
 #, python-format
 msgid "%d files will be moved"
 msgstr ""
 
-#: src/window.py:720
+#: src/window.py:838
 #, python-format
 msgid "%s will be copied"
 msgstr ""
 
-#: src/window.py:722
+#: src/window.py:840
 #, python-format
 msgid "%d files will be copied"
 msgstr ""
 
-#: src/window.py:747
+#: src/window.py:865
 msgid "Files will be overwritten, proceed?"
 msgstr ""
 
-#: src/window.py:762
+#: src/window.py:880
 msgid "Pasting"
 msgstr ""
 
-#: src/window.py:796
+#: src/window.py:914
 #, python-format
 msgid "Could not paste %s"
 msgstr ""
 
-#: src/window.py:827
+#: src/window.py:947
 msgid "Deleting"
 msgstr ""
 
-#: src/window.py:853
+#: src/window.py:973
 #, python-format
 msgid "Could not delete %s"
 msgstr ""
 
-#: src/window.py:877
+#: src/window.py:997
 msgid "Stopping"
 msgstr ""
 
-#: src/window.py:889
+#: src/window.py:1009
 msgid "New Folder"
 msgstr ""
 
-#: src/window.py:897
+#: src/window.py:1017
 msgid "No permissions on this directory"
+msgstr ""
+
+#: src/worker.py:402
+msgid "Unknown"
+msgstr ""
+
+#: src/worker.py:447
+msgid "Calculating..."
 msgstr ""
