@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-16 16:52-0300\n"
-"PO-Revision-Date: 2021-01-12 22:10+0700\n"
+"PO-Revision-Date: 2021-02-17 08:53+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -83,37 +83,35 @@ msgstr "Tak ada berkas yang ditemukan"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Properti"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Lokasi"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Tipe"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Ukuran"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Dibuat oleh"
+msgstr "Dibuat"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
-msgstr "Terakhir Diubah"
+msgstr "Diubah"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Diakses"
 
 #: src/window.ui:1566
 msgid "About"
@@ -258,8 +256,8 @@ msgstr "Tak ada izin pada direktori ini"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Tak dikenal"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Menghitung..."
