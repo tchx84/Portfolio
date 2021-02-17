@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-16 16:52-0300\n"
-"PO-Revision-Date: 2021-01-12 14:12+0100\n"
+"PO-Revision-Date: 2021-02-16 22:42+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -83,37 +83,35 @@ msgstr "Geen bestanden aangetroffen"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschappen"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Locatie"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Soort"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Grootte"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Gemaakt door"
+msgstr "Aanmaakdatum"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
 msgstr "Wijzigingsdatum"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Geopend"
 
 #: src/window.ui:1566
 msgid "About"
@@ -258,8 +256,8 @@ msgstr "Je hebt geen rechten op deze map"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Bezig met berekenen…"
