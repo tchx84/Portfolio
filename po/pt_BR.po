@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-16 16:52-0300\n"
-"PO-Revision-Date: 2021-02-12 15:33-0300\n"
+"PO-Revision-Date: 2021-02-16 18:45-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -84,37 +84,35 @@ msgstr "Nenhum arquivo encontrado"
 
 #: src/window.ui:1145
 msgid "Properties"
-msgstr ""
+msgstr "Propriedades"
 
 #: src/window.ui:1206
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/window.ui:1253
 msgid "Location"
-msgstr ""
+msgstr "Local"
 
 #: src/window.ui:1300
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: src/window.ui:1347
 msgid "Size"
-msgstr ""
+msgstr "Tamanho"
 
 #: src/window.ui:1394
-#, fuzzy
 msgid "Created"
-msgstr "Criado por"
+msgstr "Criado"
 
 #: src/window.ui:1441
-#, fuzzy
 msgid "Modified"
-msgstr "última modificação"
+msgstr "Modificado"
 
 #: src/window.ui:1488
 msgid "Accessed"
-msgstr ""
+msgstr "Acessado"
 
 #: src/window.ui:1566
 msgid "About"
@@ -259,8 +257,8 @@ msgstr "Nenhuma permissão neste diretório"
 
 #: src/worker.py:402
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: src/worker.py:447
 msgid "Calculating..."
-msgstr ""
+msgstr "Calculando..."
