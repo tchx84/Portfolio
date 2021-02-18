@@ -104,6 +104,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     property_created = Gtk.Template.Child()
     property_modified = Gtk.Template.Child()
     property_accessed = Gtk.Template.Child()
+    popover_scrolled_window = Gtk.Template.Child()
 
     ICON_COLUMN = 0
     NAME_COLUMN = 1
@@ -224,6 +225,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             "label",
             GObject.BindingFlags.SYNC_CREATE,
         )
+
+        self.connect_after("size-allocate", self._on_window_allocated)
 
         self.content_deck.connect("notify::visible-child", self._on_properties_folded)
         self.connect("destroy", self._on_shutdown)
@@ -1077,6 +1080,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         visible = self.content_deck.get_visible_child() == self.properties_box
         if not visible:
             self._properties.stop()
+
+    def _on_window_allocated(self, window, alloc):
+        constraint = int(alloc.height * 0.75)
+        if self.popover_scrolled_window.props.max_content_height != constraint:
+            self.popover_scrolled_window.props.max_content_height = constraint
 
     def _on_shutdown(self, window):
         if self._worker is not None:
