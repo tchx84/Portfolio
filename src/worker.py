@@ -41,14 +41,29 @@ class PortfolioWorker(threading.Thread, GObject.GObject):
     def __init__(self):
         threading.Thread.__init__(self)
         GObject.GObject.__init__(self)
-        self._must_stop = False
+        self._cancellable = Gio.Cancellable()
+
+    def _progress(self, current, total):
+        logger.debug(current, total)
+
+    def _copy(self, source, destination):
+        source = Gio.File.new_for_path(source)
+        destination = Gio.File.new_for_path(destination)
+
+        try:
+            source.copy(destination, Gio.FileCopyFlags.OVERWRITE, self._cancellable)
+        except GLib.Error as e:
+            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                raise WorkerStoppedException()
+            raise
 
     def _stop_check(self):
-        if self._must_stop is True:
+        if self._cancellable.is_cancelled():
             raise WorkerStoppedException()
 
     def stop(self):
-        self._must_stop = True
+        if not self._cancellable.is_cancelled():
+            self._cancellable.cancel()
 
     def emit(self, *args):
         GLib.idle_add(GObject.GObject.emit, self, *args)
@@ -90,7 +105,7 @@ class PortfolioCopyWorker(PortfolioWorker):
                 nonlocal count, total
                 self._stop_check()
                 self.emit("pre-update", _destination)
-                shutil.copy2(_path, _destination)
+                self._copy(_path, _destination)
                 self.emit("updated", _destination, True, count, total)
                 count += 1
 
@@ -102,7 +117,7 @@ class PortfolioCopyWorker(PortfolioWorker):
                         shutil.rmtree(destination)
                     shutil.copytree(path, destination, copy_function=_callback)
                 else:
-                    shutil.copyfile(path, destination)
+                    self._copy(path, destination)
             except WorkerStoppedException:
                 self.emit("stopped")
                 return
@@ -134,7 +149,7 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 nonlocal count, total
                 self._stop_check()
                 self.emit("pre-update", _destination)
-                shutil.copy2(_path, _destination)
+                self._copy(_path, _destination)
                 self.emit("updated", _destination, True, count, total)
                 count += 1
 
