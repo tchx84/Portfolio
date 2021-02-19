@@ -34,6 +34,9 @@ from .worker import PortfolioPropertiesWorker
 from .places import PortfolioPlaces
 
 
+HORIZONTAL_MENU_THRESHOLD = 450
+
+
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
 class PortfolioWindow(Handy.ApplicationWindow):
     __gtype_name__ = "PortfolioWindow"
@@ -224,6 +227,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             "label",
             GObject.BindingFlags.SYNC_CREATE,
         )
+
+        self.connect_after("size-allocate", self._on_size_allocated)
 
         self.content_deck.connect("notify::visible-child", self._on_properties_folded)
         self.connect("destroy", self._on_shutdown)
@@ -1077,6 +1082,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         visible = self.content_deck.get_visible_child() == self.properties_box
         if not visible:
             self._properties.stop()
+
+    def _on_size_allocated(self, window, alloc):
+        if alloc.height > HORIZONTAL_MENU_THRESHOLD:
+            orientation = Gtk.Orientation.VERTICAL
+        else:
+            orientation = Gtk.Orientation.HORIZONTAL
+
+        if self.menu_box.props.orientation != orientation:
+            self.menu_box.props.orientation = orientation
 
     def _on_shutdown(self, window):
         if self._worker is not None:

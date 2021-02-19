@@ -127,6 +127,10 @@ scrolledwindow.frame {
     background-size: 16px;
 }
 
+.menu-box.horizontal {
+    margin-top: 4px;
+}
+
 /* loading */
 
 .loading {
