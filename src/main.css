@@ -111,21 +111,6 @@ scrolledwindow.frame {
     padding: 0px;
     margin-right: 9px;
 }
-.menu-box .places-box .menu-item label {
-    padding-left: 25px;
-    background: -gtk-icontheme("user-home-symbolic") left no-repeat;
-    background-size: 16px;
-}
-.menu-box .places-box .menu-item.mount label {
-    padding-left: 25px;
-    background: -gtk-icontheme("drive-removable-media-symbolic") left no-repeat;
-    background-size: 16px;
-}
-.menu-box .places-box .menu-item.system label {
-    padding-left: 25px;
-    background: -gtk-icontheme("drive-harddisk-symbolic") left no-repeat;
-    background-size: 16px;
-}
 
 /* loading */
 
@@ -190,4 +175,10 @@ treeview.view {
     margin: 10px;
     font-size: medium;
     color: @insensitive_fg_color;
+}
+
+/* places */
+
+.devices-group > box {
+    margin-top: 15px
 }

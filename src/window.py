@@ -80,22 +80,26 @@ class PortfolioWindow(Handy.ApplicationWindow):
     selection_tools = Gtk.Template.Child()
     navigation_tools = Gtk.Template.Child()
     places_box = Gtk.Template.Child()
+    places_inner_box = Gtk.Template.Child()
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
-    app_box = Gtk.Template.Child()
+    files_box = Gtk.Template.Child()
     about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
     stop_box = Gtk.Template.Child()
     stop_tools = Gtk.Template.Child()
-    deck = Gtk.Template.Child()
+    about_deck = Gtk.Template.Child()
+    content_deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
     menu_box = Gtk.Template.Child()
+    menu_popover = Gtk.Template.Child()
+    menu_button = Gtk.Template.Child()
+    home_menu_button = Gtk.Template.Child()
     content_scroll = Gtk.Template.Child()
     go_top_revealer = Gtk.Template.Child()
-    content_deck = Gtk.Template.Child()
     properties_box = Gtk.Template.Child()
     property_name = Gtk.Template.Child()
     property_location = Gtk.Template.Child()
@@ -166,8 +170,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.a_to_z_button.connect("toggled", self._on_sort_toggled)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
-        self.properties_back_button.connect("clicked", self._on_properties_back_clicked)
         self.about_back_button.connect("clicked", self._on_about_back_clicked)
+        self.properties_back_button.connect("clicked", self._on_properties_back_clicked)
+
+        # XXX no model for options yet so this...
+        self.menu_button.connect("clicked", self._on_menu_button_clicked)
+        self.home_menu_button.connect("clicked", self._on_menu_button_clicked)
 
         self._adjustment = self.content_scroll.get_vadjustment()
         self._adjustment.connect("value-changed", self._update_go_top_button)
@@ -179,7 +187,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
         places.connect("removed", self._on_places_removed)
-        self.places_box.add(places)
+        self.places_inner_box.add(places)
 
         self._properties = PortfolioPropertiesWorker()
         self._properties.bind_property(
@@ -510,7 +518,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.next.props.sensitive = False
             return
 
-        self.previous.props.sensitive = True if self._index > 0 else False
+        self.previous.props.sensitive = True
         self.next.props.sensitive = (
             True if len(self._history) - 1 > self._index else False
         )
@@ -698,8 +706,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _on_go_previous(self, button):
-        self._index -= 1
-        self._move(self._history[self._index], True)
+        if self._index == 0:
+            self.content_deck.set_visible_child(self.places_box)
+        else:
+            self._index -= 1
+            self._move(self._history[self._index], True)
 
     def _on_go_next(self, button):
         self._index += 1
@@ -992,7 +1003,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         self._force_go_home = False
-        self._reset_to_path(PortfolioPlaces.PORTFOLIO_HOME_DIR)
+        self.content_deck.set_visible_child(self.places_box)
 
     def _on_stop_clicked(self, button):
         self.loading_label.set_text(_("Stopping"))
@@ -1039,6 +1050,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_places_updated(self, button, path):
         self._reset_to_path(path)
+        self.content_deck.set_visible_child(self.files_box)
 
     def _on_places_removed(self, button, path):
         directory = self._history[self._index]
@@ -1050,13 +1062,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
 
     def _on_about_clicked(self, button):
-        self.deck.set_visible_child(self.about_box)
+        self.about_deck.set_visible_child(self.about_box)
 
     def _on_about_back_clicked(self, button):
-        self.deck.set_visible_child(self.content_deck)
+        self.about_deck.set_visible_child(self.content_deck)
 
     def _on_properties_back_clicked(self, button):
-        self.content_deck.set_visible_child(self.app_box)
+        self.content_deck.set_visible_child(self.files_box)
 
     def _on_long_pressed(self, gesture, x, y):
         if self.selection.get_mode() != Gtk.SelectionMode.MULTIPLE:
@@ -1073,6 +1085,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_sort_toggled(self, button):
         self._refresh()
 
+    def _on_menu_button_clicked(self, button):
+        button.props.popover = self.menu_popover
+        self.menu_popover.popup()
+
     def _on_properties_folded(self, deck, data=None):
         visible = self.content_deck.get_visible_child() == self.properties_box
         if not visible:
@@ -1083,7 +1099,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._worker.stop()
         self._properties.stop()
 
-    def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR):
+    def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR, force_page_switch=False):
         # XXX so cheap !
         path = path.replace("file://", "")
 
@@ -1108,6 +1124,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._reset_to_path(path)
 
-    def show_properties(self, path):
+        if force_page_switch is False:
+            return
+
+        self.about_deck.set_visible_child(self.content_deck)
+        self.content_deck.set_visible_child(self.files_box)
+
+    def show_properties(self, path, force_page_switch=False):
         self._properties.props.path = path
+
+        if force_page_switch is True:
+            self.open(path, force_page_switch)
+
         self.content_deck.set_visible_child(self.properties_box)
