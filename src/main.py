@@ -46,11 +46,11 @@ class Application(Gtk.Application):
 
     def show_properties(self, path):
         self.activate()
-        self.props.active_window.show_properties(path)
+        self.props.active_window.show_properties(path, force_page_switch=True)
 
     def open_path(self, path):
         self.activate()
-        self.props.active_window.open(path)
+        self.props.active_window.open(path, force_page_switch=True)
 
     def do_open(self, files, hint, data):
         self.open_path(files[0].get_path())
