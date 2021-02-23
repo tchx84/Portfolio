@@ -22,7 +22,7 @@ from locale import gettext as _
 from gi.repository import GLib, Gio, Gtk, GObject, Handy
 
 
-class PortfolioPlaces(Gtk.Box):
+class PortfolioPlaces(Gtk.Stack):
     __gtype_name__ = "PortfolioPlaces"
 
     __gsignals__ = {
@@ -53,14 +53,26 @@ class PortfolioPlaces(Gtk.Box):
         self._setup()
 
     def _setup(self):
-        self.props.orientation = Gtk.Orientation.VERTICAL
         self.props.visible = True
+        self.props.transition_type = Gtk.StackTransitionType.CROSSFADE
 
         self._permissions = None
 
         self._manager = Gio.VolumeMonitor.get()
         self._manager.connect("mount-added", self._on_mount_added)
         self._manager.connect("mount-removed", self._on_mount_removed)
+
+        # begin UI structure
+
+        self._groups_box = Gtk.Box()
+        self._groups_box.props.expand = True
+        self._groups_box.props.visible = True
+        self._groups_box.props.orientation = Gtk.Orientation.VERTICAL
+
+        self._message_box = Gtk.Box()
+        self._message_box.props.expand = True
+        self._message_box.props.visible = True
+        self._message_box.props.orientation = Gtk.Orientation.VERTICAL
 
         self._places_group = Handy.PreferencesGroup()
         self._places_group.props.title = _("Places")
@@ -71,7 +83,7 @@ class PortfolioPlaces(Gtk.Box):
         self._devices_group.props.visible = True
         self._devices_group.get_style_context().add_class("devices-group")
 
-        # quick access
+        # places
 
         if self._has_permission_for(self.HOME_PERMISSION):
             self._add_place(
@@ -138,11 +150,38 @@ class PortfolioPlaces(Gtk.Box):
                     mount.get_root().get_path(),
                 )
 
-        self.add(self._places_group)
-        self.add(self._devices_group)
+        self._groups_box.add(self._places_group)
+        self._groups_box.add(self._devices_group)
 
+        # no places message
+
+        message = Gtk.Label()
+        message.props.expand = True
+        message.props.visible = True
+        message.props.label = _("No places found")
+        message.get_style_context().add_class("no-places")
+
+        self._message_box.add(message)
+
+        # finalize UI structure
+
+        self.add_named(self._groups_box, "groups")
+        self.add_named(self._message_box, "message")
+
+        # update visibility
+
+        self._update_stack_visibility()
         self._update_places_group_visibility()
         self._update_device_group_visibility()
+
+    def _update_stack_visibility(self):
+        groups = len(self._places_group.get_children())
+        devices = len(self._devices_group.get_children())
+
+        if not groups and not devices:
+            self.set_visible_child_name("message")
+        else:
+            self.set_visible_child_name("groups")
 
     def _update_places_group_visibility(self):
         visible = len(self._places_group.get_children()) >= 1
@@ -213,8 +252,10 @@ class PortfolioPlaces(Gtk.Box):
             mount.get_name(),
             mount.get_root().get_path(),
         )
+        self._update_stack_visibility()
         self._update_device_group_visibility()
 
     def _on_mount_removed(self, monitor, mount):
         self._remove_place(self._devices_group, mount)
+        self._update_stack_visibility()
         self._update_device_group_visibility()
