@@ -466,4 +466,4 @@ def test_properties_worker_default():
     worker.props.path = os.path.join(TEST_HOME_DIR, "file")
 
     assert worker.props.name == "file"
-    assert worker.props.size == "8.0 "
+    assert worker.props.size == "8.0 B"

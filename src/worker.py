@@ -396,9 +396,9 @@ class PortfolioPropertiesWorker(GObject.GObject):
     def _human_size(self, num):
         for unit in ["", "k", "M", "G", "T", "P", "E", "Z"]:
             if abs(num) < 1024.0:
-                return "%3.1f %s" % (num, unit)
+                return "%3.1f %sB" % (num, unit)
             num /= 1024.0
-        return "%.1f%s" % (num, "Yi")
+        return "%.1f%sB" % (num, "Yi")
 
     def _get_human_time(self, timestamp):
         fmt = locale.nl_langinfo(locale.D_T_FMT)
