@@ -62,9 +62,9 @@ class PortfolioPlaces(Gtk.Box):
         self._manager.connect("mount-added", self._on_mount_added)
         self._manager.connect("mount-removed", self._on_mount_removed)
 
-        self._quick_access_group = Handy.PreferencesGroup()
-        self._quick_access_group.props.title = _("Places")
-        self._quick_access_group.props.visible = True
+        self._places_group = Handy.PreferencesGroup()
+        self._places_group.props.title = _("Places")
+        self._places_group.props.visible = True
 
         self._devices_group = Handy.PreferencesGroup()
         self._devices_group.props.title = _("Devices")
@@ -75,42 +75,42 @@ class PortfolioPlaces(Gtk.Box):
 
         if self._has_permission_for(self.HOME_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "user-home-symbolic",
                 _("Home"),
                 self.PORTFOLIO_HOME_DIR,
             )
         if self._has_permission_for(self.DOWNLOAD_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "folder-download-symbolic",
                 os.path.basename(self.XDG_DOWNLOAD),
                 self.XDG_DOWNLOAD,
             )
         if self._has_permission_for(self.DOCUMENTS_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "folder-documents-symbolic",
                 os.path.basename(self.XDG_DOCUMENTS),
                 self.XDG_DOCUMENTS,
             )
         if self._has_permission_for(self.PICTURES_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "folder-pictures-symbolic",
                 os.path.basename(self.XDG_PICTURES),
                 self.XDG_PICTURES,
             )
         if self._has_permission_for(self.MUSIC_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "folder-music-symbolic",
                 os.path.basename(self.XDG_MUSIC),
                 self.XDG_MUSIC,
             )
         if self._has_permission_for(self.VIDEOS_PERMISSION):
             self._add_place(
-                self._quick_access_group,
+                self._places_group,
                 "folder-videos-symbolic",
                 os.path.basename(self.XDG_VIDEOS),
                 self.XDG_VIDEOS,
@@ -138,10 +138,15 @@ class PortfolioPlaces(Gtk.Box):
                     mount.get_root().get_path(),
                 )
 
-        self.add(self._quick_access_group)
+        self.add(self._places_group)
         self.add(self._devices_group)
 
+        self._update_places_group_visibility()
         self._update_device_group_visibility()
+
+    def _update_places_group_visibility(self):
+        visible = len(self._places_group.get_children()) >= 1
+        self._places_group.props.visible = visible
 
     def _update_device_group_visibility(self):
         visible = len(self._devices_group.get_children()) >= 1
