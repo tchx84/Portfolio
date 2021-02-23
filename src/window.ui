@@ -1918,8 +1918,8 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
-                                    <property name="label">Tobias Bernard</property>
-                                    <property name="single-line-mode">True</property>
+                                    <property name="label">Tobias Bernard
+Nahuel Gomez Castro</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
