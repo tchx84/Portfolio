@@ -171,10 +171,10 @@ class PortfolioPlaces(Gtk.Box):
         required = set(required)
         negated = set([f"!{r}" for r in required])
 
-        if negated.intersection(permissions):
-            return False
         if required.intersection(permissions):
             return True
+        if negated.intersection(permissions):
+            return False
 
         return False
 
