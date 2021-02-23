@@ -182,3 +182,9 @@ treeview.view {
 .devices-group > box {
     margin-top: 15px
 }
+
+label.no-places {
+    margin: 10px;
+    font-size: 20px;
+    color: @insensitive_fg_color;
+}
