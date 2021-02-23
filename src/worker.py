@@ -19,7 +19,6 @@ import os
 import shutil
 import locale
 import datetime
-import mimetypes
 import threading
 
 from locale import gettext as _
@@ -27,8 +26,6 @@ from gi.repository import Gio, GObject, GLib
 
 from . import utils
 from . import logger
-
-mimetypes.init()
 
 
 class WorkerStoppedException(Exception):
@@ -407,17 +404,6 @@ class PortfolioPropertiesWorker(GObject.GObject):
         fmt = locale.nl_langinfo(locale.D_T_FMT)
         return datetime.datetime.fromtimestamp(timestamp).strftime(fmt)
 
-    def _get_type(self):
-        if os.path.isdir(self._path):
-            return "inode/directory"
-
-        _type = mimetypes.guess_type(self._path)[0]
-
-        if _type is None:
-            return _("Unknown")
-
-        return _type
-
     @GObject.Property(type=str)
     def name(self):
         return self._name
@@ -456,9 +442,16 @@ class PortfolioPropertiesWorker(GObject.GObject):
 
         self._inner_worker.stop()
 
+        file = Gio.File.new_for_path(path)
+        info = file.query_info(
+            Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+            Gio.FileQueryInfoFlags.NONE,
+            None,
+        )
+
         self._name = os.path.basename(self._path)
         self._location = os.path.dirname(self._path)
-        self._type = self._get_type()
+        self._type = info.get_content_type()
         self._size = _("Calculating...")
         self._created = self._get_human_time(os.path.getctime(self._path))
         self._modified = self._get_human_time(os.path.getmtime(self._path))
