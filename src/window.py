@@ -238,8 +238,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.content_deck.connect("notify::visible-child", self._on_properties_folded)
         self.connect("destroy", self._on_shutdown)
 
-        self.open()
-
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
         text = self.search_entry.get_text()
