@@ -113,6 +113,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     NAME_COLUMN = 1
     PATH_COLUMN = 2
     SEARCH_DELAY = 500
+    LOAD_ANIMATION_DELAY = 250
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -137,6 +138,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._history = []
         self._index = -1
         self._search_delay_handler_id = 0
+        self._load_delay_handler_id = 0
 
         self.gesture = Gtk.GestureLongPress.new(self.treeview)
         self.gesture.connect("pressed", self._on_long_pressed)
@@ -468,6 +470,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _clean_progress(self):
         self.loading_description.set_text("")
 
+    def _clean_loading_delay(self):
+        if self._load_delay_handler_id != 0:
+            GLib.Source.remove(self._load_delay_handler_id)
+            self._load_delay_handler_id = 0
+
     def _update_mode(self):
         count = self.selection.count_selected_rows()
         if count == 0:
@@ -628,12 +635,20 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._reset_search()
 
         self.liststore.clear()
+        self._load_delay_handler_id = GLib.timeout_add(
+            self.LOAD_ANIMATION_DELAY,
+            self._on_load_started_delayed,
+        )
 
+    def _on_load_started_delayed(self):
         self.loading_label.set_text(_("Loading"))
         self.loading_bar.set_fraction(0.0)
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
+
+        self._load_delay_handler_id = 0
+        return GLib.SOURCE_REMOVE
 
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path in found:
@@ -648,6 +663,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_finished(self, worker, directory):
         self._busy = False
         self._clean_workers()
+        self._clean_loading_delay()
 
         self._update_all()
 
@@ -662,9 +678,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_failed(self, worker, directory):
         self._busy = False
         self._clean_workers()
+        self._clean_loading_delay()
 
         name = os.path.basename(directory)
+        self.loading_label.set_text(_("Loading"))
         self.loading_description.set_text(_("Could not load %s") % name)
+        self.content_stack.set_visible_child(self.loading_box)
 
         self._to_select_row = None
         self._to_select = None
@@ -1121,6 +1140,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if isinstance(self._worker, PortfolioLoadWorker):
             self._worker.stop()
             self._clean_workers()
+            self._clean_loading_delay()
 
         self._reset_to_path(path)
 
