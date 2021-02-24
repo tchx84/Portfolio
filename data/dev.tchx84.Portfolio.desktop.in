@@ -5,7 +5,7 @@ Exec=dev.tchx84.Portfolio
 Terminal=false
 Type=Application
 GenericName=File Manager
-Categories=FileManager;
+Categories=GTK;Utility;FileManager;
 # TRANSLATORS: Don't translate this text
 Icon=dev.tchx84.Portfolio
 StartupNotify=true
