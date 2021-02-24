@@ -5,6 +5,7 @@ Exec=dev.tchx84.Portfolio %f
 Terminal=false
 Type=Application
 GenericName=File Manager
+Comment=Manage files on the go
 Categories=GTK;Utility;FileManager;
 # TRANSLATORS: Don't translate this text
 Icon=dev.tchx84.Portfolio
