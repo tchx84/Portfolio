@@ -432,7 +432,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _refresh(self):
-        self._move(self._history[self._index], True)
+        if self._index > -1:
+            self._move(self._history[self._index], True)
 
     def _switch_to_navigation_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.NONE)
