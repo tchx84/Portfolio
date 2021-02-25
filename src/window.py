@@ -1088,13 +1088,22 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.content_deck.set_visible_child(self.files_box)
 
     def _on_long_pressed(self, gesture, x, y):
-        if self.selection.get_mode() != Gtk.SelectionMode.MULTIPLE:
-            self._switch_to_selection_mode()
-            treepath = self.treeview.get_path_at_pos(x, y)[0]
-            self.selection.select_path(treepath)
-            # because of the custom selection rules, is not guaranteed
-            # that this will actually be selected so always update mode.
-            self._update_mode()
+        if self.selection.get_mode() == Gtk.SelectionMode.MULTIPLE:
+            return
+
+        self._switch_to_selection_mode()
+        path = self.treeview.get_path_at_pos(x, y)
+
+        if path is None:
+            self._switch_to_navigation_mode()
+            return
+
+        treepath = path[0]
+        self.selection.select_path(treepath)
+
+        # because of the custom selection rules, is not guaranteed
+        # that this will actually be selected so always update mode.
+        self._update_mode()
 
     def _on_hidden_toggled(self, button):
         self._refresh()
