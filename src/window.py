@@ -342,6 +342,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.liststore.remove(self.liststore.get_iter(treepath))
 
     def _populate(self, directory):
+        self._switch_to_navigation_mode()
+
         if self._worker is not None:
             self._worker.stop()
 
