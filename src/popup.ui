@@ -5,19 +5,21 @@
   <template class="PortfolioPopup" parent="GtkRevealer">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="halign">center</property>
     <property name="valign">start</property>
     <child>
       <object class="GtkBox">
-        <property name="width-request">358</property>
+        <property name="width-request">360</property>
+        <property name="height-request">50</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="valign">center</property>
         <child>
           <object class="GtkLabel" id="description">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="ellipsize">start</property>
+            <property name="valign">center</property>
+            <property name="ellipsize">middle</property>
             <property name="single-line-mode">True</property>
             <property name="lines">1</property>
             <style>
@@ -35,6 +37,8 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
@@ -57,7 +61,8 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <property name="relief">none</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
@@ -66,7 +71,7 @@
               </object>
             </child>
             <style>
-              <class name="image-button"/>
+              <class name="confirm-button"/>
             </style>
           </object>
           <packing>
