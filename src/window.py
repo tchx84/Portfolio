@@ -828,7 +828,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             name = _("these %d files") % count
 
-        description = _("Delete %s?") % name
+        description = _("Delete %s permanently?") % name
 
         self._notify(
             description,
