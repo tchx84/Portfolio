@@ -632,10 +632,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_started(self, worker, directory):
         self._busy = True
 
+        self.liststore.clear()
+
         self._update_directory_title()
         self._reset_search()
+        self._update_all()
 
-        self.liststore.clear()
         self._load_delay_handler_id = GLib.timeout_add(
             self.LOAD_ANIMATION_DELAY,
             self._on_load_started_delayed,
