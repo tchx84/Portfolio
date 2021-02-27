@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-27 07:50-0300\n"
-"PO-Revision-Date: 2021-02-16 22:42+0100\n"
+"PO-Revision-Date: 2021-02-27 20:01+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -27,7 +27,7 @@ msgstr "Portfolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
-msgstr ""
+msgstr "Bestandsbeheerder"
 
 #: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
@@ -166,7 +166,7 @@ msgstr "Locaties"
 
 #: src/places.py:82
 msgid "Devices"
-msgstr ""
+msgstr "Apparaten"
 
 #: src/places.py:92
 msgid "Home"
@@ -177,9 +177,8 @@ msgid "System"
 msgstr "Systeem"
 
 #: src/places.py:161
-#, fuzzy
 msgid "No places found"
-msgstr "Geen bestanden aangetroffen"
+msgstr "Geen locaties aangetroffen"
 
 #: src/window.py:608
 msgid "Opening"
@@ -210,9 +209,9 @@ msgid "these %d files"
 msgstr "deze %d bestanden"
 
 #: src/window.py:835
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s permanently?"
-msgstr "Wil je '%s' verwijderen?"
+msgstr "Wil je '%s' permanent verwijderen?"
 
 #: src/window.py:854
 #, python-format
