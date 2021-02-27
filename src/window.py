@@ -408,6 +408,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if len(self.sorted) >= 1:
             self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
+    def _go_back_to_homepage(self):
+        self.content_deck.set_visible_child(self.places_box)
+
     def _move(self, path, navigating=False):
         self._clean_popups()
 
@@ -729,7 +732,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_go_previous(self, button):
         if self._index == 0:
-            self.content_deck.set_visible_child(self.places_box)
+            self._go_back_to_homepage()
         else:
             self._index -= 1
             self._move(self._history[self._index], True)
@@ -1025,7 +1028,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         self._force_go_home = False
-        self.content_deck.set_visible_child(self.places_box)
+        self._go_back_to_homepage()
 
     def _on_stop_clicked(self, button):
         self.loading_label.set_text(_("Stopping"))
@@ -1075,10 +1078,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.content_deck.set_visible_child(self.files_box)
 
     def _on_places_removed(self, button, path):
+        if self._index == -1:
+            return
         directory = self._history[self._index]
         if not directory.startswith(path):
             return
-        self._reset_to_path(PortfolioPlaces.PORTFOLIO_HOME_DIR)
+        self._go_back_to_homepage()
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
