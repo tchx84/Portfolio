@@ -3,6 +3,7 @@
   <gresource prefix="/dev/tchx84/Portfolio">
     <file>window.ui</file>
     <file>popup.ui</file>
+    <file>place.ui</file>
     <file>main.css</file>
     <file>org.freedesktop.FileManager1.xml</file>
   </gresource>

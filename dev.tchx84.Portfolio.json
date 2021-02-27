@@ -12,6 +12,8 @@
         "--filesystem=home",
         "--filesystem=/media",
         "--filesystem=/run/media",
+        "--talk-name=org.gtk.vfs",
+        "--talk-name=org.gtk.vfs.*",
         "--own-name=org.freedesktop.FileManager1"
     ],
     "cleanup" : [

@@ -21,6 +21,9 @@ from locale import gettext as _
 
 from gi.repository import GLib, Gio, Gtk, GObject, Handy
 
+from . import logger
+from .place import PortfolioPlace
+
 
 class PortfolioPlaces(Gtk.Stack):
     __gtype_name__ = "PortfolioPlaces"
@@ -148,6 +151,7 @@ class PortfolioPlaces(Gtk.Stack):
                     "drive-removable-media-symbolic",
                     mount.get_name(),
                     mount.get_root().get_path(),
+                    mount,
                 )
 
         self._groups_box.add(self._places_group)
@@ -222,17 +226,16 @@ class PortfolioPlaces(Gtk.Stack):
 
         return False
 
-    def _add_place(self, group, icon, name, path):
-        place = Handy.ActionRow()
+    def _add_place(self, group, icon, name, path, mount=None):
+        place = PortfolioPlace()
         place.set_icon_name(icon)
         place.set_title(name)
         place.set_subtitle(path)
-        place.props.visible = True
-        place.props.activatable = True
+        place.path = path
+        place.mount = mount
+        place.eject.props.visible = mount is not None
+        place.eject.connect("clicked", self._on_eject, place)
         place.connect("activated", self._on_place_activated)
-
-        # easier reference
-        setattr(place, "path", path)
 
         group.add(place)
 
@@ -251,6 +254,7 @@ class PortfolioPlaces(Gtk.Stack):
             "drive-removable-media-symbolic",
             mount.get_name(),
             mount.get_root().get_path(),
+            mount,
         )
         self._update_stack_visibility()
         self._update_device_group_visibility()
@@ -259,3 +263,22 @@ class PortfolioPlaces(Gtk.Stack):
         self._remove_place(self._devices_group, mount)
         self._update_stack_visibility()
         self._update_device_group_visibility()
+
+    def _on_eject(self, button, place):
+        mount = place.mount
+
+        if mount.can_eject():
+            method = mount.eject
+            finish = mount.eject_finish
+        elif mount.can_unmount():
+            method = mount.unmount
+            finish = mount.unmount_finish
+
+        method(Gio.MountUnmountFlags.NONE, None, self._on_eject_finished, finish)
+        place.props.sensitive = False
+
+    def _on_eject_finished(self, mount, task, finish):
+        try:
+            finish(task)
+        except Exception as e:
+            logger.debug(e)
