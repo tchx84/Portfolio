@@ -2,7 +2,14 @@
 
 ## [unreleased]
 
+- Fixed all blockers to enable portrait mode.
+- Fixed a few cases where the selection mode would incorrectly activate.
+- Fixed stopping operations to immediately cancel the current operation.
+- Fixed categories and keywords to make Portfolio easier to find, by @philipzae.
 - Added Brazilian Portuguese translation by @rffontenelle.
+- Added home page with places and devices, designed by @nahuelwexd.
+- Added file properties viewer.
+- Changed folder loading behavior to only display the progress bar if loading too slow.
 
 ## [0.9.9] 2021-02-10
 
