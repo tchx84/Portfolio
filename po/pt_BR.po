@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-16 16:52-0300\n"
+"POT-Creation-Date: 2021-02-27 07:50-0300\n"
 "PO-Revision-Date: 2021-02-16 18:45-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -21,20 +21,25 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:348
-#: src/window.ui:1644
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:291
+#: src/window.ui:373 src/window.ui:1669
 msgid "Portfolio"
 msgstr "Portfólio"
 
-#: data/dev.tchx84.Portfolio.desktop.in:13
-msgid "folder;manager;explore;disk;filesystem;"
-msgstr "pasta;gerenciador;explorar;disco;sistema de arquivos;"
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr ""
 
+#: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
 msgid "Manage files on the go"
 msgstr "Gerencie arquivos em qualquer lugar"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1698
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "pasta;gerenciador;explorar;disco;sistema de arquivos;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1723
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -47,82 +52,78 @@ msgid "Martin Abente Lahaye"
 msgstr "Martin Abente Lahaye"
 
 #: src/window.ui:49
-msgid "Places"
-msgstr "Locais"
-
-#: src/window.ui:106
 msgid "Filter"
 msgstr "Filtro"
 
-#: src/window.ui:129
+#: src/window.ui:72
 msgid "Show Hidden Files"
 msgstr "Mostrar arquivos ocultos"
 
-#: src/window.ui:178
+#: src/window.ui:121
 msgid "Sort"
 msgstr "Ordenar"
 
-#: src/window.ui:201
+#: src/window.ui:144
 msgid "A-Z"
 msgstr "A-Z"
 
-#: src/window.ui:227
+#: src/window.ui:170
 msgid "Last Modified"
 msgstr "última modificação"
 
-#: src/window.ui:283
+#: src/window.ui:226
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/window.ui:299
+#: src/window.ui:242
 msgid "About Portfolio"
 msgstr "Sobre o Portfólio"
 
-#: src/window.ui:688
+#: src/window.ui:713
 msgid "No files found"
 msgstr "Nenhum arquivo encontrado"
 
-#: src/window.ui:1145
+#: src/window.ui:1170
 msgid "Properties"
 msgstr "Propriedades"
 
-#: src/window.ui:1206
+#: src/window.ui:1231
 msgid "Name"
 msgstr "Nome"
 
-#: src/window.ui:1253
+#: src/window.ui:1278
 msgid "Location"
 msgstr "Local"
 
-#: src/window.ui:1300
+#: src/window.ui:1325
 msgid "Type"
 msgstr "Tipo"
 
-#: src/window.ui:1347
+#: src/window.ui:1372
 msgid "Size"
 msgstr "Tamanho"
 
-#: src/window.ui:1394
+#: src/window.ui:1419
 msgid "Created"
 msgstr "Criado"
 
-#: src/window.ui:1441
+#: src/window.ui:1466
 msgid "Modified"
 msgstr "Modificado"
 
-#: src/window.ui:1488
+#: src/window.ui:1513
 msgid "Accessed"
 msgstr "Acessado"
 
-#: src/window.ui:1566
+#: src/window.ui:1591
 msgid "About"
 msgstr "Sobre"
 
-#: src/window.ui:1726
+#: src/window.ui:1751
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Site</a>"
 
-#: src/window.ui:1781
+#: src/window.ui:1806
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -132,7 +133,7 @@ msgstr ""
 "gnu.org/licenses/gpl-3.0.html\">Licença Pública Geral GNU, versão 3 ou "
 "posterior</a> para obter detalhes."
 
-#: src/window.ui:1810
+#: src/window.ui:1835
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -144,121 +145,130 @@ msgstr ""
 "wikimedia.org/wiki/File:Portfolio.svg\">aqui</a>, licenciada sob <a href="
 "\"https://creativecommons.org/licenses/by/3.0/deed.pt_BR\"> CC BY 3.0</a>."
 
-#: src/window.ui:1848
+#: src/window.ui:1873
 msgid "Created by"
 msgstr "Criado por"
 
-#: src/window.ui:1879
+#: src/window.ui:1904
 msgid "Artwork by"
 msgstr "Art por"
 
-#: src/window.ui:1910
+#: src/window.ui:1935
 msgid "Translated by"
 msgstr "Traduzido por"
 
-#: src/window.ui:1945
+#: src/window.ui:1970
 msgid "Contributions by"
 msgstr "Contribuições por"
 
-#: src/places.py:50
-msgid "System"
-msgstr "Sistema"
+#: src/places.py:78
+msgid "Places"
+msgstr "Locais"
 
-#: src/places.py:52
+#: src/places.py:82
+msgid "Devices"
+msgstr ""
+
+#: src/places.py:92
 msgid "Home"
 msgstr "Home"
 
-#: src/window.py:592
+#: src/places.py:137
+msgid "System"
+msgstr "Sistema"
+
+#: src/places.py:161
+#, fuzzy
+msgid "No places found"
+msgstr "Nenhum arquivo encontrado"
+
+#: src/window.py:608
 msgid "Opening"
 msgstr "Abrindo"
 
-#: src/window.py:611 src/window.py:1092 src/window.py:1102
+#: src/window.py:627 src/window.py:1139 src/window.py:1149
 #, python-format
 msgid "Could not open %s"
 msgstr "Não foi possível abrir %s"
 
-#: src/window.py:624
+#: src/window.py:647 src/window.py:687
 msgid "Loading"
 msgstr "Carregando"
 
-#: src/window.py:659
+#: src/window.py:688
 #, python-format
 msgid "Could not load %s"
 msgstr "Não foi possível carregar %s"
 
-#: src/window.py:756 src/window.py:770
+#: src/window.py:789 src/window.py:803
 #, python-format
 msgid "%s already exists"
 msgstr "%s já existe"
 
-#: src/window.py:800
+#: src/window.py:833
 #, python-format
 msgid "these %d files"
 msgstr "esses %d arquivos"
 
-#: src/window.py:802
-#, python-format
-msgid "Delete %s?"
+#: src/window.py:835
+#, fuzzy, python-format
+msgid "Delete %s permanently?"
 msgstr "Excluir %s?"
 
-#: src/window.py:821
+#: src/window.py:854
 #, python-format
 msgid "%s will be moved"
 msgstr "%s será movido"
 
-#: src/window.py:823
+#: src/window.py:856
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d arquivos serão movidos"
 
-#: src/window.py:839
+#: src/window.py:872
 #, python-format
 msgid "%s will be copied"
 msgstr "%s será copiado"
 
-#: src/window.py:841
+#: src/window.py:874
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d arquivos serão copiados"
 
-#: src/window.py:866
+#: src/window.py:899
 msgid "Files will be overwritten, proceed?"
 msgstr "Arquivos serão substituídos. Continuar?"
 
-#: src/window.py:881
+#: src/window.py:914
 msgid "Pasting"
 msgstr "Colando"
 
-#: src/window.py:915
+#: src/window.py:948
 #, python-format
 msgid "Could not paste %s"
 msgstr "Não foi possível colar %s"
 
-#: src/window.py:948
+#: src/window.py:981
 msgid "Deleting"
 msgstr "Excluindo"
 
-#: src/window.py:974
+#: src/window.py:1007
 #, python-format
 msgid "Could not delete %s"
 msgstr "Não foi possível excluir %s"
 
-#: src/window.py:998
+#: src/window.py:1031
 msgid "Stopping"
 msgstr "Parando"
 
-#: src/window.py:1010
+#: src/window.py:1043
 msgid "New Folder"
 msgstr "Nova pasta"
 
-#: src/window.py:1018
+#: src/window.py:1051
 msgid "No permissions on this directory"
 msgstr "Nenhuma permissão neste diretório"
 
-#: src/worker.py:402
-msgid "Unknown"
-msgstr "Desconhecido"
-
-#: src/worker.py:447
+#: src/worker.py:455
 msgid "Calculating..."
 msgstr "Calculando..."
