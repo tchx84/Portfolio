@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-27 07:50-0300\n"
-"PO-Revision-Date: 2021-02-17 08:53+0700\n"
+"PO-Revision-Date: 2021-02-27 20:52+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
@@ -27,7 +27,7 @@ msgstr "Portfolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
-msgstr ""
+msgstr "Manajer Berkas"
 
 #: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
@@ -166,7 +166,7 @@ msgstr "Lokasi"
 
 #: src/places.py:82
 msgid "Devices"
-msgstr ""
+msgstr "Perangkat"
 
 #: src/places.py:92
 msgid "Home"
@@ -177,9 +177,8 @@ msgid "System"
 msgstr "Sistem"
 
 #: src/places.py:161
-#, fuzzy
 msgid "No places found"
-msgstr "Tak ada berkas yang ditemukan"
+msgstr "Tak ada tempat yang ditemukan"
 
 #: src/window.py:608
 msgid "Opening"
@@ -210,9 +209,9 @@ msgid "these %d files"
 msgstr "%d berkas ini"
 
 #: src/window.py:835
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s permanently?"
-msgstr "Hapus %s?"
+msgstr "Hapus %s permanen?"
 
 #: src/window.py:854
 #, python-format
