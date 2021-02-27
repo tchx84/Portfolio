@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-27 07:50-0300\n"
-"PO-Revision-Date: 2021-02-16 23:26+0100\n"
+"PO-Revision-Date: 2021-02-27 13:26+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
-msgstr ""
+msgstr "Správce souborů"
 
 #: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
@@ -167,7 +167,7 @@ msgstr "Místa"
 
 #: src/places.py:82
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: src/places.py:92
 msgid "Home"
@@ -178,9 +178,8 @@ msgid "System"
 msgstr "Systém"
 
 #: src/places.py:161
-#, fuzzy
 msgid "No places found"
-msgstr "Nenalezeny žádné soubory"
+msgstr "Nenalezena žádná umístění"
 
 #: src/window.py:608
 msgid "Opening"
@@ -211,9 +210,9 @@ msgid "these %d files"
 msgstr "těchto %d souborů"
 
 #: src/window.py:835
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s permanently?"
-msgstr "Smazat %s?"
+msgstr "Trvale smazat %s?"
 
 #: src/window.py:854
 #, python-format
