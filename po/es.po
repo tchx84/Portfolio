@@ -26,7 +26,7 @@ msgstr ""
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
-msgstr ""
+msgstr "Gestor de Archivos"
 
 #: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
@@ -61,7 +61,7 @@ msgstr "Ordenar"
 
 #: src/window.ui:144
 msgid "A-Z"
-msgstr ""
+msgstr "A-Z"
 
 #: src/window.ui:170
 msgid "Last Modified"
@@ -163,7 +163,7 @@ msgstr "Lugares"
 
 #: src/places.py:82
 msgid "Devices"
-msgstr ""
+msgstr "Dispositivos"
 
 #: src/places.py:92
 msgid "Home"
@@ -174,9 +174,8 @@ msgid "System"
 msgstr "Sistema"
 
 #: src/places.py:161
-#, fuzzy
 msgid "No places found"
-msgstr "No se encontraron archivos"
+msgstr "No se encontraron lugares"
 
 #: src/window.py:608
 msgid "Opening"
@@ -204,12 +203,12 @@ msgstr "%s ya existe"
 #: src/window.py:833
 #, python-format
 msgid "these %d files"
-msgstr "estos %d archivos"
+msgstr "estos %d"
 
 #: src/window.py:835
 #, python-format
 msgid "Delete %s permanently?"
-msgstr "¿Eliminar %s?"
+msgstr "¿Eliminar %s permanentemente?"
 
 #: src/window.py:854
 #, python-format
