@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-27 07:50-0300\n"
-"PO-Revision-Date: 2021-02-16 18:45-0300\n"
+"PO-Revision-Date: 2021-02-27 08:38-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -28,7 +28,7 @@ msgstr "Portfólio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
-msgstr ""
+msgstr "Gerenciador de arquivos"
 
 #: data/dev.tchx84.Portfolio.desktop.in:9
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:12
@@ -167,7 +167,7 @@ msgstr "Locais"
 
 #: src/places.py:82
 msgid "Devices"
-msgstr ""
+msgstr "Dispositivos"
 
 #: src/places.py:92
 msgid "Home"
@@ -178,9 +178,8 @@ msgid "System"
 msgstr "Sistema"
 
 #: src/places.py:161
-#, fuzzy
 msgid "No places found"
-msgstr "Nenhum arquivo encontrado"
+msgstr "Nenhum local encontrado"
 
 #: src/window.py:608
 msgid "Opening"
@@ -211,9 +210,9 @@ msgid "these %d files"
 msgstr "esses %d arquivos"
 
 #: src/window.py:835
-#, fuzzy, python-format
+#, python-format
 msgid "Delete %s permanently?"
-msgstr "Excluir %s?"
+msgstr "Excluir %s permanentemente?"
 
 #: src/window.py:854
 #, python-format
