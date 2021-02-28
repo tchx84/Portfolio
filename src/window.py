@@ -235,7 +235,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             GObject.BindingFlags.SYNC_CREATE,
         )
 
-        self.content_deck.connect("notify::visible-child", self._on_properties_folded)
+        self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
 
     def _filter(self, model, row, data=None):
@@ -1125,9 +1125,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         button.props.popover = self.menu_popover
         self.menu_popover.popup()
 
-    def _on_properties_folded(self, deck, data=None):
-        visible = self.content_deck.get_visible_child() == self.properties_box
-        if not visible:
+    def _on_content_folded(self, deck, data=None):
+        child = self.content_deck.get_visible_child()
+        if child == self.places_box and self._worker is not None:
+            self._worker.stop()
+        elif child == self.files_box:
             self._properties.stop()
 
     def _on_shutdown(self, window):
