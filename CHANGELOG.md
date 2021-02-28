@@ -9,6 +9,7 @@
 - Added Brazilian Portuguese translation by @rffontenelle.
 - Added home page with places and devices, designed by @nahuelwexd.
 - Added file properties viewer.
+- Added eject button for external storage devices.
 - Changed folder loading behavior to only display the progress bar if loading too slow.
 
 ## [0.9.9] 2021-02-10
