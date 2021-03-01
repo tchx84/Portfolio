@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.10] 2021-03-01
 
 - Fixed all blockers to enable portrait mode.
 - Fixed a few cases where the selection mode would incorrectly activate.
