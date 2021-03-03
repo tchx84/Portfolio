@@ -37,6 +37,7 @@ portfolio_sources = [
   'utils.py',
   'service.py',
   'place.py',
+  'translation.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)

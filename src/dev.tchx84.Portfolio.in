@@ -29,13 +29,13 @@ localedir = '@localedir@'
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-locale.bindtextdomain('portfolio', localedir)
-locale.textdomain('portfolio')
-
 if __name__ == '__main__':
     from gi.repository import Gio
     resource = Gio.Resource.load(os.path.join(pkgdatadir, 'portfolio.gresource'))
     resource._register()
+
+    from portfolio.translation import translation_init
+    translation_init(localedir)
 
     from portfolio import main
     sys.exit(main.main(VERSION))
