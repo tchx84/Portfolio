@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# liquidsky42 <liquidsky42@gmail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-27 07:50-0300\n"
+"PO-Revision-Date: 2021-03-02 15:37+0100\n"
+"Last-Translator: liquidsky42 <liquidsky42@gmail.com>\n"
+"Language-Team: German <->\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 3.38.0\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:291
+#: src/window.ui:373 src/window.ui:1669
+msgid "Portfolio"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr "Dateiverwaltung"
+
+#: data/dev.tchx84.Portfolio.desktop.in:9
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Verwalte Dateien von unterwegs"
+
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "Ordner,Verwaltung,Erkunden,Speicher,Dateisystem"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1723
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr "Ein minimale Dateiverwaltung für die Nutzung auf mobilen Geräten."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:30
+msgid "Martin Abente Lahaye"
+msgstr ""
+
+#: src/window.ui:49
+msgid "Filter"
+msgstr "Filter"
+
+#: src/window.ui:72
+msgid "Show Hidden Files"
+msgstr "Verborgene Dateien anzeigen"
+
+#: src/window.ui:121
+msgid "Sort"
+msgstr "Sortieren"
+
+#: src/window.ui:144
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/window.ui:170
+msgid "Last Modified"
+msgstr "Zuletzt Geändert"
+
+#: src/window.ui:226
+msgid "Help"
+msgstr "Hilfe"
+
+#: src/window.ui:242
+msgid "About Portfolio"
+msgstr "Über Portfolio"
+
+#: src/window.ui:713
+msgid "No files found"
+msgstr "Keine Dateien gefunden"
+
+#: src/window.ui:1170
+msgid "Properties"
+msgstr "Eigenschaften"
+
+#: src/window.ui:1231
+msgid "Name"
+msgstr "Name"
+
+#: src/window.ui:1278
+msgid "Location"
+msgstr "Ort"
+
+#: src/window.ui:1325
+msgid "Type"
+msgstr "Typ"
+
+#: src/window.ui:1372
+msgid "Size"
+msgstr "Größe"
+
+#: src/window.ui:1419
+msgid "Created"
+msgstr "Erstellt"
+
+#: src/window.ui:1466
+msgid "Modified"
+msgstr "Geändert"
+
+#: src/window.ui:1513
+msgid "Accessed"
+msgstr "Zugegriffen"
+
+#: src/window.ui:1591
+msgid "About"
+msgstr "Über"
+
+#: src/window.ui:1751
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Webseite</a>"
+
+#: src/window.ui:1806
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Dieses Programm kommt OHNE JEDWEDE GARANTIE.\n"
+"Besuchen Sie <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU "
+"General Public License, version 3 or later</a> für weitere Informationen."
+
+#: src/window.ui:1835
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Das Portfoliologo ist eine modifizierte Variante von Jorgen Carlbergs "
+"Arbeit. Die Orginalversion kann <a href=\"https://commons.wikimedia.org/wiki/"
+"File:Portfolio.svg\"> hier </a> gefunden werden. Lizenziert unter <a href="
+"\"https://creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+
+#: src/window.ui:1873
+msgid "Created by"
+msgstr "Erstellt von"
+
+#: src/window.ui:1904
+msgid "Artwork by"
+msgstr "Künstlerische Darstellung von"
+
+#: src/window.ui:1935
+msgid "Translated by"
+msgstr "Übersetzung von"
+
+#: src/window.ui:1970
+msgid "Contributions by"
+msgstr "Erstellt von"
+
+#: src/places.py:78
+msgid "Places"
+msgstr "Orte"
+
+#: src/places.py:82
+msgid "Devices"
+msgstr "Geräte"
+
+#: src/places.py:92
+msgid "Home"
+msgstr "Persönlicher Ordner"
+
+#: src/places.py:137
+msgid "System"
+msgstr "Rechner"
+
+#: src/places.py:161
+msgid "No places found"
+msgstr "Kein Ort gefunden"
+
+#: src/window.py:608
+msgid "Opening"
+msgstr "Öffne"
+
+#: src/window.py:627 src/window.py:1139 src/window.py:1149
+#, python-format
+msgid "Could not open %s"
+msgstr "Kann %s nicht öffnen"
+
+#: src/window.py:647 src/window.py:687
+msgid "Loading"
+msgstr "Lade"
+
+#: src/window.py:688
+#, python-format
+msgid "Could not load %s"
+msgstr "Kann %s nicht laden"
+
+#: src/window.py:789 src/window.py:803
+#, python-format
+msgid "%s already exists"
+msgstr "%s ist bereits vorhanden."
+
+#: src/window.py:833
+#, python-format
+msgid "these %d files"
+msgstr "diese %d Dateien"
+
+#: src/window.py:835
+#, python-format
+msgid "Delete %s permanently?"
+msgstr "%s unwideruflich löschen?"
+
+#: src/window.py:854
+#, python-format
+msgid "%s will be moved"
+msgstr "%s wird verschoben"
+
+#: src/window.py:856
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d Dateien werden verschoben"
+
+#: src/window.py:872
+#, python-format
+msgid "%s will be copied"
+msgstr "%s wird kopiert"
+
+#: src/window.py:874
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d Dateien werden kopiert"
+
+#: src/window.py:899
+msgid "Files will be overwritten, proceed?"
+msgstr "Dateien werden überschrieben, Fortfahren?"
+
+#: src/window.py:914
+msgid "Pasting"
+msgstr "Einfügen"
+
+#: src/window.py:948
+#, python-format
+msgid "Could not paste %s"
+msgstr "%s kann nicht eingefügt werden"
+
+#: src/window.py:981
+msgid "Deleting"
+msgstr "Löschen"
+
+#: src/window.py:1007
+#, python-format
+msgid "Could not delete %s"
+msgstr "Kann %s nicht löschen"
+
+#: src/window.py:1031
+msgid "Stopping"
+msgstr "Halte an"
+
+#: src/window.py:1043
+msgid "New Folder"
+msgstr "Neuer Ordner"
+
+#: src/window.py:1051
+msgid "No permissions on this directory"
+msgstr "Keine Rechte für diesen Ordner"
+
+#: src/worker.py:455
+msgid "Calculating..."
+msgstr "Berrechne..."
