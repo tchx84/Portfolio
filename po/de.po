@@ -173,7 +173,7 @@ msgstr "Persönlicher Ordner"
 
 #: src/places.py:137
 msgid "System"
-msgstr ""
+msgstr "Rechner"
 
 #: src/places.py:161
 msgid "No places found"
