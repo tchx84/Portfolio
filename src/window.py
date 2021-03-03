@@ -18,7 +18,8 @@
 import os
 
 from pathlib import Path
-from locale import gettext as _
+
+from .translation import gettext as _
 
 from gi.repository import Gtk, GLib, Gio, Handy, GObject
 

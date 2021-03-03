@@ -21,11 +21,11 @@ import locale
 import datetime
 import threading
 
-from locale import gettext as _
 from gi.repository import Gio, GObject, GLib
 
 from . import utils
 from . import logger
+from .translation import gettext as _
 
 
 class WorkerStoppedException(Exception):

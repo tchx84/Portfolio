@@ -17,12 +17,11 @@
 
 import os
 
-from locale import gettext as _
-
 from gi.repository import GLib, Gio, Gtk, GObject, Handy
 
 from . import logger
 from .place import PortfolioPlace
+from .translation import gettext as _
 
 
 class PortfolioPlaces(Gtk.Stack):
