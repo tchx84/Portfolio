@@ -34,8 +34,8 @@ if __name__ == '__main__':
     resource = Gio.Resource.load(os.path.join(pkgdatadir, 'portfolio.gresource'))
     resource._register()
 
-    from portfolio.translation import translation_init
-    translation_init(localedir)
+    from portfolio import translation
+    translation.init(localedir)
 
     from portfolio import main
     sys.exit(main.main(VERSION))
