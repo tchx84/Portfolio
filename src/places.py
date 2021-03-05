@@ -95,35 +95,35 @@ class PortfolioPlaces(Gtk.Stack):
                 _("Home"),
                 self.PORTFOLIO_HOME_DIR,
             )
-        if self._has_permission_for(self.DOWNLOAD_PERMISSION):
+        if self._has_permission_for(self.DOWNLOAD_PERMISSION) and self.XDG_DOWNLOAD:
             self._add_place(
                 self._places_group,
                 "folder-download-symbolic",
                 os.path.basename(self.XDG_DOWNLOAD),
                 self.XDG_DOWNLOAD,
             )
-        if self._has_permission_for(self.DOCUMENTS_PERMISSION):
+        if self._has_permission_for(self.DOCUMENTS_PERMISSION) and self.XDG_DOCUMENTS:
             self._add_place(
                 self._places_group,
                 "folder-documents-symbolic",
                 os.path.basename(self.XDG_DOCUMENTS),
                 self.XDG_DOCUMENTS,
             )
-        if self._has_permission_for(self.PICTURES_PERMISSION):
+        if self._has_permission_for(self.PICTURES_PERMISSION) and self.XDG_PICTURES:
             self._add_place(
                 self._places_group,
                 "folder-pictures-symbolic",
                 os.path.basename(self.XDG_PICTURES),
                 self.XDG_PICTURES,
             )
-        if self._has_permission_for(self.MUSIC_PERMISSION):
+        if self._has_permission_for(self.MUSIC_PERMISSION) and self.XDG_MUSIC:
             self._add_place(
                 self._places_group,
                 "folder-music-symbolic",
                 os.path.basename(self.XDG_MUSIC),
                 self.XDG_MUSIC,
             )
-        if self._has_permission_for(self.VIDEOS_PERMISSION):
+        if self._has_permission_for(self.VIDEOS_PERMISSION) and self.XDG_VIDEOS:
             self._add_place(
                 self._places_group,
                 "folder-videos-symbolic",
