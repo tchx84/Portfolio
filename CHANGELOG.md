@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed issues in systems without glibc by @craftyguy.
+- Added German translation by @lqs01.
+
 ## [0.9.10] 2021-03-01
 
 - Fixed all blockers to enable portrait mode.
