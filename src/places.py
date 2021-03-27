@@ -34,6 +34,7 @@ class PortfolioPlaces(Gtk.Stack):
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
     PORTFOLIO_SYSTEM_DIR = os.path.abspath(os.sep)
+    PORTFOLIO_SYSTEM_DIR_FLATPAK = os.path.join(os.path.abspath(os.sep), "run", "host")
     PORTFOLIO_HOME_DIR = os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~"))
 
     XDG_DOWNLOAD = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
@@ -140,6 +141,14 @@ class PortfolioPlaces(Gtk.Stack):
                 self.PORTFOLIO_SYSTEM_DIR,
             )
 
+        if self._has_permission_for(self.HOST_PERMISSION) and self._is_flatpak():
+            self._add_place(
+                self._devices_group,
+                "drive-harddisk-ieee1394-symbolic",
+                _("Host"),
+                self.PORTFOLIO_SYSTEM_DIR_FLATPAK,
+            )
+
         for mount in self._manager.get_mounts():
             if mount.get_root().get_path() not in [
                 self.PORTFOLIO_SYSTEM_DIR,
@@ -209,9 +218,12 @@ class PortfolioPlaces(Gtk.Stack):
 
         return self._permissions
 
+    def _is_flatpak(self):
+        return os.path.exists(self.FLATPAK_INFO)
+
     def _has_permission_for(self, required):
         # not using flatpak, so access to all
-        if not os.path.exists(self.FLATPAK_INFO):
+        if not self._is_flatpak():
             return True
 
         permissions = self._get_permissions()
