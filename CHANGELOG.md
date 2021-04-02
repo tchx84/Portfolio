@@ -4,6 +4,7 @@
 
 - Fixed issues in systems without glibc by @craftyguy.
 - Added German translation by @lqs01.
+- Added improved icon by @jimmac.
 
 ## [0.9.10] 2021-03-01
 
