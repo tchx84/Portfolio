@@ -33,7 +33,7 @@
             "builddir" : true,
             "buildsystem" : "meson",
             "config-opts": [
-                "-Dservice_filename=org.freedesktop.FileManager1.service",
+                "-Dservice_filename=org.freedesktop.FileManager1.service"
              ],
             "sources" : [
                 {
