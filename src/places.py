@@ -37,11 +37,11 @@ class PortfolioPlaces(Gtk.Stack):
     PORTFOLIO_SYSTEM_DIR_FLATPAK = os.path.join(os.path.abspath(os.sep), "run", "host")
     PORTFOLIO_HOME_DIR = os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~"))
 
-    XDG_DOWNLOAD = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
-    XDG_DOCUMENTS = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOCUMENTS)
-    XDG_PICTURES = GLib.get_user_special_dir(GLib.USER_DIRECTORY_PICTURES)
-    XDG_MUSIC = GLib.get_user_special_dir(GLib.USER_DIRECTORY_MUSIC)
-    XDG_VIDEOS = GLib.get_user_special_dir(GLib.USER_DIRECTORY_VIDEOS)
+    XDG_DOWNLOAD = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD)
+    XDG_DOCUMENTS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
+    XDG_PICTURES = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES)
+    XDG_MUSIC = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
+    XDG_VIDEOS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
 
     HOST_PERMISSION = ["host"]
     HOME_PERMISSION = ["host", "home"]
