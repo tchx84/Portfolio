@@ -32,6 +32,10 @@ from .worker import PortfolioDeleteWorker
 from .worker import PortfolioLoadWorker
 from .worker import PortfolioOpenWorker
 from .worker import PortfolioPropertiesWorker
+from .worker import PortfolioLoadTrashWorker
+from .worker import PortfolioRestoreTrashWorker
+from .worker import PortfolioDeleteTrashWorker
+from .worker import PortfolioSendTrashWorker
 from .places import PortfolioPlaces
 
 
@@ -58,6 +62,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
     new_folder = Gtk.Template.Child()
+    delete_trash = Gtk.Template.Child()
+    restore_trash = Gtk.Template.Child()
     loading_label = Gtk.Template.Child()
     loading_bar = Gtk.Template.Child()
     loading_description = Gtk.Template.Child()
@@ -91,6 +97,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     close_tools = Gtk.Template.Child()
     stop_box = Gtk.Template.Child()
     stop_tools = Gtk.Template.Child()
+    trash_tools = Gtk.Template.Child()
     about_deck = Gtk.Template.Child()
     content_deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
@@ -163,6 +170,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.cut.connect("clicked", self._on_cut_clicked)
         self.copy.connect("clicked", self._on_copy_clicked)
         self.paste.connect("clicked", self._on_paste_clicked)
+        self.restore_trash.connect("clicked", self._on_restore_trash_clicked)
+        self.delete_trash.connect("clicked", self._on_delete_trash_clicked)
         self.select_all.connect("clicked", self._on_select_all)
         self.select_none.connect("clicked", self._on_select_none)
         self.new_folder.connect("clicked", self._on_new_folder)
@@ -238,6 +247,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
+
+    def _is_trash(self):
+        return self._history[self._index].startswith(PortfolioPlaces.XDG_TRASH)
 
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -348,9 +360,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._worker is not None:
             self._worker.stop()
 
-        self._worker = PortfolioLoadWorker(
-            directory, self.show_hidden_button.props.active
-        )
+        if directory.startswith(PortfolioPlaces.XDG_TRASH):
+            worker_class = PortfolioLoadTrashWorker
+        else:
+            worker_class = PortfolioLoadWorker
+
+        self._worker = worker_class(directory, self.show_hidden_button.props.active)
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
@@ -417,6 +432,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if path is None:
             return
+        elif path.startswith(PortfolioPlaces.XDG_TRASH):
+            self._update_history(path, navigating)
+            self._populate(path)
         elif os.path.isdir(path):
             self._update_history(path, navigating)
             self._populate(path)
@@ -447,16 +465,32 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _switch_to_selection_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
-    def _notify(self, description, on_confirm, on_cancel, autoclose, data):
+    def _notify(self, description, on_confirm, on_cancel, on_trash, autoclose, data):
         self._clean_popups()
 
         self._popup = PortfolioPopup(
-            description, on_confirm, on_cancel, autoclose, data
+            description, on_confirm, on_cancel, on_trash, autoclose, data
         )
         self.popup_box.add(self._popup)
         self._popup.props.reveal_child = True
 
+    def _find_icon_trash(self, uri):
+        file = Gio.File.new_for_uri(uri)
+        info = file.query_info(
+            Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+            Gio.FileQueryInfoFlags.NONE,
+            None,
+        )
+
+        if info.get_content_type() == "inode/directory":
+            return "folder-symbolic"
+        else:
+            return "text-x-generic-symbolic"
+
     def _find_icon(self, path):
+        if path.startswith(PortfolioPlaces.XDG_TRASH):
+            return self._find_icon_trash(path)
+
         if os.path.isdir(path):
             return "folder-symbolic"
         else:
@@ -497,6 +531,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_content_stack()
         self._update_navigation()
         self._update_navigation_tools()
+        self._update_trash_tools()
         self._update_selection()
         self._update_selection_tools()
         self._update_action_stack()
@@ -548,6 +583,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(child)
 
     def _update_tools_stack(self):
+        if self._is_trash():
+            self.tools_stack.set_visible_child(self.trash_tools)
+            return
+
         count = self.selection.count_selected_rows()
         selected = count >= 1
         child = self.selection_tools if selected else self.navigation_tools
@@ -571,6 +610,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.paste.props.sensitive = not selected and to_paste and not self._busy
         self.new_folder.props.sensitive = not selected and not self._busy
 
+    def _update_trash_tools(self):
+        count = self.selection.count_selected_rows()
+        selected = count >= 1
+        self.restore_trash.props.sensitive = selected
+        self.delete_trash.props.sensitive = selected
+
     def _update_rename(self):
         count = self.selection.count_selected_rows()
         sensitive = count == 1 and not self._editing and not self._busy
@@ -583,7 +628,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_directory_title(self):
         directory = self._history[self._index]
-        name = os.path.basename(directory)
+
+        if directory.startswith(PortfolioPlaces.XDG_TRASH):
+            name = PortfolioPlaces.XDG_TRASH_NAME
+        else:
+            name = os.path.basename(directory)
+
         self.headerbar.set_title(name)
 
     def _update_filter(self):
@@ -807,6 +857,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
                 _("%s already exists") % new_name,
                 None,
                 self._on_popup_closed,
+                None,
                 True,
                 None,
             )
@@ -842,6 +893,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             description,
             self._on_delete_confirmed,
             self._on_popup_closed,
+            self._on_trash_instead,
             False,
             selection,
         )
@@ -859,7 +911,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             description = _("%d files will be moved") % count
 
-        self._notify(description, None, None, True, None)
+        self._notify(description, None, None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -877,7 +929,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             description = _("%d files will be copied") % count
 
-        self._notify(description, None, None, True, None)
+        self._notify(description, None, None, None, True, None)
 
         self._unselect_all()
         self._update_mode()
@@ -903,6 +955,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             _("Files will be overwritten, proceed?"),
             self._on_paste_confirmed,
             self._on_popup_closed,
+            None,
             False,
             (to_paste, Worker),
         )
@@ -958,6 +1011,26 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._paste_finish()
         # XXX nuclear fix for when parent directorty doesn't get to be updated
         self._refresh()
+
+    def _on_trash_instead(self, button, popup, selection):
+        self._clean_popups()
+
+        # clean history entries from deleted paths
+        directory = self._history[self._index]
+        self._history = [
+            path
+            for path in self._history
+            if not path.startswith(directory) or path == directory
+        ]
+
+        self._worker = PortfolioSendTrashWorker(selection)
+        self._worker.connect("started", self._on_delete_started)
+        self._worker.connect("pre-update", self._on_delete_pre_updated)
+        self._worker.connect("updated", self._on_delete_updated)
+        self._worker.connect("finished", self._on_delete_finished)
+        self._worker.connect("failed", self._on_delete_failed)
+        self._worker.connect("stopped", self._on_delete_stopped)
+        self._worker.start()
 
     def _on_delete_confirmed(self, button, popup, selection):
         self._clean_popups()
@@ -1055,6 +1128,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
                 _("No permissions on this directory"),
                 None,
                 self._on_popup_closed,
+                None,
                 True,
                 None,
             )
@@ -1065,6 +1139,102 @@ class PortfolioWindow(Handy.ApplicationWindow):
         icon = self._find_icon(path)
         row = self.liststore.append([icon, folder_name, path])
         self._select_and_go(row, edit=True)
+
+    def _on_restore_trash_clicked(self, button):
+        selection = self._get_selection()
+
+        self._worker = PortfolioRestoreTrashWorker(selection)
+        self._worker.connect("started", self._on_restore_trash_started)
+        self._worker.connect("updated", self._on_restore_trash_updated)
+        self._worker.connect("finished", self._on_restore_trash_finished)
+        self._worker.connect("failed", self._on_restore_trash_failed)
+        self._worker.start()
+
+    def _on_restore_trash_started(self, worker):
+        self._busy = True
+
+        self.loading_label.set_text(_("Restoring"))
+        self.loading_bar.set_fraction(0.0)
+        self.content_stack.set_visible_child(self.loading_box)
+
+        self._update_all()
+
+        self.action_stack.set_visible_child(self.stop_box)
+        self.tools_stack.set_visible_child(self.stop_tools)
+
+    def _on_restore_trash_pre_updated(self, worker, path):
+        self.loading_description.set_text(path)
+
+    def _on_restore_trash_updated(self, worker, path, ref, index, total):
+        self._remove_row(ref)
+        self.loading_bar.set_fraction((index + 1) / total)
+
+    def _on_restore_trash_finished(self, worker, total):
+        self._busy = False
+        self._clean_workers()
+        self._clean_progress()
+
+        self._unselect_all()
+
+        self._update_all()
+        self._update_mode()
+
+    def _on_restore_trash_failed(self, worker, path):
+        self._busy = False
+        self._clean_workers()
+        self._clean_progress()
+
+        self.loading_description.set_text(_("Could not restore %s") % path)
+
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tool)
+
+    def _on_delete_trash_clicked(self, button):
+        selection = self._get_selection()
+
+        self._worker = PortfolioDeleteTrashWorker(selection)
+        self._worker.connect("started", self._on_delete_trash_started)
+        self._worker.connect("pre-update", self._on_delete_trash_pre_updated)
+        self._worker.connect("updated", self._on_delete_trash_updated)
+        self._worker.connect("finished", self._on_delete_trash_finished)
+        self._worker.connect("failed", self._on_delete_trash_failed)
+        self._worker.connect("stopped", self._on_delete_trash_stopped)
+        self._worker.start()
+
+    def _on_delete_trash_started(self, worker):
+        self._busy = True
+
+        self.loading_label.set_text(_("Deleting"))
+        self.loading_bar.set_fraction(0.0)
+        self.content_stack.set_visible_child(self.loading_box)
+
+        self._update_all()
+
+        self.action_stack.set_visible_child(self.stop_box)
+        self.tools_stack.set_visible_child(self.stop_tools)
+
+    def _on_delete_trash_pre_updated(self, worker, path):
+        self.loading_description.set_text(path)
+
+    def _on_delete_trash_updated(self, worker, path, ref, index, total):
+        self._remove_row(ref)
+        self.loading_bar.set_fraction((index + 1) / total)
+
+    def _on_delete_trash_finished(self, worker, total):
+        self._delete_finish()
+
+    def _on_delete_trash_failed(self, worker, path):
+        self._busy = False
+        self._clean_workers()
+        self._clean_progress()
+
+        self.loading_description.set_text(_("Could not delete %s") % path)
+
+        self.action_stack.set_visible_child(self.close_box)
+        self.tools_stack.set_visible_child(self.close_tools)
+
+    def _on_delete_trash_stopped(self, worker):
+        self._delete_finish()
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
         if self._dont_activate is True:

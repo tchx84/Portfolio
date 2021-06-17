@@ -28,8 +28,9 @@ class PortfolioPopup(Gtk.Revealer):
     description = Gtk.Template.Child()
     confirm_button = Gtk.Template.Child()
     cancel_button = Gtk.Template.Child()
+    trash_button = Gtk.Template.Child()
 
-    def __init__(self, description, on_confirm, on_cancel, autoclose, data):
+    def __init__(self, description, on_confirm, on_cancel, on_trash, autoclose, data):
         super().__init__()
 
         self.description.set_text(description)
@@ -43,6 +44,11 @@ class PortfolioPopup(Gtk.Revealer):
             self.cancel_button.connect("clicked", on_cancel, self, data)
         else:
             self.cancel_button.props.sensitive = False
+
+        if on_trash is not None:
+            self.trash_button.connect("clicked", on_trash, self, data)
+        else:
+            self.trash_button.props.sensitive = False
 
         if autoclose is True:
             self.cancel_button.props.sensitive = True
