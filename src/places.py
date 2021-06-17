@@ -43,6 +43,9 @@ class PortfolioPlaces(Gtk.Stack):
     XDG_MUSIC = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
     XDG_VIDEOS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
 
+    XDG_TRASH = "trash:"
+    XDG_TRASH_NAME = _("Trash")
+
     HOST_PERMISSION = ["host"]
     HOME_PERMISSION = ["host", "home"]
     DOWNLOAD_PERMISSION = ["host", "home", "xdg-download"]
@@ -50,6 +53,7 @@ class PortfolioPlaces(Gtk.Stack):
     PICTURES_PERMISSION = ["host", "home", "xdg-pictures"]
     MUSIC_PERMISSION = ["host", "home", "xdg-music"]
     VIDEOS_PERMISSION = ["host", "home", "xdg-videos"]
+    TRASH_PERMISSION = ["host", "home", "xdg-run/gvfsd"]
 
     def __init__(self, **kargs):
         super().__init__(**kargs)
@@ -129,6 +133,13 @@ class PortfolioPlaces(Gtk.Stack):
                 "folder-videos-symbolic",
                 os.path.basename(self.XDG_VIDEOS),
                 self.XDG_VIDEOS,
+            )
+        if self._has_permission_for(self.TRASH_PERMISSION) and self.XDG_TRASH:
+            self._add_place(
+                self._places_group,
+                "user-trash-symbolic",
+                self.XDG_TRASH_NAME,
+                self.XDG_TRASH,
             )
 
         # devices
