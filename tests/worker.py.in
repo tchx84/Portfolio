@@ -28,6 +28,8 @@ TEST_HOME_DIR = os.path.join(ROOT_DIR, "tests/root/home/tchx84")
 TEST_COPY_DIR = os.path.join(TEST_HOME_DIR, "copy")
 TEST_CUT_DIR = os.path.join(TEST_HOME_DIR, "cut")
 
+TEST_TRASH_TMP_DIR = os.path.join(ROOT_DIR, "tests/root/home/Trashable")
+
 
 def update_gtk():
     from gi.repository import Gtk
@@ -51,11 +53,18 @@ def setup_module(module):
     pathlib.Path(os.path.join(TEST_HOME_DIR, "file")).touch()
     pathlib.Path(os.path.join(TEST_HOME_DIR, ".hidden")).touch()
 
+    # for Trash tests
+    pathlib.Path(TEST_TRASH_TMP_DIR).mkdir(exist_ok=True)
+    pathlib.Path(os.path.join(TEST_TRASH_TMP_DIR, "file")).touch()
+    pathlib.Path(os.path.join(TEST_TRASH_TMP_DIR, "folder")).mkdir(exist_ok=True)
+    pathlib.Path(os.path.join(TEST_TRASH_TMP_DIR, "folder", "file")).touch()
+
 
 def teardown_module(module):
     pathlib.Path(os.path.join(TEST_HOME_DIR, "folder", "file")).touch()
     shutil.rmtree(TEST_COPY_DIR, ignore_errors=True)
     shutil.rmtree(TEST_CUT_DIR, ignore_errors=True)
+    shutil.rmtree(TEST_TRASH_TMP_DIR, ignore_errors=True)
 
 
 def test_init_setup():
@@ -467,3 +476,121 @@ def test_properties_worker_default():
 
     assert worker.props.name == "file"
     assert worker.props.size == "8.0 B"
+
+
+@pytest.mark.timeout(5)
+def test_send_trash_worker_default():
+    from src.worker import PortfolioSendTrashWorker
+
+    assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 2
+
+    selection = [
+        (os.path.join(TEST_TRASH_TMP_DIR, "file"), None),
+        (os.path.join(TEST_TRASH_TMP_DIR, "folder"), None),
+    ]
+
+    finished = False
+
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
+    worker = PortfolioSendTrashWorker(selection)
+    worker.connect("finished", _callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0
+
+
+@pytest.mark.timeout(5)
+def test_load_trash_worker_default():
+    from src.worker import PortfolioLoadTrashWorker
+
+    paths = []
+
+    def _update_callback(worker, name, tuples, index, total):
+        nonlocal paths
+        paths += [tuples[0][0]]
+
+    finished = False
+
+    def _finished_callback(worker, path):
+        nonlocal finished
+        finished = True
+
+    worker = PortfolioLoadTrashWorker("trash:")
+    worker.connect("updated", _update_callback)
+    worker.connect("finished", _finished_callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert len(paths) == 2
+    assert set(paths) == set(
+        [
+            "file",
+            "folder",
+        ]
+    )
+
+
+@pytest.mark.timeout(5)
+def test_restore_trash_worker_default():
+    from src.worker import PortfolioRestoreTrashWorker
+
+    assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0
+
+    selection = [
+        ("trash:///file", None),
+        ("trash:///folder", None),
+    ]
+
+    finished = False
+
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
+    worker = PortfolioRestoreTrashWorker(selection)
+    worker.connect("finished", _callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 2
+
+
+@pytest.mark.timeout(5)
+def test_delete_trash_worker_default():
+    import time
+    from src.worker import PortfolioDeleteTrashWorker
+
+    test_send_trash_worker_default()
+
+    # XXX handle the delay with the trash:/// backend
+    time.sleep(1)
+
+    selection = [
+        ("trash:///file", None),
+        ("trash:///folder", None),
+    ]
+
+    finished = False
+
+    def _callback(worker, total):
+        nonlocal finished
+        finished = True
+
+    worker = PortfolioDeleteTrashWorker(selection)
+    worker.connect("finished", _callback)
+    worker.start()
+
+    while not finished:
+        update_gtk()
+
+    assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0

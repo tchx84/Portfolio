@@ -20,6 +20,7 @@ import shutil
 import locale
 import datetime
 import threading
+import subprocess
 
 from gi.repository import Gio, GObject, GLib
 
@@ -469,3 +470,283 @@ class PortfolioPropertiesWorker(GObject.GObject):
 
     def stop(self):
         self._inner_worker.stop()
+
+
+class PortfolioLoadTrashWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioLoadTrashWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self, uri, hidden=False):
+        super().__init__()
+        self._uri = uri
+        self._cancellable = Gio.Cancellable()
+        self._timeout_handler_id = None
+
+    def _get_total(self):
+        # XXX there HAS to be a better way
+        total = 0
+
+        file = Gio.File.new_for_uri(self._uri)
+        enumerator = file.enumerate_children(
+            "",
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+            None,
+        )
+
+        while enumerator.next_file(None) is not None:
+            total += 1
+
+        return total
+
+    def start(self):
+        self.emit("started", self._uri)
+
+        self._trash = Gio.File.new_for_uri(self._uri)
+        self._enumerator = self._trash.enumerate_children(
+            f"{Gio.FILE_ATTRIBUTE_STANDARD_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH}",
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+            self._cancellable,
+        )
+
+        self._index = 1
+        self._total = self._get_total()
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def step(self):
+        info = self._enumerator.next_file(self._cancellable)
+
+        if info is None:
+            self.emit("finished", self._uri)
+            return
+
+        name = info.get_display_name()
+
+        uri = GLib.uri_parse(self._uri, GLib.UriFlags.NONE)
+        uri = GLib.uri_join(
+            GLib.UriFlags.NONE,
+            uri.get_scheme(),
+            None,
+            None,
+            -1,
+            os.path.join(uri.get_path(), info.get_name()),
+            None,
+            None,
+        )
+
+        self.emit(
+            "updated",
+            self._uri,
+            [[name, uri]],
+            self._index,
+            self._total,
+        )
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if not self._cancellable.is_cancelled():
+            self._cancellable.cancel()
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+
+
+class PortfolioSendTrashWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioSendTrashWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
+    def __init__(self, selection):
+        super().__init__()
+        self._selection = selection
+
+    def start(self):
+        self.emit("started")
+
+        self._paths = [path for path, ref in self._selection]
+        self._refs = dict(self._selection)
+
+        self._total = len(self._paths)
+        self._index = 0
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", self._total)
+            return
+
+        path = self._paths[self._index]
+
+        try:
+            self.emit("pre-update", path)
+
+            if os.path.exists(os.path.join(os.path.sep, ".flatpak-info")):
+                cmd = f'flatpak-spawn --host gio trash "{path}"'
+                subprocess.run(cmd, shell=True, check=True)
+            else:
+                file = Gio.File.new_for_path(path)
+                file.trash()
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", path)
+            return
+
+        self._index += 1
+        self.emit("updated", path, self._refs.get(path), self._index, self._total)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+        self.emit("stopped")
+
+
+class PortfolioRestoreTrashWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioRestoreTrashWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
+    def __init__(self, selection):
+        super().__init__()
+        self._selection = selection
+
+    def start(self):
+        self.emit("started")
+
+        self._paths = [path for path, ref in self._selection]
+        self._refs = dict(self._selection)
+
+        self._total = len(self._paths)
+        self._index = 0
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", self._total)
+            return
+
+        path = self._paths[self._index]
+
+        try:
+            self.emit("pre-update", path)
+
+            file = Gio.File.new_for_uri(path)
+            info = file.query_info(
+                Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH,
+                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+                None,
+            )
+
+            original_path = info.get_attribute_as_string(
+                Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH
+            )
+            original_parent = os.path.dirname(original_path)
+            original_file = Gio.File.new_for_path(original_path)
+
+            if not os.path.exists(original_parent):
+                os.makedirs(original_parent)
+
+            file.move(original_file, Gio.FileCopyFlags.OVERWRITE, None)
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", path)
+            return
+
+        self._index += 1
+        self.emit("updated", path, self._refs.get(path), self._index, self._total)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+        self.emit("stopped")
+
+
+class PortfolioDeleteTrashWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioDeleteTrashWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
+    def __init__(self, selection):
+        super().__init__()
+        self._selection = selection
+
+    def start(self):
+        self.emit("started")
+
+        self._paths = [path for path, ref in self._selection]
+        self._refs = dict(self._selection)
+
+        self._total = len(self._paths)
+        self._index = 0
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", self._total)
+            return
+
+        path = self._paths[self._index]
+
+        try:
+            self.emit("pre-update", path)
+            file = Gio.File.new_for_uri(path)
+            file.delete()
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", path)
+            return
+
+        self._index += 1
+        self.emit("updated", path, self._refs.get(path), self._index, self._total)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is not None:
+            GLib.Source.remove(self._timeout_handler_id)
+            self._timeout_handler_id = None
+        self.emit("stopped")
