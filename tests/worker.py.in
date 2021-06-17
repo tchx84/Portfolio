@@ -31,6 +31,9 @@ TEST_CUT_DIR = os.path.join(TEST_HOME_DIR, "cut")
 TEST_TRASH_TMP_DIR = os.path.join(ROOT_DIR, "tests/root/home/Trashable")
 
 
+skip_trash = True
+
+
 def update_gtk():
     from gi.repository import Gtk
 
@@ -479,6 +482,7 @@ def test_properties_worker_default():
 
 
 @pytest.mark.timeout(5)
+@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_send_trash_worker_default():
     from src.worker import PortfolioSendTrashWorker
 
@@ -506,6 +510,7 @@ def test_send_trash_worker_default():
 
 
 @pytest.mark.timeout(5)
+@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_load_trash_worker_default():
     from src.worker import PortfolioLoadTrashWorker
 
@@ -539,6 +544,7 @@ def test_load_trash_worker_default():
 
 
 @pytest.mark.timeout(5)
+@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_restore_trash_worker_default():
     from src.worker import PortfolioRestoreTrashWorker
 
@@ -566,6 +572,7 @@ def test_restore_trash_worker_default():
 
 
 @pytest.mark.timeout(5)
+@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_delete_trash_worker_default():
     import time
     from src.worker import PortfolioDeleteTrashWorker
