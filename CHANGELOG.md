@@ -5,6 +5,7 @@
 - Fixed issues in systems without glibc by @craftyguy.
 - Added German translation by @lqs01.
 - Added improved icon by @jimmac.
+- Added shortcut to Flatpak HOST root filesystem in places.
 - Added support for Trash folder.
 
 ## [0.9.10] 2021-03-01
