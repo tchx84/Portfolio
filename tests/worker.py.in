@@ -20,6 +20,10 @@ import sys
 import shutil
 import pathlib
 import pytest
+import gi
+
+gi.require_version("Gio", "2.0")
+from gi.repository import Gio
 
 ROOT_DIR = "@source_dir@"
 sys.path.append(ROOT_DIR)
@@ -31,7 +35,7 @@ TEST_CUT_DIR = os.path.join(TEST_HOME_DIR, "cut")
 TEST_TRASH_TMP_DIR = os.path.join(ROOT_DIR, "tests/root/home/Trashable")
 
 
-skip_trash = True
+skip_trash = not Gio.File.new_for_uri("trash:").query_exists(None)
 
 
 def update_gtk():
