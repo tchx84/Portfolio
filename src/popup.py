@@ -48,7 +48,7 @@ class PortfolioPopup(Gtk.Revealer):
         if on_trash is not None:
             self.trash_button.connect("clicked", on_trash, self, data)
         else:
-            self.trash_button.props.sensitive = False
+            self.trash_button.props.visible = False
 
         if autoclose is True:
             self.cancel_button.props.sensitive = True

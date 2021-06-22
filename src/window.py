@@ -88,6 +88,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     navigation_tools = Gtk.Template.Child()
     places_box = Gtk.Template.Child()
     places_inner_box = Gtk.Template.Child()
+    places_popup_box = Gtk.Template.Child()
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
@@ -131,6 +132,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         Handy.init()
 
         self._popup = None
+        self._places_popup = None
         self._worker = None
         self._busy = False
         self._editing = False
@@ -198,6 +200,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
+        places.connect("removed", self._on_places_removing)
         places.connect("removed", self._on_places_removed)
         self.places_inner_box.add(places)
 
@@ -473,6 +476,14 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
         self.popup_box.add(self._popup)
         self._popup.props.reveal_child = True
+
+    def _places_notify(self, description):
+        if self._places_popup is not None:
+            self._places_popup.destroy()
+
+        self._places_popup = PortfolioPopup(description, None, None, None, True, None)
+        self.places_popup_box.add(self._places_popup)
+        self._places_popup.props.reveal_child = True
 
     def _find_icon_trash(self, uri):
         file = Gio.File.new_for_uri(uri)
@@ -1248,12 +1259,19 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._reset_to_path(path)
         self.content_deck.set_visible_child(self.files_box)
 
+    def _on_places_removing(self, button, path):
+        self._places_notify(_("Removing device, please wait"))
+
     def _on_places_removed(self, button, path):
+        self._places_notify(_("Device can be removed"))
+
         if self._index == -1:
             return
+
         directory = self._history[self._index]
         if not directory.startswith(path):
             return
+
         self._go_back_to_homepage()
 
     def _on_help_clicked(self, button):
