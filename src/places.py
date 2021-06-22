@@ -29,6 +29,7 @@ class PortfolioPlaces(Gtk.Stack):
 
     __gsignals__ = {
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "removing": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
@@ -301,6 +302,7 @@ class PortfolioPlaces(Gtk.Stack):
 
         method(Gio.MountUnmountFlags.NONE, None, self._on_eject_finished, finish)
         place.props.sensitive = False
+        self.emit("removing", place.path)
 
     def _on_eject_finished(self, mount, task, finish):
         try:
