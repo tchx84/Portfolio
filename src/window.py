@@ -481,7 +481,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._places_popup is not None:
             self._places_popup.destroy()
 
-        self._places_popup = PortfolioPopup(description, None, None, None, True, None)
+        self._places_popup = PortfolioPopup(description, None, None, None, False, None)
         self.places_popup_box.add(self._places_popup)
         self._places_popup.props.reveal_child = True
 

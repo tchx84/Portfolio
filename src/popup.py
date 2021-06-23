@@ -43,7 +43,7 @@ class PortfolioPopup(Gtk.Revealer):
         if on_cancel is not None:
             self.cancel_button.connect("clicked", on_cancel, self, data)
         else:
-            self.cancel_button.props.sensitive = False
+            self.cancel_button.connect("clicked", self._on_default_callback, self, data)
 
         if on_trash is not None:
             self.trash_button.connect("clicked", on_trash, self, data)
@@ -51,8 +51,6 @@ class PortfolioPopup(Gtk.Revealer):
             self.trash_button.props.visible = False
 
         if autoclose is True:
-            self.cancel_button.props.sensitive = True
-            self.cancel_button.connect("clicked", self._on_default_callback, self, data)
             GLib.timeout_add_seconds(
                 DEFAULT_CLOSE_TIME, self._on_default_callback, None, None, None
             )
