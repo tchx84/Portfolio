@@ -1149,6 +1149,29 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_restore_trash_clicked(self, button):
         selection = self._get_selection()
 
+        should_warn = any(
+            [
+                Gio.File.new_for_path(utils.get_uri_orig_path(uri)).query_exists(None)
+                for uri in [uri for uri, ref in selection]
+            ]
+        )
+
+        if not should_warn:
+            self._on_restore_trash_confirmed(None, None, selection)
+            return
+
+        self._notify(
+            _("Files will be overwritten, proceed?"),
+            self._on_restore_trash_confirmed,
+            self._on_popup_closed,
+            None,
+            False,
+            selection,
+        )
+
+    def _on_restore_trash_confirmed(self, button, popup, selection):
+        self._clean_popups()
+
         self._worker = PortfolioRestoreTrashWorker(selection)
         self._worker.connect("started", self._on_restore_trash_started)
         self._worker.connect("updated", self._on_restore_trash_updated)

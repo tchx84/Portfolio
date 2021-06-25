@@ -65,9 +65,14 @@ def flatten_walk(path):
 def get_uri_info(uri):
     file = Gio.File.new_for_uri(uri)
     info = file.query_info(
-        f"{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE}",
+        f"{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE},{Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH}",
         Gio.FileQueryInfoFlags.NONE,
         None,
     )
 
     return info
+
+
+def get_uri_orig_path(uri):
+    info = get_uri_info(uri)
+    return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH)
