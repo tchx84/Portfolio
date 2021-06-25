@@ -18,6 +18,8 @@
 import os
 import re
 
+from gi.repository import Gio
+
 
 def find_new_name(directory, name):
     counter = 1
@@ -58,3 +60,14 @@ def flatten_walk(path):
         _paths += [path]
 
     return _paths
+
+
+def get_uri_info(uri):
+    file = Gio.File.new_for_uri(uri)
+    info = file.query_info(
+        f"{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE}",
+        Gio.FileQueryInfoFlags.NONE,
+        None,
+    )
+
+    return info
