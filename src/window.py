@@ -486,12 +486,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._places_popup.props.reveal_child = True
 
     def _find_icon_trash(self, uri):
-        file = Gio.File.new_for_uri(uri)
-        info = file.query_info(
-            Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-            Gio.FileQueryInfoFlags.NONE,
-            None,
-        )
+        info = utils.get_uri_info(uri)
 
         if info.get_content_type() == "inode/directory":
             return "folder-symbolic"
@@ -1202,6 +1197,27 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_delete_trash_clicked(self, button):
         selection = self._get_selection()
+        count = len(selection)
+
+        if count == 1:
+            info = utils.get_uri_info(selection[0][0])
+            name = info.get_display_name()
+        else:
+            name = _("these %d files") % count
+
+        description = _("Delete %s permanently?") % name
+
+        self._notify(
+            description,
+            self._on_delete_trash_confirmed,
+            self._on_popup_closed,
+            None,
+            False,
+            selection,
+        )
+
+    def _on_delete_trash_confirmed(self, button, popup, selection):
+        self._clean_popups()
 
         self._worker = PortfolioDeleteTrashWorker(selection)
         self._worker.connect("started", self._on_delete_trash_started)
