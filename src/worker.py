@@ -320,8 +320,10 @@ class PortfolioOpenWorker(GObject.GObject):
 
     def start(self):
         self.emit("started")
+
+        uri = self._path if utils.is_uri(self._path) else f"file://{self._path}"
         Gio.AppInfo.launch_default_for_uri_async(
-            f"file://{self._path}", None, None, self._on_launch_finished, None
+            uri, None, None, self._on_launch_finished, None
         )
         self._timeout_handler_id = GLib.timeout_add(100, self._on_step)
 

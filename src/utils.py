@@ -18,7 +18,7 @@
 import os
 import re
 
-from gi.repository import Gio
+from gi.repository import Gio, GLib
 
 
 def find_new_name(directory, name):
@@ -62,10 +62,18 @@ def flatten_walk(path):
     return _paths
 
 
-def get_uri_info(uri):
+def is_uri(uri):
+    try:
+        GLib.uri_parse(uri, GLib.UriFlags.NONE)
+        return True
+    except:
+        return False
+
+
+def get_uri_info(uri, attributes):
     file = Gio.File.new_for_uri(uri)
     info = file.query_info(
-        f"{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE},{Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH}",
+        attributes,
         Gio.FileQueryInfoFlags.NONE,
         None,
     )
@@ -73,6 +81,51 @@ def get_uri_info(uri):
     return info
 
 
-def get_uri_orig_path(uri):
-    info = get_uri_info(uri)
+def is_trash(uri):
+    try:
+        uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
+        return uri.get_scheme() == "trash"
+    except:
+        return False
+
+
+def get_trash_uri_file_name(uri):
+    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
+    return info.get_display_name()
+
+
+def get_trash_uri_orig_path(uri):
+    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH)
     return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH)
+
+
+def get_trash_uri_modified_time(uri):
+    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_TIME_MODIFIED)
+    time = info.get_modification_date_time()
+    return time.to_unix()
+
+
+def is_trash_uri_dir(uri):
+    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
+    return info.get_content_type() == "inode/directory"
+
+
+def get_file_name(string):
+    try:
+        return get_trash_uri_file_name(string)
+    except:
+        return os.path.basename(string)
+
+
+def get_file_mtime(string):
+    try:
+        return get_trash_uri_modified_time(string)
+    except:
+        return os.path.getmtime(string)
+
+
+def is_file_dir(string):
+    try:
+        return is_trash_uri_dir(string)
+    except:
+        return os.path.isdir(string)
