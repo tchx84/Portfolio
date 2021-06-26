@@ -251,19 +251,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
 
-    def _is_trash(self):
-        return self._history[self._index].startswith(PortfolioPlaces.XDG_TRASH)
-
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
         text = self.search_entry.get_text()
         if not text:
             return True
-        return text.lower() in os.path.basename(path).lower()
+        return text.lower() in utils.get_file_name(path).lower()
 
     def _sort_by_last_modified(self, path1, path2):
-        st_mtime1 = os.path.getmtime(path1)
-        st_mtime2 = os.path.getmtime(path2)
+        st_mtime1 = utils.get_file_mtime(path1)
+        st_mtime2 = utils.get_file_mtime(path2)
 
         if st_mtime1 < st_mtime2:
             return 1
@@ -287,8 +284,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         path1 = model[row1][self.PATH_COLUMN]
         path2 = model[row2][self.PATH_COLUMN]
 
-        row1_is_dir = os.path.isdir(path1)
-        row2_is_dir = os.path.isdir(path2)
+        row1_is_dir = utils.is_file_dir(path1)
+        row2_is_dir = utils.is_file_dir(path2)
 
         if row1_is_dir and not row2_is_dir:
             return -1
@@ -363,7 +360,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._worker is not None:
             self._worker.stop()
 
-        if directory.startswith(PortfolioPlaces.XDG_TRASH):
+        if utils.is_trash(directory):
             worker_class = PortfolioLoadTrashWorker
         else:
             worker_class = PortfolioLoadWorker
@@ -435,10 +432,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if path is None:
             return
-        elif path.startswith(PortfolioPlaces.XDG_TRASH):
-            self._update_history(path, navigating)
-            self._populate(path)
-        elif os.path.isdir(path):
+        elif utils.is_file_dir(path):
             self._update_history(path, navigating)
             self._populate(path)
         else:
@@ -485,19 +479,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.places_popup_box.add(self._places_popup)
         self._places_popup.props.reveal_child = True
 
-    def _find_icon_trash(self, uri):
-        info = utils.get_uri_info(uri)
-
-        if info.get_content_type() == "inode/directory":
-            return "folder-symbolic"
-        else:
-            return "text-x-generic-symbolic"
-
     def _find_icon(self, path):
-        if path.startswith(PortfolioPlaces.XDG_TRASH):
-            return self._find_icon_trash(path)
-
-        if os.path.isdir(path):
+        if utils.is_file_dir(path):
             return "folder-symbolic"
         else:
             return "text-x-generic-symbolic"
@@ -589,7 +572,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(child)
 
     def _update_tools_stack(self):
-        if self._is_trash():
+        directory = self._history[self._index]
+        if utils.is_trash(directory):
             self.tools_stack.set_visible_child(self.trash_tools)
             return
 
@@ -634,13 +618,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_directory_title(self):
         directory = self._history[self._index]
-
-        if directory.startswith(PortfolioPlaces.XDG_TRASH):
-            name = PortfolioPlaces.XDG_TRASH_NAME
-        else:
-            name = os.path.basename(directory)
-
-        self.headerbar.set_title(name)
+        self.headerbar.set_title(utils.get_file_name(directory))
 
     def _update_filter(self):
         self.filtered.refilter()
@@ -1151,7 +1129,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         should_warn = any(
             [
-                Gio.File.new_for_path(utils.get_uri_orig_path(uri)).query_exists(None)
+                Gio.File.new_for_path(utils.get_trash_uri_orig_path(uri)).query_exists(
+                    None
+                )
                 for uri in [uri for uri, ref in selection]
             ]
         )
@@ -1223,8 +1203,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         count = len(selection)
 
         if count == 1:
-            info = utils.get_uri_info(selection[0][0])
-            name = info.get_display_name()
+            name = utils.get_file_name(selection[0][0])
         else:
             name = _("these %d files") % count
 
