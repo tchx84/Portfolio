@@ -70,6 +70,20 @@ def is_uri(uri):
         return False
 
 
+def join_uri(uri, name):
+    parsed_uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
+    return GLib.uri_join(
+        GLib.UriFlags.NONE,
+        parsed_uri.get_scheme(),
+        None,
+        None,
+        -1,
+        os.path.join(parsed_uri.get_path(), name),
+        None,
+        None,
+    )
+
+
 def get_uri_info(uri, attributes):
     file = Gio.File.new_for_uri(uri)
     info = file.query_info(
@@ -87,6 +101,25 @@ def is_trash(uri):
         return uri.get_scheme() == "trash"
     except:
         return False
+
+
+def list_trash(uri):
+    uris = []
+
+    file = Gio.File.new_for_uri(uri)
+    enumerator = file.enumerate_children(
+        f"{Gio.FILE_ATTRIBUTE_STANDARD_NAME}",
+        Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+        None,
+    )
+
+    while True:
+        info = enumerator.next_file(None)
+        if info is None:
+            break
+        uris.append(info.get_name())
+
+    return uris
 
 
 def get_trash_uri_file_name(uri):
@@ -129,3 +162,17 @@ def is_file_dir(string):
         return is_trash_uri_dir(string)
     except:
         return os.path.isdir(string)
+
+
+def list_directory(string):
+    try:
+        return list_trash(string)
+    except:
+        return os.listdir(string)
+
+
+def join_directory(directory, name):
+    try:
+        return join_uri(directory, name)
+    except:
+        return os.path.join(directory, name)
