@@ -264,7 +264,7 @@ class PortfolioLoadWorker(GObject.GObject):
         self.emit("started", self._directory)
 
         try:
-            self._paths = os.listdir(self._directory)
+            self._paths = utils.list_directory(self._directory)
         except Exception as e:
             logger.debug(e)
             self.emit("failed", self._directory)
@@ -287,7 +287,7 @@ class PortfolioLoadWorker(GObject.GObject):
                 name = self._paths[self._index + index]
                 if not self._hidden and name.startswith("."):
                     continue
-                path = os.path.join(self._directory, name)
+                path = utils.join_directory(self._directory, name)
                 found.append((name, path))
 
         self._index += self.BUFFER
@@ -472,94 +472,6 @@ class PortfolioPropertiesWorker(GObject.GObject):
 
     def stop(self):
         self._inner_worker.stop()
-
-
-class PortfolioLoadTrashWorker(GObject.GObject):
-    __gtype_name__ = "PortfolioLoadTrashWorker"
-
-    __gsignals__ = {
-        "started": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
-        "finished": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-    }
-
-    def __init__(self, uri, hidden=False):
-        super().__init__()
-        self._uri = uri
-        self._cancellable = Gio.Cancellable()
-        self._timeout_handler_id = None
-
-    def _get_total(self):
-        # XXX there HAS to be a better way
-        total = 0
-
-        file = Gio.File.new_for_uri(self._uri)
-        enumerator = file.enumerate_children(
-            "",
-            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-            None,
-        )
-
-        while enumerator.next_file(None) is not None:
-            total += 1
-
-        return total
-
-    def start(self):
-        self.emit("started", self._uri)
-
-        self._trash = Gio.File.new_for_uri(self._uri)
-        self._enumerator = self._trash.enumerate_children(
-            f"{Gio.FILE_ATTRIBUTE_STANDARD_NAME},{Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME},{Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH}",
-            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-            self._cancellable,
-        )
-
-        self._index = 1
-        self._total = self._get_total()
-        self._timeout_handler_id = GLib.idle_add(
-            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
-        )
-
-    def step(self):
-        info = self._enumerator.next_file(self._cancellable)
-
-        if info is None:
-            self.emit("finished", self._uri)
-            return
-
-        name = info.get_display_name()
-
-        uri = GLib.uri_parse(self._uri, GLib.UriFlags.NONE)
-        uri = GLib.uri_join(
-            GLib.UriFlags.NONE,
-            uri.get_scheme(),
-            None,
-            None,
-            -1,
-            os.path.join(uri.get_path(), info.get_name()),
-            None,
-            None,
-        )
-
-        self.emit(
-            "updated",
-            self._uri,
-            [[name, uri]],
-            self._index,
-            self._total,
-        )
-        self._timeout_handler_id = GLib.idle_add(
-            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
-        )
-
-    def stop(self):
-        if not self._cancellable.is_cancelled():
-            self._cancellable.cancel()
-        if self._timeout_handler_id is not None:
-            GLib.Source.remove(self._timeout_handler_id)
-            self._timeout_handler_id = None
 
 
 class PortfolioSendTrashWorker(GObject.GObject):

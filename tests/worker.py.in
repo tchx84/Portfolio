@@ -516,13 +516,13 @@ def test_send_trash_worker_default():
 @pytest.mark.timeout(5)
 @pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_load_trash_worker_default():
-    from src.worker import PortfolioLoadTrashWorker
+    from src.worker import PortfolioLoadWorker
 
     paths = []
 
     def _update_callback(worker, name, tuples, index, total):
         nonlocal paths
-        paths += [tuples[0][0]]
+        paths += [name for name, path in tuples]
 
     finished = False
 
@@ -530,7 +530,7 @@ def test_load_trash_worker_default():
         nonlocal finished
         finished = True
 
-    worker = PortfolioLoadTrashWorker("trash:")
+    worker = PortfolioLoadWorker("trash:")
     worker.connect("updated", _update_callback)
     worker.connect("finished", _finished_callback)
     worker.start()

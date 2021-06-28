@@ -32,7 +32,6 @@ from .worker import PortfolioDeleteWorker
 from .worker import PortfolioLoadWorker
 from .worker import PortfolioOpenWorker
 from .worker import PortfolioPropertiesWorker
-from .worker import PortfolioLoadTrashWorker
 from .worker import PortfolioRestoreTrashWorker
 from .worker import PortfolioDeleteTrashWorker
 from .worker import PortfolioSendTrashWorker
@@ -360,12 +359,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._worker is not None:
             self._worker.stop()
 
-        if utils.is_trash(directory):
-            worker_class = PortfolioLoadTrashWorker
-        else:
-            worker_class = PortfolioLoadWorker
-
-        self._worker = worker_class(directory, self.show_hidden_button.props.active)
+        self._worker = PortfolioLoadWorker(
+            directory, self.show_hidden_button.props.active
+        )
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
