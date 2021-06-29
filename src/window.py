@@ -1332,6 +1332,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         child = self.content_deck.get_visible_child()
         if child == self.places_box and self._worker is not None:
             self._worker.stop()
+            self._clean_workers()
         elif child == self.files_box:
             self._properties.stop()
 

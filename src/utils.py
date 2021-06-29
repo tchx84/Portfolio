@@ -20,6 +20,8 @@ import re
 
 from gi.repository import Gio, GLib
 
+from .cache import cached
+
 
 def find_new_name(directory, name):
     counter = 1
@@ -143,6 +145,7 @@ def is_trash_uri_dir(uri):
     return info.get_content_type() == "inode/directory"
 
 
+@cached
 def get_file_name(string):
     try:
         return get_trash_uri_file_name(string)
@@ -150,6 +153,7 @@ def get_file_name(string):
         return os.path.basename(string)
 
 
+@cached
 def get_file_mtime(string):
     try:
         return get_trash_uri_modified_time(string)
@@ -157,6 +161,7 @@ def get_file_mtime(string):
         return os.path.getmtime(string)
 
 
+@cached
 def is_file_dir(string):
     try:
         return is_trash_uri_dir(string)

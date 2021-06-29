@@ -26,6 +26,7 @@ from gi.repository import Gio, GObject, GLib
 
 from . import utils
 from . import logger
+from .cache import default_cache
 from .translation import gettext as _
 
 
@@ -259,6 +260,10 @@ class PortfolioLoadWorker(GObject.GObject):
         self._directory = directory
         self._hidden = hidden
         self._timeout_handler_id = None
+        default_cache.activate()
+
+    def __del__(self):
+        default_cache.deactivate()
 
     def start(self):
         self.emit("started", self._directory)
