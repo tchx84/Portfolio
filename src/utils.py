@@ -125,8 +125,8 @@ def list_trash(uri):
 
 
 def get_trash_uri_file_name(uri):
-    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME)
-    return info.get_display_name()
+    uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
+    return os.path.basename(uri.get_path())
 
 
 def get_trash_uri_orig_path(uri):
