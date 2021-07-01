@@ -7,6 +7,7 @@
 - Added improved icon by @jimmac.
 - Added shortcut to Flatpak HOST root filesystem in places.
 - Added support for Trash folder.
+- Added cache to speed up directories loading times.
 
 ## [0.9.10] 2021-03-01
 
