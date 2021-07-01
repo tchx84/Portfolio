@@ -1123,16 +1123,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_restore_trash_clicked(self, button):
         selection = self._get_selection()
 
-        should_warn = any(
-            [
-                Gio.File.new_for_path(utils.get_trash_uri_orig_path(uri)).query_exists(
-                    None
-                )
-                for uri in [uri for uri, ref in selection]
-            ]
-        )
+        paths = [
+            utils.get_trash_uri_orig_path(uri)
+            for uri in [uri for uri, ref in selection]
+        ]
 
-        if not should_warn:
+        overwrites = any([os.path.exists(path) for path in paths])
+        duplicates = len(set(paths)) != len(paths)
+
+        if not overwrites and not duplicates:
             self._on_restore_trash_confirmed(None, None, selection)
             return
 
