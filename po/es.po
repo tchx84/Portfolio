@@ -159,7 +159,7 @@ msgstr "Contribuciones por"
 
 #: src/places.py:48
 msgid "Trash"
-msgstr ""
+msgstr "Papelera"
 
 #: src/places.py:86
 msgid "Places"
@@ -179,7 +179,7 @@ msgstr "Sistema"
 
 #: src/places.py:160
 msgid "Host"
-msgstr ""
+msgstr "Anfitrión"
 
 #: src/places.py:185
 msgid "No places found"
@@ -274,20 +274,19 @@ msgstr "Sin permisos en este directorio"
 
 #: src/window.py:1178
 msgid "Restoring"
-msgstr ""
+msgstr "Restaurando"
 
 #: src/window.py:1209
-#, fuzzy, python-format
 msgid "Could not restore %s"
-msgstr "No se pudo pegar %s"
+msgstr "No se pudo restaurar %s"
 
 #: src/window.py:1294
 msgid "Removing device, please wait"
-msgstr ""
+msgstr "Removiendo dispositivo, por favor esperar"
 
 #: src/window.py:1297
 msgid "Device can be removed"
-msgstr ""
+msgstr "Ya puede remover el dispositivo"
 
 #: src/worker.py:463
 msgid "Calculating..."
