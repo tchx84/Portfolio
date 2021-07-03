@@ -8,6 +8,7 @@
 - Added shortcut to Flatpak HOST root filesystem in places.
 - Added support for Trash folder.
 - Added cache to speed up directories loading times.
+- Added scrolling to the just-left directory when navigating back.
 
 ## [0.9.10] 2021-03-01
 
