@@ -5,7 +5,7 @@
 - Fixed issues in systems without glibc by @craftyguy.
 - Added German translation by @lqs01.
 - Added improved icon by @jimmac.
-- Added shortcut to Flatpak HOST root filesystem in places.
+- Added shortcut to Flatpak host filesystem in places.
 - Added support for Trash folder.
 - Added cache to speed up directories loading times.
 - Added scrolling to the just-left directory when navigating back.
