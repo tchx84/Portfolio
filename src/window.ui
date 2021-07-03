@@ -1199,7 +1199,7 @@
                               </object>
                               <packing>
                                 <property name="name">page4</property>
-                                <property name="title" translatable="yes">page4</property>
+                                <property name="title">page4</property>
                                 <property name="position">4</property>
                               </packing>
                             </child>
