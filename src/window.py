@@ -139,6 +139,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_cut = []
         self._to_select = None
         self._to_select_row = None
+        self._to_go_to = None
+        self._to_go_to_row = None
         self._last_clicked = None
         self._last_vscroll_value = None
         self._dont_activate = False
@@ -407,6 +409,14 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _get_path(self, model, treepath):
         return model[model.get_iter(treepath)][self.PATH_COLUMN]
+
+    def _go_to(self, row):
+        result, row = self.filtered.convert_child_iter_to_iter(row)
+        result, row = self.sorted.convert_child_iter_to_iter(row)
+
+        treepath = self.sorted.get_path(row)
+
+        self.treeview.scroll_to_cell(treepath, None, False, 0, 0)
 
     def _go_to_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -695,6 +705,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
             if self._to_select == path:
                 self._to_select_row = row
 
+            if self._to_go_to == path:
+                self._to_go_to_row = row
+
         self.loading_bar.set_fraction((index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
@@ -709,6 +722,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._select_and_go(self._to_select_row)
             self._to_select_row = None
             self._to_select = None
+        elif self._to_go_to_row is not None:
+            self._go_to(self._to_go_to_row)
+            self._to_go_to_row = None
+            self._to_go_to = None
         else:
             self._go_to_top()
 
@@ -765,6 +782,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._index == 0:
             self._go_back_to_homepage()
         else:
+            self._to_go_to = self._history[self._index]
             self._index -= 1
             self._move(self._history[self._index], True)
 
