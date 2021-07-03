@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 16:33-0400\n"
-"PO-Revision-Date: 2021-02-27 13:26+0100\n"
+"PO-Revision-Date: 2021-07-03 23:58+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -163,7 +163,7 @@ msgstr "Příspěvky od"
 
 #: src/places.py:48
 msgid "Trash"
-msgstr ""
+msgstr "Koš"
 
 #: src/places.py:86
 msgid "Places"
@@ -183,7 +183,7 @@ msgstr "Systém"
 
 #: src/places.py:160
 msgid "Host"
-msgstr ""
+msgstr "Hostitel"
 
 #: src/places.py:185
 msgid "No places found"
@@ -278,20 +278,20 @@ msgstr "Žádná oprávnění na tomto adresáři"
 
 #: src/window.py:1178
 msgid "Restoring"
-msgstr ""
+msgstr "Obnovuje se"
 
 #: src/window.py:1209
-#, fuzzy, python-format
+#, python-format
 msgid "Could not restore %s"
-msgstr "Nelze vložit %s"
+msgstr "Nelze obnovit %s"
 
 #: src/window.py:1294
 msgid "Removing device, please wait"
-msgstr ""
+msgstr "Odebírá se zařízení, prosím čekejte"
 
 #: src/window.py:1297
 msgid "Device can be removed"
-msgstr ""
+msgstr "Zařízení může být odebráno"
 
 #: src/worker.py:463
 msgid "Calculating..."
