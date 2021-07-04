@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 16:33-0400\n"
-"PO-Revision-Date: 2021-02-27 20:01+0100\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"PO-Revision-Date: 2021-07-04 09:47+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -162,7 +162,7 @@ msgstr "Met bijdragen van"
 
 #: src/places.py:48
 msgid "Trash"
-msgstr ""
+msgstr "Prullenbak"
 
 #: src/places.py:86
 msgid "Places"
@@ -182,7 +182,7 @@ msgstr "Systeem"
 
 #: src/places.py:160
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: src/places.py:185
 msgid "No places found"
@@ -190,26 +190,26 @@ msgstr "Geen locaties aangetroffen"
 
 #: src/window.py:652
 msgid "Opening"
-msgstr "Openen"
+msgstr "Bezig met openen…"
 
 #: src/window.py:671 src/window.py:1367 src/window.py:1377
 #, python-format
 msgid "Could not open %s"
-msgstr "Kan %s niet openen"
+msgstr "‘%s’ kan niet worden geopend"
 
 #: src/window.py:691 src/window.py:738
 msgid "Loading"
-msgstr "Bezig met laden"
+msgstr "Bezig met laden…"
 
 #: src/window.py:739
 #, python-format
 msgid "Could not load %s"
-msgstr "Kan %s niet laden"
+msgstr "‘%s’ kan niet worden geladen"
 
 #: src/window.py:841 src/window.py:855
 #, python-format
 msgid "%s already exists"
-msgstr "%s bestaat al"
+msgstr "‘%s’ bestaat al"
 
 #: src/window.py:886 src/window.py:1221
 #, python-format
@@ -219,12 +219,12 @@ msgstr "deze %d bestanden"
 #: src/window.py:888 src/window.py:1223
 #, python-format
 msgid "Delete %s permanently?"
-msgstr "Wil je '%s' permanent verwijderen?"
+msgstr "Wil je ‘%s’ permanent verwijderen?"
 
 #: src/window.py:908
 #, python-format
 msgid "%s will be moved"
-msgstr "%s wordt verplaatst"
+msgstr "‘%s’ wordt verplaatst"
 
 #: src/window.py:910
 #, python-format
@@ -234,7 +234,7 @@ msgstr "%d bestanden worden verplaatst"
 #: src/window.py:926
 #, python-format
 msgid "%s will be copied"
-msgstr "%s wordt gekopieerd"
+msgstr "‘%s’ wordt gekopieerd"
 
 #: src/window.py:928
 #, python-format
@@ -243,29 +243,29 @@ msgstr "%d bestanden worden gekopieerd"
 
 #: src/window.py:953 src/window.py:1157
 msgid "Files will be overwritten, proceed?"
-msgstr "Bestanden worden overschreven, doorgaan?"
+msgstr "De bestanden worden overschreven. Wil je doorgaan?"
 
 #: src/window.py:969
 msgid "Pasting"
-msgstr "Bezig met plakken"
+msgstr "Bezig met plakken…"
 
 #: src/window.py:1003
 #, python-format
 msgid "Could not paste %s"
-msgstr "Kan %s niet plakken"
+msgstr "‘%s’ kan niet worden geplakt"
 
 #: src/window.py:1056 src/window.py:1249
 msgid "Deleting"
-msgstr "Bezig met verwijderen"
+msgstr "Bezig met verwijderen…"
 
 #: src/window.py:1082 src/window.py:1273
 #, python-format
 msgid "Could not delete %s"
-msgstr "Kan %s niet verwijderen"
+msgstr "‘%s’ kan niet worden verwijderd"
 
 #: src/window.py:1106
 msgid "Stopping"
-msgstr "Bezig met stoppen"
+msgstr "Bezig met afbreken…"
 
 #: src/window.py:1118
 msgid "New Folder"
@@ -277,20 +277,20 @@ msgstr "Je hebt geen rechten op deze map"
 
 #: src/window.py:1178
 msgid "Restoring"
-msgstr ""
+msgstr "Bezig met herstellen…"
 
 #: src/window.py:1209
-#, fuzzy, python-format
+#, python-format
 msgid "Could not restore %s"
-msgstr "Kan %s niet plakken"
+msgstr "‘%s’ kan niet worden hersteld"
 
 #: src/window.py:1294
 msgid "Removing device, please wait"
-msgstr ""
+msgstr "Bezig met afkoppelen van apparaat…"
 
 #: src/window.py:1297
 msgid "Device can be removed"
-msgstr ""
+msgstr "Het apparaat kan niet worden afgekoppeld"
 
 #: src/worker.py:463
 msgid "Calculating..."
