@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 16:33-0400\n"
-"PO-Revision-Date: 2021-02-27 08:38-0300\n"
+"PO-Revision-Date: 2021-07-04 08:03-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-Project-Style: gnome\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -163,7 +163,7 @@ msgstr "Contribuições por"
 
 #: src/places.py:48
 msgid "Trash"
-msgstr ""
+msgstr "Lixeira"
 
 #: src/places.py:86
 msgid "Places"
@@ -183,7 +183,7 @@ msgstr "Sistema"
 
 #: src/places.py:160
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: src/places.py:185
 msgid "No places found"
@@ -278,20 +278,20 @@ msgstr "Nenhuma permissão neste diretório"
 
 #: src/window.py:1178
 msgid "Restoring"
-msgstr ""
+msgstr "Restaurando"
 
 #: src/window.py:1209
-#, fuzzy, python-format
+#, python-format
 msgid "Could not restore %s"
-msgstr "Não foi possível colar %s"
+msgstr "Não foi possível restaurar %s"
 
 #: src/window.py:1294
 msgid "Removing device, please wait"
-msgstr ""
+msgstr "Removendo dispositivo, por favor aguarde"
 
 #: src/window.py:1297
 msgid "Device can be removed"
-msgstr ""
+msgstr "O dispositivo pode ser removido"
 
 #: src/worker.py:463
 msgid "Calculating..."
