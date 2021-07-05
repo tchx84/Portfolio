@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-03 16:33-0400\n"
-"PO-Revision-Date: 2021-02-27 20:52+0700\n"
+"PO-Revision-Date: 2021-07-05 09:17+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -162,7 +162,7 @@ msgstr "Kontribusi oleh"
 
 #: src/places.py:48
 msgid "Trash"
-msgstr ""
+msgstr "Tempat Sampah"
 
 #: src/places.py:86
 msgid "Places"
@@ -182,7 +182,7 @@ msgstr "Sistem"
 
 #: src/places.py:160
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: src/places.py:185
 msgid "No places found"
@@ -243,7 +243,7 @@ msgstr "%d berkas akan disalin"
 
 #: src/window.py:953 src/window.py:1157
 msgid "Files will be overwritten, proceed?"
-msgstr "File akan ditimpa, lanjutkan?"
+msgstr "Berkas akan ditimpa, lanjutkan?"
 
 #: src/window.py:969
 msgid "Pasting"
@@ -277,20 +277,20 @@ msgstr "Tak ada izin pada direktori ini"
 
 #: src/window.py:1178
 msgid "Restoring"
-msgstr ""
+msgstr "Memulihkan"
 
 #: src/window.py:1209
-#, fuzzy, python-format
+#, python-format
 msgid "Could not restore %s"
-msgstr "Tak bisa menempelkan %s"
+msgstr "Tak bisa memulihkan %s"
 
 #: src/window.py:1294
 msgid "Removing device, please wait"
-msgstr ""
+msgstr "Menghapus perangkat, harap tunggu"
 
 #: src/window.py:1297
 msgid "Device can be removed"
-msgstr ""
+msgstr "Perangkat dapat dihapus"
 
 #: src/worker.py:463
 msgid "Calculating..."
