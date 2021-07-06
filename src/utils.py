@@ -186,3 +186,7 @@ def join_directory(directory, name):
         return join_uri(directory, name)
     except:
         return os.path.join(directory, name)
+
+
+def is_flatpak():
+    return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))

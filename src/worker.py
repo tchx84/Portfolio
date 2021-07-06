@@ -322,7 +322,7 @@ class PortfolioOpenWorker(GObject.GObject):
         super().__init__()
         self._path = path
         self._timeout_handler_id = None
-        self._is_flatpak = os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
+        self._is_flatpak = utils.is_flatpak()
 
     def start(self):
         self.emit("started")
@@ -504,6 +504,7 @@ class PortfolioSendTrashWorker(GObject.GObject):
     def __init__(self, selection):
         super().__init__()
         self._selection = selection
+        self._is_flatpak = utils.is_flatpak()
 
     def start(self):
         self.emit("started")
@@ -527,7 +528,7 @@ class PortfolioSendTrashWorker(GObject.GObject):
         try:
             self.emit("pre-update", path)
 
-            if os.path.exists(os.path.join(os.path.sep, ".flatpak-info")):
+            if self._is_flatpak:
                 cmd = f'flatpak-spawn --host gio trash "{path}"'
                 subprocess.run(cmd, shell=True, check=True)
             else:
