@@ -97,6 +97,11 @@ def get_uri_info(uri, attributes):
     return info
 
 
+def get_uri_target_uri(uri):
+    info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_STANDARD_TARGET_URI)
+    return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_STANDARD_TARGET_URI)
+
+
 def is_trash(uri):
     try:
         uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)

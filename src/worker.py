@@ -322,11 +322,21 @@ class PortfolioOpenWorker(GObject.GObject):
         super().__init__()
         self._path = path
         self._timeout_handler_id = None
+        self._is_flatpak = os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
 
     def start(self):
         self.emit("started")
 
-        uri = self._path if utils.is_uri(self._path) else f"file://{self._path}"
+        is_uri = utils.is_uri(self._path)
+
+        # XXX can't seem to open trash uris within sandbox
+        if is_uri and self._is_flatpak:
+            uri = utils.get_uri_target_uri(self._path)
+        elif is_uri:
+            uri = self._path
+        else:
+            uri = f"file://{self._path}"
+
         Gio.AppInfo.launch_default_for_uri_async(
             uri, None, None, self._on_launch_finished, None
         )
