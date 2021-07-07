@@ -20,6 +20,7 @@ import os
 from gi.repository import GLib, Gio, Gtk, GObject, Handy
 
 from . import logger
+from . import utils
 from .place import PortfolioPlace
 from .translation import gettext as _
 
@@ -44,8 +45,8 @@ class PortfolioPlaces(Gtk.Stack):
     XDG_MUSIC = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
     XDG_VIDEOS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
 
-    XDG_TRASH = "trash:"
-    XDG_TRASH_NAME = _("Trash")
+    XDG_TRASH = utils.get_trash_uri_scheme() + ":"
+    XDG_TRASH_NAME = utils.get_trash_display_name()
 
     HOST_PERMISSION = ["host"]
     HOME_PERMISSION = ["host", "home"]

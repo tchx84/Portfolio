@@ -21,6 +21,7 @@ import re
 from gi.repository import Gio, GLib
 
 from .cache import cached
+from .translation import gettext as _
 
 
 def find_new_name(directory, name):
@@ -41,7 +42,7 @@ def count(path):
     _count = 1
 
     if os.path.isdir(path):
-        for directory, _, files in os.walk(path):
+        for directory, dirs, files in os.walk(path):
             _count += len(files)
 
     return _count
@@ -54,7 +55,7 @@ def flatten_walk(path):
         raise error
 
     if os.path.isdir(path):
-        for directory, _, files in os.walk(path, topdown=False, onerror=_callback):
+        for directory, dirs, files in os.walk(path, topdown=False, onerror=_callback):
             for file in files:
                 _paths += [os.path.join(directory, file)]
             _paths += [directory]
@@ -102,10 +103,18 @@ def get_uri_target_uri(uri):
     return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_STANDARD_TARGET_URI)
 
 
+def get_trash_uri_scheme():
+    return "trash"
+
+
+def get_trash_display_name():
+    return _("Trash")
+
+
 def is_trash(uri):
     try:
         uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
-        return uri.get_scheme() == "trash"
+        return uri.get_scheme() == get_trash_uri_scheme()
     except:
         return False
 
@@ -130,8 +139,13 @@ def list_trash(uri):
 
 
 def get_trash_uri_file_name(uri):
-    uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
-    return os.path.basename(uri.get_path())
+    uri_obj = GLib.uri_parse(uri, GLib.UriFlags.NONE)
+    name = os.path.basename(uri_obj.get_path())
+
+    if not name:
+        name = get_trash_display_name()
+
+    return name
 
 
 def get_trash_uri_orig_path(uri):
