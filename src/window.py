@@ -1359,8 +1359,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._properties.stop()
 
     def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR, force_page_switch=False):
-        # XXX so cheap !
-        path = path.replace("file://", "")
+        path = utils.get_uri_path(path)
 
         # make sure it exists though !
         if not os.path.exists(path):

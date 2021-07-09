@@ -87,6 +87,14 @@ def join_uri(uri, name):
     )
 
 
+def get_uri_path(string):
+    try:
+        uri = GLib.uri_parse(string, GLib.UriFlags.NONE)
+        return uri.get_path()
+    except:
+        return string
+
+
 def get_uri_info(uri, attributes):
     file = Gio.File.new_for_uri(uri)
     info = file.query_info(
