@@ -119,6 +119,10 @@ def get_trash_display_name():
     return _("Trash")
 
 
+def has_trash():
+    return Gio.File.new_for_uri("trash:").query_exists(None)
+
+
 def is_trash(uri):
     try:
         uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)

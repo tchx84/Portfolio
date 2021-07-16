@@ -891,7 +891,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             description,
             self._on_delete_confirmed,
             self._on_popup_closed,
-            self._on_trash_instead,
+            self._on_trash_instead if utils.has_trash() else None,
             False,
             selection,
         )

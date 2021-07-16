@@ -136,7 +136,7 @@ class PortfolioPlaces(Gtk.Stack):
                 os.path.basename(self.XDG_VIDEOS),
                 self.XDG_VIDEOS,
             )
-        if self._has_permission_for(self.TRASH_PERMISSION) and self._has_trash():
+        if self._has_permission_for(self.TRASH_PERMISSION) and utils.has_trash():
             self._add_place(
                 self._places_group,
                 "user-trash-symbolic",
@@ -233,9 +233,6 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _is_flatpak(self):
         return os.path.exists(self.FLATPAK_INFO)
-
-    def _has_trash(self):
-        return Gio.File.new_for_uri(self.XDG_TRASH).query_exists(None)
 
     def _has_permission_for(self, required):
         # not using flatpak, so access to all
