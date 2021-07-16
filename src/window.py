@@ -1209,7 +1209,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading_description.set_text(_("Could not restore %s") % path)
 
         self.action_stack.set_visible_child(self.close_box)
-        self.tools_stack.set_visible_child(self.close_tool)
+        self.tools_stack.set_visible_child(self.close_tools)
 
     def _on_delete_trash_clicked(self, button):
         selection = self._get_selection()
