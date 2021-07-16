@@ -1146,7 +1146,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             for uri in [uri for uri, ref in selection]
         ]
 
-        overwrites = any([os.path.exists(path) for path in paths])
+        overwrites = any([os.path.exists(path) for path in paths if path])
         duplicates = len(set(paths)) != len(paths)
 
         if not overwrites and not duplicates:
