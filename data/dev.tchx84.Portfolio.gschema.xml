@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="portfolio">
+  <enum id='dev.tchx84.Portfolio.SortOrder'>
+    <value nick='alphabetical' value='0'/>
+    <value nick='modified_time' value='1'/>
+  </enum>
 	<schema id="dev.tchx84.Portfolio" path="/dev/tchx84/Portfolio/">
+    <key name="show-hidden" type="b">
+      <default>false</default>
+    </key>
+    <key name="sort-order" enum="dev.tchx84.Portfolio.SortOrder">
+      <default>'alphabetical'</default>
+    </key>
 	</schema>
 </schemalist>
