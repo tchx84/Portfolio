@@ -1142,8 +1142,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         selection = self._get_selection()
 
         paths = [
-            utils.get_trash_uri_orig_path(uri)
-            for uri in [uri for uri, ref in selection]
+            utils.get_uri_orig_path(uri) for uri in [uri for uri, ref in selection]
         ]
 
         overwrites = any([os.path.exists(path) for path in paths if path])
