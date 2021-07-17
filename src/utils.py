@@ -65,6 +65,26 @@ def flatten_walk(path):
     return _paths
 
 
+def get_trash_uri_scheme():
+    return "trash"
+
+
+def get_trash_display_name():
+    return _("Trash")
+
+
+def has_trash():
+    return Gio.File.new_for_uri("trash:").query_exists(None)
+
+
+def is_trash(uri):
+    try:
+        uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
+        return uri.get_scheme() == get_trash_uri_scheme()
+    except:
+        return False
+
+
 def is_uri(uri):
     try:
         GLib.uri_parse(uri, GLib.UriFlags.NONE)
@@ -111,27 +131,7 @@ def get_uri_target_uri(uri):
     return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_STANDARD_TARGET_URI)
 
 
-def get_trash_uri_scheme():
-    return "trash"
-
-
-def get_trash_display_name():
-    return _("Trash")
-
-
-def has_trash():
-    return Gio.File.new_for_uri("trash:").query_exists(None)
-
-
-def is_trash(uri):
-    try:
-        uri = GLib.uri_parse(uri, GLib.UriFlags.NONE)
-        return uri.get_scheme() == get_trash_uri_scheme()
-    except:
-        return False
-
-
-def list_trash(uri):
+def list_uri(uri):
     uris = []
 
     file = Gio.File.new_for_uri(uri)
@@ -150,67 +150,67 @@ def list_trash(uri):
     return uris
 
 
-def get_trash_uri_file_name(uri):
+def get_uri_file_name(uri):
     uri_obj = GLib.uri_parse(uri, GLib.UriFlags.NONE)
     name = os.path.basename(uri_obj.get_path())
 
-    if not name:
+    if uri_obj.get_scheme() == get_trash_uri_scheme() and not name:
         name = get_trash_display_name()
 
     return name
 
 
-def get_trash_uri_orig_path(uri):
+def get_uri_orig_path(uri):
     info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH)
     return info.get_attribute_as_string(Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH)
 
 
-def get_trash_uri_modified_time(uri):
+def get_uri_modified_time(uri):
     info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_TIME_MODIFIED)
     time = info.get_modification_date_time()
     return time.to_unix()
 
 
-def is_trash_uri_dir(uri):
+def is_uri_dir(uri):
     info = get_uri_info(uri, Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE)
     return info.get_content_type() == "inode/directory"
 
 
 @cached
 def get_file_name(string):
-    try:
-        return get_trash_uri_file_name(string)
-    except:
+    if is_uri(string):
+        return get_uri_file_name(string)
+    else:
         return os.path.basename(string)
 
 
 @cached
 def get_file_mtime(string):
-    try:
-        return get_trash_uri_modified_time(string)
-    except:
+    if is_uri(string):
+        return get_uri_modified_time(string)
+    else:
         return os.path.getmtime(string)
 
 
 @cached
 def is_file_dir(string):
-    try:
-        return is_trash_uri_dir(string)
-    except:
+    if is_uri(string):
+        return is_uri_dir(string)
+    else:
         return os.path.isdir(string)
 
 
 def list_directory(string):
-    try:
-        return list_trash(string)
-    except:
+    if is_uri(string):
+        return list_uri(string)
+    else:
         return os.listdir(string)
 
 
 def join_directory(directory, name):
-    try:
+    if is_uri(directory):
         return join_uri(directory, name)
-    except:
+    else:
         return os.path.join(directory, name)
 
 
