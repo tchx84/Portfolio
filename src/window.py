@@ -36,6 +36,7 @@ from .worker import PortfolioRestoreTrashWorker
 from .worker import PortfolioDeleteTrashWorker
 from .worker import PortfolioSendTrashWorker
 from .places import PortfolioPlaces
+from .settings import PortfolioSettings
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
@@ -72,6 +73,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     about_button = Gtk.Template.Child()
     show_hidden_button = Gtk.Template.Child()
     a_to_z_button = Gtk.Template.Child()
+    last_modified_button = Gtk.Template.Child()
     go_top_button = Gtk.Template.Child()
     about_back_button = Gtk.Template.Child()
     properties_back_button = Gtk.Template.Child()
@@ -126,6 +128,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._setup()
+        self._setup_settings()
 
     def _setup(self):
         Handy.init()
@@ -251,6 +254,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
+
+    def _setup_settings(self):
+        self._settings = PortfolioSettings()
+
+        self.show_hidden_button.props.active = self._settings.show_hidden
+
+        if self._settings.sort_order == PortfolioSettings.ALPHABETICAL_ORDER:
+            self.a_to_z_button.props.active = True
+        else:
+            self.last_modified_button.props.active = True
 
     def _filter(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -1335,9 +1348,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_mode()
 
     def _on_hidden_toggled(self, button):
+        self._settings.show_hidden = self.show_hidden_button.props.active
         self._refresh()
 
     def _on_sort_toggled(self, button):
+        if self.a_to_z_button.props.active:
+            self._settings.sort_order = PortfolioSettings.ALPHABETICAL_ORDER
+        else:
+            self._settings.sort_order = PortfolioSettings.MODIFIED_TIME_ORDER
+
         self._refresh()
 
     def _on_menu_button_clicked(self, button):
