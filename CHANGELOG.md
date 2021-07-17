@@ -10,6 +10,7 @@
 - Added support for Trash folder (via gvfsd).
 - Added cache to speed up directories loading times.
 - Added scrolling to the just-left directory when navigating back.
+- Added persistence to filter and sort options.
 
 ## [0.9.10] 2021-03-01
 
