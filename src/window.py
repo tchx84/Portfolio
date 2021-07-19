@@ -204,7 +204,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
-        places.connect("removed", self._on_places_removing)
+        places.connect("removing", self._on_places_removing)
         places.connect("removed", self._on_places_removed)
         self.places_inner_box.add(places)
 
