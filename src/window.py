@@ -35,8 +35,10 @@ from .worker import PortfolioPropertiesWorker
 from .worker import PortfolioRestoreTrashWorker
 from .worker import PortfolioDeleteTrashWorker
 from .worker import PortfolioSendTrashWorker
+from .worker import PortfolioLoadTrashWorker
 from .places import PortfolioPlaces
 from .settings import PortfolioSettings
+from .trash import default_trash
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
@@ -374,9 +376,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._worker is not None:
             self._worker.stop()
 
-        self._worker = PortfolioLoadWorker(
-            directory, self.show_hidden_button.props.active
-        )
+        if default_trash.is_trash(directory):
+            loader_class = PortfolioLoadTrashWorker
+        else:
+            loader_class = PortfolioLoadWorker
+
+        self._worker = loader_class(directory, self.show_hidden_button.props.active)
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
@@ -451,7 +456,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         if path is None:
             return
-        elif utils.is_file_dir(path):
+        elif default_trash.is_trash(path) or utils.is_file_dir(path):
             self._update_history(path, navigating)
             self._populate(path)
         else:
@@ -592,7 +597,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_tools_stack(self):
         directory = self._history[self._index]
-        if utils.is_trash(directory):
+        if default_trash.in_trash(directory):
             self.tools_stack.set_visible_child(self.trash_tools)
             return
 
@@ -637,7 +642,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_directory_title(self):
         directory = self._history[self._index]
-        self.headerbar.set_title(utils.get_file_name(directory))
+
+        if default_trash.is_trash(directory):
+            name = PortfolioPlaces.XDG_TRASH_NAME
+        else:
+            name = os.path.basename(directory)
+
+        self.headerbar.set_title(name)
 
     def _update_filter(self):
         self.filtered.refilter()
@@ -904,7 +915,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             description,
             self._on_delete_confirmed,
             self._on_popup_closed,
-            self._on_trash_instead if utils.has_trash() else None,
+            self._on_trash_instead,
             False,
             selection,
         )
@@ -1153,10 +1164,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_restore_trash_clicked(self, button):
         selection = self._get_selection()
-
-        paths = [
-            utils.get_uri_orig_path(uri) for uri in [uri for uri, ref in selection]
-        ]
+        paths = [default_trash.get_orig_path(path) for path, ref in selection]
 
         overwrites = any([os.path.exists(path) for path in paths if path])
         duplicates = len(set(paths)) != len(paths)

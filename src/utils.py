@@ -24,7 +24,7 @@ from .cache import cached
 from .translation import gettext as _
 
 
-def find_new_name(directory, name):
+def find_new_name(directory, name, fmt="%s(%d)"):
     counter = 1
 
     while os.path.exists(os.path.join(directory, name)):
@@ -32,7 +32,7 @@ def find_new_name(directory, name):
         if len(components) > 1:
             name = "".join(components[:-2])
 
-        name = f"{name}({counter})"
+        name = fmt % (name, counter)
         counter += 1
 
     return name
@@ -216,3 +216,10 @@ def join_directory(directory, name):
 
 def is_flatpak():
     return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
+
+
+def find_mount_point(path):
+    path = os.path.abspath(path)
+    while not os.path.ismount(path):
+        path = os.path.dirname(path)
+    return path

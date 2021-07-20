@@ -9,6 +9,7 @@ sys.path.append(ROOT_DIR)
 RESOURCE_DIR = os.path.join("@resource_dir@")
 
 TEST_HOME_DIR = os.path.join(ROOT_DIR, "tests/root/home/tchx84")
+TEST_XDG_DATA_DIRS = os.path.join(ROOT_DIR, "tests/root/home/share")
 TEST_HOME_FILE = os.path.join(TEST_HOME_DIR, "file")
 TEST_HOME_FOLDER = os.path.join(TEST_HOME_DIR, "folder")
 TEST_HOME_SUB_FILE = os.path.join(TEST_HOME_DIR, "folder", "file")
@@ -47,6 +48,7 @@ def setup_module():
     Gtk.init(None)
 
     os.environ["PORTFOLIO_HOME_DIR"] = TEST_HOME_DIR
+    os.environ["PORTFOLIO_XDG_DATA_DIRS"] = TEST_XDG_DATA_DIRS
 
 
 def teardown_module():

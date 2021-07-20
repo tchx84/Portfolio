@@ -20,7 +20,6 @@ import os
 from gi.repository import GLib, Gio, Gtk, GObject, Handy
 
 from . import logger
-from . import utils
 from .place import PortfolioPlace
 from .translation import gettext as _
 
@@ -45,8 +44,8 @@ class PortfolioPlaces(Gtk.Stack):
     XDG_MUSIC = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
     XDG_VIDEOS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
 
-    XDG_TRASH = utils.get_trash_uri_scheme() + ":"
-    XDG_TRASH_NAME = utils.get_trash_display_name()
+    XDG_TRASH = "Trash"
+    XDG_TRASH_NAME = _("Trash")
 
     HOST_PERMISSION = ["host"]
     HOME_PERMISSION = ["host", "home"]
@@ -55,7 +54,7 @@ class PortfolioPlaces(Gtk.Stack):
     PICTURES_PERMISSION = ["host", "home", "xdg-pictures"]
     MUSIC_PERMISSION = ["host", "home", "xdg-music"]
     VIDEOS_PERMISSION = ["host", "home", "xdg-videos"]
-    TRASH_PERMISSION = ["host", "home", "xdg-run/gvfsd"]
+    TRASH_PERMISSION = ["host", "home"]
 
     def __init__(self, **kargs):
         super().__init__(**kargs)
@@ -136,7 +135,7 @@ class PortfolioPlaces(Gtk.Stack):
                 os.path.basename(self.XDG_VIDEOS),
                 self.XDG_VIDEOS,
             )
-        if self._has_permission_for(self.TRASH_PERMISSION) and utils.has_trash():
+        if self._has_permission_for(self.TRASH_PERMISSION):
             self._add_place(
                 self._places_group,
                 "user-trash-symbolic",

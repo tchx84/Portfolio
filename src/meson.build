@@ -40,6 +40,7 @@ portfolio_sources = [
   'translation.py',
   'cache.py',
   'settings.py',
+  'trash.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)
