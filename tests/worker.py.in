@@ -21,8 +21,6 @@ import shutil
 import pathlib
 import pytest
 
-from src import utils
-
 ROOT_DIR = "@source_dir@"
 sys.path.append(ROOT_DIR)
 
@@ -31,9 +29,7 @@ TEST_COPY_DIR = os.path.join(TEST_HOME_DIR, "copy")
 TEST_CUT_DIR = os.path.join(TEST_HOME_DIR, "cut")
 
 TEST_TRASH_TMP_DIR = os.path.join(ROOT_DIR, "tests/root/home/Trashable")
-
-
-skip_trash = not utils.has_trash()
+TEST_XDG_DATA_DIRS = os.path.join(ROOT_DIR, "tests/root/home/share")
 
 
 def update_gtk():
@@ -47,6 +43,7 @@ def setup_module(module):
     import gi
 
     gi.require_version("Gdk", "3.0")
+    gi.require_version("Gtk", "3.0")
 
     from gi.repository import Gtk
 
@@ -58,7 +55,11 @@ def setup_module(module):
     pathlib.Path(os.path.join(TEST_HOME_DIR, "file")).touch()
     pathlib.Path(os.path.join(TEST_HOME_DIR, ".hidden")).touch()
 
-    # for Trash tests
+    # for Trash test folder
+    pathlib.Path(TEST_XDG_DATA_DIRS).mkdir(exist_ok=True)
+    os.environ["PORTFOLIO_XDG_DATA_DIRS"] = TEST_XDG_DATA_DIRS
+
+    # for Trash test files
     pathlib.Path(TEST_TRASH_TMP_DIR).mkdir(exist_ok=True)
     pathlib.Path(os.path.join(TEST_TRASH_TMP_DIR, "file")).touch()
     pathlib.Path(os.path.join(TEST_TRASH_TMP_DIR, "folder")).mkdir(exist_ok=True)
@@ -70,6 +71,7 @@ def teardown_module(module):
     shutil.rmtree(TEST_COPY_DIR, ignore_errors=True)
     shutil.rmtree(TEST_CUT_DIR, ignore_errors=True)
     shutil.rmtree(TEST_TRASH_TMP_DIR, ignore_errors=True)
+    shutil.rmtree(TEST_XDG_DATA_DIRS, ignore_errors=True)
 
 
 def test_init_setup():
@@ -484,7 +486,6 @@ def test_properties_worker_default():
 
 
 @pytest.mark.timeout(5)
-@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_send_trash_worker_default():
     from src.worker import PortfolioSendTrashWorker
 
@@ -509,18 +510,19 @@ def test_send_trash_worker_default():
         update_gtk()
 
     assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0
+    assert os.path.exists(os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "file"))
+    assert os.path.exists(os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "folder"))
 
 
 @pytest.mark.timeout(5)
-@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_load_trash_worker_default():
-    from src.worker import PortfolioLoadWorker
+    from src.worker import PortfolioLoadTrashWorker
 
     paths = []
 
     def _update_callback(worker, name, tuples, index, total):
         nonlocal paths
-        paths += [name for name, path in tuples]
+        paths += [path for name, path in tuples]
 
     finished = False
 
@@ -528,7 +530,7 @@ def test_load_trash_worker_default():
         nonlocal finished
         finished = True
 
-    worker = PortfolioLoadWorker("trash:")
+    worker = PortfolioLoadTrashWorker()
     worker.connect("updated", _update_callback)
     worker.connect("finished", _finished_callback)
     worker.start()
@@ -539,22 +541,21 @@ def test_load_trash_worker_default():
     assert len(paths) == 2
     assert set(paths) == set(
         [
-            "file",
-            "folder",
+            os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "file"),
+            os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "folder"),
         ]
     )
 
 
 @pytest.mark.timeout(5)
-@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_restore_trash_worker_default():
     from src.worker import PortfolioRestoreTrashWorker
 
     assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0
 
     selection = [
-        ("trash:///file", None),
-        ("trash:///folder", None),
+        (os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "file"), None),
+        (os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "folder"), None),
     ]
 
     finished = False
@@ -571,22 +572,19 @@ def test_restore_trash_worker_default():
         update_gtk()
 
     assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 2
+    assert os.path.exists(os.path.join(TEST_TRASH_TMP_DIR, "file"))
+    assert os.path.exists(os.path.join(TEST_TRASH_TMP_DIR, "folder"))
 
 
 @pytest.mark.timeout(5)
-@pytest.mark.skipif(skip_trash, reason="No trash: available")
 def test_delete_trash_worker_default():
-    import time
     from src.worker import PortfolioDeleteTrashWorker
 
     test_send_trash_worker_default()
 
-    # XXX handle the delay with the trash:/// backend
-    time.sleep(1)
-
     selection = [
-        ("trash:///file", None),
-        ("trash:///folder", None),
+        (os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "file"), None),
+        (os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files", "folder"), None),
     ]
 
     finished = False
@@ -603,3 +601,4 @@ def test_delete_trash_worker_default():
         update_gtk()
 
     assert len(os.listdir(TEST_TRASH_TMP_DIR)) == 0
+    assert len(os.listdir(os.path.join(TEST_XDG_DATA_DIRS, "Trash", "files"))) == 0

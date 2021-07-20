@@ -20,7 +20,6 @@ import shutil
 import locale
 import datetime
 import threading
-import subprocess
 
 from gi.repository import Gio, GObject, GLib
 
@@ -28,6 +27,7 @@ from . import utils
 from . import logger
 from .cache import default_cache
 from .translation import gettext as _
+from .trash import default_trash
 
 
 class WorkerStoppedException(Exception):
@@ -527,13 +527,7 @@ class PortfolioSendTrashWorker(GObject.GObject):
 
         try:
             self.emit("pre-update", path)
-
-            if self._is_flatpak:
-                cmd = f'flatpak-spawn --host gio trash "{path}"'
-                subprocess.run(cmd, shell=True, check=True)
-            else:
-                file = Gio.File.new_for_path(path)
-                file.trash()
+            default_trash.trash(path)
         except Exception as e:
             logger.debug(e)
             self.emit("failed", path)
@@ -589,24 +583,7 @@ class PortfolioRestoreTrashWorker(GObject.GObject):
 
         try:
             self.emit("pre-update", path)
-
-            file = Gio.File.new_for_uri(path)
-            info = file.query_info(
-                Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH,
-                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-                None,
-            )
-
-            original_path = info.get_attribute_as_string(
-                Gio.FILE_ATTRIBUTE_TRASH_ORIG_PATH
-            )
-            original_parent = os.path.dirname(original_path)
-            original_file = Gio.File.new_for_path(original_path)
-
-            if not os.path.exists(original_parent):
-                os.makedirs(original_parent)
-
-            file.move(original_file, Gio.FileCopyFlags.OVERWRITE, None)
+            default_trash.restore(path)
         except Exception as e:
             logger.debug(e)
             self.emit("failed", path)
@@ -662,8 +639,7 @@ class PortfolioDeleteTrashWorker(GObject.GObject):
 
         try:
             self.emit("pre-update", path)
-            file = Gio.File.new_for_uri(path)
-            file.delete()
+            default_trash.remove(path)
         except Exception as e:
             logger.debug(e)
             self.emit("failed", path)
@@ -680,3 +656,58 @@ class PortfolioDeleteTrashWorker(GObject.GObject):
             GLib.Source.remove(self._timeout_handler_id)
             self._timeout_handler_id = None
         self.emit("stopped")
+
+
+class PortfolioLoadTrashWorker(GObject.GObject):
+    __gtype_name__ = "PortfolioLoadTrashWorker"
+
+    __gsignals__ = {
+        "started": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, object, int, int)),
+        "finished": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self, directory=None, hidden=False):
+        super().__init__()
+        self._timeout_handler_id = None
+        default_cache.activate()
+
+    def __del__(self):
+        default_cache.deactivate()
+
+    def start(self):
+        self.emit("started", "")
+
+        try:
+            self._paths = default_trash.list()
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed", "")
+            return
+
+        self._total = len(self._paths)
+        self._index = 0
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def step(self):
+        if self._index >= self._total:
+            self.emit("finished", "")
+            return
+
+        path = self._paths[self._index]
+        name = os.path.basename(path)
+
+        self._index += 1
+        self.emit("updated", "", [(name, path)], self._index, self._total)
+        self._timeout_handler_id = GLib.idle_add(
+            self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
+        )
+
+    def stop(self):
+        if self._timeout_handler_id is None:
+            return
+        GLib.Source.remove(self._timeout_handler_id)
+        self._timeout_handler_id = None
