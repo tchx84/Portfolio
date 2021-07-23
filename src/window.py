@@ -1190,6 +1190,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.connect("updated", self._on_restore_trash_updated)
         self._worker.connect("finished", self._on_restore_trash_finished)
         self._worker.connect("failed", self._on_restore_trash_failed)
+        self._worker.connect("stopped", self._on_restore_trash_stopped)
         self._worker.start()
 
     def _on_restore_trash_started(self, worker):
@@ -1230,6 +1231,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
+
+    def _on_restore_trash_stopped(self, worker):
+        self._delete_finish()
 
     def _on_delete_trash_clicked(self, button):
         selection = self._get_selection()
