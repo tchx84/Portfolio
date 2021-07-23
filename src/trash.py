@@ -33,11 +33,19 @@ class PortfolioTrash(GObject.GObject):
 
     def __init__(self):
         super().__init__()
+
+        self._manager = Gio.VolumeMonitor.get()
+        self._manager.connect("mount-added", self._on_mount_changed)
+        self._manager.connect("mount-removed", self._on_mount_changed)
+
         self.setup()
 
     def _setup_trash_dir(self, trash_dir):
         os.makedirs(os.path.join(trash_dir, "info"), exist_ok=True)
         os.makedirs(os.path.join(trash_dir, "files"), exist_ok=True)
+
+    def _on_mount_changed(self, monitor, mount):
+        self.setup()
 
     def setup(self):
         self._trash = {}
@@ -77,9 +85,8 @@ class PortfolioTrash(GObject.GObject):
 
     def get_devices_trash(self):
         trash = []
-        manager = Gio.VolumeMonitor.get()
 
-        for mount in manager.get_mounts():
+        for mount in self._manager.get_mounts():
             mount_point = mount.get_root().get_path()
             path = os.path.join(mount_point, f".Trash-{os.getuid()}")
             trash.append((mount_point, path))
@@ -112,9 +119,6 @@ class PortfolioTrash(GObject.GObject):
         return orig_path
 
     def list(self):
-        # XXX until we properly monitor mounts
-        self.setup()
-
         paths = []
 
         for name, trash_dir in self._trash.items():
