@@ -269,7 +269,7 @@ class PortfolioLoadWorker(GObject.GObject):
         self.emit("started", self._directory)
 
         try:
-            self._paths = utils.list_directory(self._directory)
+            self._paths = os.listdir(self._directory)
         except Exception as e:
             logger.debug(e)
             self.emit("failed", self._directory)
@@ -292,7 +292,7 @@ class PortfolioLoadWorker(GObject.GObject):
                 name = self._paths[self._index + index]
                 if not self._hidden and name.startswith("."):
                     continue
-                path = utils.join_directory(self._directory, name)
+                path = os.path.join(self._directory, name)
                 found.append((name, path))
 
         self._index += self.BUFFER
@@ -327,16 +327,7 @@ class PortfolioOpenWorker(GObject.GObject):
     def start(self):
         self.emit("started")
 
-        is_uri = utils.is_uri(self._path)
-
-        # XXX can't seem to open trash uris within sandbox
-        if is_uri and self._is_flatpak:
-            uri = utils.get_uri_target_uri(self._path)
-        elif is_uri:
-            uri = self._path
-        else:
-            uri = f"file://{self._path}"
-
+        uri = f"file://{self._path}"
         Gio.AppInfo.launch_default_for_uri_async(
             uri, None, None, self._on_launch_finished, None
         )

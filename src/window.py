@@ -272,7 +272,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         text = self.search_entry.get_text()
         if not text:
             return True
-        return text.lower() in utils.get_file_name(path).lower()
+        return text.lower() in os.path.basename(path).lower()
 
     def _sort_by_last_modified(self, path1, path2):
         st_mtime1 = utils.get_file_mtime(path1)
@@ -1236,7 +1236,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         count = len(selection)
 
         if count == 1:
-            name = utils.get_file_name(selection[0][0])
+            name = os.path.basename(selection[0][0])
         else:
             name = _("these %d files") % count
 
