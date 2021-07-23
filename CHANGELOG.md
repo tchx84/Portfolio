@@ -7,7 +7,7 @@
 - Added improved icon by @jimmac.
 - Added shortcut to Flatpak host filesystem in places.
 - Added notifications when removing devices.
-- Added support for Trash folder (via gvfsd).
+- Added support for freedesktop Trash.
 - Added cache to speed up directories loading times.
 - Added scrolling to the just-left directory when navigating back.
 - Added persistence to filter and sort options.
