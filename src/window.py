@@ -1187,6 +1187,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._worker = PortfolioRestoreTrashWorker(selection)
         self._worker.connect("started", self._on_restore_trash_started)
+        self._worker.connect("pre-update", self._on_restore_trash_pre_updated)
         self._worker.connect("updated", self._on_restore_trash_updated)
         self._worker.connect("finished", self._on_restore_trash_finished)
         self._worker.connect("failed", self._on_restore_trash_failed)
@@ -1206,7 +1207,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.tools_stack.set_visible_child(self.stop_tools)
 
     def _on_restore_trash_pre_updated(self, worker, path):
-        self.loading_description.set_text(path)
+        name = os.path.basename(path)
+        self.loading_description.set_text(name)
 
     def _on_restore_trash_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
@@ -1280,7 +1282,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.tools_stack.set_visible_child(self.stop_tools)
 
     def _on_delete_trash_pre_updated(self, worker, path):
-        self.loading_description.set_text(path)
+        name = os.path.basename(path)
+        self.loading_description.set_text(name)
 
     def _on_delete_trash_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
