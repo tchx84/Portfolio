@@ -182,7 +182,7 @@ class PortfolioCutWorker(PortfolioCopyWorker):
         self.emit("finished", total)
 
 
-class PortfolioDeleteWorker(GObject.GObject):
+class PortfolioDeleteWorker(GObject.GObject, CachedWorker):
     __gtype_name__ = "PortfolioDeleteWorker"
 
     __gsignals__ = {
@@ -196,6 +196,7 @@ class PortfolioDeleteWorker(GObject.GObject):
 
     def __init__(self, selection):
         super().__init__()
+        CachedWorker.__init__(self)
         self._selection = selection
         self._timeout_handler_id = None
 
@@ -485,7 +486,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._inner_worker.stop()
 
 
-class PortfolioSendTrashWorker(GObject.GObject):
+class PortfolioSendTrashWorker(GObject.GObject, CachedWorker):
     __gtype_name__ = "PortfolioSendTrashWorker"
 
     __gsignals__ = {
@@ -499,6 +500,7 @@ class PortfolioSendTrashWorker(GObject.GObject):
 
     def __init__(self, selection):
         super().__init__()
+        CachedWorker.__init__(self)
         self._selection = selection
         self._is_flatpak = utils.is_flatpak()
 
@@ -542,7 +544,7 @@ class PortfolioSendTrashWorker(GObject.GObject):
         self.emit("stopped")
 
 
-class PortfolioRestoreTrashWorker(GObject.GObject):
+class PortfolioRestoreTrashWorker(GObject.GObject, CachedWorker):
     __gtype_name__ = "PortfolioRestoreTrashWorker"
 
     __gsignals__ = {
@@ -556,6 +558,7 @@ class PortfolioRestoreTrashWorker(GObject.GObject):
 
     def __init__(self, selection):
         super().__init__()
+        CachedWorker.__init__(self)
         self._selection = selection
 
     def start(self):
