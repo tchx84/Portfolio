@@ -34,6 +34,14 @@ class WorkerStoppedException(Exception):
     pass
 
 
+class CachedWorker(object):
+    def __init__(self):
+        default_cache.activate()
+
+    def __del__(self):
+        default_cache.deactivate()
+
+
 class PortfolioWorker(threading.Thread, GObject.GObject):
     __gtype_name__ = "PortfolioWorker"
 
@@ -243,7 +251,7 @@ class PortfolioDeleteWorker(GObject.GObject):
         self.emit("stopped")
 
 
-class PortfolioLoadWorker(GObject.GObject):
+class PortfolioLoadWorker(GObject.GObject, CachedWorker):
     __gtype_name__ = "PortfolioLoadWorker"
 
     __gsignals__ = {
@@ -257,13 +265,10 @@ class PortfolioLoadWorker(GObject.GObject):
 
     def __init__(self, directory, hidden=False):
         super().__init__()
+        CachedWorker.__init__(self)
         self._directory = directory
         self._hidden = hidden
         self._timeout_handler_id = None
-        default_cache.activate()
-
-    def __del__(self):
-        default_cache.deactivate()
 
     def start(self):
         self.emit("started", self._directory)
@@ -649,7 +654,7 @@ class PortfolioDeleteTrashWorker(GObject.GObject):
         self.emit("stopped")
 
 
-class PortfolioLoadTrashWorker(GObject.GObject):
+class PortfolioLoadTrashWorker(GObject.GObject, CachedWorker):
     __gtype_name__ = "PortfolioLoadTrashWorker"
 
     __gsignals__ = {
@@ -661,11 +666,8 @@ class PortfolioLoadTrashWorker(GObject.GObject):
 
     def __init__(self, directory=None, hidden=False):
         super().__init__()
+        CachedWorker.__init__(self)
         self._timeout_handler_id = None
-        default_cache.activate()
-
-    def __del__(self):
-        default_cache.deactivate()
 
     def start(self):
         self.emit("started", "")
