@@ -293,9 +293,8 @@ msgid "Device can be removed"
 msgstr "Het apparaat kan niet worden afgekoppeld"
 
 #: src/window.py:1337
-#, fuzzy
 msgid "Device is busy, can't be removed"
-msgstr "Het apparaat kan niet worden afgekoppeld"
+msgstr "Apparaat is bezet, kan niet worden verwijderd"
 
 #: src/worker.py:470
 msgid "Calculating..."
