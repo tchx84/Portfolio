@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-03 16:33-0400\n"
+"POT-Creation-Date: 2021-07-26 16:24-0400\n"
 "PO-Revision-Date: 2021-07-04 09:47+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -46,7 +46,7 @@ msgstr ""
 "apparaten gebruiken."
 
 #. TRANSLATORS: Don't translate this text
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:36
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:39
 msgid "Martin Abente Lahaye"
 msgstr "Martin Abente Lahaye"
 
@@ -160,138 +160,143 @@ msgstr "Vertaald door"
 msgid "Contributions by"
 msgstr "Met bijdragen van"
 
-#: src/places.py:48
+#: src/places.py:49
 msgid "Trash"
 msgstr "Prullenbak"
 
-#: src/places.py:86
+#: src/places.py:87
 msgid "Places"
 msgstr "Locaties"
 
-#: src/places.py:90
+#: src/places.py:91
 msgid "Devices"
 msgstr "Apparaten"
 
-#: src/places.py:100
+#: src/places.py:101
 msgid "Home"
 msgstr "Persoonlijke map"
 
-#: src/places.py:152
+#: src/places.py:153
 msgid "System"
 msgstr "Systeem"
 
-#: src/places.py:160
+#: src/places.py:161
 msgid "Host"
 msgstr "Host"
 
-#: src/places.py:185
+#: src/places.py:186
 msgid "No places found"
 msgstr "Geen locaties aangetroffen"
 
-#: src/window.py:652
+#: src/window.py:677
 msgid "Opening"
 msgstr "Bezig met openen…"
 
-#: src/window.py:671 src/window.py:1367 src/window.py:1377
+#: src/window.py:696 src/window.py:1403 src/window.py:1413
 #, python-format
 msgid "Could not open %s"
 msgstr "‘%s’ kan niet worden geopend"
 
-#: src/window.py:691 src/window.py:738
+#: src/window.py:716 src/window.py:763
 msgid "Loading"
 msgstr "Bezig met laden…"
 
-#: src/window.py:739
+#: src/window.py:764
 #, python-format
 msgid "Could not load %s"
 msgstr "‘%s’ kan niet worden geladen"
 
-#: src/window.py:841 src/window.py:855
+#: src/window.py:866 src/window.py:880
 #, python-format
 msgid "%s already exists"
 msgstr "‘%s’ bestaat al"
 
-#: src/window.py:886 src/window.py:1221
+#: src/window.py:911 src/window.py:1248
 #, python-format
 msgid "these %d files"
 msgstr "deze %d bestanden"
 
-#: src/window.py:888 src/window.py:1223
+#: src/window.py:913 src/window.py:1250
 #, python-format
 msgid "Delete %s permanently?"
 msgstr "Wil je ‘%s’ permanent verwijderen?"
 
-#: src/window.py:908
+#: src/window.py:933
 #, python-format
 msgid "%s will be moved"
 msgstr "‘%s’ wordt verplaatst"
 
-#: src/window.py:910
+#: src/window.py:935
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d bestanden worden verplaatst"
 
-#: src/window.py:926
+#: src/window.py:951
 #, python-format
 msgid "%s will be copied"
 msgstr "‘%s’ wordt gekopieerd"
 
-#: src/window.py:928
+#: src/window.py:953
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d bestanden worden gekopieerd"
 
-#: src/window.py:953 src/window.py:1157
+#: src/window.py:978 src/window.py:1178
 msgid "Files will be overwritten, proceed?"
 msgstr "De bestanden worden overschreven. Wil je doorgaan?"
 
-#: src/window.py:969
+#: src/window.py:994
 msgid "Pasting"
 msgstr "Bezig met plakken…"
 
-#: src/window.py:1003
+#: src/window.py:1028
 #, python-format
 msgid "Could not paste %s"
 msgstr "‘%s’ kan niet worden geplakt"
 
-#: src/window.py:1056 src/window.py:1249
+#: src/window.py:1081 src/window.py:1276
 msgid "Deleting"
 msgstr "Bezig met verwijderen…"
 
-#: src/window.py:1082 src/window.py:1273
+#: src/window.py:1107 src/window.py:1301
 #, python-format
 msgid "Could not delete %s"
 msgstr "‘%s’ kan niet worden verwijderd"
 
-#: src/window.py:1106
+#: src/window.py:1131
 msgid "Stopping"
 msgstr "Bezig met afbreken…"
 
-#: src/window.py:1118
+#: src/window.py:1143
 msgid "New Folder"
 msgstr "Nieuwe map"
 
-#: src/window.py:1126
+#: src/window.py:1151
 msgid "No permissions on this directory"
 msgstr "Je hebt geen rechten op deze map"
 
-#: src/window.py:1178
+#: src/window.py:1201
 msgid "Restoring"
 msgstr "Bezig met herstellen…"
 
-#: src/window.py:1209
+#: src/window.py:1233
 #, python-format
 msgid "Could not restore %s"
 msgstr "‘%s’ kan niet worden hersteld"
 
-#: src/window.py:1294
+#: src/window.py:1322
 msgid "Removing device, please wait"
 msgstr "Bezig met afkoppelen van apparaat…"
 
-#: src/window.py:1297
+#: src/window.py:1325
 msgid "Device can be removed"
 msgstr "Het apparaat kan niet worden afgekoppeld"
 
-#: src/worker.py:463
+#: src/window.py:1337
+#, fuzzy
+msgid "Device is busy, can't be removed"
+msgstr "Het apparaat kan niet worden afgekoppeld"
+
+#: src/worker.py:470
 msgid "Calculating..."
 msgstr "Bezig met berekenen…"
