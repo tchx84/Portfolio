@@ -294,9 +294,8 @@ msgid "Device can be removed"
 msgstr "Zařízení může být odebráno"
 
 #: src/window.py:1337
-#, fuzzy
 msgid "Device is busy, can't be removed"
-msgstr "Zařízení může být odebráno"
+msgstr "Zařízení je zaneprázdněno, nelze jej odebrat"
 
 #: src/worker.py:470
 msgid "Calculating..."

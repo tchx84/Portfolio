@@ -293,9 +293,8 @@ msgid "Device can be removed"
 msgstr "Perangkat dapat dihapus"
 
 #: src/window.py:1337
-#, fuzzy
 msgid "Device is busy, can't be removed"
-msgstr "Perangkat dapat dihapus"
+msgstr "Perangkat sibuk, tidak dapat dilepas"
 
 #: src/worker.py:470
 msgid "Calculating..."
