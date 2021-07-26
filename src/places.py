@@ -31,6 +31,7 @@ class PortfolioPlaces(Gtk.Stack):
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "removing": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
@@ -297,12 +298,18 @@ class PortfolioPlaces(Gtk.Stack):
             method = mount.unmount
             finish = mount.unmount_finish
 
-        method(Gio.MountUnmountFlags.NONE, None, self._on_eject_finished, finish)
+        method(Gio.MountUnmountFlags.NONE, None, self._on_eject_finished, place, finish)
         place.props.sensitive = False
         self.emit("removing", place.path)
 
-    def _on_eject_finished(self, mount, task, finish):
+    def _on_eject_finished(self, mount, task, place, finish):
+        if task.had_error():
+            self._on_eject_failed(place)
         try:
             finish(task)
         except Exception as e:
             logger.debug(e)
+
+    def _on_eject_failed(self, place):
+        place.props.sensitive = True
+        self.emit("failed", place.path)

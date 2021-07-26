@@ -208,6 +208,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("updated", self._on_places_updated)
         places.connect("removing", self._on_places_removing)
         places.connect("removed", self._on_places_removed)
+        places.connect("failed", self._on_places_failed)
         self.places_inner_box.add(places)
 
         self._properties = PortfolioPropertiesWorker()
@@ -1331,6 +1332,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         self._go_back_to_homepage()
+
+    def _on_places_failed(self, button, path):
+        self._places_notify(_("Device is busy, can't be removed"))
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
