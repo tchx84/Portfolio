@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.11] 2021-07-30
 
 - Fixed issues in systems without glibc by @craftyguy.
 - Added German translation by @lqs01.
