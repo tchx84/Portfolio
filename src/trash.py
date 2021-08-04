@@ -88,6 +88,9 @@ class PortfolioTrash(GObject.GObject):
 
         for mount in self._manager.get_mounts():
             mount_point = mount.get_root().get_path()
+            if not os.access(mount_point, os.W_OK):
+                continue
+
             path = os.path.join(mount_point, f".Trash-{os.getuid()}")
             trash.append((mount_point, path))
 
@@ -130,6 +133,10 @@ class PortfolioTrash(GObject.GObject):
         return paths
 
     def trash(self, path):
+        # prevent shutil.move strange behavior
+        if not os.access(path, os.W_OK):
+            raise PermissionError(f"Can't access {path}")
+
         mount_point = utils.find_mount_point(path)
 
         trash_dir = self._trash.get(mount_point)
