@@ -626,10 +626,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.new_folder.props.sensitive = not selected and not self._busy
 
     def _update_trash_tools(self):
-        count = self.selection.count_selected_rows()
-        selected = count >= 1
-        self.restore_trash.props.sensitive = selected
-        self.delete_trash.props.sensitive = selected
+        selected = self.selection.count_selected_rows() >= 1
+        is_trash = default_trash.is_trash(self._history[self._index])
+        self.restore_trash.props.sensitive = selected and is_trash
+        self.delete_trash.props.sensitive = selected and is_trash
 
     def _update_rename(self):
         count = self.selection.count_selected_rows()
