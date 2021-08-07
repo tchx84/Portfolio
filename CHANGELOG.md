@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.12] 2021-08-07
 
 - Fixed trash permissions issues.
 - Fixed trash restore and empty buttons on sub-directories.
