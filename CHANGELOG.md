@@ -1,5 +1,10 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed trash permissions issues.
+- Fixed trash restore and empty buttons on sub-directories.
+
 ## [0.9.11] 2021-07-30
 
 - Fixed issues in systems without glibc by @craftyguy.
