@@ -52,7 +52,6 @@ class PortfolioTrash(GObject.GObject):
 
         mounts = self.get_devices_trash() + [self.get_home_trash()]
         for mount_point, trash_dir in mounts:
-            self._setup_trash_dir(trash_dir)
             self._trash[mount_point] = trash_dir
 
     def is_trash(self, path):
@@ -126,6 +125,8 @@ class PortfolioTrash(GObject.GObject):
 
         for name, trash_dir in self._trash.items():
             files_dir = os.path.join(trash_dir, "files")
+            if not os.path.exists(files_dir):
+                continue
             for filename in os.listdir(files_dir):
                 path = os.path.join(files_dir, filename)
                 paths.append(path)
@@ -140,6 +141,8 @@ class PortfolioTrash(GObject.GObject):
         mount_point = utils.find_mount_point(path)
 
         trash_dir = self._trash.get(mount_point)
+        self._setup_trash_dir(trash_dir)
+
         files_dir = os.path.join(trash_dir, "files")
         info_dir = os.path.join(trash_dir, "info")
 
