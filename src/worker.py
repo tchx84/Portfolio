@@ -53,17 +53,6 @@ class PortfolioWorker(threading.Thread, GObject.GObject):
     def _progress(self, current, total):
         logger.debug(current, total)
 
-    def _copy(self, source, destination):
-        source = Gio.File.new_for_path(source)
-        destination = Gio.File.new_for_path(destination)
-
-        try:
-            source.copy(destination, Gio.FileCopyFlags.OVERWRITE, self._cancellable)
-        except GLib.Error as e:
-            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                raise WorkerStoppedException()
-            raise
-
     def _stop_check(self):
         if self._cancellable.is_cancelled():
             raise WorkerStoppedException()
@@ -81,8 +70,8 @@ class PortfolioCopyWorker(PortfolioWorker):
 
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
-        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, bool, int, int)),
+        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int, float)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -93,10 +82,34 @@ class PortfolioCopyWorker(PortfolioWorker):
         self._selection = selection
         self._directory = directory
 
+    def _do_copy(self, source, destination, callback):
+        source = Gio.File.new_for_path(source)
+        destination = Gio.File.new_for_path(destination)
+
+        try:
+            source.copy(
+                destination, Gio.FileCopyFlags.OVERWRITE, self._cancellable, callback
+            )
+        except GLib.Error as e:
+            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
+                raise WorkerStoppedException()
+            raise
+
+    def _copy(self, source, destination):
+        self._stop_check()
+
+        def callback(current_bytes, total_bytes):
+            progress = current_bytes / total_bytes if total_bytes else 1.0
+            self.emit("updated", destination, self._count + 1, self._total, progress)
+
+        self._do_copy(source, destination, callback)
+        self._count += 1
+
     def run(self):
-        count = 0
-        total = sum([utils.count(path) for path, ref in self._selection])
-        self.emit("started", total)
+        self._count = 0
+        self._total = sum([utils.count(path) for path, ref in self._selection])
+
+        self.emit("started", self._total)
 
         for path, ref in self._selection:
             name = os.path.basename(path)
@@ -108,21 +121,14 @@ class PortfolioCopyWorker(PortfolioWorker):
                 destination = os.path.join(self._directory, name)
                 overwritten = False
 
-            def _callback(_path, _destination):
-                nonlocal count, total
-                self._stop_check()
-                self.emit("pre-update", _destination)
-                self._copy(_path, _destination)
-                self.emit("updated", _destination, True, count, total)
-                count += 1
-
             try:
                 self._stop_check()
-                self.emit("pre-update", destination)
+                self.emit("pre-update", destination, overwritten)
+
                 if os.path.isdir(path):
                     if overwritten and os.path.isdir(path):
                         shutil.rmtree(destination)
-                    shutil.copytree(path, destination, copy_function=_callback)
+                    shutil.copytree(path, destination, copy_function=self._copy)
                 else:
                     self._copy(path, destination)
             except WorkerStoppedException:
@@ -132,42 +138,33 @@ class PortfolioCopyWorker(PortfolioWorker):
                 logger.debug(e)
                 self.emit("failed", destination)
                 return
-            else:
-                self.emit("updated", destination, overwritten, count, total)
-                count += 1
 
-        self.emit("finished", total)
+        self.emit("finished", self._total)
 
 
 class PortfolioCutWorker(PortfolioCopyWorker):
     __gtype_name__ = "PortfolioCutWorker"
 
     def run(self):
-        count = 0
-        total = sum([utils.count(path) for path, ref in self._selection])
-        self.emit("started", total)
+        self._count = 0
+        self._total = sum([utils.count(path) for path, ref in self._selection])
+
+        self.emit("started", self._total)
 
         for path, ref in self._selection:
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
             overwritten = os.path.exists(destination)
 
-            def _callback(_path, _destination):
-                nonlocal count, total
-                self._stop_check()
-                self.emit("pre-update", _destination)
-                self._copy(_path, _destination)
-                self.emit("updated", _destination, True, count, total)
-                count += 1
-
             try:
                 self._stop_check()
-                self.emit("pre-update", destination)
+                self.emit("pre-update", destination, overwritten)
+
                 if destination == path:
                     continue
                 if overwritten and os.path.isdir(path):
                     shutil.rmtree(destination)
-                shutil.move(path, destination, copy_function=_callback)
+                shutil.move(path, destination, copy_function=self._copy)
             except WorkerStoppedException:
                 self.emit("stopped")
                 return
@@ -175,11 +172,8 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 logger.debug(e)
                 self.emit("failed", path)
                 return
-            else:
-                self.emit("updated", destination, overwritten, count, total)
-                count += 1
 
-        self.emit("finished", total)
+        self.emit("finished", self._total)
 
 
 class PortfolioDeleteWorker(GObject.GObject, CachedWorker):

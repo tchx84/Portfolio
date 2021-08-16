@@ -1000,18 +1000,20 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(self.stop_box)
         self.tools_stack.set_visible_child(self.stop_tools)
 
-    def _on_paste_pre_updated(self, worker, path):
-        name = os.path.basename(path)
-        self.loading_description.set_text(name)
+    def _on_paste_pre_updated(self, worker, path, overwritten):
+        if overwritten:
+            return
 
-    def _on_paste_updated(self, worker, path, overwritten, index, total):
         # XXX this approach won't allow me to put stat info in liststore
-        if not overwritten:
-            icon = self._find_icon(path)
-            name = os.path.basename(path)
-            self.liststore.append([icon, name, path])
+        name = os.path.basename(path)
+        icon = self._find_icon(path)
+        self.liststore.append([icon, name, path])
 
-        self.loading_bar.set_fraction((index + 1) / total)
+    def _on_paste_updated(self, worker, path, index, total, percent):
+        name = os.path.basename(path)
+        description = f"({index}/{total}) {name}"
+        self.loading_description.set_text(description)
+        self.loading_bar.set_fraction(percent)
 
     def _on_paste_finished(self, worker, total):
         self._paste_finish()
