@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed creating trash directories before needed.
+
 ## [0.9.12] 2021-08-07
 
 - Fixed trash permissions issues.
