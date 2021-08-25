@@ -69,6 +69,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     loading_label = Gtk.Template.Child()
     loading_bar = Gtk.Template.Child()
     loading_description = Gtk.Template.Child()
+    loading_details = Gtk.Template.Child()
     close_button = Gtk.Template.Child()
     stop_button = Gtk.Template.Child()
     help_button = Gtk.Template.Child()
@@ -522,6 +523,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _clean_progress(self):
         self.loading_description.set_text("")
+        self.loading_details.set_text("")
+        self.loading_details.props.visible = False
 
     def _clean_loading_delay(self):
         if self._load_delay_handler_id != 0:
@@ -676,6 +679,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.loading_label.set_text(_("Opening"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = False
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -715,6 +719,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_started_delayed(self):
         self.loading_label.set_text(_("Loading"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = False
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -993,6 +998,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.loading_label.set_text(_("Pasting"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = True
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1000,18 +1006,25 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(self.stop_box)
         self.tools_stack.set_visible_child(self.stop_tools)
 
-    def _on_paste_pre_updated(self, worker, path):
-        name = os.path.basename(path)
-        self.loading_description.set_text(name)
+    def _on_paste_pre_updated(self, worker, path, overwritten):
+        if overwritten:
+            return
 
-    def _on_paste_updated(self, worker, path, overwritten, index, total):
         # XXX this approach won't allow me to put stat info in liststore
-        if not overwritten:
-            icon = self._find_icon(path)
-            name = os.path.basename(path)
-            self.liststore.append([icon, name, path])
+        name = os.path.basename(path)
+        icon = self._find_icon(path)
+        self.liststore.append([icon, name, path])
 
-        self.loading_bar.set_fraction((index + 1) / total)
+    def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
+        description = os.path.basename(path)
+        self.loading_description.set_text(description)
+        self.loading_bar.set_fraction(index / total)
+
+        human_current_bytes = utils.get_size_for_humans(current_bytes)
+        human_total_bytes = utils.get_size_for_humans(total_bytes)
+        self.loading_details.set_text(
+            _("%s of %s") % (human_current_bytes, human_total_bytes)
+        )
 
     def _on_paste_finished(self, worker, total):
         self._paste_finish()
@@ -1080,6 +1093,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.loading_label.set_text(_("Deleting"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = False
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1200,6 +1214,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.loading_label.set_text(_("Restoring"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = False
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1275,6 +1290,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self.loading_label.set_text(_("Deleting"))
         self.loading_bar.set_fraction(0.0)
+        self.loading_details.props.visible = False
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()

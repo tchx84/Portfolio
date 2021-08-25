@@ -139,6 +139,11 @@ scrolledwindow.frame {
     font-size: small;
     font-weight: bold;
 }
+.loading-details {
+    color: @insensitive_fg_color;
+    margin: 0px;
+    font-size: x-small;
+}
 
 /* files */
 
