@@ -2,6 +2,7 @@
 
 ## [unreleased]
 
+- Added file-size details to paste operations dialogs.
 - Fixed creating trash directories before needed.
 
 ## [0.9.12] 2021-08-07
