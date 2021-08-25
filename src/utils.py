@@ -91,3 +91,12 @@ def find_mount_point(path):
     while not os.path.ismount(path):
         path = os.path.dirname(path)
     return path
+
+
+# https://gist.github.com/cbwar/d2dfbc19b140bd599daccbe0fe925597
+def get_size_for_humans(num):
+    for unit in ["", "k", "M", "G", "T", "P", "E", "Z"]:
+        if abs(num) < 1024.0:
+            return "%3.1f %sB" % (num, unit)
+        num /= 1024.0
+    return "%.1f%sB" % (num, "Yi")
