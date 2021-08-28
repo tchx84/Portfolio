@@ -87,10 +87,14 @@ class PortfolioTrash(GObject.GObject):
 
         for mount in self._manager.get_mounts():
             mount_point = mount.get_root().get_path()
-            if not os.access(mount_point, os.W_OK):
+            if not mount_point or not os.access(mount_point, os.W_OK):
                 continue
 
-            path = os.path.join(mount_point, f".Trash-{os.getuid()}")
+            user_id = os.getuid()
+            if not user_id:
+                continue
+
+            path = os.path.join(mount_point, f".Trash-{user_id}")
             trash.append((mount_point, path))
 
         return trash
