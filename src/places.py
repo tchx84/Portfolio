@@ -67,9 +67,15 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._permissions = None
 
+        # volumes
+
         self._manager = Gio.VolumeMonitor.get()
+        self._manager.connect("volume-added", self._on_volume_added)
         self._manager.connect("mount-added", self._on_mount_added)
         self._manager.connect("mount-removed", self._on_mount_removed)
+
+        for volume in self._manager.get_volumes():
+            self._automount(volume)
 
         # begin UI structure
 
@@ -269,6 +275,11 @@ class PortfolioPlaces(Gtk.Stack):
                 self.emit("removed", place.path)
                 place.destroy()
 
+    def _automount(self, volume):
+        if not volume.should_automount():
+            return
+        volume.mount(Gio.MountMountFlags.NONE, None, None, None)
+
     def _on_place_activated(self, place):
         self.emit("updated", place.path)
 
@@ -313,3 +324,6 @@ class PortfolioPlaces(Gtk.Stack):
     def _on_eject_failed(self, place):
         place.props.sensitive = True
         self.emit("failed", place.path)
+
+    def _on_volume_added(self, monitor, volume):
+        self._automount(volume)
