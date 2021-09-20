@@ -469,6 +469,7 @@
                                   <object class="GtkScrolledWindow" id="content_scroll">
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
+                                    <property name="hscrollbar-policy">never</property>
                                     <property name="shadow-type">in</property>
                                     <child>
                                       <object class="GtkTreeView" id="treeview">
@@ -478,7 +479,6 @@
                                         <property name="headers-visible">False</property>
                                         <property name="headers-clickable">False</property>
                                         <property name="enable-search">False</property>
-                                        <property name="search-column">1</property>
                                         <property name="fixed-height-mode">True</property>
                                         <property name="show-expanders">False</property>
                                         <property name="activate-on-single-click">True</property>
