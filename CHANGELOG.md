@@ -4,6 +4,7 @@
 
 - Added file-size details to paste operations dialogs.
 - Fixed creating trash directories before needed.
+- Fixed crash on Sway tiling Wayland compositor.
 
 ## [0.9.12] 2021-08-07
 
