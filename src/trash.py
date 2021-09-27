@@ -24,6 +24,7 @@ from configparser import ConfigParser
 from gi.repository import GLib, Gio, GObject
 
 from . import utils
+from . import logger
 
 
 class PortfolioTrash(GObject.GObject):
@@ -92,10 +93,12 @@ class PortfolioTrash(GObject.GObject):
         for mount in self._manager.get_mounts():
             mount_point = mount.get_root().get_path()
             if not mount_point or not os.access(mount_point, os.W_OK):
+                logger.debug("Can't find mount_point, skipping...")
                 continue
 
             user_id = os.getuid()
             if not user_id:
+                logger.debug("Can't find user_id, skipping...")
                 continue
 
             path = os.path.join(mount_point, f".Trash-{user_id}")
