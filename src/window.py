@@ -909,6 +909,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_clicked(self, button):
         selection = self._get_selection()
         count = len(selection)
+        directory = self._history[self._index]
 
         if count == 1:
             name = os.path.basename(selection[0][0])
@@ -921,7 +922,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             description,
             self._on_delete_confirmed,
             self._on_popup_closed,
-            self._on_trash_instead,
+            self._on_trash_instead if default_trash.has_trash(directory) else None,
             False,
             selection,
         )

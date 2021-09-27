@@ -67,6 +67,10 @@ class PortfolioTrash(GObject.GObject):
 
         return False
 
+    def has_trash(self, path):
+        mount_point = utils.find_mount_point(path)
+        return mount_point in self._trash
+
     def get_home_trash(self):
         if "PORTFOLIO_XDG_DATA_DIRS" in os.environ:
             data_dir = os.environ.get("PORTFOLIO_XDG_DATA_DIRS")
