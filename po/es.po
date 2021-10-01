@@ -216,7 +216,7 @@ msgstr "estos %d"
 #: src/window.py:913 src/window.py:1250
 #, python-format
 msgid "Delete %s permanently?"
-msgstr "¿Eliminar %s permanentemente?"
+msgstr "¿Eliminar %s permanente?"
 
 #: src/window.py:933
 #, python-format
