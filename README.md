@@ -15,11 +15,11 @@ Tap to activate and long press to select, to browse, open, copy, move, delete, o
 ## Build it yourself
 
 ```
-$ git clone https://github.com/tchx84/Portfolio.git
-$ cd Portfolio
-$ flatpak-builder --force-clean --repo=repo build dev.tchx84.Portfolio.json
-$ flatpak build-bundle repo portfolio.flatpak dev.tchx84.Portfolio
-$ flatpak install portfolio.flatpak
+git clone https://github.com/tchx84/Portfolio.git
+cd Portfolio
+flatpak install --user org.gnome.{Platform,Sdk}//41
+flatpak-builder --user --force-clean --install build dev.tchx84.Portfolio.json
+flatpak run --branch=master dev.tchx84.Portfolio
 ```
 
 This app is powered by [Builder](https://flathub.org/apps/details/org.gnome.Builder) and [Glade](https://flathub.org/apps/details/org.gnome.Glade).
