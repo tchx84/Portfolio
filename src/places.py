@@ -175,6 +175,27 @@ class PortfolioPlaces(Gtk.Stack):
                     mount,
                 )
 
+        # unmounted devices
+
+        for device in self._manager.get_connected_drives():
+            if not device.is_removable():
+                continue
+
+            for volume in device.get_volumes():
+                if volume.get_mount():
+                    continue
+                if not volume.can_mount():
+                    continue
+
+                self._add_place(
+                    self._devices_group,
+                    "drive-removable-media-symbolic",
+                    volume.get_name(),
+                    None,
+                    None,
+                    volume,
+                )
+
         self._groups_box.add(self._places_group)
         self._groups_box.add(self._devices_group)
 
@@ -250,18 +271,28 @@ class PortfolioPlaces(Gtk.Stack):
 
         return False
 
-    def _add_place(self, group, icon, name, path, mount=None):
+    def _add_place(self, group, icon, name, path, mount=None, volume=None):
         place = PortfolioPlace()
         place.set_icon_name(icon)
         place.set_title(name)
         place.set_subtitle(path)
         place.path = path
         place.mount = mount
+        place.volume = volume
         place.eject.props.visible = mount is not None
         place.eject.connect("clicked", self._on_eject, place)
+        place.insert.props.visible = volume is not None
+        place.insert.connect("clicked", self._on_insert, place)
+        place.props.activatable = volume is None
         place.connect("activated", self._on_place_activated)
-
         group.add(place)
+
+    def _mount(self, place):
+        operation = Gio.MountOperation()
+        operation.set_anonymous(True)
+        place.volume.mount(
+            Gio.MountMountFlags.NONE, operation, None, self._on_insert_finished, place
+        )
 
     def _remove_place(self, group, mount):
         for place in group.get_children():
@@ -287,6 +318,12 @@ class PortfolioPlaces(Gtk.Stack):
         self._remove_place(self._devices_group, mount)
         self._update_stack_visibility()
         self._update_device_group_visibility()
+
+    def _on_insert(self, button, place):
+        self._mount(place)
+
+    def _on_insert_finished(self, volume, task, place):
+        place.destroy()
 
     def _on_eject(self, button, place):
         mount = place.mount
