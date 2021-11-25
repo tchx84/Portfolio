@@ -70,6 +70,8 @@ class PortfolioPlaces(Gtk.Stack):
         self._manager = Gio.VolumeMonitor.get()
         self._manager.connect("mount-added", self._on_mount_added)
         self._manager.connect("mount-removed", self._on_mount_removed)
+        self._manager.connect("volume-added", self._on_volume_added)
+        self._manager.connect("volume-removed", self._on_volume_removed)
 
         # begin UI structure
 
@@ -300,10 +302,33 @@ class PortfolioPlaces(Gtk.Stack):
                 self.emit("removed", place.path)
                 place.destroy()
 
+    def _remove_volume(self, group, volume):
+        for place in group.get_children():
+            if place.volume is None:
+                continue
+            if place.volume.get_uuid() == volume.get_uuid():
+                place.destroy()
+
+    def _on_volume_added(self, monitor, volume):
+        if volume.get_mount() is not None:
+            return
+        self._add_place(
+            self._devices_group,
+            "drive-removable-media-symbolic",
+            volume.get_name(),
+            None,
+            None,
+            volume,
+        )
+
+    def _on_volume_removed(self, monitor, volume):
+        self._remove_volume(self._devices_group, volume)
+
     def _on_place_activated(self, place):
         self.emit("updated", place.path)
 
     def _on_mount_added(self, monitor, mount):
+        self._remove_volume(self._devices_group, mount.get_volume())
         self._add_place(
             self._devices_group,
             "drive-removable-media-symbolic",
