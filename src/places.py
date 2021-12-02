@@ -17,10 +17,10 @@
 
 import os
 
-from gi.repository import GLib, Gio, Gtk, GObject, Handy
+from gi.repository import GLib, Gtk, GObject, Handy
 
-from . import logger
 from .place import PortfolioPlace
+from .devices import PortfolioDevices
 from .translation import gettext as _
 
 
@@ -67,9 +67,9 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._permissions = None
 
-        self._manager = Gio.VolumeMonitor.get()
-        self._manager.connect("mount-added", self._on_mount_added)
-        self._manager.connect("mount-removed", self._on_mount_removed)
+        self._devices = PortfolioDevices()
+        self._devices.connect("added", self._on_device_added)
+        self._devices.connect("removed", self._on_device_removed)
 
         # begin UI structure
 
@@ -144,7 +144,7 @@ class PortfolioPlaces(Gtk.Stack):
                 self.XDG_TRASH,
             )
 
-        # devices
+        # static devices
 
         if self._has_permission_for(self.HOST_PERMISSION):
             self._add_place(
@@ -161,19 +161,6 @@ class PortfolioPlaces(Gtk.Stack):
                 _("Host"),
                 self.PORTFOLIO_SYSTEM_DIR_FLATPAK,
             )
-
-        for mount in self._manager.get_mounts():
-            if mount.get_root().get_path() not in [
-                self.PORTFOLIO_SYSTEM_DIR,
-                self.PORTFOLIO_HOME_DIR,
-            ]:
-                self._add_place(
-                    self._devices_group,
-                    "drive-removable-media-symbolic",
-                    mount.get_name(),
-                    mount.get_root().get_path(),
-                    mount,
-                )
 
         self._groups_box.add(self._places_group)
         self._groups_box.add(self._devices_group)
@@ -192,6 +179,10 @@ class PortfolioPlaces(Gtk.Stack):
 
         self.add_named(self._groups_box, "groups")
         self.add_named(self._message_box, "message")
+
+        # dynamic devices
+
+        self._devices.get_devices()
 
         # update visibility
 
@@ -250,66 +241,62 @@ class PortfolioPlaces(Gtk.Stack):
 
         return False
 
-    def _add_place(self, group, icon, name, path, mount=None):
+    def _add_place(self, group, icon, name, path, device=None):
         place = PortfolioPlace()
         place.set_icon_name(icon)
         place.set_title(name)
         place.set_subtitle(path)
         place.path = path
-        place.mount = mount
-        place.eject.props.visible = mount is not None
-        place.eject.connect("clicked", self._on_eject, place)
+
+        if device is not None:
+            place.uuid = device.uuid
+            place.eject.connect("clicked", self._on_eject, device)
+            place.insert.connect("clicked", self._on_insert, device)
+            self._update_place_from_device(place, device)
+            device.connect("updated", self._on_device_updated)
+
         place.connect("activated", self._on_place_activated)
 
         group.add(place)
 
-    def _remove_place(self, group, mount):
+    def _find_place_by_device_uuid(self, group, device):
         for place in group.get_children():
-            if place.path == mount.get_root().get_path():
-                self.emit("removed", place.path)
-                place.destroy()
+            if place.uuid == device.uuid:
+                return place
+        return None
+
+    def _update_place_from_device(self, place, device):
+        place.path = device.mount_point
+        place.set_title(device.label)
+        place.set_subtitle(device.mount_point)
+        place.eject.props.visible = device.mount_point is not None
+        place.insert.props.visible = device.mount_point is None
+        place.props.activatable = device.mount_point is not None
 
     def _on_place_activated(self, place):
         self.emit("updated", place.path)
 
-    def _on_mount_added(self, monitor, mount):
+    def _on_device_added(self, devices, device):
         self._add_place(
             self._devices_group,
             "drive-removable-media-symbolic",
-            mount.get_name(),
-            mount.get_root().get_path(),
-            mount,
+            device.label,
+            device.mount_point,
+            device,
         )
         self._update_stack_visibility()
         self._update_device_group_visibility()
 
-    def _on_mount_removed(self, monitor, mount):
-        self._remove_place(self._devices_group, mount)
-        self._update_stack_visibility()
-        self._update_device_group_visibility()
+    def _on_device_removed(self, devices, device):
+        place = self._find_place_by_device_uuid(self._devices_group, device)
+        place.destroy()
 
-    def _on_eject(self, button, place):
-        mount = place.mount
+    def _on_device_updated(self, device):
+        place = self._find_place_by_device_uuid(self._devices_group, device)
+        self._update_place_from_device(place, device)
 
-        if mount.can_eject():
-            method = mount.eject
-            finish = mount.eject_finish
-        elif mount.can_unmount():
-            method = mount.unmount
-            finish = mount.unmount_finish
+    def _on_eject(self, button, device):
+        device.unmount()
 
-        method(Gio.MountUnmountFlags.NONE, None, self._on_eject_finished, place, finish)
-        place.props.sensitive = False
-        self.emit("removing", place.path)
-
-    def _on_eject_finished(self, mount, task, place, finish):
-        if task.had_error():
-            self._on_eject_failed(place)
-        try:
-            finish(task)
-        except Exception as e:
-            logger.debug(e)
-
-    def _on_eject_failed(self, place):
-        place.props.sensitive = True
-        self.emit("failed", place.path)
+    def _on_insert(self, button, device):
+        device.mount()
