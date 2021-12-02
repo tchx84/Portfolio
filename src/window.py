@@ -1345,7 +1345,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         directory = self._history[self._index]
-        if not directory.startswith(path):
+        if not path or not directory.startswith(path):
             return
 
         self._go_back_to_homepage()
