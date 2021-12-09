@@ -41,6 +41,7 @@ portfolio_sources = [
   'cache.py',
   'settings.py',
   'trash.py',
+  'devices.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)
