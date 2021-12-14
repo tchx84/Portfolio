@@ -60,6 +60,9 @@ class PortfolioDevice(GObject.GObject):
         self.uuid = self._get_block_uuid()
         self.mount_point = self._get_filesystem_mount_point()
 
+    def __repr__(self):
+        return f"uuid:{self.uuid}, label:{self.label}, mount_point:{self.mount_point}"
+
     def _get_string_from_bytes(self, bytes):
         return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
 

@@ -19,6 +19,7 @@ import os
 
 from gi.repository import GLib, Gtk, GObject, Handy
 
+from . import logger
 from .place import PortfolioPlace
 from .devices import PortfolioDevices
 from .translation import gettext as _
@@ -277,6 +278,8 @@ class PortfolioPlaces(Gtk.Stack):
         self.emit("updated", place.path)
 
     def _on_device_added(self, devices, device):
+        logger.error(f"added {device}")
+
         self._add_place(
             self._devices_group,
             "drive-removable-media-symbolic",
@@ -288,15 +291,20 @@ class PortfolioPlaces(Gtk.Stack):
         self._update_device_group_visibility()
 
     def _on_device_removed(self, devices, device):
+        logger.error(f"removed {device}")
         place = self._find_place_by_device_uuid(self._devices_group, device)
         place.destroy()
+        self.emit("removed", device.mount_point)
 
     def _on_device_updated(self, device):
+        logger.error(f"updated {device}")
         place = self._find_place_by_device_uuid(self._devices_group, device)
         self._update_place_from_device(place, device)
 
     def _on_eject(self, button, device):
+        logger.error(f"ejected {device}")
         device.unmount()
 
     def _on_insert(self, button, device):
+        logger.error(f"inserted {device}")
         device.mount()
