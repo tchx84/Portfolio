@@ -6,6 +6,7 @@
 - Fixed crash on Sway tiling Wayland compositor.
 - Fixed showing trash button for volumes with no trash folder.
 - Added file-size details to paste operations dialogs.
+- Added support for mounting external devices.
 - Changed to GNOME 41 runtime for stability.
 
 ## [0.9.12] 2021-08-07
