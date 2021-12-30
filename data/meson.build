@@ -41,6 +41,11 @@ install_data('dev.tchx84.Portfolio.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 
+install_data('dev.tchx84.Portfolio.rules',
+  install_dir: join_paths(get_option('datadir'), 'polkit-1/rules.d'),
+  install_mode: 'rw-r--r--'
+)
+
 conf = configuration_data()
 conf.set('prefix', get_option('prefix'))
 conf.set('bindir', get_option('bindir'))
