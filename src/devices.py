@@ -52,12 +52,8 @@ class PortfolioDrive(GObject.GObject):
         self._drive_proxy.PowerOff("(a{sv})", ({}))
 
 
-class PortfolioDevice(GObject.GObject):
-    __gtype_name__ = "PortfolioDevice"
-
-    __gsignals__ = {
-        "updated": (GObject.SignalFlags.RUN_LAST, None, ()),
-    }
+class PortfolioBlock(GObject.GObject):
+    __gtype_name__ = "PortfolioBlock"
 
     def __init__(self, object):
         GObject.GObject.__init__(self)
@@ -65,23 +61,12 @@ class PortfolioDevice(GObject.GObject):
         self._object = object
         self._block_proxy = object.get_interface("org.freedesktop.UDisks2.Block")
 
-        self._filesystem_proxy = object.get_interface(
-            "org.freedesktop.UDisks2.Filesystem"
-        )
-        self._filesystem_proxy.connect(
-            "g-properties-changed", self._on_filesystem_changed
-        )
-
         self.label = self._get_block_label()
         self.uuid = self._get_block_uuid()
         self.drive = self._get_block_drive()
-        self.mount_point = self._get_filesystem_mount_point()
 
     def __repr__(self):
-        return f"Device(uuid={self.uuid}, label={self.label}, mount_point={self.mount_point})"
-
-    def _get_string_from_bytes(self, bytes):
-        return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
+        return f"Block(uuid={self.uuid}, label={self.label})"
 
     def _get_block_drive(self):
         return self._block_proxy.get_cached_property("Drive").unpack()
@@ -98,6 +83,32 @@ class PortfolioDevice(GObject.GObject):
             return uuid.unpack()
 
         return None
+
+
+class PortfolioDevice(PortfolioBlock):
+    __gtype_name__ = "PortfolioDevice"
+
+    __gsignals__ = {
+        "updated": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
+    def __init__(self, object):
+        PortfolioBlock.__init__(self, object)
+
+        self._filesystem_proxy = object.get_interface(
+            "org.freedesktop.UDisks2.Filesystem"
+        )
+        self._filesystem_proxy.connect(
+            "g-properties-changed", self._on_filesystem_changed
+        )
+
+        self.mount_point = self._get_filesystem_mount_point()
+
+    def __repr__(self):
+        return f"Device(uuid={self.uuid}, label={self.label}, mount_point={self.mount_point})"
+
+    def _get_string_from_bytes(self, bytes):
+        return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
 
     def _get_filesystem_mount_point(self):
         mount_points = [
@@ -124,6 +135,19 @@ class PortfolioDevice(GObject.GObject):
         return self._filesystem_proxy.Unmount("(a{sv})", ({}))
 
 
+class PortfolioDeviceEncrypted(PortfolioBlock):
+    __gtype_name__ = "PortfolioDeviceEncrypted"
+
+    def __init__(self, object):
+        PortfolioBlock.__init__(self, object)
+        self._encrypted_proxy = object.get_interface(
+            "org.freedesktop.UDisks2.Encrypted"
+        )
+
+    def unlock(self, passphrase):
+        return self._encrypted_proxy.Unlock("(sa{sv})", (passphrase, {}))
+
+
 class PortfolioDevices(GObject.GObject):
     __gtype_name__ = "PortfolioDevices"
 
@@ -137,6 +161,7 @@ class PortfolioDevices(GObject.GObject):
 
         self._drives = {}
         self._devices = {}
+        self._encrypted = {}
         self._manager = None
 
         try:
@@ -171,6 +196,10 @@ class PortfolioDevices(GObject.GObject):
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
             self._devices[device.get_object_path()] = PortfolioDevice(object)
             self.emit("added", self._devices[device.get_object_path()])
+        elif encrypted := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
+            self._encrypted[encrypted.get_object_path()] = PortfolioDeviceEncrypted(
+                object
+            )
 
     def _remove_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
@@ -178,6 +207,8 @@ class PortfolioDevices(GObject.GObject):
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
             self.emit("removed", self._devices[device.get_object_path()])
             del self._devices[device.get_object_path()]
+        elif encrypted := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
+            del self._encrypted[encrypted.get_object_path()]
 
     def scan(self):
         if self._manager is None:
