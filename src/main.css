@@ -200,3 +200,16 @@ label.no-places {
     border-radius: 9999px;
     -gtk-outline-radius: 9999px;
 }
+
+/* passphrase screen */
+
+.passphrase-details {
+    color: @insensitive_fg_color;
+    margin: 10px;
+    font-size: small;
+    font-weight: bold;
+}
+
+.passphrase-spinner {
+    margin: 0px 10px;
+}
