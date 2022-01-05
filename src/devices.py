@@ -52,8 +52,8 @@ class PortfolioDrive(GObject.GObject):
         self._drive_proxy.PowerOff("(a{sv})", ({}))
 
 
-class PortfolioDevice(GObject.GObject):
-    __gtype_name__ = "PortfolioDevice"
+class PortfolioBlock(GObject.GObject):
+    __gtype_name__ = "PortfolioBlock"
 
     __gsignals__ = {
         "updated": (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -65,23 +65,12 @@ class PortfolioDevice(GObject.GObject):
         self._object = object
         self._block_proxy = object.get_interface("org.freedesktop.UDisks2.Block")
 
-        self._filesystem_proxy = object.get_interface(
-            "org.freedesktop.UDisks2.Filesystem"
-        )
-        self._filesystem_proxy.connect(
-            "g-properties-changed", self._on_filesystem_changed
-        )
-
         self.label = self._get_block_label()
         self.uuid = self._get_block_uuid()
         self.drive = self._get_block_drive()
-        self.mount_point = self._get_filesystem_mount_point()
 
     def __repr__(self):
-        return f"Device(uuid={self.uuid}, label={self.label}, mount_point={self.mount_point})"
-
-    def _get_string_from_bytes(self, bytes):
-        return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
+        return f"Block(uuid={self.uuid}, label={self.label})"
 
     def _get_block_drive(self):
         return self._block_proxy.get_cached_property("Drive").unpack()
@@ -98,6 +87,28 @@ class PortfolioDevice(GObject.GObject):
             return uuid.unpack()
 
         return None
+
+
+class PortfolioDevice(PortfolioBlock):
+    __gtype_name__ = "PortfolioDevice"
+
+    def __init__(self, object):
+        PortfolioBlock.__init__(self, object)
+
+        self._filesystem_proxy = object.get_interface(
+            "org.freedesktop.UDisks2.Filesystem"
+        )
+        self._filesystem_proxy.connect(
+            "g-properties-changed", self._on_filesystem_changed
+        )
+
+        self.mount_point = self._get_filesystem_mount_point()
+
+    def __repr__(self):
+        return f"Device(uuid={self.uuid}, label={self.label}, mount_point={self.mount_point})"
+
+    def _get_string_from_bytes(self, bytes):
+        return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
 
     def _get_filesystem_mount_point(self):
         mount_points = [
@@ -124,12 +135,42 @@ class PortfolioDevice(GObject.GObject):
         return self._filesystem_proxy.Unmount("(a{sv})", ({}))
 
 
+class PortfolioEncrypted(PortfolioBlock):
+    __gtype_name__ = "PortfolioEncrypted"
+
+    def __init__(self, object):
+        PortfolioBlock.__init__(self, object)
+
+        self._encrypted_proxy = object.get_interface(
+            "org.freedesktop.UDisks2.Encrypted"
+        )
+        self._encrypted_proxy.connect(
+            "g-properties-changed", self._on_cleartext_device_changed
+        )
+
+        self.mount_point = None
+        self.cleartext_device = self._get_encrypted_cleartext_device()
+
+    def _get_encrypted_cleartext_device(self):
+        return self._encrypted_proxy.get_cached_property("CleartextDevice").unpack()
+
+    def _on_cleartext_device_changed(self, proxy, new_properties, old_properties):
+        properties = new_properties.unpack()
+        if "CleartextDevice" in properties:
+            self.cleartext_device = self._get_encrypted_cleartext_device()
+            self.emit("updated")
+
+    def unlock(self, passphrase):
+        return self._encrypted_proxy.Unlock("(sa{sv})", passphrase, {})
+
+
 class PortfolioDevices(GObject.GObject):
     __gtype_name__ = "PortfolioDevices"
 
     __gsignals__ = {
         "added": (GObject.SignalFlags.RUN_LAST, None, (object,)),
         "removed": (GObject.SignalFlags.RUN_LAST, None, (object,)),
+        "encrypted-added": (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
 
     def __init__(self):
@@ -137,6 +178,7 @@ class PortfolioDevices(GObject.GObject):
 
         self._drives = {}
         self._devices = {}
+        self._encrypted = {}
         self._manager = None
 
         try:
@@ -165,12 +207,23 @@ class PortfolioDevices(GObject.GObject):
     def _on_object_removed(self, manager, object):
         self._remove_object(object)
 
+    def _on_encrypted_updated(self, encrypted):
+        if encrypted.cleartext_device in self._devices:
+            self.emit("removed", encrypted)
+            del self._encrypted[encrypted._object.get_object_path()]
+
     def _add_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
             self._drives[drive.get_object_path()] = PortfolioDrive(object)
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
             self._devices[device.get_object_path()] = PortfolioDevice(object)
             self.emit("added", self._devices[device.get_object_path()])
+        elif proxy := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
+            encrypted = PortfolioEncrypted(object)
+            encrypted.connect("updated", self._on_encrypted_updated)
+            self._encrypted[proxy.get_object_path()] = encrypted
+            if encrypted.cleartext_device == "/":
+                self.emit("encrypted-added", encrypted)
 
     def _remove_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
@@ -178,6 +231,11 @@ class PortfolioDevices(GObject.GObject):
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
             self.emit("removed", self._devices[device.get_object_path()])
             del self._devices[device.get_object_path()]
+        elif encrypted := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
+            if encrypted.get_object_path() not in self._encrypted:
+                return
+            self.emit("removed", self._encrypted[encrypted.get_object_path()])
+            del self._encrypted[encrypted.get_object_path()]
 
     def scan(self):
         if self._manager is None:

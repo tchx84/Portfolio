@@ -33,6 +33,7 @@ class PortfolioPlaces(Gtk.Stack):
         "removing": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "unlock": (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
@@ -71,6 +72,7 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices = PortfolioDevices()
         self._devices.connect("added", self._on_device_added)
         self._devices.connect("removed", self._on_device_removed)
+        self._devices.connect("encrypted-added", self._on_encrypted_added)
 
         # begin UI structure
 
@@ -242,7 +244,7 @@ class PortfolioPlaces(Gtk.Stack):
 
         return False
 
-    def _add_place(self, group, icon, name, path, device=None):
+    def _add_place(self, group, icon, name, path):
         place = PortfolioPlace()
         place.set_icon_name(icon)
         place.set_title(name)
@@ -251,14 +253,7 @@ class PortfolioPlaces(Gtk.Stack):
         place.connect("activated", self._on_place_activated)
         group.add(place)
 
-        if device is None:
-            return
-
-        place.uuid = device.uuid
-        place.eject.connect("clicked", self._on_eject, device)
-        place.insert.connect("clicked", self._on_insert, device)
-        self._update_place_from_device(place, device)
-        device.connect("updated", self._on_device_updated)
+        return place
 
     def _find_place_by_device_uuid(self, group, device):
         for place in group.get_children():
@@ -297,19 +292,40 @@ class PortfolioPlaces(Gtk.Stack):
     def _on_place_activated(self, place):
         self.emit("updated", place.path)
 
+    def _on_encrypted_added(self, devices, encrypted):
+        logger.debug(f"added {encrypted}")
+
+        place = self._add_place(
+            self._devices_group,
+            "system-lock-screen-symbolic",
+            encrypted.label,
+            None,
+        )
+
+        place.uuid = encrypted.uuid
+        place.props.activatable = False
+        place.unlock.props.visible = True
+        place.unlock.connect("clicked", self._on_unlock, encrypted)
+
     def _on_device_added(self, devices, device):
         logger.debug(f"added {device}")
 
         if self._filter_device(device):
             return
 
-        self._add_place(
+        place = self._add_place(
             self._devices_group,
             "drive-removable-media-symbolic",
             device.label,
             device.mount_point,
-            device,
         )
+
+        place.uuid = device.uuid
+        place.eject.connect("clicked", self._on_eject, device)
+        place.insert.connect("clicked", self._on_insert, device)
+        self._update_place_from_device(place, device)
+        device.connect("updated", self._on_device_updated)
+
         self._update_stack_visibility()
         self._update_device_group_visibility()
 
@@ -358,3 +374,7 @@ class PortfolioPlaces(Gtk.Stack):
             device.mount()
         except Exception as e:
             logger.error(str(e))
+
+    def _on_unlock(self, button, encrypted):
+        logger.debug(f"inserted {encrypted}")
+        self.emit("unlock", encrypted.unlock)
