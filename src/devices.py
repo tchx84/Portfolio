@@ -166,10 +166,12 @@ class PortfolioEncrypted(PortfolioBlock):
             self.emit("updated")
 
     def _unlock_finish(self, proxy, task, data):
-        if task.had_error():
-            self.emit("failed")
-        else:
+        try:
+            proxy.call_finish(task)
             self.emit("finished")
+        except Exception as e:
+            logger.debug(e)
+            self.emit("failed")
 
     def unlock(self, passphrase):
         self._encrypted_proxy.call(
