@@ -89,6 +89,12 @@ class PortfolioDrive(GObject.GObject):
             device,
         )
 
+    def shutdown(self, callback, device):
+        if self.is_ejectable:
+            self.eject(callback=callback, device=device)
+        elif self.can_power_off:
+            self.power_off(callback=callback, device=device)
+
 
 class PortfolioBlock(GObject.GObject):
     __gtype_name__ = "PortfolioBlock"
@@ -106,6 +112,7 @@ class PortfolioBlock(GObject.GObject):
         self.label = self._get_block_label()
         self.uuid = self._get_block_uuid()
         self.drive = self._get_block_drive()
+        self.crypto_backing_device = self._get_block_crypto_backing_device()
         self.drive_object = None
 
     def __repr__(self):
@@ -127,6 +134,12 @@ class PortfolioBlock(GObject.GObject):
 
         return None
 
+    def _get_block_crypto_backing_device(self):
+        if device := self._block_proxy.get_cached_property("CryptoBackingDevice"):
+            return device.unpack()
+
+        return None
+
 
 class PortfolioDevice(PortfolioBlock):
     __gtype_name__ = "PortfolioDevice"
@@ -142,6 +155,7 @@ class PortfolioDevice(PortfolioBlock):
         )
 
         self.mount_point = self._get_filesystem_mount_point()
+        self.encrypted_object = None
 
     def __repr__(self):
         return f"Device(uuid={self.uuid}, label={self.label}, mount_point={self.mount_point})"
@@ -184,15 +198,10 @@ class PortfolioDevice(PortfolioBlock):
             callback(self, False)
             return
 
-        # XXX fix mapping between encrypted and drives
-        if self.drive_object is None:
-            callback(self, True)
-            return
-
-        if self.drive_object.is_ejectable:
-            self.drive_object.eject(callback=callback, device=self)
-        elif self.drive_object.can_power_off:
-            self.drive_object.power_off(callback=callback, device=self)
+        if self.encrypted_object is not None:
+            self.encrypted_object.lock(callback, self)
+        else:
+            self.drive_object.shutdown(callback, self)
 
     def mount(self, callback):
         self._filesystem_proxy.call(
@@ -201,7 +210,7 @@ class PortfolioDevice(PortfolioBlock):
             Gio.DBusCallFlags.NONE,
             -1,
             None,
-            self._on_unmount_finished,
+            self._on_mount_finished,
             callback,
         )
 
@@ -256,6 +265,15 @@ class PortfolioEncrypted(PortfolioBlock):
             logger.debug(e)
             self.emit("failed")
 
+    def _lock_finish(self, proxy, task, callback, device):
+        logger.debug(f"lock finished {self}")
+        try:
+            proxy.call_finish(task)
+            device.drive_object.shutdown(callback, device)
+        except Exception as e:
+            logger.debug(e)
+            callback(device, False)
+
     def unlock(self, passphrase):
         self._encrypted_proxy.call(
             "Unlock",
@@ -265,6 +283,19 @@ class PortfolioEncrypted(PortfolioBlock):
             None,
             self._unlock_finish,
             None,
+        )
+
+    def lock(self, callback, device):
+        logger.debug(f"lock {self}")
+        self._encrypted_proxy.call(
+            "Lock",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._lock_finish,
+            callback,
+            device,
         )
 
 
@@ -314,12 +345,15 @@ class PortfolioDevices(GObject.GObject):
     def _on_encrypted_updated(self, encrypted):
         if encrypted.cleartext_device in self._devices:
             self.emit("removed", encrypted)
-            del self._encrypted[encrypted._object.get_object_path()]
 
     def _update_drive_mapping(self):
         for _, device in self._devices.items():
             if device.drive_object is None:
                 device.drive_object = self._drives.get(device.drive)
+            if device.drive_object is None:
+                if encrypted := self._encrypted.get(device.crypto_backing_device):
+                    device.encrypted_object = encrypted
+                    device.drive_object = self._drives.get(encrypted.drive)
 
     def _add_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
@@ -343,8 +377,6 @@ class PortfolioDevices(GObject.GObject):
             self.emit("removed", self._devices[device.get_object_path()])
             del self._devices[device.get_object_path()]
         elif encrypted := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
-            if encrypted.get_object_path() not in self._encrypted:
-                return
             self.emit("removed", self._encrypted[encrypted.get_object_path()])
             del self._encrypted[encrypted.get_object_path()]
 
