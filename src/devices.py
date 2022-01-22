@@ -45,11 +45,49 @@ class PortfolioDrive(GObject.GObject):
     def _get_drive_can_power_off(self):
         return self._drive_proxy.get_cached_property("CanPowerOff").unpack()
 
-    def eject(self):
-        self._drive_proxy.Eject("(a{sv})", ({}))
+    def _on_eject_finished(self, proxy, task, callback, device):
+        logger.debug(f"eject finished {self} {device}")
+        try:
+            proxy.call_finish(task)
+            callback(device, True)
+        except Exception as e:
+            logger.debug(e)
+            callback(device, False)
 
-    def power_off(self):
-        self._drive_proxy.PowerOff("(a{sv})", ({}))
+    def _on_power_off_finished(self, proxy, task, callback, device):
+        logger.debug(f"power_off finished {self} {device}")
+        try:
+            proxy.call_finish(task)
+            callback(device, True)
+        except Exception as e:
+            logger.debug(e)
+            callback(device, False)
+
+    def eject(self, callback, device):
+        logger.debug(f"eject {self} {device}")
+        self._drive_proxy.call(
+            "Eject",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._on_eject_finished,
+            callback,
+            device,
+        )
+
+    def power_off(self, callback, device):
+        logger.debug(f"power_off {self} {device}")
+        self._drive_proxy.call(
+            "PowerOff",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._on_power_off_finished,
+            callback,
+            device,
+        )
 
 
 class PortfolioBlock(GObject.GObject):
@@ -68,6 +106,7 @@ class PortfolioBlock(GObject.GObject):
         self.label = self._get_block_label()
         self.uuid = self._get_block_uuid()
         self.drive = self._get_block_drive()
+        self.drive_object = None
 
     def __repr__(self):
         return f"Block(uuid={self.uuid}, label={self.label})"
@@ -128,11 +167,55 @@ class PortfolioDevice(PortfolioBlock):
             self.mount_point = self._get_filesystem_mount_point()
             self.emit("updated")
 
-    def mount(self):
-        return self._filesystem_proxy.Mount("(a{sv})", ({}))
+    def _on_mount_finished(self, proxy, task, callback):
+        try:
+            proxy.call_finish(task)
+            callback(self, True)
+        except Exception as e:
+            logger.debug(e)
+            callback(self, False)
 
-    def unmount(self):
-        return self._filesystem_proxy.Unmount("(a{sv})", ({}))
+    def _on_unmount_finished(self, proxy, task, callback):
+        logger.debug(f"unmont finished {self}")
+        try:
+            proxy.call_finish(task)
+        except Exception as e:
+            logger.debug(e)
+            callback(self, False)
+            return
+
+        # XXX fix mapping between encrypted and drives
+        if self.drive_object is None:
+            callback(self, True)
+            return
+
+        if self.drive_object.is_ejectable:
+            self.drive_object.eject(callback=callback, device=self)
+        elif self.drive_object.can_power_off:
+            self.drive_object.power_off(callback=callback, device=self)
+
+    def mount(self, callback):
+        self._filesystem_proxy.call(
+            "Mount",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._on_unmount_finished,
+            callback,
+        )
+
+    def unmount(self, callback):
+        logger.debug(f"unmont {self}")
+        self._filesystem_proxy.call(
+            "Unmount",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._on_unmount_finished,
+            callback,
+        )
 
 
 class PortfolioEncrypted(PortfolioBlock):
@@ -233,6 +316,11 @@ class PortfolioDevices(GObject.GObject):
             self.emit("removed", encrypted)
             del self._encrypted[encrypted._object.get_object_path()]
 
+    def _update_drive_mapping(self):
+        for _, device in self._devices.items():
+            if device.drive_object is None:
+                device.drive_object = self._drives.get(device.drive)
+
     def _add_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
             self._drives[drive.get_object_path()] = PortfolioDrive(object)
@@ -245,6 +333,8 @@ class PortfolioDevices(GObject.GObject):
             self._encrypted[proxy.get_object_path()] = encrypted
             if encrypted.cleartext_device == "/":
                 self.emit("encrypted-added", encrypted)
+
+        self._update_drive_mapping()
 
     def _remove_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
@@ -263,21 +353,3 @@ class PortfolioDevices(GObject.GObject):
             return
         for object in self._manager.get_objects():
             self._add_object(object)
-
-    def can_remove_drive(self, device):
-        drive = self._drives.get(device.drive)
-
-        if drive is None:
-            return False
-
-        return drive.is_ejectable and drive.can_power_off
-
-    def remove_drive(self, device):
-        drive = self._drives.get(device.drive)
-
-        if drive is None:
-            return
-        if drive.is_ejectable:
-            drive.eject()
-        if not drive.can_power_off:
-            drive.power_off()

@@ -349,36 +349,23 @@ class PortfolioPlaces(Gtk.Stack):
         self._update_place_from_device(place, device)
 
     def _on_eject(self, button, device):
-        logger.debug(f"ejected {device}")
-
-        try:
-            device.unmount()
-        except Exception as e:
-            logger.error(str(e))
-            self.emit("failed", device.mount_point)
-            return
-
-        if not self._devices.can_remove_drive(device):
-            return
-
+        logger.debug(f"eject {device}")
         self.emit("removing", device.mount_point)
-        GLib.idle_add(self._on_eject_finished, device)
+        device.unmount(callback=self._on_eject_finished)
 
-    def _on_eject_finished(self, device):
-        try:
-            self._devices.remove_drive(device)
-        except Exception as e:
-            logger.error(str(e))
-            return
-
-        self._on_device_removed(None, device)
+    def _on_eject_finished(self, device, success):
+        logger.debug(f"eject finished {device} {success}")
+        if success:
+            self._on_device_removed(None, device)
+        else:
+            self.emit("failed", device.mount_point)
 
     def _on_insert(self, button, device):
         logger.debug(f"inserted {device}")
-        try:
-            device.mount()
-        except Exception as e:
-            logger.error(str(e))
+        device.mount(callback=self._on_insert_finished)
+
+    def _on_insert_finished(self, device, success):
+        pass
 
     def _on_unlock(self, button, encrypted):
         logger.debug(f"unlocked {encrypted}")
