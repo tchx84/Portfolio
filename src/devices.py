@@ -230,11 +230,6 @@ class PortfolioDevice(PortfolioBlock):
 class PortfolioEncrypted(PortfolioBlock):
     __gtype_name__ = "PortfolioEncrypted"
 
-    __gsignals__ = {
-        "finished": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "failed": (GObject.SignalFlags.RUN_LAST, None, ()),
-    }
-
     def __init__(self, object):
         PortfolioBlock.__init__(self, object)
 
@@ -257,13 +252,13 @@ class PortfolioEncrypted(PortfolioBlock):
             self.cleartext_device = self._get_encrypted_cleartext_device()
             self.emit("updated")
 
-    def _unlock_finish(self, proxy, task, data):
+    def _unlock_finish(self, proxy, task, callback):
         try:
             proxy.call_finish(task)
-            self.emit("finished")
+            callback(self, True)
         except Exception as e:
             logger.debug(e)
-            self.emit("failed")
+            callback(self, False)
 
     def _lock_finish(self, proxy, task, callback, device):
         logger.debug(f"lock finished {self}")
@@ -274,7 +269,7 @@ class PortfolioEncrypted(PortfolioBlock):
             logger.debug(e)
             callback(device, False)
 
-    def unlock(self, passphrase):
+    def unlock(self, passphrase, callback):
         self._encrypted_proxy.call(
             "Unlock",
             GLib.Variant("(sa{sv})", (passphrase, {})),
@@ -282,7 +277,7 @@ class PortfolioEncrypted(PortfolioBlock):
             -1,
             None,
             self._unlock_finish,
-            None,
+            callback,
         )
 
     def lock(self, callback, device):

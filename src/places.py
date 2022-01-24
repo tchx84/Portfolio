@@ -34,8 +34,6 @@ class PortfolioPlaces(Gtk.Stack):
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "unlock": (GObject.SignalFlags.RUN_LAST, None, (object,)),
-        "unlock-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "unlock-failed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
@@ -309,9 +307,6 @@ class PortfolioPlaces(Gtk.Stack):
         place.unlock.props.visible = True
         place.unlock.connect("clicked", self._on_unlock, encrypted)
 
-        encrypted.connect("finished", self._on_unlock_finished)
-        encrypted.connect("failed", self._on_unlock_failed)
-
     def _on_device_added(self, devices, device):
         logger.debug(f"added {device}")
 
@@ -369,12 +364,4 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _on_unlock(self, button, encrypted):
         logger.debug(f"unlocked {encrypted}")
-        self.emit("unlock", encrypted.unlock)
-
-    def _on_unlock_finished(self, encrypted):
-        logger.debug(f"unlocked {encrypted} finished")
-        self.emit("unlock-finished")
-
-    def _on_unlock_failed(self, encrypted):
-        logger.debug(f"unlocked {encrypted} failed")
-        self.emit("unlock-failed")
+        self.emit("unlock", encrypted)
