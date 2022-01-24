@@ -164,7 +164,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._index = -1
         self._search_delay_handler_id = 0
         self._load_delay_handler_id = 0
-        self._passphrase_callback = None
+        self._encrypted = None
 
         self.gesture = Gtk.GestureLongPress.new(self.treeview)
         self.gesture.connect("pressed", self._on_long_pressed)
@@ -222,8 +222,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("removed", self._on_places_removed)
         places.connect("failed", self._on_places_failed)
         places.connect("unlock", self._on_places_unlock)
-        places.connect("unlock-finished", self._on_places_unlock_finished)
-        places.connect("unlock-failed", self._on_places_unlock_failed)
         self.places_inner_box.add(places)
 
         self._properties = PortfolioPropertiesWorker()
@@ -546,7 +544,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._load_delay_handler_id = 0
 
     def _clean_passphrase(self):
-        self._passphrase_callback = None
+        self._encrypted = None
         self.passphrase_entry.set_text("")
         self.passphrase_label.set_text("")
         self.passphrase_entry.props.sensitive = True
@@ -1377,33 +1375,17 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_places_failed(self, button, path):
         self._places_notify(_("Device is busy, can't be removed"))
 
-    def _on_places_unlock(self, button, callback):
+    def _on_places_unlock(self, button, encrypted):
         self._clean_passphrase()
-        self._passphrase_callback = callback
+        self._encrypted = encrypted
         self.places_deck.set_visible_child(self.passphrase_box)
         self.passphrase_entry.grab_focus()
-
-    def _on_places_unlock_finished(self, button):
-        self._clean_passphrase()
-        self._on_passphrase_back_clicked(None)
-
-    def _on_places_unlock_failed(self, button):
-        self.passphrase_entry.props.sensitive = True
-        self.passphrase_button.props.sensitive = True
-        self.passphrase_image.props.visible = True
-        self.passphrase_spinner.props.visible = False
-        self.passphrase_spinner.props.active = False
-        self.passphrase_entry.grab_focus()
-        self.passphrase_label.set_text(_("Sorry, unlocking didn't work"))
 
     def _on_passphrase_back_clicked(self, button):
         self._clean_passphrase()
         self.places_deck.set_visible_child(self.places_box)
 
     def _on_passphrase_button_clicked(self, button):
-        if self._passphrase_callback is None:
-            return
-
         self.passphrase_entry.props.sensitive = False
         self.passphrase_button.props.sensitive = False
         self.passphrase_image.props.visible = False
@@ -1411,7 +1393,18 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.passphrase_spinner.props.active = True
 
         passphrase = self.passphrase_entry.get_text()
-        self._passphrase_callback(passphrase)
+        self._encrypted.unlock(passphrase, self._on_places_unlock_finished)
+
+    def _on_places_unlock_finished(self, encrypted, success):
+        self._clean_passphrase()
+
+        if success is True:
+            self._on_passphrase_back_clicked(None)
+            return
+
+        self._encrypted = encrypted
+        self.passphrase_entry.grab_focus()
+        self.passphrase_label.set_text(_("Sorry, unlocking didn't work"))
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
