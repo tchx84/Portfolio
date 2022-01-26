@@ -122,6 +122,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     property_created = Gtk.Template.Child()
     property_modified = Gtk.Template.Child()
     property_accessed = Gtk.Template.Child()
+    passphrase_header = Gtk.Template.Child()
     passphrase_box = Gtk.Template.Child()
     passphrase_entry = Gtk.Template.Child()
     passphrase_label = Gtk.Template.Child()
@@ -1378,6 +1379,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_places_unlock(self, button, encrypted):
         self._clean_passphrase()
         self._encrypted = encrypted
+        self.passphrase_header.props.title = encrypted.get_friendly_label()
         self.places_deck.set_visible_child(self.passphrase_box)
         self.passphrase_entry.grab_focus()
 

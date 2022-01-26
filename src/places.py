@@ -298,7 +298,7 @@ class PortfolioPlaces(Gtk.Stack):
         place = self._add_place(
             self._devices_group,
             "system-lock-screen-symbolic",
-            encrypted.label,
+            encrypted.get_friendly_label(),
             None,
         )
 

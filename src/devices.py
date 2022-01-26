@@ -18,6 +18,7 @@
 from gi.repository import Gio, GLib, GObject
 
 from . import logger
+from . import utils
 
 
 class PortfolioDrive(GObject.GObject):
@@ -32,6 +33,8 @@ class PortfolioDrive(GObject.GObject):
         self.uuid = self._get_drive_uuid()
         self.is_ejectable = self._get_drive_is_ejectable()
         self.can_power_off = self._get_drive_can_power_off()
+        self.model = self._get_drive_model()
+        self.size = self._get_drive_size()
 
     def __repr__(self):
         return f"Drive(uuid={self.uuid}, is_ejectable={self.is_ejectable}, can_power_off={self.can_power_off})"
@@ -44,6 +47,12 @@ class PortfolioDrive(GObject.GObject):
 
     def _get_drive_can_power_off(self):
         return self._drive_proxy.get_cached_property("CanPowerOff").unpack()
+
+    def _get_drive_model(self):
+        return self._drive_proxy.get_cached_property("Model").unpack()
+
+    def _get_drive_size(self):
+        return self._drive_proxy.get_cached_property("Size").unpack()
 
     def _on_eject_finished(self, proxy, task, callback, device):
         logger.debug(f"eject finished {self} {device}")
@@ -269,6 +278,10 @@ class PortfolioEncrypted(PortfolioBlock):
             logger.debug(e)
             callback(device, False)
 
+    def get_friendly_label(self):
+        size = utils.get_size_for_humans(self.drive_object.size)
+        return f"{self.drive_object.model} ({size} Drive)"
+
     def unlock(self, passphrase, callback):
         self._encrypted_proxy.call(
             "Unlock",
@@ -350,6 +363,14 @@ class PortfolioDevices(GObject.GObject):
                     device.encrypted_object = encrypted
                     device.drive_object = self._drives.get(encrypted.drive)
 
+        # XXX defer encrypted-added until the corresponding drive is found
+        for _, encrypted in self._encrypted.items():
+            if encrypted.drive_object is None:
+                drive = self._drives.get(encrypted.drive)
+                encrypted.drive_object = drive
+                if drive is not None and encrypted.cleartext_device == "/":
+                    self.emit("encrypted-added", encrypted)
+
     def _add_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
             self._drives[drive.get_object_path()] = PortfolioDrive(object)
@@ -360,8 +381,6 @@ class PortfolioDevices(GObject.GObject):
             encrypted = PortfolioEncrypted(object)
             encrypted.connect("updated", self._on_encrypted_updated)
             self._encrypted[proxy.get_object_path()] = encrypted
-            if encrypted.cleartext_device == "/":
-                self.emit("encrypted-added", encrypted)
 
         self._update_drive_mapping()
 
