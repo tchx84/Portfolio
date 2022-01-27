@@ -290,7 +290,8 @@ class PortfolioPlaces(Gtk.Stack):
         place.props.activatable = device.mount_point is not None
 
     def _on_place_activated(self, place):
-        self.emit("updated", place.path)
+        if place.path is not None:
+            self.emit("updated", place.path)
 
     def _on_encrypted_added(self, devices, encrypted):
         logger.debug(f"added {encrypted}")
@@ -303,9 +304,10 @@ class PortfolioPlaces(Gtk.Stack):
         )
 
         place.uuid = encrypted.uuid
-        place.props.activatable = False
-        place.unlock.props.visible = True
-        place.unlock.connect("clicked", self._on_unlock, encrypted)
+        place.props.activatable = True
+        place.eject.props.visible = True
+        place.eject.connect("clicked", self._on_encrypted_eject, encrypted)
+        place.connect("activated", self._on_encrypted_unlock, encrypted)
 
     def _on_device_added(self, devices, device):
         logger.debug(f"added {device}")
@@ -362,6 +364,12 @@ class PortfolioPlaces(Gtk.Stack):
     def _on_insert_finished(self, device, success):
         pass
 
-    def _on_unlock(self, button, encrypted):
+    def _on_encrypted_eject(self, button, encrypted):
+        encrypted.drive_object.eject(self._on_encrypted_eject_finished, encrypted)
+
+    def _on_encrypted_eject_finished(self, encrypted, success):
+        pass
+
+    def _on_encrypted_unlock(self, place, encrypted):
         logger.debug(f"unlocked {encrypted}")
         self.emit("unlock", encrypted)
