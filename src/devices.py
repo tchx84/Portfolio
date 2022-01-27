@@ -306,6 +306,9 @@ class PortfolioEncrypted(PortfolioBlock):
             device,
         )
 
+    def eject(self, callback):
+        self.drive_object.shutdown(callback, self)
+
 
 class PortfolioDevices(GObject.GObject):
     __gtype_name__ = "PortfolioDevices"

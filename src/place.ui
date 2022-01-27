@@ -7,14 +7,12 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="selectable">False</property>
-    <property name="activatable">True</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
           <object class="GtkButton" id="eject">
-            <property name="visible">False</property>
             <property name="can-focus">False</property>
             <property name="receives-default">False</property>
             <property name="halign">end</property>
@@ -38,7 +36,6 @@
         </child>
         <child>
           <object class="GtkButton" id="insert">
-            <property name="visible">False</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="halign">end</property>
@@ -58,29 +55,6 @@
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="unlock">
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="halign">end</property>
-            <property name="valign">center</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">dialog-password-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="eject-button"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
           </packing>
         </child>
       </object>
