@@ -24,7 +24,7 @@ class PortfolioPlace(Handy.ActionRow):
 
     eject = Gtk.Template.Child()
     insert = Gtk.Template.Child()
-    unlock = Gtk.Template.Child()
     mount = None
     path = ""
     uuid = ""
+    encrypted = None
