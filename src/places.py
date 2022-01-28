@@ -250,6 +250,7 @@ class PortfolioPlaces(Gtk.Stack):
         place.set_title(name)
         place.set_subtitle(path)
         place.path = path
+        place.props.activatable = True
         place.connect("activated", self._on_place_activated)
         group.add(place)
 
@@ -285,15 +286,18 @@ class PortfolioPlaces(Gtk.Stack):
         place.path = device.mount_point
         place.set_title(device.label)
         place.set_subtitle(device.mount_point)
-        place.eject.props.visible = device.mount_point is not None
-        place.insert.props.visible = device.mount_point is None
-        place.props.activatable = device.mount_point is not None
+        place.eject.props.visible = True
 
     def _on_place_activated(self, place):
         if place.path is not None:
             self.emit("updated", place.path)
-        if place.encrypted is not None:
+        elif place.encrypted is not None:
             self.emit("unlock", place.encrypted)
+        elif place.device is not None:
+            place.device.mount(self._on_insert_finished)
+
+    def _on_insert_finished(self, device, success):
+        self.emit("updated", device.mount_point)
 
     def _on_encrypted_added(self, devices, encrypted):
         logger.debug(f"added {encrypted}")
@@ -307,7 +311,7 @@ class PortfolioPlaces(Gtk.Stack):
 
         place.uuid = encrypted.uuid
         place.encrypted = encrypted
-        place.props.activatable = True
+
         place.eject.props.visible = True
         place.eject.connect("clicked", self._on_encrypted_eject, encrypted)
 
@@ -325,11 +329,12 @@ class PortfolioPlaces(Gtk.Stack):
         )
 
         place.uuid = device.uuid
+        place.device = device
         place.eject.connect("clicked", self._on_eject, device)
-        place.insert.connect("clicked", self._on_insert, device)
-        self._update_place_from_device(place, device)
+
         device.connect("updated", self._on_device_updated)
 
+        self._update_place_from_device(place, device)
         self._update_stack_visibility()
         self._update_device_group_visibility()
 
@@ -350,7 +355,7 @@ class PortfolioPlaces(Gtk.Stack):
     def _on_eject(self, button, device):
         logger.debug(f"eject {device}")
         self.emit("removing", device.mount_point)
-        device.unmount(callback=self._on_eject_finished)
+        device.eject(self._on_eject_finished)
 
     def _on_eject_finished(self, device, success):
         logger.debug(f"eject finished {device} {success}")
@@ -358,13 +363,6 @@ class PortfolioPlaces(Gtk.Stack):
             self._on_device_removed(None, device)
         else:
             self.emit("failed", device.mount_point)
-
-    def _on_insert(self, button, device):
-        logger.debug(f"inserted {device}")
-        device.mount(callback=self._on_insert_finished)
-
-    def _on_insert_finished(self, device, success):
-        pass
 
     def _on_encrypted_eject(self, button, encrypted):
         encrypted.eject(self._on_encrypted_eject_finished)
