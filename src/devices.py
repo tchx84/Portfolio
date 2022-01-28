@@ -207,6 +207,9 @@ class PortfolioDevice(PortfolioBlock):
             callback(self, False)
             return
 
+        self._shutdown(callback)
+
+    def _shutdown(self, callback):
         if self.encrypted_object is not None:
             self.encrypted_object.lock(callback, self)
         else:
@@ -234,6 +237,12 @@ class PortfolioDevice(PortfolioBlock):
             self._on_unmount_finished,
             callback,
         )
+
+    def eject(self, callback):
+        if self.mount_point is not None:
+            self.unmount(callback)
+        else:
+            self._shutdown(callback)
 
 
 class PortfolioEncrypted(PortfolioBlock):

@@ -23,8 +23,8 @@ class PortfolioPlace(Handy.ActionRow):
     __gtype_name__ = "PortfolioPlace"
 
     eject = Gtk.Template.Child()
-    insert = Gtk.Template.Child()
     mount = None
     path = ""
     uuid = ""
     encrypted = None
+    device = None
