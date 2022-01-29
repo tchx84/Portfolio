@@ -1361,8 +1361,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_places_removing(self, button, path):
         self._places_notify(_("Removing device, please wait"))
 
-    def _on_places_removed(self, button, path):
-        self._places_notify(_("Device can be removed"))
+    def _on_places_removed(self, button, path, safely):
+        if safely is True:
+            self._places_notify(_("Device can be removed"))
 
         if self._index == -1:
             return

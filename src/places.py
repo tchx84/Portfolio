@@ -31,7 +31,7 @@ class PortfolioPlaces(Gtk.Stack):
     __gsignals__ = {
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "removing": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "removed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "removed": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "unlock": (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
@@ -345,7 +345,7 @@ class PortfolioPlaces(Gtk.Stack):
         if place is not None:
             place.destroy()
 
-        self.emit("removed", device.mount_point)
+        self.emit("removed", device.mount_point, device.safely_removed)
 
     def _on_device_updated(self, device):
         logger.debug(f"updated {device}")
