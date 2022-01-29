@@ -58,6 +58,7 @@ class PortfolioDrive(GObject.GObject):
         logger.debug(f"eject finished {self} {device}")
         try:
             proxy.call_finish(task)
+            device.safely_removed = True
             callback(device, True)
         except Exception as e:
             logger.debug(e)
@@ -67,6 +68,7 @@ class PortfolioDrive(GObject.GObject):
         logger.debug(f"power_off finished {self} {device}")
         try:
             proxy.call_finish(task)
+            device.safely_removed = True
             callback(device, True)
         except Exception as e:
             logger.debug(e)
@@ -123,6 +125,7 @@ class PortfolioBlock(GObject.GObject):
         self.drive = self._get_block_drive()
         self.crypto_backing_device = self._get_block_crypto_backing_device()
         self.drive_object = None
+        self.safely_removed = False
 
     def __repr__(self):
         return f"Block(uuid={self.uuid}, label={self.label})"
