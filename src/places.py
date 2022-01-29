@@ -286,7 +286,6 @@ class PortfolioPlaces(Gtk.Stack):
         place.path = device.mount_point
         place.set_title(device.label)
         place.set_subtitle(device.mount_point)
-        place.eject.props.visible = True
 
     def _on_place_activated(self, place):
         if place.path is not None:
@@ -330,6 +329,7 @@ class PortfolioPlaces(Gtk.Stack):
 
         place.uuid = device.uuid
         place.device = device
+        place.eject.props.visible = True
         place.eject.connect("clicked", self._on_eject, device)
 
         device.connect("updated", self._on_device_updated)
