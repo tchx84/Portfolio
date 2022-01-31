@@ -369,6 +369,25 @@ class PortfolioDevices(GObject.GObject):
         if encrypted.cleartext_device in self._devices:
             self.emit("removed", encrypted)
 
+    def _remove_device(self, object_path):
+        device = self._devices.get(object_path)
+        if device is None:
+            return
+
+        self.emit("removed", device)
+        del self._devices[object_path]
+
+    def _remove_encrypted(self, object_path):
+        encrypted = self._encrypted.get(object_path)
+        if encrypted is None:
+            return
+
+        # XXX unsafely removed devices don't emit removed signal
+        self._remove_device(encrypted.cleartext_device)
+
+        self.emit("removed", encrypted)
+        del self._encrypted[object_path]
+
     def _update_drive_mapping(self):
         for _, device in self._devices.items():
             if device.drive_object is None:
@@ -403,11 +422,9 @@ class PortfolioDevices(GObject.GObject):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
             del self._drives[drive.get_object_path()]
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
-            self.emit("removed", self._devices[device.get_object_path()])
-            del self._devices[device.get_object_path()]
+            self._remove_device(device.get_object_path())
         elif encrypted := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
-            self.emit("removed", self._encrypted[encrypted.get_object_path()])
-            del self._encrypted[encrypted.get_object_path()]
+            self._remove_encrypted(encrypted.get_object_path())
 
     def scan(self):
         if self._manager is None:
