@@ -209,3 +209,7 @@ label.no-places {
     font-size: small;
     font-weight: bold;
 }
+
+.passphrase-spinner {
+    margin: 10px;
+}

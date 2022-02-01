@@ -126,8 +126,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
     passphrase_box = Gtk.Template.Child()
     passphrase_entry = Gtk.Template.Child()
     passphrase_label = Gtk.Template.Child()
-    passphrase_button = Gtk.Template.Child()
-    passphrase_image = Gtk.Template.Child()
     passphrase_spinner = Gtk.Template.Child()
     passphrase_back_button = Gtk.Template.Child()
 
@@ -204,7 +202,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.about_back_button.connect("clicked", self._on_about_back_clicked)
         self.properties_back_button.connect("clicked", self._on_properties_back_clicked)
         self.passphrase_back_button.connect("clicked", self._on_passphrase_back_clicked)
-        self.passphrase_button.connect("clicked", self._on_passphrase_button_clicked)
+        self.passphrase_entry.connect("activate", self._on_passphrase_activate)
 
         # XXX no model for options yet so this...
         self.menu_button.connect("clicked", self._on_menu_button_clicked)
@@ -549,8 +547,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.passphrase_entry.set_text("")
         self.passphrase_label.set_text("")
         self.passphrase_entry.props.sensitive = True
-        self.passphrase_button.props.sensitive = True
-        self.passphrase_image.props.visible = True
+        self.passphrase_label.props.visible = True
         self.passphrase_spinner.props.visible = False
         self.passphrase_spinner.props.active = False
 
@@ -1388,10 +1385,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_passphrase()
         self.places_deck.set_visible_child(self.places_box)
 
-    def _on_passphrase_button_clicked(self, button):
+    def _on_passphrase_activate(self, button):
         self.passphrase_entry.props.sensitive = False
-        self.passphrase_button.props.sensitive = False
-        self.passphrase_image.props.visible = False
+        self.passphrase_label.props.visible = False
         self.passphrase_spinner.props.visible = True
         self.passphrase_spinner.props.active = True
 
@@ -1407,7 +1403,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._encrypted = encrypted
         self.passphrase_entry.grab_focus()
-        self.passphrase_label.set_text(_("Sorry, unlocking didn't work"))
+        self.passphrase_label.set_text(_("Sorry, that didn't work"))
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
