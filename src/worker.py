@@ -375,7 +375,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
                     if self._stop:
                         return
                     try:
-                        size += os.path.getsize(os.path.join(directory, filename))
+                        size += os.lstat(os.path.join(directory, filename)).st_size
                     except:
                         pass
 
@@ -397,7 +397,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._inner_worker = self.InnerWorker(self)
 
     def _get_file_size(self):
-        return os.path.getsize(self._path)
+        return os.lstat(self._path).st_size
 
     def _update_size(self):
         if os.path.isdir(self._path):
@@ -452,7 +452,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         file = Gio.File.new_for_path(path)
         info = file.query_info(
             Gio.FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-            Gio.FileQueryInfoFlags.NONE,
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
             None,
         )
 
@@ -460,9 +460,9 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._location = os.path.dirname(self._path)
         self._type = info.get_content_type()
         self._size = _("Calculating...")
-        self._created = self._get_human_time(os.path.getctime(self._path))
-        self._modified = self._get_human_time(os.path.getmtime(self._path))
-        self._accessed = self._get_human_time(os.path.getatime(self._path))
+        self._created = self._get_human_time(os.lstat(self._path).st_ctime)
+        self._modified = self._get_human_time(os.lstat(self._path).st_mtime)
+        self._accessed = self._get_human_time(os.lstat(self._path).st_atime)
 
         self.notify("name")
         self.notify("location")
