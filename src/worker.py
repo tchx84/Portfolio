@@ -88,7 +88,10 @@ class PortfolioCopyWorker(PortfolioWorker):
 
         try:
             source.copy(
-                destination, Gio.FileCopyFlags.OVERWRITE, self._cancellable, callback
+                destination,
+                Gio.FileCopyFlags.OVERWRITE | Gio.FileCopyFlags.NOFOLLOW_SYMLINKS,
+                self._cancellable,
+                callback,
             )
         except GLib.Error as e:
             if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
