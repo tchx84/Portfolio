@@ -74,7 +74,7 @@ def get_uri_path(string):
 
 @cached
 def get_file_mtime(string):
-    return os.path.getmtime(string)
+    return os.lstat(string).st_mtime
 
 
 @cached
