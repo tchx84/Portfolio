@@ -249,7 +249,7 @@ msgstr "Pegando"
 #: src/window.py:1047
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s de %s"
 
 #: src/window.py:1062
 #, python-format
@@ -300,7 +300,7 @@ msgstr "Dispositivo ocupado, no se puede remover"
 
 #: src/window.py:1406
 msgid "Sorry, that didn't work"
-msgstr ""
+msgstr "Lo siento, eso no ha funcionado"
 
 #: src/worker.py:465
 msgid "Calculating..."
