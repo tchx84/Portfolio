@@ -385,7 +385,6 @@
                       <object class="HdyHeaderBar" id="passphrase_header">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="title" translatable="yes">Passphrase</property>
                         <property name="show-close-button">True</property>
                         <child>
                           <object class="GtkToggleButton" id="passphrase_back_button">
