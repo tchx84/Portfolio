@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2021.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 18:38-0300\n"
-"PO-Revision-Date: 2021-07-05 09:17+0700\n"
+"PO-Revision-Date: 2022-02-04 08:27+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. TRANSLATORS: Don't translate this text
@@ -252,7 +252,7 @@ msgstr "Menempel"
 #: src/window.py:1047
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s dari %s"
 
 #: src/window.py:1062
 #, python-format
@@ -303,7 +303,7 @@ msgstr "Perangkat sibuk, tidak dapat dilepas"
 
 #: src/window.py:1406
 msgid "Sorry, that didn't work"
-msgstr ""
+msgstr "Maaf, itu tidak berhasil"
 
 #: src/worker.py:465
 msgid "Calculating..."
