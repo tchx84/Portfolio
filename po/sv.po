@@ -1,14 +1,14 @@
 # Swedish translation for Portfolio.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2020, 2021.
+# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2020-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 18:38-0300\n"
-"PO-Revision-Date: 2021-07-04 07:56+0200\n"
+"PO-Revision-Date: 2022-02-04 07:26+0100\n"
 "Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
 "Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
 "Language: sv\n"
@@ -252,7 +252,7 @@ msgstr "Klistrar in"
 #: src/window.py:1047
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s av %s"
 
 #: src/window.py:1062
 #, python-format
@@ -303,7 +303,7 @@ msgstr "Enheten är upptagen, kan inte tas bort"
 
 #: src/window.py:1406
 msgid "Sorry, that didn't work"
-msgstr ""
+msgstr "Beklagar, det fungerade inte."
 
 #: src/worker.py:465
 msgid "Calculating..."
