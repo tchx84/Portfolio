@@ -1,14 +1,14 @@
 # Brazilian Portuguese translation for portfolio.
-# Copyright (C) 2021 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2022 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2021.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-03 18:38-0300\n"
-"PO-Revision-Date: 2021-07-04 08:03-0300\n"
+"PO-Revision-Date: 2022-02-03 19:21-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -129,7 +129,7 @@ msgid ""
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
 "later</a> for details."
 msgstr ""
-"Este programa não vem com nenhuma garantia. Consulte a <a href=\"https://www."
+"Este programa vem com nenhuma garantia. Consulte a <a href=\"https://www."
 "gnu.org/licenses/gpl-3.0.html\">Licença Pública Geral GNU, versão 3 ou "
 "posterior</a> para obter detalhes."
 
@@ -253,7 +253,7 @@ msgstr "Colando"
 #: src/window.py:1047
 #, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s de %s"
 
 #: src/window.py:1062
 #, python-format
@@ -304,7 +304,7 @@ msgstr "O dispositivo está ocupado, não pode ser removido"
 
 #: src/window.py:1406
 msgid "Sorry, that didn't work"
-msgstr ""
+msgstr "Sinto muito, isso não funcionou"
 
 #: src/worker.py:465
 msgid "Calculating..."
