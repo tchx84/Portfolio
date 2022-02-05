@@ -163,7 +163,7 @@ class PortfolioCutWorker(PortfolioCopyWorker):
         for path, ref in self._selection:
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
-            overwritten = os.path.exists(destination)
+            overwritten = os.path.lexists(destination)
 
             try:
                 self._stop_check()
