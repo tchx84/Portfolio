@@ -123,7 +123,7 @@ class PortfolioCopyWorker(PortfolioWorker):
         for path, ref in self._selection:
             name = os.path.basename(path)
             destination = os.path.join(self._directory, name)
-            overwritten = os.path.exists(destination)
+            overwritten = os.path.lexists(destination)
 
             if path == destination:
                 name = utils.find_new_name(self._directory, name)
