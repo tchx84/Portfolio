@@ -991,7 +991,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         should_warn = any(
             [
                 os.path.dirname(path) != directory
-                and os.path.exists(os.path.join(directory, os.path.basename(path)))
+                and os.path.lexists(os.path.join(directory, os.path.basename(path)))
                 for path, ref in to_paste
             ]
         )
