@@ -1202,7 +1202,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         selection = self._get_selection()
         paths = [default_trash.get_orig_path(path) for path, ref in selection]
 
-        overwrites = any([os.path.exists(path) for path in paths if path])
+        overwrites = any([os.path.lexists(path) for path in paths if path])
         duplicates = len(set(paths)) != len(paths)
 
         if not overwrites and not duplicates:

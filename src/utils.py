@@ -26,7 +26,7 @@ from .cache import cached
 def find_new_name(directory, name, fmt="%s(%d)"):
     counter = 1
 
-    while os.path.exists(os.path.join(directory, name)):
+    while os.path.lexists(os.path.join(directory, name)):
         components = re.split("(\(\d+\)$)", name)
         if len(components) > 1:
             name = "".join(components[:-2])

@@ -146,7 +146,7 @@ class PortfolioTrash(GObject.GObject):
 
     def trash(self, path):
         # prevent shutil.move strange behavior
-        if not os.access(path, os.W_OK):
+        if not os.access(path, os.W_OK, follow_symlinks=False):
             raise PermissionError(f"Can't access {path}")
 
         mount_point = utils.find_mount_point(path)
