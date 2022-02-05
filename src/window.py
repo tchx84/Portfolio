@@ -887,7 +887,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         try:
             # respect empty folders
-            if os.path.exists(new_path):
+            if os.path.lexists(new_path):
                 raise FileExistsError(_("%s already exists") % new_path)
 
             os.rename(old_path, new_path)
