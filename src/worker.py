@@ -173,6 +173,8 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                     continue
                 if overwritten and os.path.isdir(path):
                     shutil.rmtree(destination)
+                if overwritten and os.path.islink(destination):
+                    os.unlink(destination)
                 shutil.move(path, destination, copy_function=self._copy)
             except WorkerStoppedException:
                 self.emit("stopped")
