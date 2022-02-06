@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import time
 import shutil
 import locale
 import datetime
@@ -83,14 +84,17 @@ class PortfolioCopyWorker(PortfolioWorker):
         self._directory = directory
 
     def _do_copy(self, source, destination, callback):
+        last_sync = time.monotonic()
         current_bytes = 0
         total_bytes = os.stat(source.name).st_size
 
-        # XXX https://github.com/python/cpython/blob/main/Lib/shutil.py#L133
+        # start with an arbitrary buffer
         buffer_bytes = 8 * 1024 * 1024
 
         while True:
             self._stop_check()
+
+            logger.debug(f"buffer size is {buffer_bytes}")
 
             sent_bytes = os.sendfile(
                 destination.fileno(), source.fileno(), None, buffer_bytes
@@ -98,9 +102,20 @@ class PortfolioCopyWorker(PortfolioWorker):
             if not sent_bytes:
                 break
 
-            # XXX fsync often so it shows actual real progress on external devices
+            # fsync frequency is indirectly controlled by the size of the buffer
             destination.flush()
             os.fsync(destination.fileno())
+
+            # now dynamically adjust buffer size so that...
+            now = time.monotonic()
+
+            # it will keep fysnc requency between 500 and 1000 ms
+            if now - last_sync > 1.0:
+                buffer_bytes = buffer_bytes // 2
+            elif now - last_sync < 0.5:
+                buffer_bytes = buffer_bytes * 2
+
+            last_sync = now
 
             current_bytes += sent_bytes
             callback(current_bytes, total_bytes)
