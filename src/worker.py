@@ -73,7 +73,7 @@ class PortfolioCopyWorker(PortfolioWorker):
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
-        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int, int, int)),
+        "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int, float, float)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
