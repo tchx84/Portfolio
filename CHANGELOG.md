@@ -2,12 +2,13 @@
 
 ## [unreleased]
 
-- Fixed creating trash directories before needed.
-- Fixed crash on Sway tiling Wayland compositor.
+- Fixed creating trash directories before it's needed.
+- Fixed crashing on Sway tiling Wayland compositor.
 - Fixed showing trash button for volumes with no trash folder.
-- Added file-size details to paste operations dialogs.
+- Fixed handling of broken symlinks.
+- Added more progress details on paste operations dialogs.
 - Added support for mounting external devices.
-- Added support for unlocking devices.
+- Added support for unlocking encrypted devices.
 - Changed to GNOME 41 runtime for stability.
 
 ## [0.9.12] 2021-08-07
