@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
+import time
 import shutil
 import locale
 import datetime
@@ -83,35 +85,66 @@ class PortfolioCopyWorker(PortfolioWorker):
         self._directory = directory
 
     def _do_copy(self, source, destination, callback):
-        source = Gio.File.new_for_path(source)
-        destination = Gio.File.new_for_path(destination)
+        current_bytes = 0
+        total_bytes = os.stat(source.name).st_size
+        arch_capped = sys.maxsize < 2**32
 
-        try:
-            source.copy(
-                destination,
-                Gio.FileCopyFlags.OVERWRITE | Gio.FileCopyFlags.NOFOLLOW_SYMLINKS,
-                self._cancellable,
-                callback,
-            )
-        except GLib.Error as e:
-            if e.matches(Gio.io_error_quark(), Gio.IOErrorEnum.CANCELLED):
-                raise WorkerStoppedException()
-            raise
+        # start with an arbitrary block size
+        block_bytes = 2**23
+        last_sync = time.monotonic()
 
-    def _copy(self, source, destination):
-        self._stop_check()
+        outfd = destination.fileno()
+        infd = source.fileno()
+
+        while True:
+            self._stop_check()
+
+            # assume kernel >= 2.6.33
+            sent_bytes = os.sendfile(outfd, infd, None, block_bytes)
+            if sent_bytes == 0:
+                break
+
+            # fsync frequency is indirectly controlled by the size of the block
+            destination.flush()
+            os.fsync(outfd)
+
+            # now dynamically adjust the block size so that it
+            # will keep fsync frequency between 750 and 1250ms
+            now = time.monotonic()
+            if now - last_sync > 1.25:
+                block_bytes //= 2
+            elif now - last_sync < 0.75:
+                block_bytes *= 2
+
+            # On 32 bit arch block size must be capped
+            if arch_capped:
+                block_bytes = min(block_bytes, 2**30)
+
+            last_sync = now
+            current_bytes += sent_bytes
+            callback(current_bytes, total_bytes)
+
+        logger.debug(f"sendfile block size converged to {block_bytes}")
+
+    def _copy(self, source_path, destination_path):
+        if os.path.islink(source_path):
+            os.symlink(os.readlink(source_path), destination_path)
+            return
 
         def callback(current_bytes, total_bytes):
             self.emit(
                 "updated",
-                destination,
+                destination_path,
                 self._count,
                 self._total,
                 current_bytes,
                 total_bytes,
             )
 
-        self._do_copy(source, destination, callback)
+        with open(source_path, "rb") as source:
+            with open(destination_path, "wb") as destination:
+                self._do_copy(source, destination, callback)
+
         self._count += 1
 
     def run(self):
