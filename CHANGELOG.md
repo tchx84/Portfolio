@@ -6,6 +6,7 @@
 - Fixed crashing on Sway tiling Wayland compositor.
 - Fixed showing trash button for volumes with no trash folder.
 - Fixed handling of broken symlinks.
+- Fixed responsiveness when copying big files to slow devices.
 - Added more progress details on paste operations dialogs.
 - Added support for mounting external devices.
 - Added support for unlocking encrypted devices.
