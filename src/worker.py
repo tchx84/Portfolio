@@ -186,6 +186,8 @@ class PortfolioCopyWorker(PortfolioWorker):
                 logger.debug(e)
                 self.emit("failed", destination)
                 return
+            finally:
+                utils.sync_folder(os.path.dirname(destination))
 
         self.emit("finished", self._total)
 
@@ -222,6 +224,8 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 logger.debug(e)
                 self.emit("failed", path)
                 return
+            finally:
+                utils.sync_folder(os.path.dirname(destination))
 
         self.emit("finished", self._total)
 
