@@ -86,6 +86,12 @@ def is_flatpak():
     return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
 
 
+def sync_folder(path):
+    fd = os.open(path, os.O_DIRECTORY)
+    os.fsync(fd)
+    os.close(fd)
+
+
 def find_mount_point(path):
     path = os.path.abspath(path)
     while not os.path.ismount(path):

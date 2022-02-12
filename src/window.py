@@ -1180,6 +1180,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         try:
             Path(path).mkdir(parents=False, exist_ok=True)
+            utils.sync_folder(path)
         except Exception as e:
             logger.debug(e)
             self._notify(

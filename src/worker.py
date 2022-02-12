@@ -149,6 +149,7 @@ class PortfolioCopyWorker(PortfolioWorker):
             with open(destination_path, "wb") as destination:
                 self._do_copy(source, destination, callback)
 
+        utils.sync_folder(os.path.dirname(destination_path))
         shutil.copymode(source_path, destination_path)
 
         self._count += 1
