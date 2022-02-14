@@ -58,6 +58,12 @@ class PortfolioDrive(GObject.GObject):
         logger.debug(f"eject finished {self} {device}")
         try:
             proxy.call_finish(task)
+
+            # all devices should power off whenever possible
+            if self.can_power_off:
+                self.power_off(callback, device)
+                return
+
             device.safely_removed = True
             callback(device, True)
         except Exception as e:
