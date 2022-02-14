@@ -365,7 +365,12 @@ class PortfolioPlaces(Gtk.Stack):
             self.emit("failed", device.mount_point)
 
     def _on_encrypted_eject(self, button, encrypted):
+        logger.debug(f"encrypted eject {encrypted}")
         encrypted.eject(self._on_encrypted_eject_finished)
 
     def _on_encrypted_eject_finished(self, encrypted, success):
-        pass
+        logger.debug(f"encrypted eject finished {encrypted}")
+        if success:
+            self._on_device_removed(None, encrypted)
+        else:
+            self.emit("failed", None)
