@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.13] 2022-02-17
 
 - Fixed creating trash directories before it's needed.
 - Fixed crashing on Sway tiling Wayland compositor.
