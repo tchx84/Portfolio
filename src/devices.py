@@ -130,6 +130,7 @@ class PortfolioBlock(GObject.GObject):
         self.uuid = self._get_block_uuid()
         self.drive = self._get_block_drive()
         self.crypto_backing_device = self._get_block_crypto_backing_device()
+        self.hint_system = self._get_block_hint_system()
         self.drive_object = None
         self.safely_removed = False
 
@@ -155,6 +156,12 @@ class PortfolioBlock(GObject.GObject):
     def _get_block_crypto_backing_device(self):
         if device := self._block_proxy.get_cached_property("CryptoBackingDevice"):
             return device.unpack()
+
+        return None
+
+    def _get_block_hint_system(self):
+        if (hint := self._block_proxy.get_cached_property("HintSystem")) is not None:
+            return hint.unpack()
 
         return None
 
@@ -395,28 +402,35 @@ class PortfolioDevices(GObject.GObject):
         del self._encrypted[object_path]
 
     def _update_drive_mapping(self):
+        # XXX defer added until we can determine real hint system
         for _, device in self._devices.items():
             if device.drive_object is None:
                 device.drive_object = self._drives.get(device.drive)
+                if device.drive_object and device.hint_system is False:
+                    self.emit("added", device)
             if device.drive_object is None:
                 if encrypted := self._encrypted.get(device.crypto_backing_device):
                     device.encrypted_object = encrypted
                     device.drive_object = self._drives.get(encrypted.drive)
+                if device.drive_object and encrypted.hint_system is False:
+                    self.emit("added", device)
 
         # XXX defer encrypted-added until the corresponding drive is found
         for _, encrypted in self._encrypted.items():
             if encrypted.drive_object is None:
                 drive = self._drives.get(encrypted.drive)
                 encrypted.drive_object = drive
-                if drive is not None and encrypted.cleartext_device == "/":
-                    self.emit("encrypted-added", encrypted)
+                if encrypted.hint_system is True:
+                    continue
+                if drive is None or encrypted.cleartext_device != "/":
+                    continue
+                self.emit("encrypted-added", encrypted)
 
     def _add_object(self, object):
         if drive := object.get_interface("org.freedesktop.UDisks2.Drive"):
             self._drives[drive.get_object_path()] = PortfolioDrive(object)
         elif device := object.get_interface("org.freedesktop.UDisks2.Filesystem"):
             self._devices[device.get_object_path()] = PortfolioDevice(object)
-            self.emit("added", self._devices[device.get_object_path()])
         elif proxy := object.get_interface("org.freedesktop.UDisks2.Encrypted"):
             encrypted = PortfolioEncrypted(object)
             encrypted.connect("updated", self._on_encrypted_updated)
