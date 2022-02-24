@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Changed places view to ignore system devices.
+
 ## [0.9.13] 2022-02-17
 
 - Fixed creating trash directories before it's needed.
