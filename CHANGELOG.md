@@ -3,6 +3,7 @@
 ## [unreleased]
 
 - Changed places view to ignore system devices.
+- Removed unnecessary sandbox permissions.
 
 ## [0.9.13] 2022-02-17
 
