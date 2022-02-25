@@ -12,8 +12,6 @@
         "--filesystem=home",
         "--filesystem=/media",
         "--filesystem=/run/media",
-        "--talk-name=org.gtk.vfs",
-        "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.UDisks2",
         "--own-name=org.freedesktop.FileManager1"
     ],
