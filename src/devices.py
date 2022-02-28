@@ -206,6 +206,14 @@ class PortfolioDevice(PortfolioBlock):
             self.mount_point = self._get_filesystem_mount_point()
             self.emit("updated")
 
+    def _on_mount_and_activate_finished(self, proxy, task, callback, encrypted):
+        try:
+            proxy.call_finish(task)
+            callback(self, encrypted, True)
+        except Exception as e:
+            logger.debug(e)
+            callback(self, encrypted, False)
+
     def _on_mount_finished(self, proxy, task, callback):
         try:
             proxy.call_finish(task)
@@ -230,6 +238,18 @@ class PortfolioDevice(PortfolioBlock):
             self.encrypted_object.lock(callback, self)
         else:
             self.drive_object.shutdown(callback, self)
+
+    def mount_and_activate(self, callback, encrypted):
+        self._filesystem_proxy.call(
+            "Mount",
+            GLib.Variant("(a{sv})", ({},)),
+            Gio.DBusCallFlags.NONE,
+            -1,
+            None,
+            self._on_mount_and_activate_finished,
+            callback,
+            encrypted,
+        )
 
     def mount(self, callback):
         self._filesystem_proxy.call(
@@ -276,6 +296,7 @@ class PortfolioEncrypted(PortfolioBlock):
 
         self.mount_point = None
         self.cleartext_device = self._get_encrypted_cleartext_device()
+        self.cleartext_device_object = None
 
     def _get_encrypted_cleartext_device(self):
         return self._encrypted_proxy.get_cached_property("CleartextDevice").unpack()
@@ -289,10 +310,10 @@ class PortfolioEncrypted(PortfolioBlock):
     def _unlock_finish(self, proxy, task, callback):
         try:
             proxy.call_finish(task)
-            callback(self, True)
+            self.cleartext_device_object.mount_and_activate(callback, self)
         except Exception as e:
             logger.debug(e)
-            callback(self, False)
+            callback(None, self, False)
 
     def _lock_finish(self, proxy, task, callback, device):
         logger.debug(f"lock finished {self}")
@@ -411,6 +432,7 @@ class PortfolioDevices(GObject.GObject):
             if device.drive_object is None:
                 if encrypted := self._encrypted.get(device.crypto_backing_device):
                     device.encrypted_object = encrypted
+                    encrypted.cleartext_device_object = device
                     device.drive_object = self._drives.get(encrypted.drive)
                 if device.drive_object and encrypted.hint_system is False:
                     self.emit("added", device)
