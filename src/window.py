@@ -406,8 +406,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._worker = Worker(to_paste, directory)
         self._worker.connect("started", self._on_paste_started)
-        self._worker.connect("pre-update", self._on_paste_pre_updated)
         self._worker.connect("updated", self._on_paste_updated)
+        self._worker.connect("post-update", self._on_paste_post_updated)
         self._worker.connect("finished", self._on_paste_finished)
         self._worker.connect("failed", self._on_paste_failed)
         self._worker.connect("stopped", self._on_paste_stopped)
@@ -1027,8 +1027,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(self.stop_box)
         self.tools_stack.set_visible_child(self.stop_tools)
 
-    def _on_paste_pre_updated(self, worker, path, overwritten):
+    def _on_paste_post_updated(self, worker, path, overwritten):
         if overwritten:
+            return
+        if not os.path.exists(path):
+            logger.debug(f"Attempting to add unexisting {path}")
             return
 
         # XXX this approach won't allow me to put stat info in liststore

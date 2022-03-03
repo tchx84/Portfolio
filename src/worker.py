@@ -72,8 +72,8 @@ class PortfolioCopyWorker(PortfolioWorker):
 
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
-        "pre-update": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int, float, float)),
+        "post-update": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -171,7 +171,6 @@ class PortfolioCopyWorker(PortfolioWorker):
 
             try:
                 self._stop_check()
-                self.emit("pre-update", destination, overwritten)
 
                 if os.path.isdir(path):
                     if overwritten and os.path.isdir(path):
@@ -186,8 +185,9 @@ class PortfolioCopyWorker(PortfolioWorker):
                 logger.debug(e)
                 self.emit("failed", destination)
                 return
-            finally:
+            else:
                 utils.sync_folder(os.path.dirname(destination))
+                self.emit("post-update", destination, overwritten)
 
         self.emit("finished", self._total)
 
@@ -208,7 +208,6 @@ class PortfolioCutWorker(PortfolioCopyWorker):
 
             try:
                 self._stop_check()
-                self.emit("pre-update", destination, overwritten)
 
                 if destination == path:
                     continue
@@ -224,8 +223,9 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 logger.debug(e)
                 self.emit("failed", path)
                 return
-            finally:
+            else:
                 utils.sync_folder(os.path.dirname(destination))
+                self.emit("post-update", destination, overwritten)
 
         self.emit("finished", self._total)
 
