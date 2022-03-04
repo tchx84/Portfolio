@@ -209,10 +209,10 @@ class PortfolioDevice(PortfolioBlock):
     def _on_mount_finished(self, proxy, task, callback):
         try:
             proxy.call_finish(task)
-            callback(self, True)
+            callback(self, self.encrypted_object, True)
         except Exception as e:
             logger.debug(e)
-            callback(self, False)
+            callback(self, self.encrypted_object, False)
 
     def _on_unmount_finished(self, proxy, task, callback):
         logger.debug(f"unmont finished {self}")
@@ -276,6 +276,7 @@ class PortfolioEncrypted(PortfolioBlock):
 
         self.mount_point = None
         self.cleartext_device = self._get_encrypted_cleartext_device()
+        self.cleartext_device_object = None
 
     def _get_encrypted_cleartext_device(self):
         return self._encrypted_proxy.get_cached_property("CleartextDevice").unpack()
@@ -289,10 +290,10 @@ class PortfolioEncrypted(PortfolioBlock):
     def _unlock_finish(self, proxy, task, callback):
         try:
             proxy.call_finish(task)
-            callback(self, True)
+            self.cleartext_device_object.mount(callback)
         except Exception as e:
             logger.debug(e)
-            callback(self, False)
+            callback(None, self, False)
 
     def _lock_finish(self, proxy, task, callback, device):
         logger.debug(f"lock finished {self}")
@@ -411,6 +412,7 @@ class PortfolioDevices(GObject.GObject):
             if device.drive_object is None:
                 if encrypted := self._encrypted.get(device.crypto_backing_device):
                     device.encrypted_object = encrypted
+                    encrypted.cleartext_device_object = device
                     device.drive_object = self._drives.get(encrypted.drive)
                 if device.drive_object and encrypted.hint_system is False:
                     self.emit("added", device)

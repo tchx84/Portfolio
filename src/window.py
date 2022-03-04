@@ -1394,10 +1394,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         passphrase = self.passphrase_entry.get_text()
         self._encrypted.unlock(passphrase, self._on_places_unlock_finished)
 
-    def _on_places_unlock_finished(self, encrypted, success):
+    def _on_places_unlock_finished(self, device, encrypted, success):
         self._clean_passphrase()
 
         if success is True:
+            self._on_places_updated(None, device.mount_point)
             self._on_passphrase_back_clicked(None)
             return
 

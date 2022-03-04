@@ -295,7 +295,7 @@ class PortfolioPlaces(Gtk.Stack):
         elif place.device is not None:
             place.device.mount(self._on_insert_finished)
 
-    def _on_insert_finished(self, device, success):
+    def _on_insert_finished(self, device, encrypted, success):
         logger.debug(f"insert finished {device}")
         if success:
             self.emit("updated", device.mount_point)
