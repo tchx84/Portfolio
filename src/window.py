@@ -91,12 +91,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
     selection_tools = Gtk.Template.Child()
     navigation_tools = Gtk.Template.Child()
     places_box = Gtk.Template.Child()
-    places_deck = Gtk.Template.Child()
     places_inner_box = Gtk.Template.Child()
     places_popup_box = Gtk.Template.Child()
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
+    files_stack = Gtk.Template.Child()
     files_box = Gtk.Template.Child()
     about_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
@@ -462,7 +462,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
     def _go_back_to_homepage(self):
-        self.content_deck.set_visible_child(self.places_deck)
+        self.content_deck.set_visible_child(self.places_box)
+
+    def _go_to_files_view(self, duration):
+        self.content_deck.set_visible_child(self.files_stack)
+        self.files_stack.props.transition_duration = duration
+        self.files_stack.set_visible_child(self.files_box)
 
     def _move(self, path, navigating=False):
         self._clean_popups()
@@ -1353,7 +1358,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_places_updated(self, button, path):
         self._reset_to_path(path)
-        self.content_deck.set_visible_child(self.files_box)
+        self._go_to_files_view(duration=0)
 
     def _on_places_removing(self, button, path):
         self._places_notify(_("Removing device, please wait"))
@@ -1378,12 +1383,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_passphrase()
         self._encrypted = encrypted
         self.passphrase_header.props.title = encrypted.get_friendly_label()
-        self.places_deck.set_visible_child(self.passphrase_box)
+        self.content_deck.set_visible_child(self.files_stack)
+        self.files_stack.set_visible_child(self.passphrase_box)
         self.passphrase_entry.grab_focus()
 
     def _on_passphrase_back_clicked(self, button):
         self._clean_passphrase()
-        self.places_deck.set_visible_child(self.places_box)
+        self.content_deck.set_visible_child(self.places_box)
 
     def _on_passphrase_activate(self, button):
         self.passphrase_entry.props.sensitive = False
@@ -1398,8 +1404,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_passphrase()
 
         if success is True:
-            self._on_places_updated(None, device.mount_point)
-            self._on_passphrase_back_clicked(None)
+            self._reset_to_path(device.mount_point)
+            self._go_to_files_view(duration=200)
             return
 
         self._encrypted = encrypted
@@ -1416,7 +1422,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.about_deck.set_visible_child(self.content_deck)
 
     def _on_properties_back_clicked(self, button):
-        self.content_deck.set_visible_child(self.files_box)
+        self.content_deck.set_visible_child(self.files_stack)
 
     def _on_long_pressed(self, gesture, x, y):
         if self.selection.get_mode() == Gtk.SelectionMode.MULTIPLE:
@@ -1454,7 +1460,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_content_folded(self, deck, data=None):
         child = self.content_deck.get_visible_child()
-        if child == self.places_deck and self._worker is not None:
+        if child == self.places_box and self._worker is not None:
             self._worker.stop()
             self._clean_workers()
         elif child == self.files_box:
@@ -1494,7 +1500,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         self.about_deck.set_visible_child(self.content_deck)
-        self.content_deck.set_visible_child(self.files_box)
+        self.content_deck.set_visible_child(self.files_stack)
 
     def show_properties(self, path, force_page_switch=False):
         self._properties.props.path = path
