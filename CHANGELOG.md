@@ -2,6 +2,8 @@
 
 ## [unreleased]
 
+- Fixed ghost files showing up after pasting failures.
+- Changed devices unlocking sequence for a much improved UX.
 - Changed places view to ignore system devices.
 - Removed unnecessary sandbox permissions.
 
