@@ -189,6 +189,9 @@ class PortfolioPlaces(Gtk.Stack):
 
         # update visibility
 
+        self._update_visibility()
+
+    def _update_visibility(self):
         self._update_stack_visibility()
         self._update_places_group_visibility()
         self._update_device_group_visibility()
@@ -316,6 +319,8 @@ class PortfolioPlaces(Gtk.Stack):
         place.eject.props.visible = True
         place.eject.connect("clicked", self._on_encrypted_eject, encrypted)
 
+        self._update_visibility()
+
     def _on_device_added(self, devices, device):
         logger.debug(f"added {device}")
 
@@ -337,8 +342,7 @@ class PortfolioPlaces(Gtk.Stack):
         device.connect("updated", self._on_device_updated)
 
         self._update_place_from_device(place, device)
-        self._update_stack_visibility()
-        self._update_device_group_visibility()
+        self._update_visibility()
 
     def _on_device_removed(self, devices, device):
         logger.debug(f"removed {device}")
@@ -349,10 +353,13 @@ class PortfolioPlaces(Gtk.Stack):
 
         self.emit("removed", device.mount_point, device.safely_removed)
 
+        self._update_visibility()
+
     def _on_device_updated(self, device):
         logger.debug(f"updated {device}")
         place = self._find_place_by_device_uuid(self._devices_group, device)
         self._update_place_from_device(place, device)
+        self._update_visibility()
 
     def _on_eject(self, button, device):
         logger.debug(f"eject {device}")
