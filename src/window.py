@@ -1406,7 +1406,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_places_unlock_finished(self, device, encrypted, success):
         self._clean_passphrase()
 
-        if success is True:
+        if device is None:
+            logger.debug(f"Failed to unlock {encrypted}")
+        elif not os.access(device.mount_point, os.R_OK):
+            logger.debug(f"No permissions for {device}")
+        elif success is True:
             self._reset_to_path(device.mount_point)
             self._go_to_files_view(duration=200)
             return
