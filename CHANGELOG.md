@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.14] 2022-03-19
 
 - Fixed places visibility when adding or removing devices.
 - Fixed ghost files showing up after pasting failures.
