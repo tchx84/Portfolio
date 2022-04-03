@@ -381,7 +381,9 @@ class PortfolioOpenWorker(GObject.GObject):
     def start(self):
         self.emit("started")
 
-        uri = f"file://{self._path}"
+        uri = GLib.Uri.build(
+            GLib.UriFlags.NONE, "file", None, None, -1, self._path, None, None
+        ).to_string()
         Gio.AppInfo.launch_default_for_uri_async(
             uri, None, None, self._on_launch_finished, None
         )
