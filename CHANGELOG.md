@@ -1,5 +1,9 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed opening files with special characters in name by @jwaataja.
+
 ## [0.9.14] 2022-03-19
 
 - Fixed places visibility when adding or removing devices.
