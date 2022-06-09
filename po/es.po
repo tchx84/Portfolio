@@ -22,7 +22,7 @@ msgstr ""
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:296
 #: src/window.ui:508 src/window.ui:1889
 msgid "Portfolio"
-msgstr ""
+msgstr "Portafolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
@@ -40,7 +40,7 @@ msgstr "carpeta;administrador;explorar;disco;archivo;"
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1943
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
-msgstr "Un gestor de archivos minimalista para dispositivos móviles Linux."
+msgstr "Un simple gestor de archivos para móviles."
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:39
@@ -73,7 +73,7 @@ msgstr "Ayuda"
 
 #: src/window.ui:242
 msgid "About Portfolio"
-msgstr "Acerca de Portfolio"
+msgstr "Acerca de Portafolio"
 
 #: src/window.ui:875
 msgid "No files found"
@@ -216,7 +216,7 @@ msgstr "estos %d"
 #: src/window.py:939 src/window.py:1286
 #, python-format
 msgid "Delete %s permanently?"
-msgstr "¿Eliminar %s permanente?"
+msgstr "¿Borrar %s?"
 
 #: src/window.py:959
 #, python-format
@@ -263,7 +263,7 @@ msgstr "Eliminando"
 #: src/window.py:1142 src/window.py:1338
 #, python-format
 msgid "Could not delete %s"
-msgstr "No se pudo eliminar %s"
+msgstr "No se pudo borrar %s"
 
 #: src/window.py:1166
 msgid "Stopping"
@@ -296,7 +296,7 @@ msgstr "Ya puede remover el dispositivo"
 
 #: src/window.py:1375
 msgid "Device is busy, can't be removed"
-msgstr "Dispositivo ocupado, no se puede remover"
+msgstr "Dispositivo ocupado, no se puede quitar"
 
 #: src/window.py:1406
 msgid "Sorry, that didn't work"
