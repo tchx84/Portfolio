@@ -1,0 +1,312 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-03 18:38-0300\n"
+"PO-Revision-Date: 2022-06-20 11:40+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:296
+#: src/window.ui:508 src/window.ui:1889
+msgid "Portfolio"
+msgstr "Porte-documents"
+
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr "Gestionnaire de fichiers"
+
+#: data/dev.tchx84.Portfolio.desktop.in:9
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Gérez vos fichiers rapidement"
+
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr ""
+"folder;manager;explore;disk;filesystem;dossier;gestionnaire;système de "
+"fichiers;fichiers;explorer;disque"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1943
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Un gestionnaire de fichiers minimaliste pour ceux qui veulent utiliser Linux "
+"sur des appareils mobiles."
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:39
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/window.ui:49
+msgid "Filter"
+msgstr "Filtrer"
+
+#: src/window.ui:72
+msgid "Show Hidden Files"
+msgstr "Afficher les fichiers cachés"
+
+#: src/window.ui:121
+msgid "Sort"
+msgstr "Trier"
+
+#: src/window.ui:144
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/window.ui:170
+msgid "Last Modified"
+msgstr "Dernier modifié"
+
+#: src/window.ui:226
+msgid "Help"
+msgstr "Aide"
+
+#: src/window.ui:242
+msgid "About Portfolio"
+msgstr "À propos de Porte-documents"
+
+#: src/window.ui:875
+msgid "No files found"
+msgstr "Aucun fichier trouvé"
+
+#: src/window.ui:1389
+msgid "Properties"
+msgstr "Propriétés"
+
+#: src/window.ui:1450
+msgid "Name"
+msgstr "Nom"
+
+#: src/window.ui:1497
+msgid "Location"
+msgstr "Emplacement"
+
+#: src/window.ui:1544
+msgid "Type"
+msgstr "Type"
+
+#: src/window.ui:1591
+msgid "Size"
+msgstr "Taille"
+
+#: src/window.ui:1638
+msgid "Created"
+msgstr "Créé le"
+
+#: src/window.ui:1685
+msgid "Modified"
+msgstr "Modifié"
+
+#: src/window.ui:1732
+msgid "Accessed"
+msgstr "Dernier accès"
+
+#: src/window.ui:1810
+msgid "About"
+msgstr "À propos"
+
+#: src/window.ui:1971
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Site web</a>"
+
+#: src/window.ui:2026
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Ce programme est fourni sans aucune garantie.\n"
+"Pour plus de détails, visitez <a href=\"https://www.gnu.org/licenses/gpl-3.0."
+"html\">Licence publique générale GNU, version 3 ou ultérieure</a>."
+
+#: src/window.ui:2055
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Le logo de Porte-documents est une version modifiée du travail de Jorgen "
+"Carlsberg. La version originale peut être trouvée <a href=\"https://commons."
+"wikimedia.org/wiki/File:Portfolio.svg\"> ici </a>, sous la licence <a "
+"href=\"https://creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+
+#: src/window.ui:2093
+msgid "Created by"
+msgstr "Créé par"
+
+#: src/window.ui:2124
+msgid "Artwork by"
+msgstr "Travail artistique par"
+
+#: src/window.ui:2156
+msgid "Translated by"
+msgstr "Traduit par"
+
+#: src/window.ui:2192
+msgid "Contributions by"
+msgstr "Contributions de"
+
+#: src/places.py:51
+msgid "Trash"
+msgstr "Corbeille"
+
+#: src/places.py:90
+msgid "Places"
+msgstr "Emplacements"
+
+#: src/places.py:94
+msgid "Devices"
+msgstr "Appareils"
+
+#: src/places.py:104
+msgid "Home"
+msgstr "Dossier personnel"
+
+#: src/places.py:156
+msgid "System"
+msgstr "Système"
+
+#: src/places.py:164
+msgid "Host"
+msgstr "Hôte"
+
+#: src/places.py:176
+msgid "No places found"
+msgstr "Aucun emplacement trouvé"
+
+#: src/window.py:700
+msgid "Opening"
+msgstr "Ouverture"
+
+#: src/window.py:720 src/window.py:1472 src/window.py:1482
+#, python-format
+msgid "Could not open %s"
+msgstr "Impossible d’ouvrir %s"
+
+#: src/window.py:740 src/window.py:788
+msgid "Loading"
+msgstr "Chargement"
+
+#: src/window.py:789
+#, python-format
+msgid "Could not load %s"
+msgstr "Impossible de charger %s"
+
+#: src/window.py:891 src/window.py:905
+#, python-format
+msgid "%s already exists"
+msgstr "%s existe déjà"
+
+#: src/window.py:937 src/window.py:1284
+#, python-format
+msgid "these %d files"
+msgstr "ces %d fichiers"
+
+#: src/window.py:939 src/window.py:1286
+#, python-format
+msgid "Delete %s permanently?"
+msgstr "Supprimer %s de manière permanente ?"
+
+#: src/window.py:959
+#, python-format
+msgid "%s will be moved"
+msgstr "%s sera déplacé"
+
+#: src/window.py:961
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d fichiers seront déplacés"
+
+#: src/window.py:977
+#, python-format
+msgid "%s will be copied"
+msgstr "%s sera copié"
+
+#: src/window.py:979
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d fichiers seront copiés"
+
+#: src/window.py:1004 src/window.py:1213
+msgid "Files will be overwritten, proceed?"
+msgstr "Les fichiers seront écrasés, poursuivre ?"
+
+#: src/window.py:1020
+msgid "Pasting"
+msgstr "Collage"
+
+#: src/window.py:1047
+#, python-format
+msgid "%s of %s"
+msgstr "%s sur %s"
+
+#: src/window.py:1062
+#, python-format
+msgid "Could not paste %s"
+msgstr "Impossible de coller %s"
+
+#: src/window.py:1115 src/window.py:1312
+msgid "Deleting"
+msgstr "Suppression"
+
+#: src/window.py:1142 src/window.py:1338
+#, python-format
+msgid "Could not delete %s"
+msgstr "Impossible de supprimer %s"
+
+#: src/window.py:1166
+msgid "Stopping"
+msgstr "Arrêt"
+
+#: src/window.py:1178
+msgid "New Folder"
+msgstr "Nouveau dossier"
+
+#: src/window.py:1186
+msgid "No permissions on this directory"
+msgstr "Pas de permissions sur ce répertoire"
+
+#: src/window.py:1236
+msgid "Restoring"
+msgstr "Restauration"
+
+#: src/window.py:1269
+#, python-format
+msgid "Could not restore %s"
+msgstr "Impossible de restaurer %s"
+
+#: src/window.py:1359
+msgid "Removing device, please wait"
+msgstr "Suppression de l'appareil, merci de patienter"
+
+#: src/window.py:1363
+msgid "Device can be removed"
+msgstr "L’appareil ne peut être enlevé"
+
+#: src/window.py:1375
+msgid "Device is busy, can't be removed"
+msgstr "L’appareil est occupé, il ne peut être enlevé"
+
+#: src/window.py:1406
+msgid "Sorry, that didn't work"
+msgstr "Désolé, ça n’a pas marché"
+
+#: src/worker.py:465
+msgid "Calculating..."
+msgstr "Calcul..."
