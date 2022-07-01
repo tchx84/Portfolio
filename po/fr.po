@@ -23,7 +23,7 @@ msgstr ""
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:296
 #: src/window.ui:508 src/window.ui:1889
 msgid "Portfolio"
-msgstr "Porte-documents"
+msgstr "Portfolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
@@ -78,7 +78,7 @@ msgstr "Aide"
 
 #: src/window.ui:242
 msgid "About Portfolio"
-msgstr "À propos de Porte-documents"
+msgstr "À propos de Portfolio"
 
 #: src/window.ui:875
 msgid "No files found"
@@ -141,7 +141,7 @@ msgid ""
 "Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
 "org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 msgstr ""
-"Le logo de Porte-documents est une version modifiée du travail de Jorgen "
+"Le logo de Portfolio est une version modifiée du travail de Jorgen "
 "Carlsberg. La version originale peut être trouvée <a href=\"https://commons."
 "wikimedia.org/wiki/File:Portfolio.svg\"> ici </a>, sous la licence <a "
 "href=\"https://creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
