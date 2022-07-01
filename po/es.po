@@ -22,7 +22,7 @@ msgstr ""
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:296
 #: src/window.ui:508 src/window.ui:1889
 msgid "Portfolio"
-msgstr "Portafolio"
+msgstr "Portfolio"
 
 #: data/dev.tchx84.Portfolio.desktop.in:8
 msgid "File Manager"
@@ -73,7 +73,7 @@ msgstr "Ayuda"
 
 #: src/window.ui:242
 msgid "About Portfolio"
-msgstr "Acerca de Portafolio"
+msgstr "Acerca de Portfolio"
 
 #: src/window.ui:875
 msgid "No files found"
