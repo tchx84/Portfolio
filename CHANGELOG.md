@@ -3,6 +3,8 @@
 ## [unreleased]
 
 - Fixed opening files with special characters in name by @jwaataja.
+- Fixed Spanish translation by @carlosgonz0.
+- Added French translation by @rene-coty.
 
 ## [0.9.14] 2022-03-19
 
