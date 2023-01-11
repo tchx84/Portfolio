@@ -525,7 +525,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if utils.is_file_dir(path):
             return "folder-symbolic"
         else:
-            return "text-x-generic-symbolic"
+            return utils.get_file_icon_name(path)
 
     def _clean_workers(self):
         del self._worker

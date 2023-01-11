@@ -18,7 +18,7 @@
 import os
 import re
 
-from gi.repository import GLib
+from gi.repository import GLib, Gio
 
 from .cache import cached
 
@@ -80,6 +80,13 @@ def get_file_mtime(string):
 @cached
 def is_file_dir(string):
     return os.path.isdir(string)
+
+@cached
+def get_file_icon_name(string):
+    file = Gio.file_new_for_path(string)
+    fileinfo = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0)
+    fileicon = fileinfo.get_icon().get_names()[1]
+    return fileicon
 
 
 def is_flatpak():
