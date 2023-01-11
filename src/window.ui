@@ -6,7 +6,7 @@
   <object class="GtkListStore" id="liststore">
     <columns>
       <!-- column-name icon -->
-      <column type="gchararray"/>
+      <column type="GIcon"/>
       <!-- column-name name -->
       <column type="gchararray"/>
       <!-- column-name path -->
@@ -502,7 +502,7 @@
                                                     <property name="stock_size">5</property>
                                                   </object>
                                                   <attributes>
-                                                    <attribute name="icon-name">0</attribute>
+                                                    <attribute name="gicon">0</attribute>
                                                   </attributes>
                                                 </child>
                                               </object>
