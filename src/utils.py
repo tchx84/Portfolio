@@ -18,7 +18,7 @@
 import os
 import re
 
-from gi.repository import GLib, Gio
+from gi.repository import GLib, Gio, Gtk
 
 from .cache import cached
 
@@ -82,12 +82,18 @@ def is_file_dir(string):
     return os.path.isdir(string)
 
 @cached
-def get_file_icon_name(string):
+def get_file_icon(string, icon_size):
+    gtkicon = Gtk.IconTheme.new()
+    if os.path.isdir(string):
+        return gtkicon.load_icon("folder-symbolic", icon_size, Gtk.IconLookupFlags.USE_BUILTIN)
+
     file = Gio.file_new_for_path(string)
     fileinfo = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0)
-    fileicon = fileinfo.get_icon().get_names()[1]
-    return fileicon
-
+    fileicon = gtkicon.choose_icon(fileinfo.get_icon().get_names(), icon_size, Gtk.IconLookupFlags.USE_BUILTIN).load_icon()
+    if fileicon is None:
+        return gtkicon.load_icon("text-x-generic-symbolic", icon_size, Gtk.IconLookupFlags.USE_BUILTIN)
+    else:
+        return fileicon
 
 def is_flatpak():
     return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
