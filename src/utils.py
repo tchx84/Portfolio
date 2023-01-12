@@ -83,7 +83,6 @@ def is_file_dir(string):
 
 @cached
 def get_file_icon(string):
-    gtkicon = Gtk.IconTheme.new()
     if os.path.isdir(string):
         return Gio.ThemedIcon.new("folder-symbolic")
 
