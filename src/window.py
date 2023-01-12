@@ -522,9 +522,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._places_popup.props.reveal_child = True
 
     def _find_icon(self, path):
-        # TODO get width/height from the associated pixbuf.
-        # 50 is the default value in window.ui
-        return utils.get_file_icon(path, 50)
+        return utils.get_file_icon(path)
 
     def _clean_workers(self):
         del self._worker

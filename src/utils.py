@@ -82,18 +82,15 @@ def is_file_dir(string):
     return os.path.isdir(string)
 
 @cached
-def get_file_icon(string, icon_size):
+def get_file_icon(string):
     gtkicon = Gtk.IconTheme.new()
     if os.path.isdir(string):
-        return gtkicon.load_icon("folder-symbolic", icon_size, Gtk.IconLookupFlags.USE_BUILTIN)
+        return Gio.ThemedIcon.new("folder-symbolic")
 
-    file = Gio.file_new_for_path(string)
-    fileinfo = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0)
-    fileicon = gtkicon.choose_icon(fileinfo.get_icon().get_names(), icon_size, Gtk.IconLookupFlags.USE_BUILTIN).load_icon()
+    fileicon = Gio.file_new_for_path(string).query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0).get_icon()
     if fileicon is None:
-        return gtkicon.load_icon("text-x-generic-symbolic", icon_size, Gtk.IconLookupFlags.USE_BUILTIN)
-    else:
-        return fileicon
+        return Gio.ThemedIcon.new("text-x-generic-symbolic")
+    return fileicon
 
 def is_flatpak():
     return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
