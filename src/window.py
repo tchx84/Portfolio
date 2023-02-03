@@ -143,7 +143,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _setup(self):
         Handy.init()
         Handy.StyleManager.get_default().set_color_scheme(
-            Handy.ColorScheme.PREFER_LIGHT)
+            Handy.ColorScheme.PREFER_LIGHT
+        )
 
         self._popup = None
         self._places_popup = None
