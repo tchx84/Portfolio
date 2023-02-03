@@ -6,6 +6,8 @@ pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.proje
 moduledir = join_paths(python_dir, meson.project_name())
 gnome = import('gnome')
 
+dependency('libhandy-1', version : '>= 1.5')
+
 gnome.compile_resources('portfolio',
   'portfolio.gresource.xml',
   gresource_bundle: true,
