@@ -81,6 +81,7 @@ def get_file_mtime(string):
 def is_file_dir(string):
     return os.path.isdir(string)
 
+
 def get_file_icon(string):
     if os.path.isdir(string):
         return Gio.ThemedIcon.new("folder")
@@ -89,6 +90,7 @@ def get_file_icon(string):
     if fileicon is None:
         return Gio.ThemedIcon.new("text-x-generic")
     return fileicon
+
 
 def is_flatpak():
     return os.path.exists(os.path.join(os.path.sep, ".flatpak-info"))
