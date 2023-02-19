@@ -521,8 +521,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.places_popup_box.add(self._places_popup)
         self._places_popup.props.reveal_child = True
 
-    def _find_icon(self, path):
-        return utils.get_file_icon(path)
 
     def _clean_workers(self):
         del self._worker
@@ -751,7 +749,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path in found:
-            icon = self._find_icon(path)
+            icon = utils.get_file_icon(path)
             row = self.liststore.append([icon, name, path])
 
             if self._to_select == path:
@@ -1038,7 +1036,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         # XXX this approach won't allow me to put stat info in liststore
         name = os.path.basename(path)
-        icon = self._find_icon(path)
+        icon = utils.get_file_icon(path)
         self.liststore.append([icon, name, path])
 
     def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
@@ -1199,7 +1197,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._switch_to_selection_mode()
 
-        icon = self._find_icon(path)
+        icon = utils.get_file_icon(path)
         row = self.liststore.append([icon, folder_name, path])
         self._select_and_go(row, edit=True)
 
