@@ -18,7 +18,7 @@
 import os
 import re
 
-from gi.repository import GLib, Gio, Gtk
+from gi.repository import GLib, Gio
 
 from .cache import cached
 
@@ -86,7 +86,11 @@ def get_file_icon(string):
     if os.path.isdir(string):
         return Gio.ThemedIcon.new("folder")
 
-    fileicon = Gio.file_new_for_path(string).query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0).get_icon()
+    fileicon = (
+        Gio.file_new_for_path(string)
+        .query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0)
+        .get_icon()
+    )
     if fileicon is None:
         return Gio.ThemedIcon.new("text-x-generic")
     return fileicon
