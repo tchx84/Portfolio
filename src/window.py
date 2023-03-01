@@ -524,7 +524,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.places_popup_box.add(self._places_popup)
         self._places_popup.props.reveal_child = True
 
-
     def _clean_workers(self):
         del self._worker
         self._worker = None
