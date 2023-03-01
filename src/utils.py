@@ -82,18 +82,15 @@ def is_file_dir(string):
     return os.path.isdir(string)
 
 
-def get_file_icon(string):
-    if os.path.isdir(string):
-        return Gio.ThemedIcon.new("folder")
-
-    fileicon = (
-        Gio.file_new_for_path(string)
-        .query_info(Gio.FILE_ATTRIBUTE_STANDARD_ICON, 0)
+def get_file_icon(path):
+    return (
+        Gio.file_new_for_path(path)
+        .query_info(
+            Gio.FILE_ATTRIBUTE_STANDARD_ICON,
+            Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+        )
         .get_icon()
     )
-    if fileicon is None:
-        return Gio.ThemedIcon.new("text-x-generic")
-    return fileicon
 
 
 def is_flatpak():
