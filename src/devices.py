@@ -179,7 +179,7 @@ class PortfolioDevice(PortfolioBlock):
             "g-properties-changed", self._on_filesystem_changed
         )
 
-        self.mount_point = self._get_filesystem_mount_point()
+        self.mount_point = self._get_preferred_mount_point()
         self.encrypted_object = None
 
     def __repr__(self):
@@ -188,22 +188,49 @@ class PortfolioDevice(PortfolioBlock):
     def _get_string_from_bytes(self, bytes):
         return bytearray(bytes).replace(b"\x00", b"").decode("utf-8")
 
-    def _get_filesystem_mount_point(self):
-        mount_points = [
+    def _get_filesystem_mount_points(self):
+        return [
             self._get_string_from_bytes(m)
             for m in self._filesystem_proxy.get_cached_property("MountPoints")
             if m
         ]
 
-        if mount_points:
+    def _get_fstab_mount_points(self):
+        return [
+            self._get_string_from_bytes(c.get("dir"))
+            for t, c in self._block_proxy.get_cached_property("Configuration")
+            if t == "fstab"
+        ]
+
+    def _get_preferred_mount_point(self):
+        mount_points = self._get_filesystem_mount_points()
+
+        # Check if not mounted yet
+        if len(mount_points) == 0:
+            return None
+
+        # Check udisks2 to see if there's only one option
+        if len(mount_points) == 1:
             return mount_points[0]
 
-        return None
+        fstab_mount_points = self._get_fstab_mount_points()
+
+        # Filter to active mount points that are in fstab
+        fstab_mount_points = list(
+            set(fstab_mount_points).intersection(set(mount_points))
+        )
+
+        # Check fstab to see if there's a valid option
+        if fstab_mount_points:
+            return fstab_mount_points[0]
+
+        # Default to previous behavior
+        return mount_points[0]
 
     def _on_filesystem_changed(self, proxy, new_properties, old_properties):
         properties = new_properties.unpack()
         if "MountPoints" in properties:
-            self.mount_point = self._get_filesystem_mount_point()
+            self.mount_point = self._get_preferred_mount_point()
             self.emit("updated")
 
     def _on_mount_finished(self, proxy, task, callback):
