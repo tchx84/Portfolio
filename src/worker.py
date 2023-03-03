@@ -17,6 +17,7 @@
 
 import os
 import sys
+import stat
 import time
 import shutil
 import locale
@@ -443,6 +444,9 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._created = ""
         self._modified = ""
         self._accessed = ""
+        self._permissions_owner = ""
+        self._permissions_group = ""
+        self._permissions_others = ""
 
         self._inner_worker = self.InnerWorker(self)
 
@@ -460,6 +464,35 @@ class PortfolioPropertiesWorker(GObject.GObject):
     def _get_human_time(self, timestamp):
         fmt = locale.nl_langinfo(locale.D_T_FMT)
         return datetime.datetime.fromtimestamp(timestamp).strftime(fmt)
+
+    def _get_human_permissions(self, path, target="owner"):
+        permissions = []
+        mode = os.lstat(path).st_mode
+
+        if target == "owner":
+            can_read = stat.S_IRUSR
+            can_write = stat.S_IWUSR
+            can_exec = stat.S_IXUSR
+        elif target == "group":
+            can_read = stat.S_IRGRP
+            can_write = stat.S_IWGRP
+            can_exec = stat.S_IXGRP
+        else:
+            can_read = stat.S_IROTH
+            can_write = stat.S_IWOTH
+            can_exec = stat.S_IXOTH
+
+        if mode & can_read:
+            permissions.append(_("read"))
+        if mode & can_write:
+            permissions.append(_("write"))
+        if mode & can_exec:
+            permissions.append(_("execute"))
+
+        if permissions:
+            return _(", ").join(permissions)
+
+        return _("do nothing")
 
     @GObject.Property(type=str)
     def name(self):
@@ -490,6 +523,18 @@ class PortfolioPropertiesWorker(GObject.GObject):
         return self._accessed
 
     @GObject.Property(type=str)
+    def permissions_owner(self):
+        return self._permissions_owner
+
+    @GObject.Property(type=str)
+    def permissions_group(self):
+        return self._permissions_group
+
+    @GObject.Property(type=str)
+    def permissions_others(self):
+        return self._permissions_others
+
+    @GObject.Property(type=str)
     def path(self):
         return self._path
 
@@ -513,6 +558,9 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._created = self._get_human_time(os.lstat(self._path).st_ctime)
         self._modified = self._get_human_time(os.lstat(self._path).st_mtime)
         self._accessed = self._get_human_time(os.lstat(self._path).st_atime)
+        self._permissions_owner = self._get_human_permissions(self._path, "owner")
+        self._permissions_group = self._get_human_permissions(self._path, "group")
+        self._permissions_others = self._get_human_permissions(self._path, "others")
 
         self.notify("name")
         self.notify("location")
@@ -521,6 +569,9 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self.notify("created")
         self.notify("modified")
         self.notify("accessed")
+        self.notify("permissions_owner")
+        self.notify("permissions_group")
+        self.notify("permissions_others")
 
         self._update_size()
 
