@@ -168,10 +168,10 @@ treeview.view {
 /* properties */
 
 .properties {
-    margin: 25px;
+    margin: 0px 25px 25px 25px;
 }
 
-.properties .group:not(:first-child) {
+.properties preferencesgroup {
     margin-top: 25px;
 }
 
