@@ -1720,9 +1720,6 @@
                                     <child>
                                       <placeholder/>
                                     </child>
-                                    <style>
-                                      <class name="group"/>
-                                    </style>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -1878,9 +1875,6 @@
                                     <child>
                                       <placeholder/>
                                     </child>
-                                    <style>
-                                      <class name="group"/>
-                                    </style>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -2130,9 +2124,6 @@
                                     <child>
                                       <placeholder/>
                                     </child>
-                                    <style>
-                                      <class name="group"/>
-                                    </style>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
