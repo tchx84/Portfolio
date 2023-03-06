@@ -1560,6 +1560,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1607,6 +1608,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1654,6 +1656,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1701,6 +1704,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1762,6 +1766,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1809,6 +1814,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1856,6 +1862,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1917,6 +1924,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -1964,6 +1972,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -2011,6 +2020,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -2058,6 +2068,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
@@ -2105,6 +2116,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="halign">end</property>
+                                                <property name="selectable">True</property>
                                                 <property name="ellipsize">end</property>
                                                 <property name="single-line-mode">True</property>
                                                 <style>
