@@ -171,6 +171,10 @@ treeview.view {
     margin: 25px;
 }
 
+.properties .group:not(:first-child) {
+    margin-top: 25px;
+}
+
 .properties .property {
     margin: 10px;
     font-size: medium;
