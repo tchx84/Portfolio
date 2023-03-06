@@ -25,6 +25,7 @@ import datetime
 import threading
 
 from pwd import getpwuid
+from grp import getgrgid
 
 from gi.repository import Gio, GObject, GLib
 
@@ -450,6 +451,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._permissions_group = ""
         self._permissions_others = ""
         self._owner = ""
+        self._group = ""
 
         self._inner_worker = self.InnerWorker(self)
 
@@ -502,6 +504,11 @@ class PortfolioPropertiesWorker(GObject.GObject):
         owner = getpwuid(owner_id).pw_name
         return owner
 
+    def _get_human_group(self, path):
+        group_id = os.lstat(path).st_gid
+        group = getgrgid(group_id).gr_name
+        return group
+
     @GObject.Property(type=str)
     def name(self):
         return self._name
@@ -547,6 +554,10 @@ class PortfolioPropertiesWorker(GObject.GObject):
         return self._owner
 
     @GObject.Property(type=str)
+    def group(self):
+        return self._group
+
+    @GObject.Property(type=str)
     def path(self):
         return self._path
 
@@ -574,6 +585,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self._permissions_group = self._get_human_permissions(self._path, "group")
         self._permissions_others = self._get_human_permissions(self._path, "others")
         self._owner = self._get_human_owner(self._path)
+        self._group = self._get_human_group(self._path)
 
         self.notify("name")
         self.notify("location")
@@ -586,6 +598,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
         self.notify("permissions_group")
         self.notify("permissions_others")
         self.notify("owner")
+        self.notify("group")
 
         self._update_size()
 
