@@ -338,7 +338,7 @@
                                   <placeholder/>
                                 </child>
                                 <style>
-                                  <class name="properties"/>
+                                  <class name="places"/>
                                 </style>
                               </object>
                             </child>
