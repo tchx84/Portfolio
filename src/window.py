@@ -125,6 +125,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     property_permissions_owner = Gtk.Template.Child()
     property_permissions_group = Gtk.Template.Child()
     property_permissions_others = Gtk.Template.Child()
+    property_owner = Gtk.Template.Child()
     passphrase_header = Gtk.Template.Child()
     passphrase_box = Gtk.Template.Child()
     passphrase_entry = Gtk.Template.Child()
@@ -287,6 +288,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._properties.bind_property(
             "permissions_others",
             self.property_permissions_others,
+            "label",
+            GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._properties.bind_property(
+            "owner",
+            self.property_owner,
             "label",
             GObject.BindingFlags.SYNC_CREATE,
         )
