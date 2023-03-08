@@ -2,9 +2,14 @@
 
 ## [unreleased]
 
+- Fixed detecting mount points from fstab.
 - Fixed opening files with special characters in name by @jwaataja.
 - Fixed Spanish translation by @carlosgonz0.
 - Added French translation by @rene-coty.
+- Added support for system-wide style preferences by @pabloyoyoista.
+- Added file permissions to the properties view.
+- Changed to regular icons by @AngelTomkins.
+- Changed to GNOME 43 runtime for stability.
 
 ## [0.9.14] 2022-03-19
 
