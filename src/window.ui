@@ -2368,7 +2368,7 @@
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label">© 2020-2022 Martin Abente Lahaye</property>
+                                <property name="label">© 2020-2023 Martin Abente Lahaye</property>
                                 <property name="wrap">True</property>
                                 <style>
                                   <class name="author-label"/>
