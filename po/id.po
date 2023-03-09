@@ -116,23 +116,23 @@ msgstr "Diakses"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Pemilik"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Kelompok"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Pemilik bisa"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Kelompok bisa"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "Orang lain bisa"
 
 #: src/window.ui:2182
 msgid "About"
@@ -327,19 +327,19 @@ msgstr "Maaf, itu tidak berhasil"
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "baca"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "tulis"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "mengeksekusi"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "melakukan apa-apa"
 
 #: src/worker.py:580
 msgid "Calculating..."
