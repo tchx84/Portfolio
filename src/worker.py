@@ -495,7 +495,7 @@ class PortfolioPropertiesWorker(GObject.GObject):
             permissions.append(_("execute"))
 
         if permissions:
-            return _(", ").join(permissions)
+            return ", ".join(permissions)
 
         return _("do nothing")
 
