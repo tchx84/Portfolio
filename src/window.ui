@@ -1908,7 +1908,7 @@
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="label" translatable="yes">Onwer</property>
+                                                <property name="label" translatable="yes">Owner</property>
                                                 <style>
                                                   <class name="property"/>
                                                 </style>
@@ -2004,7 +2004,7 @@
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="label" translatable="yes">Onwer can</property>
+                                                <property name="label" translatable="yes">Owner can</property>
                                                 <style>
                                                   <class name="property"/>
                                                 </style>
