@@ -116,23 +116,23 @@ msgstr "Öppnad"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Ägare"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Grupp"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Ägare kan"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Group can"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "Andra kan"
 
 #: src/window.ui:2182
 msgid "About"
@@ -327,19 +327,19 @@ msgstr "Beklagar, det fungerade inte."
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "läs"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "skriv"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "exekvera"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "göra ingenting"
 
 #: src/worker.py:580
 msgid "Calculating..."
