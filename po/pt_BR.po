@@ -117,23 +117,23 @@ msgstr "Acessado"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Proprietário"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Grupo"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Proprietário pode"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Grupo pode"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "Outros podem"
 
 #: src/window.ui:2182
 msgid "About"
@@ -329,19 +329,19 @@ msgstr "Sinto muito, isso não funcionou"
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "ler"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "escrever"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "executar"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "fazer nada"
 
 #: src/worker.py:580
 msgid "Calculating..."
