@@ -116,23 +116,23 @@ msgstr "Zugegriffen"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Besitzer"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Gruppe"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Besitzer kann"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Gruppe kann"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "Andere können"
 
 #: src/window.ui:2182
 msgid "About"
@@ -327,19 +327,19 @@ msgstr "Entschuldigung, das hat nicht geklappt"
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "lesen"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "schreiben"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "ausführen"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "nichts tun"
 
 #: src/worker.py:580
 msgid "Calculating..."
