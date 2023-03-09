@@ -118,23 +118,23 @@ msgstr "Dernier accès"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Propriétaire"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Groupe"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Propriétaire peut"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Groupe peut"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "D'autres peuvent"
 
 #: src/window.ui:2182
 msgid "About"
@@ -329,19 +329,19 @@ msgstr "Désolé, ça n’a pas marché"
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "lire"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "écrire"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "exécuter"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "ne fais rien"
 
 #: src/worker.py:580
 msgid "Calculating..."
