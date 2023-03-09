@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-03 18:38-0300\n"
+"POT-Creation-Date: 2023-03-09 10:08-0300\n"
 "PO-Revision-Date: 2022-02-04 14:57+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -20,8 +20,8 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:296
-#: src/window.ui:508 src/window.ui:1889
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:291
+#: src/window.ui:389 src/window.ui:2261
 msgid "Portfolio"
 msgstr "Portfolio"
 
@@ -38,7 +38,7 @@ msgstr "Beheer onderweg je bestanden"
 msgid "folder;manager;explore;disk;filesystem;"
 msgstr "map;beheerder;verkennen;schijf;bestandssysteem;"
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:1943
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:2315
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -78,51 +78,71 @@ msgstr "Hulp"
 msgid "About Portfolio"
 msgstr "Over Portfolio"
 
-#: src/window.ui:875
+#: src/window.ui:756
 msgid "No files found"
 msgstr "Geen bestanden aangetroffen"
 
-#: src/window.ui:1389
+#: src/window.ui:1486
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: src/window.ui:1450
+#: src/window.ui:1547
 msgid "Name"
 msgstr "Naam"
 
-#: src/window.ui:1497
+#: src/window.ui:1595
 msgid "Location"
 msgstr "Locatie"
 
-#: src/window.ui:1544
+#: src/window.ui:1643
 msgid "Type"
 msgstr "Soort"
 
-#: src/window.ui:1591
+#: src/window.ui:1691
 msgid "Size"
 msgstr "Grootte"
 
-#: src/window.ui:1638
+#: src/window.ui:1753
 msgid "Created"
 msgstr "Aanmaakdatum"
 
-#: src/window.ui:1685
+#: src/window.ui:1801
 msgid "Modified"
 msgstr "Wijzigingsdatum"
 
-#: src/window.ui:1732
+#: src/window.ui:1849
 msgid "Accessed"
 msgstr "Geopend"
 
-#: src/window.ui:1810
+#: src/window.ui:1911
+msgid "Owner"
+msgstr ""
+
+#: src/window.ui:1959
+msgid "Group"
+msgstr ""
+
+#: src/window.ui:2007
+msgid "Owner can"
+msgstr ""
+
+#: src/window.ui:2055
+msgid "Group can"
+msgstr ""
+
+#: src/window.ui:2103
+msgid "Others can"
+msgstr ""
+
+#: src/window.ui:2182
 msgid "About"
 msgstr "Over"
 
-#: src/window.ui:1971
+#: src/window.ui:2343
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 
-#: src/window.ui:2026
+#: src/window.ui:2398
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
@@ -132,7 +152,7 @@ msgstr ""
 "Lees voor meer informatie de <a href=\"https://www.gnu.org/licenses/gpl-3.0."
 "html\">GNU General Public License, versie 3 of hoger</a>."
 
-#: src/window.ui:2055
+#: src/window.ui:2427
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -144,19 +164,19 @@ msgstr ""
 "Portfolio.svg\"> hier </a> te vinden, uitgebracht onder de <a href=\"https://"
 "creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a>-licentie."
 
-#: src/window.ui:2093
+#: src/window.ui:2465
 msgid "Created by"
 msgstr "Gemaakt door"
 
-#: src/window.ui:2124
+#: src/window.ui:2496
 msgid "Artwork by"
 msgstr "Vormgegeven door"
 
-#: src/window.ui:2156
+#: src/window.ui:2528
 msgid "Translated by"
 msgstr "Vertaald door"
 
-#: src/window.ui:2192
+#: src/window.ui:2565
 msgid "Contributions by"
 msgstr "Met bijdragen van"
 
@@ -188,123 +208,139 @@ msgstr "Host"
 msgid "No places found"
 msgstr "Geen locaties aangetroffen"
 
-#: src/window.py:700
+#: src/window.py:737
 msgid "Opening"
 msgstr "Bezig met openen…"
 
-#: src/window.py:720 src/window.py:1472 src/window.py:1482
+#: src/window.py:757 src/window.py:1518 src/window.py:1528
 #, python-format
 msgid "Could not open %s"
 msgstr "‘%s’ kan niet worden geopend"
 
-#: src/window.py:740 src/window.py:788
+#: src/window.py:777 src/window.py:825
 msgid "Loading"
 msgstr "Bezig met laden…"
 
-#: src/window.py:789
+#: src/window.py:826
 #, python-format
 msgid "Could not load %s"
 msgstr "‘%s’ kan niet worden geladen"
 
-#: src/window.py:891 src/window.py:905
+#: src/window.py:928 src/window.py:942
 #, python-format
 msgid "%s already exists"
 msgstr "‘%s’ bestaat al"
 
-#: src/window.py:937 src/window.py:1284
+#: src/window.py:974 src/window.py:1324
 #, python-format
 msgid "these %d files"
 msgstr "deze %d bestanden"
 
-#: src/window.py:939 src/window.py:1286
+#: src/window.py:976 src/window.py:1326
 #, python-format
 msgid "Delete %s permanently?"
 msgstr "Wil je ‘%s’ permanent verwijderen?"
 
-#: src/window.py:959
+#: src/window.py:996
 #, python-format
 msgid "%s will be moved"
 msgstr "‘%s’ wordt verplaatst"
 
-#: src/window.py:961
+#: src/window.py:998
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d bestanden worden verplaatst"
 
-#: src/window.py:977
+#: src/window.py:1014
 #, python-format
 msgid "%s will be copied"
 msgstr "‘%s’ wordt gekopieerd"
 
-#: src/window.py:979
+#: src/window.py:1016
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d bestanden worden gekopieerd"
 
-#: src/window.py:1004 src/window.py:1213
+#: src/window.py:1041 src/window.py:1253
 msgid "Files will be overwritten, proceed?"
 msgstr "De bestanden worden overschreven. Wil je doorgaan?"
 
-#: src/window.py:1020
+#: src/window.py:1057
 msgid "Pasting"
 msgstr "Bezig met plakken…"
 
-#: src/window.py:1047
+#: src/window.py:1087
 #, python-format
 msgid "%s of %s"
 msgstr "%s van %s"
 
-#: src/window.py:1062
+#: src/window.py:1102
 #, python-format
 msgid "Could not paste %s"
 msgstr "‘%s’ kan niet worden geplakt"
 
-#: src/window.py:1115 src/window.py:1312
+#: src/window.py:1155 src/window.py:1352
 msgid "Deleting"
 msgstr "Bezig met verwijderen…"
 
-#: src/window.py:1142 src/window.py:1338
+#: src/window.py:1182 src/window.py:1378
 #, python-format
 msgid "Could not delete %s"
 msgstr "‘%s’ kan niet worden verwijderd"
 
-#: src/window.py:1166
+#: src/window.py:1206
 msgid "Stopping"
 msgstr "Bezig met afbreken…"
 
-#: src/window.py:1178
+#: src/window.py:1218
 msgid "New Folder"
 msgstr "Nieuwe map"
 
-#: src/window.py:1186
+#: src/window.py:1226
 msgid "No permissions on this directory"
 msgstr "Je hebt geen rechten op deze map"
 
-#: src/window.py:1236
+#: src/window.py:1276
 msgid "Restoring"
 msgstr "Bezig met herstellen…"
 
-#: src/window.py:1269
+#: src/window.py:1309
 #, python-format
 msgid "Could not restore %s"
 msgstr "‘%s’ kan niet worden hersteld"
 
-#: src/window.py:1359
+#: src/window.py:1399
 msgid "Removing device, please wait"
 msgstr "Bezig met afkoppelen van apparaat…"
 
-#: src/window.py:1363
+#: src/window.py:1403
 msgid "Device can be removed"
 msgstr "Het apparaat kan niet worden afgekoppeld"
 
-#: src/window.py:1375
+#: src/window.py:1415
 msgid "Device is busy, can't be removed"
 msgstr "Apparaat is bezet, kan niet worden verwijderd"
 
-#: src/window.py:1406
+#: src/window.py:1452
 msgid "Sorry, that didn't work"
 msgstr "Er is iets misgegaan"
 
-#: src/worker.py:465
+#: src/worker.py:491
+msgid "read"
+msgstr ""
+
+#: src/worker.py:493
+msgid "write"
+msgstr ""
+
+#: src/worker.py:495
+msgid "execute"
+msgstr ""
+
+#: src/worker.py:500
+msgid "do nothing"
+msgstr ""
+
+#: src/worker.py:580
 msgid "Calculating..."
 msgstr "Bezig met berekenen…"
