@@ -117,23 +117,23 @@ msgstr "Přístup"
 
 #: src/window.ui:1911
 msgid "Owner"
-msgstr ""
+msgstr "Vlastník"
 
 #: src/window.ui:1959
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: src/window.ui:2007
 msgid "Owner can"
-msgstr ""
+msgstr "Vlastník může"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr ""
+msgstr "Skupina může"
 
 #: src/window.ui:2103
 msgid "Others can"
-msgstr ""
+msgstr "Ostatní mohou"
 
 #: src/window.ui:2182
 msgid "About"
@@ -328,19 +328,19 @@ msgstr "Bohužel, ale nefunguje to"
 
 #: src/worker.py:491
 msgid "read"
-msgstr ""
+msgstr "čtení"
 
 #: src/worker.py:493
 msgid "write"
-msgstr ""
+msgstr "zápis"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr ""
+msgstr "spustit"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr ""
+msgstr "nedělat nic"
 
 #: src/worker.py:580
 msgid "Calculating..."
