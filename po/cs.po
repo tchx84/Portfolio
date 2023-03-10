@@ -328,15 +328,15 @@ msgstr "Bohužel, ale nefunguje to"
 
 #: src/worker.py:491
 msgid "read"
-msgstr "čtení"
+msgstr "číst"
 
 #: src/worker.py:493
 msgid "write"
-msgstr "zápis"
+msgstr "zapisovat"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr "spustit"
+msgstr "spouštět"
 
 #: src/worker.py:500
 msgid "do nothing"
