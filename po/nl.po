@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-09 10:08-0300\n"
-"PO-Revision-Date: 2022-02-04 14:57+0100\n"
+"PO-Revision-Date: 2023-03-10 13:23+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
@@ -80,7 +80,7 @@ msgstr "Over Portfolio"
 
 #: src/window.ui:756
 msgid "No files found"
-msgstr "Geen bestanden aangetroffen"
+msgstr "Er zijn geen bestanden aangetroffen"
 
 #: src/window.ui:1486
 msgid "Properties"
@@ -315,11 +315,11 @@ msgstr "Bezig met afkoppelen van apparaat…"
 
 #: src/window.py:1403
 msgid "Device can be removed"
-msgstr "Het apparaat kan niet worden afgekoppeld"
+msgstr "Het apparaat kan worden afgekoppeld"
 
 #: src/window.py:1415
 msgid "Device is busy, can't be removed"
-msgstr "Apparaat is bezet, kan niet worden verwijderd"
+msgstr "Het apparaat is bezig en kan daarom niet worden afgekoppeld"
 
 #: src/window.py:1452
 msgid "Sorry, that didn't work"
