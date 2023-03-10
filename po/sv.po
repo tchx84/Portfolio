@@ -128,7 +128,7 @@ msgstr "Ägare kan"
 
 #: src/window.ui:2055
 msgid "Group can"
-msgstr "Group can"
+msgstr "Grupp kan"
 
 #: src/window.ui:2103
 msgid "Others can"
@@ -335,11 +335,11 @@ msgstr "skriv"
 
 #: src/worker.py:495
 msgid "execute"
-msgstr "exekvera"
+msgstr "kör"
 
 #: src/worker.py:500
 msgid "do nothing"
-msgstr "göra ingenting"
+msgstr "gör ingenting"
 
 #: src/worker.py:580
 msgid "Calculating..."
