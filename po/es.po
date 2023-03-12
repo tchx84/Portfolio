@@ -89,7 +89,7 @@ msgstr "Nombre"
 
 #: src/window.ui:1595
 msgid "Location"
-msgstr "Lugar"
+msgstr "Ubicación"
 
 #: src/window.ui:1643
 msgid "Type"
@@ -312,7 +312,7 @@ msgstr "Removiendo dispositivo, por favor esperar"
 
 #: src/window.py:1403
 msgid "Device can be removed"
-msgstr "Ya puede remover el dispositivo"
+msgstr "Dispositivo disponible, ya se puede quitar"
 
 #: src/window.py:1415
 msgid "Device is busy, can't be removed"
