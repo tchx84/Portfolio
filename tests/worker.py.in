@@ -90,7 +90,7 @@ def test_load_worker_default():
 
     def _callback(worker, directory, found, index, total):
         nonlocal paths
-        paths += [path for name, path in found]
+        paths += [path for name, path, icon in found]
 
     worker = PortfolioLoadWorker(TEST_HOME_DIR)
     worker.connect("updated", _callback)
@@ -115,7 +115,7 @@ def test_load_worker_hidden():
 
     def _callback(worker, directory, found, index, total):
         nonlocal paths
-        paths += [path for name, path in found]
+        paths += [path for name, path, icon in found]
 
     worker = PortfolioLoadWorker(TEST_HOME_DIR, True)
     worker.connect("updated", _callback)

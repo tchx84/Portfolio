@@ -77,7 +77,7 @@ class PortfolioCopyWorker(PortfolioWorker):
     __gsignals__ = {
         "started": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "updated": (GObject.SignalFlags.RUN_LAST, None, (str, int, int, float, float)),
-        "post-update": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
+        "post-update": (GObject.SignalFlags.RUN_LAST, None, (str, str, object, bool)),
         "finished": (GObject.SignalFlags.RUN_LAST, None, (int,)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "stopped": (GObject.SignalFlags.RUN_LAST, None, ()),
@@ -191,7 +191,13 @@ class PortfolioCopyWorker(PortfolioWorker):
                 return
             else:
                 utils.sync_folder(os.path.dirname(destination))
-                self.emit("post-update", destination, overwritten)
+                self.emit(
+                    "post-update",
+                    os.path.basename(destination),
+                    destination,
+                    utils.get_file_icon(destination),
+                    overwritten,
+                )
 
         self.emit("finished", self._total)
 
@@ -229,7 +235,13 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 return
             else:
                 utils.sync_folder(os.path.dirname(destination))
-                self.emit("post-update", destination, overwritten)
+                self.emit(
+                    "post-update",
+                    os.path.basename(destination),
+                    destination,
+                    utils.get_file_icon(destination),
+                    overwritten,
+                )
 
         self.emit("finished", self._total)
 
@@ -351,7 +363,7 @@ class PortfolioLoadWorker(GObject.GObject, CachedWorker):
                 if not self._hidden and name.startswith("."):
                     continue
                 path = os.path.join(self._directory, name)
-                found.append((name, path))
+                found.append((name, path, utils.get_file_icon(path)))
 
         self._index += self.BUFFER
         self.emit("updated", self._directory, found, self._index, self._total)
