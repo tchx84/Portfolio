@@ -785,8 +785,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _on_load_updated(self, worker, directory, found, index, total):
-        for name, path in found:
-            icon = utils.get_file_icon(path)
+        for name, path, icon in found:
             row = self.liststore.append([icon, name, path])
 
             if self._to_select == path:
@@ -1064,16 +1063,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.action_stack.set_visible_child(self.stop_box)
         self.tools_stack.set_visible_child(self.stop_tools)
 
-    def _on_paste_post_updated(self, worker, path, overwritten):
+    def _on_paste_post_updated(self, worker, name, path, icon, overwritten):
         if overwritten:
             return
         if not os.path.exists(path):
             logger.debug(f"Attempting to add unexisting {path}")
             return
 
-        # XXX this approach won't allow me to put stat info in liststore
-        name = os.path.basename(path)
-        icon = utils.get_file_icon(path)
         self.liststore.append([icon, name, path])
 
     def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
