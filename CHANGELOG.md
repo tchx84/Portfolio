@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [0.9.15] 2023-03-14
 
 - Fixed detecting mount points from fstab.
 - Fixed opening files with special characters in name by @jwaataja.
