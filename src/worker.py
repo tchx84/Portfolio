@@ -827,9 +827,10 @@ class PortfolioLoadTrashWorker(GObject.GObject, CachedWorker):
 
         path = self._paths[self._index]
         name = os.path.basename(path)
+        icon = utils.get_file_icon(path)
 
         self._index += 1
-        self.emit("updated", "", [(name, path)], self._index, self._total)
+        self.emit("updated", "", [(name, path, icon)], self._index, self._total)
         self._timeout_handler_id = GLib.idle_add(
             self.step, priority=GLib.PRIORITY_HIGH_IDLE + 20
         )

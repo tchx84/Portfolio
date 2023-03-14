@@ -522,7 +522,7 @@ def test_load_trash_worker_default():
 
     def _update_callback(worker, name, tuples, index, total):
         nonlocal paths
-        paths += [path for name, path in tuples]
+        paths += [path for name, path, icon in tuples]
 
     finished = False
 
