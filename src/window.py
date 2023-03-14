@@ -21,7 +21,7 @@ from pathlib import Path
 
 from .translation import gettext as _
 
-from gi.repository import Gtk, GLib, Gio, Handy, GObject
+from gi.repository import Gtk, GLib, Gio, Handy
 
 from . import utils
 from . import logger
@@ -37,6 +37,7 @@ from .worker import PortfolioDeleteTrashWorker
 from .worker import PortfolioSendTrashWorker
 from .worker import PortfolioLoadTrashWorker
 from .places import PortfolioPlaces
+from .properties import PortfolioProperties
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -115,18 +116,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     content_scroll = Gtk.Template.Child()
     go_top_revealer = Gtk.Template.Child()
     properties_box = Gtk.Template.Child()
-    property_name = Gtk.Template.Child()
-    property_location = Gtk.Template.Child()
-    property_type = Gtk.Template.Child()
-    property_size = Gtk.Template.Child()
-    property_created = Gtk.Template.Child()
-    property_modified = Gtk.Template.Child()
-    property_accessed = Gtk.Template.Child()
-    property_permissions_owner = Gtk.Template.Child()
-    property_permissions_group = Gtk.Template.Child()
-    property_permissions_others = Gtk.Template.Child()
-    property_owner = Gtk.Template.Child()
-    property_group = Gtk.Template.Child()
+    properties_inner_box = Gtk.Template.Child()
     passphrase_header = Gtk.Template.Child()
     passphrase_box = Gtk.Template.Child()
     passphrase_entry = Gtk.Template.Child()
@@ -231,79 +221,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("unlock", self._on_places_unlock)
         self.places_inner_box.add(places)
 
-        self._properties = PortfolioPropertiesWorker()
-        self._properties.bind_property(
-            "name",
-            self.property_name,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "location",
-            self.property_location,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "type",
-            self.property_type,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "size",
-            self.property_size,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "created",
-            self.property_created,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "modified",
-            self.property_modified,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "accessed",
-            self.property_accessed,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "permissions_owner",
-            self.property_permissions_owner,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "permissions_group",
-            self.property_permissions_group,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "permissions_others",
-            self.property_permissions_others,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "owner",
-            self.property_owner,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._properties.bind_property(
-            "group",
-            self.property_group,
-            "label",
-            GObject.BindingFlags.SYNC_CREATE,
-        )
+        self._properties_worker = PortfolioPropertiesWorker()
+        self.properties_inner_box.add(PortfolioProperties(self._properties_worker))
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
@@ -1499,12 +1418,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._worker.stop()
             self._clean_workers()
         elif child == self.files_box:
-            self._properties.stop()
+            self._properties_worker.stop()
 
     def _on_shutdown(self, window):
         if self._worker is not None:
             self._worker.stop()
-        self._properties.stop()
+        self._properties_worker.stop()
 
     def open(self, path=PortfolioPlaces.PORTFOLIO_HOME_DIR, force_page_switch=False):
         path = utils.get_uri_path(path)
@@ -1538,7 +1457,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.content_deck.set_visible_child(self.files_stack)
 
     def show_properties(self, path, force_page_switch=False):
-        self._properties.props.path = path
+        self._properties_worker.props.path = path
 
         if force_page_switch is True:
             self.open(path, force_page_switch)
