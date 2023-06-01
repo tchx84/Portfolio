@@ -38,6 +38,7 @@ from .worker import PortfolioSendTrashWorker
 from .worker import PortfolioLoadTrashWorker
 from .places import PortfolioPlaces
 from .properties import PortfolioProperties
+from .about import PortfolioAbout
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -100,6 +101,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     files_stack = Gtk.Template.Child()
     files_box = Gtk.Template.Child()
     about_box = Gtk.Template.Child()
+    about_inner_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
     close_tools = Gtk.Template.Child()
     stop_box = Gtk.Template.Child()
@@ -223,6 +225,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._properties_worker = PortfolioPropertiesWorker()
         self.properties_inner_box.add(PortfolioProperties(self._properties_worker))
+
+        self.about_inner_box.add(PortfolioAbout())
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
