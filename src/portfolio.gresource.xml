@@ -7,6 +7,7 @@
     <file>place.ui</file>
     <file>main.css</file>
     <file>about.ui</file>
+    <file>passphrase.ui</file>
     <file>org.freedesktop.FileManager1.xml</file>
   </gresource>
 </gresources>
