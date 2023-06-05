@@ -39,6 +39,7 @@ from .worker import PortfolioLoadTrashWorker
 from .places import PortfolioPlaces
 from .properties import PortfolioProperties
 from .about import PortfolioAbout
+from .passphrase import PortfolioPassphrase
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -121,9 +122,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     properties_inner_box = Gtk.Template.Child()
     passphrase_header = Gtk.Template.Child()
     passphrase_box = Gtk.Template.Child()
-    passphrase_entry = Gtk.Template.Child()
-    passphrase_label = Gtk.Template.Child()
-    passphrase_spinner = Gtk.Template.Child()
+    passphrase_inner_box = Gtk.Template.Child()
     passphrase_back_button = Gtk.Template.Child()
 
     ICON_COLUMN = 0
@@ -163,7 +162,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._index = -1
         self._search_delay_handler_id = 0
         self._load_delay_handler_id = 0
-        self._encrypted = None
 
         self.gesture = Gtk.GestureLongPress.new(self.treeview)
         self.gesture.connect("pressed", self._on_long_pressed)
@@ -202,7 +200,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.about_back_button.connect("clicked", self._on_about_back_clicked)
         self.properties_back_button.connect("clicked", self._on_properties_back_clicked)
         self.passphrase_back_button.connect("clicked", self._on_passphrase_back_clicked)
-        self.passphrase_entry.connect("activate", self._on_passphrase_activate)
 
         # XXX no model for options yet so this...
         self.menu_button.connect("clicked", self._on_menu_button_clicked)
@@ -227,6 +224,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.properties_inner_box.add(PortfolioProperties(self._properties_worker))
 
         self.about_inner_box.add(PortfolioAbout())
+
+        self.passphrase = PortfolioPassphrase()
+        self.passphrase.connect("unlocked", self._on_places_unlocked)
+        self.passphrase_inner_box.add(self.passphrase)
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
@@ -501,15 +502,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._load_delay_handler_id != 0:
             GLib.Source.remove(self._load_delay_handler_id)
             self._load_delay_handler_id = 0
-
-    def _clean_passphrase(self):
-        self._encrypted = None
-        self.passphrase_entry.set_text("")
-        self.passphrase_label.set_text("")
-        self.passphrase_entry.props.sensitive = True
-        self.passphrase_label.props.visible = True
-        self.passphrase_spinner.props.visible = False
-        self.passphrase_spinner.props.active = False
 
     def _update_mode(self):
         count = self.selection.count_selected_rows()
@@ -1334,41 +1326,18 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._places_notify(_("Device is busy, can't be removed"))
 
     def _on_places_unlock(self, button, encrypted):
-        self._clean_passphrase()
-        self._encrypted = encrypted
+        self.passphrase.unlock(encrypted)
         self.passphrase_header.props.title = encrypted.get_friendly_label()
         self.content_deck.set_visible_child(self.files_stack)
         self.files_stack.set_visible_child(self.passphrase_box)
-        self.passphrase_entry.grab_focus()
+
+    def _on_places_unlocked(self, widget, path):
+        self._reset_to_path(path)
+        self._go_to_files_view(duration=200)
 
     def _on_passphrase_back_clicked(self, button):
-        self._clean_passphrase()
+        self.passphrase.clean()
         self.content_deck.set_visible_child(self.places_box)
-
-    def _on_passphrase_activate(self, button):
-        self.passphrase_entry.props.sensitive = False
-        self.passphrase_label.props.visible = False
-        self.passphrase_spinner.props.visible = True
-        self.passphrase_spinner.props.active = True
-
-        passphrase = self.passphrase_entry.get_text()
-        self._encrypted.unlock(passphrase, self._on_places_unlock_finished)
-
-    def _on_places_unlock_finished(self, device, encrypted, success):
-        self._clean_passphrase()
-
-        if device is None:
-            logger.debug(f"Failed to unlock {encrypted}")
-        elif not os.access(device.mount_point, os.R_OK):
-            logger.debug(f"No permissions for {device}")
-        elif success is True:
-            self._reset_to_path(device.mount_point)
-            self._go_to_files_view(duration=200)
-            return
-
-        self._encrypted = encrypted
-        self.passphrase_entry.grab_focus()
-        self.passphrase_label.set_text(_("Sorry, that didn't work"))
 
     def _on_help_clicked(self, button):
         Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
