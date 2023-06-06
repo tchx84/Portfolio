@@ -40,6 +40,7 @@ from .places import PortfolioPlaces
 from .properties import PortfolioProperties
 from .about import PortfolioAbout
 from .passphrase import PortfolioPassphrase
+from .placeholder import PortfolioPlaceholder
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -112,6 +113,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     content_deck = Gtk.Template.Child()
     headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
+    placeholder_inner_box = Gtk.Template.Child()
     menu_box = Gtk.Template.Child()
     menu_popover = Gtk.Template.Child()
     menu_button = Gtk.Template.Child()
@@ -228,6 +230,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.passphrase = PortfolioPassphrase()
         self.passphrase.connect("unlocked", self._on_places_unlocked)
         self.passphrase_inner_box.add(self.passphrase)
+
+        self.placeholder_inner_box.add(PortfolioPlaceholder())
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
