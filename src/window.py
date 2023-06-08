@@ -41,6 +41,7 @@ from .properties import PortfolioProperties
 from .about import PortfolioAbout
 from .passphrase import PortfolioPassphrase
 from .placeholder import PortfolioPlaceholder
+from .loading import PortfolioLoading
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -70,10 +71,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
     new_folder = Gtk.Template.Child()
     delete_trash = Gtk.Template.Child()
     restore_trash = Gtk.Template.Child()
-    loading_label = Gtk.Template.Child()
-    loading_bar = Gtk.Template.Child()
-    loading_description = Gtk.Template.Child()
-    loading_details = Gtk.Template.Child()
     close_button = Gtk.Template.Child()
     stop_button = Gtk.Template.Child()
     help_button = Gtk.Template.Child()
@@ -99,6 +96,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     places_popup_box = Gtk.Template.Child()
     content_stack = Gtk.Template.Child()
     loading_box = Gtk.Template.Child()
+    loading_inner_box = Gtk.Template.Child()
     content_box = Gtk.Template.Child()
     files_stack = Gtk.Template.Child()
     files_box = Gtk.Template.Child()
@@ -232,6 +230,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.passphrase_inner_box.add(self.passphrase)
 
         self.placeholder_inner_box.add(PortfolioPlaceholder())
+
+        self.loading = PortfolioLoading()
+        self.loading_inner_box.add(self.loading)
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
@@ -382,7 +383,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _paste_finish(self):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
         self._to_cut = []
         self._to_copy = []
@@ -395,7 +396,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _delete_finish(self):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
         self._unselect_all()
         self._update_all()
@@ -496,11 +497,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
         self._popup.destroy()
         self._popup = None
-
-    def _clean_progress(self):
-        self.loading_description.set_text("")
-        self.loading_details.set_text("")
-        self.loading_details.props.visible = False
 
     def _clean_loading_delay(self):
         if self._load_delay_handler_id != 0:
@@ -652,16 +648,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_open_started(self, worker):
         self._busy = True
-
-        self.loading_label.set_text(_("Opening"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = False
+        self.loading.update(_("Opening"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
 
     def _on_open_updated(self, worker):
-        self.loading_bar.pulse()
+        self.loading.pulse()
 
     def _on_open_finished(self, worker):
         self._busy = False
@@ -673,7 +666,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_workers()
 
         name = os.path.basename(path)
-        self.loading_description.set_text(_("Could not open %s") % name)
+        self.loading.update(description=_("Could not open %s") % name)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -693,9 +686,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
 
     def _on_load_started_delayed(self):
-        self.loading_label.set_text(_("Loading"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = False
+        self.loading.update(_("Loading"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -713,7 +704,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             if self._to_go_to == path:
                 self._to_go_to_row = row
 
-        self.loading_bar.set_fraction((index + 1) / total)
+        self.loading.update(progress=(index + 1) / total)
 
     def _on_load_finished(self, worker, directory):
         self._busy = False
@@ -740,8 +731,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_loading_delay()
 
         name = os.path.basename(directory)
-        self.loading_label.set_text(_("Loading"))
-        self.loading_description.set_text(_("Could not load %s") % name)
+        self.loading.update(
+            title=_("Loading"), description=_("Could not load %s") % name
+        )
         self.content_stack.set_visible_child(self.loading_box)
 
         self._to_select_row = None
@@ -971,10 +963,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_started(self, worker, total):
         self._busy = True
-
-        self.loading_label.set_text(_("Pasting"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = True
+        self.loading.update(_("Pasting"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -993,13 +982,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
         description = os.path.basename(path)
-        self.loading_description.set_text(description)
-        self.loading_bar.set_fraction(index / total)
-
         human_current_bytes = utils.get_size_for_humans(current_bytes)
         human_total_bytes = utils.get_size_for_humans(total_bytes)
-        self.loading_details.set_text(
-            _("%s of %s") % (human_current_bytes, human_total_bytes)
+        self.loading.update(
+            description=description,
+            progress=index / total,
+            details=_("%s of %s") % (human_current_bytes, human_total_bytes),
         )
 
     def _on_paste_finished(self, worker, total):
@@ -1008,13 +996,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_paste_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
         self._to_cut = []
         self._to_copy = []
 
         name = os.path.basename(path)
-        self.loading_description.set_text(_("Could not paste %s") % name)
+        self.loading.update(description=_("Could not paste %s") % name)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -1066,10 +1054,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_delete_started(self, worker):
         self._busy = True
-
-        self.loading_label.set_text(_("Deleting"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = False
+        self.loading.update(_("Deleting"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1079,11 +1064,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_delete_pre_updated(self, worker, path):
         name = os.path.basename(path)
-        self.loading_description.set_text(name)
+        self.loading.update(description=name)
 
     def _on_delete_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
-        self.loading_bar.set_fraction((index + 1) / total)
+        self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
         self._delete_finish()
@@ -1091,10 +1076,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
         name = os.path.basename(path)
-        self.loading_description.set_text(_("Could not delete %s") % name)
+        self.loading.update(description=_("Could not delete %s") % name)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -1106,7 +1091,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_popups()
 
     def _on_button_closed(self, button):
-        self._clean_progress()
+        self.loading.clean()
         self._unselect_all()
         self._update_all()
         self._update_mode()
@@ -1118,7 +1103,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._go_back_to_homepage()
 
     def _on_stop_clicked(self, button):
-        self.loading_label.set_text(_("Stopping"))
+        self.loading.update(title=_("Stopping"))
         self._worker.stop()
 
     def _on_select_all(self, button):
@@ -1188,9 +1173,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_restore_trash_started(self, worker):
         self._busy = True
 
-        self.loading_label.set_text(_("Restoring"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = False
+        self.loading.update(_("Restoring"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1200,16 +1183,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_restore_trash_pre_updated(self, worker, path):
         name = os.path.basename(path)
-        self.loading_description.set_text(name)
+        self.loading.update(description=name)
 
     def _on_restore_trash_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
-        self.loading_bar.set_fraction((index + 1) / total)
+        self.loading.update(progress=(index + 1) / total)
 
     def _on_restore_trash_finished(self, worker, total):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
         self._unselect_all()
 
@@ -1219,9 +1202,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_restore_trash_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
-        self.loading_description.set_text(_("Could not restore %s") % path)
+        self.loading.update(description=_("Could not restore %s") % path)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -1264,9 +1247,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_trash_started(self, worker):
         self._busy = True
 
-        self.loading_label.set_text(_("Deleting"))
-        self.loading_bar.set_fraction(0.0)
-        self.loading_details.props.visible = False
+        self.loading.update(_("Deleting"), 0.0, "", "")
         self.content_stack.set_visible_child(self.loading_box)
 
         self._update_all()
@@ -1276,11 +1257,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_delete_trash_pre_updated(self, worker, path):
         name = os.path.basename(path)
-        self.loading_description.set_text(name)
+        self.loading.update(description=name)
 
     def _on_delete_trash_updated(self, worker, path, ref, index, total):
         self._remove_row(ref)
-        self.loading_bar.set_fraction((index + 1) / total)
+        self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_trash_finished(self, worker, total):
         self._delete_finish()
@@ -1288,9 +1269,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_delete_trash_failed(self, worker, path):
         self._busy = False
         self._clean_workers()
-        self._clean_progress()
+        self.loading.clean()
 
-        self.loading_description.set_text(_("Could not delete %s") % path)
+        self.loading.update(description=_("Could not delete %s") % path)
 
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
