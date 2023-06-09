@@ -87,8 +87,19 @@ class PortfolioCopyWorker(PortfolioWorker):
         super().__init__()
         self._selection = selection
         self._directory = directory
+        self._copy_was_called = False
 
-    def _do_copy(self, source, destination, callback):
+    def _report_status(self, path, current_bytes, total_bytes):
+        self.emit(
+            "updated",
+            path,
+            self._count,
+            self._total,
+            current_bytes,
+            total_bytes,
+        )
+
+    def _do_copy(self, source, destination):
         current_bytes = 0
         total_bytes = os.stat(source.name).st_size
         arch_capped = sys.maxsize < 2**32
@@ -130,7 +141,7 @@ class PortfolioCopyWorker(PortfolioWorker):
 
             last_sync = now
             current_bytes += sent_bytes
-            callback(current_bytes, total_bytes)
+            self._report_status(destination.name, current_bytes, total_bytes)
 
         logger.debug(f"sendfile block size converged to {block_bytes}")
 
@@ -139,23 +150,14 @@ class PortfolioCopyWorker(PortfolioWorker):
             os.symlink(os.readlink(source_path), destination_path)
             return
 
-        def callback(current_bytes, total_bytes):
-            self.emit(
-                "updated",
-                destination_path,
-                self._count,
-                self._total,
-                current_bytes,
-                total_bytes,
-            )
-
         with open(source_path, "rb") as source:
             with open(destination_path, "wb") as destination:
-                self._do_copy(source, destination, callback)
+                self._do_copy(source, destination)
 
         shutil.copymode(source_path, destination_path)
 
         self._count += 1
+        self._copy_was_called = True
 
     def run(self):
         self._count = 0
@@ -235,6 +237,13 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 return
             else:
                 utils.sync_folder(os.path.dirname(destination))
+
+                # XXX force report even if count is not precise
+                if self._copy_was_called is False:
+                    self._count += 1
+                    total_bytes = os.lstat(destination).st_size
+                    self._report_status(destination, total_bytes, total_bytes)
+
                 self.emit(
                     "post-update",
                     os.path.basename(destination),
