@@ -87,6 +87,7 @@ class PortfolioCopyWorker(PortfolioWorker):
         super().__init__()
         self._selection = selection
         self._directory = directory
+        self._copy_was_called = False
 
     def _do_copy(self, source, destination, callback):
         current_bytes = 0
@@ -156,6 +157,7 @@ class PortfolioCopyWorker(PortfolioWorker):
         shutil.copymode(source_path, destination_path)
 
         self._count += 1
+        self._copy_was_called = True
 
     def run(self):
         self._count = 0
@@ -226,6 +228,19 @@ class PortfolioCutWorker(PortfolioCopyWorker):
                 if overwritten and os.path.islink(destination):
                     os.unlink(destination)
                 shutil.move(path, destination, copy_function=self._copy)
+
+                # XXX report status even if copy_function was not called
+                if self._copy_was_called is False:
+                    self._count += 1
+                    total_bytes = os.lstat(destination).st_size
+                    self.emit(
+                        "updated",
+                        destination,
+                        self._count,
+                        self._total,
+                        total_bytes,
+                        total_bytes,
+                    )
             except WorkerStoppedException:
                 self.emit("stopped")
                 return
