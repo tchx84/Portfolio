@@ -19,6 +19,7 @@ import os
 import shutil
 
 from datetime import datetime
+from urllib.parse import quote, unquote
 from configparser import ConfigParser
 
 from gi.repository import GLib, Gio, GObject
@@ -119,11 +120,11 @@ class PortfolioTrash(GObject.GObject):
         trash_dir = self._trash.get(mount_point)
 
         info_path = self.get_info_path(path)
-        info_file = ConfigParser()
+        info_file = ConfigParser(interpolation=None)
         info_file.optionxform = str
         info_file.read(info_path)
 
-        orig_path = info_file["Trash Info"]["Path"]
+        orig_path = unquote(info_file["Trash Info"]["Path"])
 
         # restore absolute path
         if trash_dir != self._home_trash and not os.path.isabs(orig_path):
@@ -166,10 +167,10 @@ class PortfolioTrash(GObject.GObject):
         else:
             orig_path = os.path.relpath(path, mount_point)
 
-        info_file = ConfigParser()
+        info_file = ConfigParser(interpolation=None)
         info_file.optionxform = str
         info_file["Trash Info"] = {}
-        info_file["Trash Info"]["Path"] = orig_path
+        info_file["Trash Info"]["Path"] = quote(orig_path)
         info_file["Trash Info"]["DeletionDate"] = (
             datetime.utcnow().replace(microsecond=0).isoformat()
         )
