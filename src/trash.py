@@ -119,7 +119,7 @@ class PortfolioTrash(GObject.GObject):
         trash_dir = self._trash.get(mount_point)
 
         info_path = self.get_info_path(path)
-        info_file = ConfigParser()
+        info_file = ConfigParser(interpolation=None)
         info_file.optionxform = str
         info_file.read(info_path)
 
@@ -166,7 +166,7 @@ class PortfolioTrash(GObject.GObject):
         else:
             orig_path = os.path.relpath(path, mount_point)
 
-        info_file = ConfigParser()
+        info_file = ConfigParser(interpolation=None)
         info_file.optionxform = str
         info_file["Trash Info"] = {}
         info_file["Trash Info"]["Path"] = orig_path
