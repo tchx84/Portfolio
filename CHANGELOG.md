@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed icons not showing on GNOME Software.
+- Fixed trashing and restoring files with special characters.
+- Fixed progress report when moving files between same device.
+- Changed internal UI structure to prepare for GTK4 migration.
+
 ## [0.9.15] 2023-03-14
 
 - Fixed detecting mount points from fstab.
