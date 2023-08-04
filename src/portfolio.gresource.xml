@@ -10,6 +10,7 @@
     <file>passphrase.ui</file>
     <file>placeholder.ui</file>
     <file>loading.ui</file>
+    <file>files.ui</file>
     <file>org.freedesktop.FileManager1.xml</file>
   </gresource>
 </gresources>
