@@ -49,6 +49,7 @@ portfolio_sources = [
   'passphrase.py',
   'placeholder.py',
   'loading.py',
+  'files.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)
