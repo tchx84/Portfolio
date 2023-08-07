@@ -139,6 +139,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._busy = False
         self._to_copy = []
         self._to_cut = []
+        self._to_go_to = None
+        self._to_go_to_row = None
         self._last_vscroll_value = None
         self._force_go_home = False
         self._history = []
@@ -175,6 +177,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.home_menu_button.connect("clicked", self._on_menu_button_clicked)
 
         self._files = PortfolioFiles()
+        self._files.connect("path-activated", self._on_path_activated)
+
         self.content_scroll.add(self._files)
         self._adjustment = self.content_scroll.get_vadjustment()
         self._adjustment.connect("value-changed", self._update_go_top_button)
@@ -218,7 +222,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             self.last_modified_button.props.active = True
 
-    def _wait_and_edit(self):
+    def  _wait_and_edit(self):
         value = self._adjustment.get_value()
 
         if value == self._last_vscroll_value:
@@ -230,7 +234,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         return True
 
     def _populate(self, directory):
-        self._switch_to_navigation_mode()
+        self._files.switch_to_navigation_mode()
 
         if self._worker is not None:
             self._worker.stop()
@@ -270,7 +274,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._unselect_all()
 
         self._update_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _delete_finish(self):
         self._busy = False
@@ -279,13 +283,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._unselect_all()
         self._update_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _get_row(self, model, treepath):
         return model.get_iter(treepath)
-
-    def _get_path(self, model, treepath):
-        return model[model.get_iter(treepath)][self.PATH_COLUMN]
 
     def _go_to_top(self, *args):
         # XXX PortfolioFiles
@@ -322,7 +323,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._history = []
         self._index = -1
         self._move(path, False)
-        self._update_mode()
+        self._files.update_mode()
 
     def _refresh(self):
         if self._index > -1:
@@ -382,7 +383,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_search(self):
         # XXX PortfolioFiles
-        sensitive = not self._editing and not self._busy
+        sensitive = not self._files.editing and not self._busy
         self.search.props.sensitive = sensitive
         self.search_entry.sensitive = sensitive
 
@@ -393,15 +394,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_content_stack(self):
         if self._busy:
             return
-        # XXX PorfolioFiles
-        elif len(self.sorted) == 0:
+        elif self._files.empty():
             self.content_stack.set_visible_child(self.placeholder_box)
         else:
             self.content_stack.set_visible_child(self.content_box)
 
     def _update_navigation(self):
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
+        count = self._files.selected_count()
         selected = count >= 1
 
         if selected or self._busy:
@@ -416,14 +415,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_selection(self):
         # XXX PortfolioFiles
-        sensitive = not self._editing and not self._busy
+        sensitive = not self._files.editing and not self._busy
 
         self.select_all.props.sensitive = sensitive
         self.select_none.props.sensitive = sensitive
 
     def _update_action_stack(self):
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
+        count = self._files.selected_count()
         selected = count >= 1
         child = self.selection_box if selected else self.navigation_box
         self.action_stack.set_visible_child(child)
@@ -434,16 +432,15 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.tools_stack.set_visible_child(self.trash_tools)
             return
 
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
+        count = self._files.selected_count()
         selected = count >= 1
         child = self.selection_tools if selected else self.navigation_tools
         self.tools_stack.set_visible_child(child)
 
     def _update_selection_tools(self):
         # XXX  PortfolioFiles
-        count = self.selection.count_selected_rows()
-        sensitive = count >= 1 and not self._editing and not self._busy
+        count = self._files.selected_count()
+        sensitive = count >= 1 and not self._files.editing and not self._busy
 
         self.delete.props.sensitive = sensitive
         self.cut.props.sensitive = sensitive
@@ -453,30 +450,26 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_detail()
 
     def _update_navigation_tools(self):
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
+        count = self._files.selected_count()
         selected = count >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
         self.paste.props.sensitive = not selected and to_paste and not self._busy
         self.new_folder.props.sensitive = not selected and not self._busy
 
     def _update_trash_tools(self):
-        # XXX PortfolioFiles
-        selected = self.selection.count_selected_rows() >= 1
+        selected = self._files.selected_count() >= 1
         is_trash = default_trash.is_trash(self._history[self._index])
         self.restore_trash.props.sensitive = selected and is_trash
         self.delete_trash.props.sensitive = selected and is_trash
 
     def _update_rename(self):
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
-        sensitive = count == 1 and not self._editing and not self._busy
+        count = self._files.selected_count()
+        sensitive = count == 1 and not self._files.editing and not self._busy
         self.rename.props.sensitive = sensitive
 
     def _update_detail(self):
-        # XXX PortfolioFiles
-        count = self.selection.count_selected_rows()
-        sensitive = count == 1 and not self._editing and not self._busy
+        count = self._files.selected_count()
+        sensitive = count == 1 and not self._files.editing and not self._busy
         self.detail.props.sensitive = sensitive
 
     def _update_directory_title(self):
@@ -503,13 +496,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_go_top_button(self, *args):
         # XXX PortfolioFiles
         alloc = self.get_allocation()
-        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._editing
+        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._files.editing
         self.go_top_revealer.props.reveal_child = reveal
 
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text("")
         self.search.grab_focus()
+
+    def _on_path_activated(self, files, path):
+        self._move(path)
 
     def _on_open_started(self, worker):
         self._busy = True
@@ -539,9 +535,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _on_load_started(self, worker, directory):
         self._busy = True
 
-        # XXX PortfolioFiles
-        self.liststore.clear()
-
+        self._files.clear()
         self._update_directory_title()
         self._reset_search()
         self._update_all()
@@ -562,11 +556,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path, icon in found:
-            # XXX PortfolioFiles
-            row = self.liststore.append([icon, name, path])
-
-            if self._to_select == path:
-                self._to_select_row = row
+            row = self._files.add(icon, name, path)
 
             if self._to_go_to == path:
                 self._to_go_to_row = row
@@ -581,13 +571,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_all()
 
         # XXX PortfolioFiles
-        if self._to_select_row is not None:
-            self._switch_to_selection_mode()
-            self._select_and_go(self._to_select_row)
+        if self._files.to_select_row is not None:
+            self._files.switch_to_selection_mode()
+            self._files.select_and_go(self._to_select_row)
             self._to_select_row = None
             self._to_select = None
         elif self._to_go_to_row is not None:
-            self._go_to(self._to_go_to_row)
+            self._files.go_to(self._to_go_to_row)
             self._to_go_to_row = None
             self._to_go_to = None
         else:
@@ -682,7 +672,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._notify(description, None, None, None, True, None)
 
         self._unselect_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _on_copy_clicked(self, button):
         selection = self._get_selection()
@@ -700,7 +690,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._notify(description, None, None, None, True, None)
 
         self._unselect_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _on_paste_clicked(self, button):
         to_paste = self._to_copy if self._to_copy else self._to_cut
@@ -867,7 +857,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.clean()
         self._unselect_all()
         self._update_all()
-        self._update_mode()
+        self._files.update_mode()
 
         if self._force_go_home is False:
             return
@@ -881,7 +871,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_select_all(self, button):
         self._select_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _on_select_none(self, button):
         self._unselect_all()
@@ -949,7 +939,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._unselect_all()
 
         self._update_all()
-        self._update_mode()
+        self._files.update_mode()
 
     def _on_restore_trash_failed(self, worker, path):
         self._busy = False
@@ -1086,8 +1076,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_sort_toggled(self, button):
         if self.a_to_z_button.props.active:
+            self._files.sort_order = PortfolioSettings.ALPHABETICAL_ORDER
             self._settings.sort_order = PortfolioSettings.ALPHABETICAL_ORDER
         else:
+            self._files.sort_order = PortfolioSettings.MODIFIED_TIME_ORDER
             self._settings.sort_order = PortfolioSettings.MODIFIED_TIME_ORDER
 
         self._refresh()

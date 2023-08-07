@@ -15,12 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
+
+from . import utils
+from .settings import PortfolioSettings
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/files.ui")
 class PortfolioFiles(Gtk.TreeView):
     __gtype_name__ = "PortfolioFiles"
+
+    __gsignals__ = {
+        "selection-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-activated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "path-detailed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "edit-started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "edit-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
 
     name_column = Gtk.Template.Child()
     name_cell = Gtk.Template.Child()
@@ -41,13 +52,13 @@ class PortfolioFiles(Gtk.TreeView):
         self._editing = False
         self._to_select = None
         self._to_select_row = None
-        self._to_go_to = None
-        self._to_go_to_row = None
         self._last_clicked = None
         self._dont_activate = False
         self._force_select = False
+        self._filter = ""
+        self._sort_order = PortfolioSettings.ALPHABETICAL_ORDER
 
-        self.filtered.set_visible_func(self._filter, data=None)
+        self.filtered.set_visible_func(self._filter_func, data=None)
         self.sorted.set_default_sort_func(self._sort, None)
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
@@ -61,12 +72,39 @@ class PortfolioFiles(Gtk.TreeView):
         self.gesture = Gtk.GestureLongPress.new(self)
         self.gesture.connect("pressed", self._on_long_pressed)
 
-    def _filter(self, model, row, data=None):
+    @property
+    def filter(self):
+        return self._filter
+
+    @filter.setter
+    def filter(self, value):
+        self._filter = value
+
+    @property
+    def to_select_row(self):
+        return self._to_select_row
+
+    @to_select_row.setter
+    def to_select_row(self, value):
+        self._to_select_row = value
+
+    @property
+    def sort_order(self):
+        return self._sort_order
+
+    @sort_order.setter
+    def sort_order(self, value):
+        self._sort_order = value
+
+    @property
+    def editing(self):
+        return self._editing
+
+    def _filter_func(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
-        text = self.search_entry.get_text()
-        if not text:
+        if not self._filter:
             return True
-        return text.lower() in os.path.basename(path).lower()
+        return self._filter.lower() in os.path.basename(path).lower()
 
     def _sort_by_last_modified(self, path1, path2):
         st_mtime1 = utils.get_file_mtime(path1)
@@ -102,12 +140,15 @@ class PortfolioFiles(Gtk.TreeView):
         elif not row1_is_dir and row2_is_dir:
             return 1
 
-        if self.a_to_z_button.props.active:
+        if self._sort_order == PortfolioSettings.ALPHABETICAL_ORDER:
             return self._sort_by_a_to_z(path1, path2)
         else:
             return self._sort_by_last_modified(path1, path2)
 
-    def _get_selection(self):
+    def _get_path(self, model, treepath):
+        return model[model.get_iter(treepath)][self.PATH_COLUMN]
+
+    def get_selection(self):
         model, treepaths = self.selection.get_selected_rows()
         selection = [
             (
@@ -119,10 +160,7 @@ class PortfolioFiles(Gtk.TreeView):
         return selection
 
     def _on_selection_changed(self, selection):
-        if self._busy is True:
-            return
-        self._update_all()
-        self._update_mode()
+        self.emit("selection-changed")
 
     def _on_select(self, selection, model, treepath, selected, data=None):
         should_select = False
@@ -144,17 +182,17 @@ class PortfolioFiles(Gtk.TreeView):
 
         return should_select
 
-    def _select_all(self):
+    def select_all(self):
         self._force_select = True
         self.selection.select_all()
         self._force_select = False
 
-    def _unselect_all(self):
+    def unselect_all(self):
         self._force_select = True
         self.selection.unselect_all()
         self._force_select = False
 
-    def _select_row(self, row):
+    def select_row(self, row):
         self._force_select = True
         self.selection.select_iter(row)
         self._force_select = False
@@ -167,7 +205,7 @@ class PortfolioFiles(Gtk.TreeView):
         )
         self.scroll_to_cell(treepath, None, False, 0, 0)
 
-    def _go_to(self, row):
+    def go_to(self, row):
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
@@ -175,17 +213,17 @@ class PortfolioFiles(Gtk.TreeView):
 
         self.scroll_to_cell(treepath, None, False, 0, 0)
 
-    def _select_and_go(self, row, edit=False):
+    def select_and_go(self, row, edit=False):
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
-        self._select_row(row)
+        self.select_row(row)
         GLib.idle_add(self._go_to_selection)
 
         if edit is True:
             GLib.timeout_add(100, self._wait_and_edit)
 
-    def _go_to_top(self, *args):
+    def go_to_top(self, *args):
         if len(self.sorted) >= 1:
             self.scroll_to_cell(0, None, True, 0, 0)
 
@@ -195,7 +233,7 @@ class PortfolioFiles(Gtk.TreeView):
             return
         if self.selection.get_mode() == Gtk.SelectionMode.NONE:
             path = self._get_path(self.sorted, treepath)
-            self._move(path)
+            self.emit("path-activated", path)
 
     def _on_clicked(self, treeview, event):
         result = self.get_path_at_pos(event.x, event.y)
@@ -206,16 +244,12 @@ class PortfolioFiles(Gtk.TreeView):
 
     def _on_rename_started(self, cell_name, treepath, data=None):
         self._editing = True
-
-        self._update_search()
-        self._update_selection()
-        self._update_selection_tools()
-        self._update_go_top_button()
+        self.emit("edit-started")
 
     def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
-        directory = self._history[self._index]
-        new_path = os.path.join(directory, new_name)
         old_path = self._get_path(self.sorted, treepath)
+        directory = os.basedir(old_path)
+        new_path = os.path.join(directory, new_name)
 
         if new_path == old_path:
             self._on_rename_finished()
@@ -245,13 +279,8 @@ class PortfolioFiles(Gtk.TreeView):
                 True,
                 None,
             )
-            self._on_rename_clicked(None)
+            self.on_rename_clicked(None)
             return
-
-        # remove this folder from history
-        self._history = [
-            path for path in self._history if not path.startswith(old_path)
-        ]
 
         # take the user to the new position
         self._on_rename_finished()
@@ -260,9 +289,9 @@ class PortfolioFiles(Gtk.TreeView):
     def _on_rename_finished(self, *args):
         self.name_cell.props.editable = False
         self._editing = False
-        self._update_all()
+        self.emit("edit-finished")
 
-    def _on_rename_clicked(self, button):
+    def on_rename_clicked(self, button):
         self.name_cell.props.editable = True
         model, treepaths = self.selection.get_selected_rows()
         treepath = treepaths[-1]
@@ -270,7 +299,7 @@ class PortfolioFiles(Gtk.TreeView):
             treepath, self.name_column, self.name_cell, True
         )
 
-    def _remove_row(self, ref):
+    def remove_row(self, ref):
         if ref is None or not ref.valid():
             return
 
@@ -280,26 +309,26 @@ class PortfolioFiles(Gtk.TreeView):
 
         self.liststore.remove(self.liststore.get_iter(treepath))
 
-    def _update_mode(self):
+    def update_mode(self):
         count = self.selection.count_selected_rows()
         if count == 0:
-            self._switch_to_navigation_mode()
+            self.switch_to_navigation_mode()
 
-    def _switch_to_navigation_mode(self):
+    def switch_to_navigation_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.NONE)
 
-    def _switch_to_selection_mode(self):
+    def switch_to_selection_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     def _on_long_pressed(self, gesture, x, y):
         if self.selection.get_mode() == Gtk.SelectionMode.MULTIPLE:
             return
 
-        self._switch_to_selection_mode()
+        self.switch_to_selection_mode()
         path = self.get_path_at_pos(x, y)
 
         if path is None:
-            self._switch_to_navigation_mode()
+            self.switch_to_navigation_mode()
             return
 
         treepath = path[0]
@@ -307,16 +336,15 @@ class PortfolioFiles(Gtk.TreeView):
 
         # because of the custom selection rules, is not guaranteed
         # that this will actually be selected so always update mode.
-        self._update_mode()
+        self.update_mode()
 
     def _on_detail_clicked(self, button):
         model, treepaths = self.selection.get_selected_rows()
         treepath = treepaths[-1]
         path = model[treepath][self.PATH_COLUMN]
-        self.show_properties(path)
+        self.emit("path-detailed", path)
 
-    def _on_new_folder(self, button):
-        directory = self._history[self._index]
+    def _on_new_folder(self, directory):
         folder_name = utils.find_new_name(directory, _("New Folder"))
         path = os.path.join(directory, folder_name)
 
@@ -334,12 +362,29 @@ class PortfolioFiles(Gtk.TreeView):
             )
             return
 
-        self._switch_to_selection_mode()
+        self.switch_to_selection_mode()
 
         icon = utils.get_file_icon(path)
         row = self.liststore.append([icon, folder_name, path])
-        self._select_and_go(row, edit=True)
+        self.select_and_go(row, edit=True)
 
     def _update_treeview(self):
         sensitive = not self._busy
         self.props.sensitive = sensitive
+
+    def selected_count(self):
+        return self.selection.count_selected_rows()
+
+    def empty(self):
+        return len(self.sorted) == 0
+
+    def add(self, icon, name, path):
+        row = self.liststore.append([icon, name, path])
+
+        if self._to_select == path:
+            self._to_select_row = row
+
+        return row
+
+    def clear(self):
+        self.liststore.clear()
