@@ -289,8 +289,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         return model.get_iter(treepath)
 
     def _go_to_top(self, *args):
-        # XXX PortfolioFiles
-        pass
+        self._files.go_to_top()
 
     def _go_back_to_homepage(self):
         self.content_deck.set_visible_child(self.places_box)
@@ -581,7 +580,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self._to_go_to_row = None
             self._to_go_to = None
         else:
-            self._go_to_top()
+            self._files.go_to_top()
 
     def _on_load_failed(self, worker, directory):
         self._busy = False
