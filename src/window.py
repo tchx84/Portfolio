@@ -139,8 +139,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._busy = False
         self._to_copy = []
         self._to_cut = []
-        self._to_go_to = None
-        self._to_go_to_row = None
         self._last_vscroll_value = None
         self._force_go_home = False
         self._history = []
@@ -555,10 +553,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path, icon in found:
-            row = self._files.add(icon, name, path)
-
-            if self._to_go_to == path:
-                self._to_go_to_row = row
+            self._files.add(icon, name, path)
 
         self.loading.update(progress=(index + 1) / total)
 
@@ -568,19 +563,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_loading_delay()
 
         self._update_all()
-
-        # XXX PortfolioFiles
-        if self._files.to_select_row is not None:
-            self._files.switch_to_selection_mode()
-            self._files.select_and_go(self._to_select_row)
-            self._to_select_row = None
-            self._to_select = None
-        elif self._to_go_to_row is not None:
-            self._files.go_to(self._to_go_to_row)
-            self._to_go_to_row = None
-            self._to_go_to = None
-        else:
-            self._files.go_to_top()
+        self._files.update_scrolling()
 
     def _on_load_failed(self, worker, directory):
         self._busy = False
@@ -593,9 +576,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
         self.content_stack.set_visible_child(self.loading_box)
 
-        # XXX PortfolioFiles
-        self._to_select_row = None
-        self._to_select = None
+        self._files._clear_select_and_go()
         self._force_go_home = True
         self.action_stack.set_visible_child(self.close_box)
         self.tools_stack.set_visible_child(self.close_tools)
@@ -604,7 +585,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._index == 0:
             self._go_back_to_homepage()
         else:
-            self._to_go_to = self._history[self._index]
+            self._files.to_go_to_path = self._history[self._index]
             self._index -= 1
             self._move(self._history[self._index], True)
 
@@ -1109,9 +1090,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
             return
 
         # if it's a file then use its parent folder
-        # XXX PortfolioFiles
         if not os.path.isdir(path):
-            self._to_select = path
+            self._files.to_select_path = path
             path = os.path.dirname(path)
 
         # XXX no support for background workers yet

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, GLib, GObject
 
 from . import utils
 from .settings import PortfolioSettings
@@ -50,8 +50,10 @@ class PortfolioFiles(Gtk.TreeView):
 
     def _setup(self):
         self._editing = False
-        self._to_select = None
+        self._to_select_path = None
         self._to_select_row = None
+        self._to_go_to_path = None
+        self._to_go_to_row = None
         self._last_clicked = None
         self._dont_activate = False
         self._force_select = False
@@ -81,12 +83,20 @@ class PortfolioFiles(Gtk.TreeView):
         self._filter = value
 
     @property
-    def to_select_row(self):
-        return self._to_select_row
+    def to_select_path(self):
+        return self._to_select_path
 
-    @to_select_row.setter
-    def to_select_row(self, value):
-        self._to_select_row = value
+    @to_select_path.setter
+    def to_select_path(self, value):
+        self._to_select_path = value
+
+    @property
+    def to_go_to_path(self):
+        return self._to_go_to_path
+
+    @to_go_to_path.setter
+    def to_go_to_path(self, value):
+        self._to_go_to_path = value
 
     @property
     def sort_order(self):
@@ -205,15 +215,18 @@ class PortfolioFiles(Gtk.TreeView):
         )
         self.scroll_to_cell(treepath, None, False, 0, 0)
 
-    def go_to(self, row):
+    def _go_to(self, row):
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
         treepath = self.sorted.get_path(row)
 
         self.scroll_to_cell(treepath, None, False, 0, 0)
+        self._clear_to_go_to()
 
-    def select_and_go(self, row, edit=False):
+    def _select_and_go(self, row, edit=False):
+        self.switch_to_selection_mode()
+
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
@@ -223,7 +236,9 @@ class PortfolioFiles(Gtk.TreeView):
         if edit is True:
             GLib.timeout_add(100, self._wait_and_edit)
 
-    def go_to_top(self, *args):
+        self._clear_select_and_go()
+
+    def go_to_top(self):
         if len(self.sorted) >= 1:
             self.scroll_to_cell(0, None, True, 0, 0)
 
@@ -362,15 +377,21 @@ class PortfolioFiles(Gtk.TreeView):
             )
             return
 
-        self.switch_to_selection_mode()
-
         icon = utils.get_file_icon(path)
         row = self.liststore.append([icon, folder_name, path])
-        self.select_and_go(row, edit=True)
+        self._select_and_go(row, edit=True)
 
     def _update_treeview(self):
         sensitive = not self._busy
         self.props.sensitive = sensitive
+
+    def update_scrolling(self):
+        if self._to_select_row is not None:
+            self._select_and_go(self._to_select_row)
+        elif self._to_go_to_row is not None:
+            self._go_to(self._to_go_to_row)
+        else:
+            self.go_to_top()
 
     def selected_count(self):
         return self.selection.count_selected_rows()
@@ -381,10 +402,19 @@ class PortfolioFiles(Gtk.TreeView):
     def add(self, icon, name, path):
         row = self.liststore.append([icon, name, path])
 
-        if self._to_select == path:
+        if self._to_select_path == path:
             self._to_select_row = row
 
-        return row
+        if self._to_go_to_path == path:
+            self._to_go_to_row = row
 
     def clear(self):
         self.liststore.clear()
+
+    def _clear_select_and_go(self):
+        self._to_select_path = None
+        self._to_select_row = None
+
+    def _clear_to_go_to(self):
+        self._to_go_to_path = None
+        self._to_go_to_row = None
