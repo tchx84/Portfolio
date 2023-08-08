@@ -17,11 +17,14 @@
 
 import os
 
+from pathlib import Path
+
 from gi.repository import Gtk, GLib, GObject
 
 from . import utils
 from . import logger
 from .settings import PortfolioSettings
+from .translation import gettext as _
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/files.ui")
@@ -34,6 +37,7 @@ class PortfolioFiles(Gtk.TreeView):
         "path-rename-started": (GObject.SignalFlags.RUN_LAST, None, ()),
         "path-rename-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
         "path-rename-failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "path-added-failed": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     name_column = Gtk.Template.Child()
@@ -345,28 +349,6 @@ class PortfolioFiles(Gtk.TreeView):
         # that this will actually be selected so always update mode.
         self.update_mode()
 
-    def _on_new_folder(self, directory):
-        folder_name = utils.find_new_name(directory, _("New Folder"))
-        path = os.path.join(directory, folder_name)
-
-        try:
-            Path(path).mkdir(parents=False, exist_ok=True)
-        except Exception as e:
-            logger.debug(e)
-            self._notify(
-                _("No permissions on this directory"),
-                None,
-                self._on_popup_closed,
-                None,
-                True,
-                None,
-            )
-            return
-
-        icon = utils.get_file_icon(path)
-        row = self.liststore.append([icon, folder_name, path])
-        self._select_and_go(row, edit=True)
-
     def _update_treeview(self):
         sensitive = not self._busy
         self.props.sensitive = sensitive
@@ -393,6 +375,21 @@ class PortfolioFiles(Gtk.TreeView):
 
         if self._to_go_to_path == path:
             self._to_go_to_row = row
+
+    def add_new_folder(self, directory):
+        folder_name = utils.find_new_name(directory, _("New Folder"))
+        path = os.path.join(directory, folder_name)
+
+        try:
+            Path(path).mkdir(parents=False, exist_ok=True)
+        except Exception as e:
+            logger.debug(e)
+            self.emit("path-added-failed")
+            return
+
+        icon = utils.get_file_icon(path)
+        row = self.liststore.append([icon, folder_name, path])
+        self._select_and_go(row, edit=True)
 
     def remove(self, ref):
         if ref is None or not ref.valid():

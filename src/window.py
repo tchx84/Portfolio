@@ -180,6 +180,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._files.connect("path-rename-started", self._on_path_rename_started)
         self._files.connect("path-rename-finished", self._on_path_rename_finished)
         self._files.connect("path-rename-failed", self._on_path_rename_failed)
+        self._files.connect("path-added-failed", self._on_path_added_failed)
 
         self.content_scroll.add(self._files)
         self._adjustment = self.content_scroll.get_vadjustment()
@@ -525,6 +526,16 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._on_rename_clicked(None)
         self._notify(
             _("%s already exists") % new_name,
+            None,
+            self._on_popup_closed,
+            None,
+            True,
+            None,
+        )
+
+    def _on_path_added_failed(self, files):
+        self._notify(
+            _("No permissions on this directory"),
             None,
             self._on_popup_closed,
             None,
@@ -883,8 +894,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._files.unselect_all()
 
     def _on_new_folder(self, button):
-        # XXX PortfolioFiles
-        pass
+        directory = self._history[self._index]
+        self._files.add_new_folder(directory)
 
     def _on_restore_trash_clicked(self, button):
         selection = self._files.get_selection()
