@@ -176,6 +176,10 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._files = PortfolioFiles()
         self._files.connect("path-activated", self._on_path_activated)
+        self._files.connect("path-selected", self._on_path_selected)
+        self._files.connect("path-rename-started", self._on_path_rename_started)
+        self._files.connect("path-rename-finished", self._on_path_rename_finished)
+        self._files.connect("path-rename-failed", self._on_path_rename_failed)
 
         self.content_scroll.add(self._files)
         self._adjustment = self.content_scroll.get_vadjustment()
@@ -269,7 +273,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_cut = []
         self._to_copy = []
 
-        self._unselect_all()
+        self._files.unselect_all()
 
         self._update_all()
         self._files.update_mode()
@@ -279,7 +283,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_workers()
         self.loading.clean()
 
-        self._unselect_all()
+        self._files.unselect_all()
         self._update_all()
         self._files.update_mode()
 
@@ -391,7 +395,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_content_stack(self):
         if self._busy:
             return
-        elif self._files.empty():
+        elif self._files.is_empty():
             self.content_stack.set_visible_child(self.placeholder_box)
         else:
             self.content_stack.set_visible_child(self.content_box)
@@ -411,7 +415,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
 
     def _update_selection(self):
-        # XXX PortfolioFiles
         sensitive = not self._files.editing and not self._busy
 
         self.select_all.props.sensitive = sensitive
@@ -502,6 +505,32 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_path_activated(self, files, path):
         self._move(path)
+
+    def _on_path_selected(self, files):
+        if self._busy is True:
+            return
+        self._update_all()
+        self._files.update_mode()
+
+    def _on_path_rename_started(self, files):
+        self._update_search()
+        self._update_selection()
+        self._update_selection_tools()
+        self._update_go_top_button()
+
+    def _on_path_rename_finished(self, files):
+        self._update_all()
+
+    def _on_path_rename_failed(self, files, new_name):
+        self._on_rename_clicked(None)
+        self._notify(
+            _("%s already exists") % new_name,
+            None,
+            self._on_popup_closed,
+            None,
+            True,
+            None,
+        )
 
     def _on_open_started(self, worker):
         self._busy = True
@@ -607,15 +636,14 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._reset_search()
 
     def _on_detail_clicked(self, button):
-        # XXX PortfolioFiles
-        pass
+        path = self._files.get_selected_path()
+        self.show_properties(path)
 
     def _on_rename_clicked(self, button):
-        # XXX PortfolioFiles
-        pass
+        self._files.rename_selected_path()
 
     def _on_delete_clicked(self, button):
-        selection = self._get_selection()
+        selection = self._files.get_selection()
         count = len(selection)
         directory = self._history[self._index]
 
@@ -636,7 +664,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
 
     def _on_cut_clicked(self, button):
-        selection = self._get_selection()
+        selection = self._files.get_selection()
         count = len(selection)
 
         self._to_cut = selection
@@ -650,11 +678,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._notify(description, None, None, None, True, None)
 
-        self._unselect_all()
+        self._files.unselect_all()
         self._files.update_mode()
 
     def _on_copy_clicked(self, button):
-        selection = self._get_selection()
+        selection = self._files.get_selection()
         count = len(selection)
 
         self._to_copy = selection
@@ -668,7 +696,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._notify(description, None, None, None, True, None)
 
-        self._unselect_all()
+        self._files.unselect_all()
         self._files.update_mode()
 
     def _on_paste_clicked(self, button):
@@ -719,8 +747,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             logger.debug(f"Attempting to add unexisting {path}")
             return
 
-        # XXX PortfolioFiles
-        self.liststore.append([icon, name, path])
+        self._files.add(icon, name, path)
 
     def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
         description = os.path.basename(path)
@@ -809,7 +836,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.update(description=name)
 
     def _on_delete_updated(self, worker, path, ref, index, total):
-        self._remove_row(ref)
+        self._files.remove(ref)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
@@ -834,7 +861,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_button_closed(self, button):
         self.loading.clean()
-        self._unselect_all()
+        self._files.unselect_all()
         self._update_all()
         self._files.update_mode()
 
@@ -849,18 +876,18 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._worker.stop()
 
     def _on_select_all(self, button):
-        self._select_all()
+        self._files.select_all()
         self._files.update_mode()
 
     def _on_select_none(self, button):
-        self._unselect_all()
+        self._files.unselect_all()
 
     def _on_new_folder(self, button):
         # XXX PortfolioFiles
         pass
 
     def _on_restore_trash_clicked(self, button):
-        selection = self._get_selection()
+        selection = self._files.get_selection()
         paths = [default_trash.get_orig_path(path) for path, ref in selection]
 
         overwrites = any([os.path.lexists(path) for path in paths if path])
@@ -907,7 +934,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.update(description=name)
 
     def _on_restore_trash_updated(self, worker, path, ref, index, total):
-        self._remove_row(ref)
+        self._files.remove(ref)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_restore_trash_finished(self, worker, total):
@@ -915,7 +942,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._clean_workers()
         self.loading.clean()
 
-        self._unselect_all()
+        self._files.unselect_all()
 
         self._update_all()
         self._files.update_mode()
@@ -934,7 +961,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._delete_finish()
 
     def _on_delete_trash_clicked(self, button):
-        selection = self._get_selection()
+        selection = self._files.get_selection()
         count = len(selection)
 
         if count == 1:
@@ -981,7 +1008,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.update(description=name)
 
     def _on_delete_trash_updated(self, worker, path, ref, index, total):
-        self._remove_row(ref)
+        self._files.remove(ref)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_trash_finished(self, worker, total):

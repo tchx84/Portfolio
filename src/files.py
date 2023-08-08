@@ -20,6 +20,7 @@ import os
 from gi.repository import Gtk, GLib, GObject
 
 from . import utils
+from . import logger
 from .settings import PortfolioSettings
 
 
@@ -28,11 +29,11 @@ class PortfolioFiles(Gtk.TreeView):
     __gtype_name__ = "PortfolioFiles"
 
     __gsignals__ = {
-        "selection-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-selected": (GObject.SignalFlags.RUN_LAST, None, ()),
         "path-activated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "path-detailed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "edit-started": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "edit-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-rename-started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-rename-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-rename-failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     name_column = Gtk.Template.Child()
@@ -172,8 +173,14 @@ class PortfolioFiles(Gtk.TreeView):
         ]
         return selection
 
+    def get_selected_path(self):
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        path = model[treepath][self.PATH_COLUMN]
+        return path
+
     def _on_selection_changed(self, selection):
-        self.emit("selection-changed")
+        self.emit("path-selected")
 
     def _on_select(self, selection, model, treepath, selected, data=None):
         should_select = False
@@ -205,7 +212,7 @@ class PortfolioFiles(Gtk.TreeView):
         self.selection.unselect_all()
         self._force_select = False
 
-    def select_row(self, row):
+    def _select_row(self, row):
         self._force_select = True
         self.selection.select_iter(row)
         self._force_select = False
@@ -233,7 +240,7 @@ class PortfolioFiles(Gtk.TreeView):
         result, row = self.filtered.convert_child_iter_to_iter(row)
         result, row = self.sorted.convert_child_iter_to_iter(row)
 
-        self.select_row(row)
+        self._select_row(row)
         GLib.idle_add(self._go_to_selection)
 
         if edit is True:
@@ -262,11 +269,11 @@ class PortfolioFiles(Gtk.TreeView):
 
     def _on_rename_started(self, cell_name, treepath, data=None):
         self._editing = True
-        self.emit("edit-started")
+        self.emit("path-rename-started")
 
     def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
         old_path = self._get_path(self.sorted, treepath)
-        directory = os.basedir(old_path)
+        directory = os.path.dirname(old_path)
         new_path = os.path.join(directory, new_name)
 
         if new_path == old_path:
@@ -289,15 +296,7 @@ class PortfolioFiles(Gtk.TreeView):
             self.liststore.set_value(row, self.NAME_COLUMN, new_name)
         except Exception as e:
             logger.debug(e)
-            self._notify(
-                _("%s already exists") % new_name,
-                None,
-                self._on_popup_closed,
-                None,
-                True,
-                None,
-            )
-            self.on_rename_clicked(None)
+            self.emit("path-rename-failed", new_name)
             return
 
         # take the user to the new position
@@ -307,25 +306,15 @@ class PortfolioFiles(Gtk.TreeView):
     def _on_rename_finished(self, *args):
         self.name_cell.props.editable = False
         self._editing = False
-        self.emit("edit-finished")
+        self.emit("path-rename-finished")
 
-    def on_rename_clicked(self, button):
+    def rename_selected_path(self):
         self.name_cell.props.editable = True
         model, treepaths = self.selection.get_selected_rows()
         treepath = treepaths[-1]
         self.set_cursor_on_cell(
             treepath, self.name_column, self.name_cell, True
         )
-
-    def remove_row(self, ref):
-        if ref is None or not ref.valid():
-            return
-
-        treepath = ref.get_path()
-        treepath = self.sorted.convert_path_to_child_path(treepath)
-        treepath = self.filtered.convert_path_to_child_path(treepath)
-
-        self.liststore.remove(self.liststore.get_iter(treepath))
 
     def update_mode(self):
         count = self.selection.count_selected_rows()
@@ -355,12 +344,6 @@ class PortfolioFiles(Gtk.TreeView):
         # because of the custom selection rules, is not guaranteed
         # that this will actually be selected so always update mode.
         self.update_mode()
-
-    def _on_detail_clicked(self, button):
-        model, treepaths = self.selection.get_selected_rows()
-        treepath = treepaths[-1]
-        path = model[treepath][self.PATH_COLUMN]
-        self.emit("path-detailed", path)
 
     def _on_new_folder(self, directory):
         folder_name = utils.find_new_name(directory, _("New Folder"))
@@ -399,7 +382,7 @@ class PortfolioFiles(Gtk.TreeView):
     def selected_count(self):
         return self.selection.count_selected_rows()
 
-    def empty(self):
+    def is_empty(self):
         return len(self.sorted) == 0
 
     def add(self, icon, name, path):
@@ -410,6 +393,16 @@ class PortfolioFiles(Gtk.TreeView):
 
         if self._to_go_to_path == path:
             self._to_go_to_row = row
+
+    def remove(self, ref):
+        if ref is None or not ref.valid():
+            return
+
+        treepath = ref.get_path()
+        treepath = self.sorted.convert_path_to_child_path(treepath)
+        treepath = self.filtered.convert_path_to_child_path(treepath)
+
+        self.liststore.remove(self.liststore.get_iter(treepath))
 
     def clear(self):
         self.liststore.clear()
