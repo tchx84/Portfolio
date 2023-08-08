@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 from gi.repository import Gtk, GLib, GObject
 
 from . import utils
@@ -81,6 +83,7 @@ class PortfolioFiles(Gtk.TreeView):
     @filter.setter
     def filter(self, value):
         self._filter = value
+        self.filtered.refilter()
 
     @property
     def to_select_path(self):

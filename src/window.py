@@ -480,8 +480,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.headerbar.set_title(name)
 
     def _update_filter(self):
-        # XXX PortfolioFiles
-        self.filtered.refilter()
+        self._files.filter = self.search_entry.get_text()
         self._update_content_stack()
 
         self._search_delay_handler_id = 0
