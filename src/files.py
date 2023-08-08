@@ -28,7 +28,7 @@ from .translation import gettext as _
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/files.ui")
-class PortfolioFiles(Gtk.TreeView):
+class PortfolioFiles(Gtk.ScrolledWindow):
     __gtype_name__ = "PortfolioFiles"
 
     __gsignals__ = {
@@ -38,8 +38,10 @@ class PortfolioFiles(Gtk.TreeView):
         "path-rename-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
         "path-rename-failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "path-added-failed": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "path-adjustment-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
+    treeview = Gtk.Template.Child()
     name_column = Gtk.Template.Child()
     name_cell = Gtk.Template.Child()
     sorted = Gtk.Template.Child()
@@ -64,6 +66,7 @@ class PortfolioFiles(Gtk.TreeView):
         self._last_clicked = None
         self._dont_activate = False
         self._force_select = False
+        self._last_vscroll_value = None
         self._filter = ""
         self._sort_order = PortfolioSettings.ALPHABETICAL_ORDER
 
@@ -71,14 +74,17 @@ class PortfolioFiles(Gtk.TreeView):
         self.sorted.set_default_sort_func(self._sort, None)
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
-        self.connect("row-activated", self._on_row_activated)
-        self.connect("button-press-event", self._on_clicked)
+        self.treeview.connect("row-activated", self._on_row_activated)
+        self.treeview.connect("button-press-event", self._on_clicked)
 
         self.name_cell.connect("editing-started", self._on_rename_started)
         self.name_cell.connect("edited", self._on_rename_updated)
         self.name_cell.connect("editing-canceled", self._on_rename_finished)
 
-        self.gesture = Gtk.GestureLongPress.new(self)
+        self._adjustment = self.get_vadjustment()
+        self._adjustment.connect("value-changed", self._on_adjustment_changed)
+
+        self.gesture = Gtk.GestureLongPress.new(self.treeview)
         self.gesture.connect("pressed", self._on_long_pressed)
 
     @property
@@ -163,6 +169,22 @@ class PortfolioFiles(Gtk.TreeView):
         else:
             return self._sort_by_last_modified(path1, path2)
 
+    def _on_adjustment_changed(self, adjustment):
+        alloc = self.get_allocation()
+        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._editing
+        self.emit("path-adjustment-changed", reveal)
+
+    def _wait_and_edit(self):
+        value = self._adjustment.get_value()
+
+        if value == self._last_vscroll_value:
+            self.rename_selected_path()
+            self._last_vscroll_value = None
+            return False
+
+        self._last_vscroll_value = value
+        return True
+
     def _get_path(self, model, treepath):
         return model[model.get_iter(treepath)][self.PATH_COLUMN]
 
@@ -224,10 +246,10 @@ class PortfolioFiles(Gtk.TreeView):
     def _go_to_selection(self):
         model, treepaths = self.selection.get_selected_rows()
         treepath = treepaths[-1]
-        self.set_cursor_on_cell(
+        self.treeview.set_cursor_on_cell(
             treepath, self.name_column, self.name_cell, False
         )
-        self.scroll_to_cell(treepath, None, False, 0, 0)
+        self.treeview.scroll_to_cell(treepath, None, False, 0, 0)
 
     def _go_to(self, row):
         result, row = self.filtered.convert_child_iter_to_iter(row)
@@ -235,7 +257,7 @@ class PortfolioFiles(Gtk.TreeView):
 
         treepath = self.sorted.get_path(row)
 
-        self.scroll_to_cell(treepath, None, False, 0, 0)
+        self.treeview.scroll_to_cell(treepath, None, False, 0, 0)
         self._clear_to_go_to()
 
     def _select_and_go(self, row, edit=False):
@@ -254,7 +276,7 @@ class PortfolioFiles(Gtk.TreeView):
 
     def go_to_top(self):
         if len(self.sorted) >= 1:
-            self.scroll_to_cell(0, None, True, 0, 0)
+            self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
         if self._dont_activate is True:
@@ -265,7 +287,7 @@ class PortfolioFiles(Gtk.TreeView):
             self.emit("path-activated", path)
 
     def _on_clicked(self, treeview, event):
-        result = self.get_path_at_pos(event.x, event.y)
+        result = self.treeview.get_path_at_pos(event.x, event.y)
         if result is None:
             return
         treepath, column, x, y = result
@@ -316,7 +338,7 @@ class PortfolioFiles(Gtk.TreeView):
         self.name_cell.props.editable = True
         model, treepaths = self.selection.get_selected_rows()
         treepath = treepaths[-1]
-        self.set_cursor_on_cell(
+        self.treeview.set_cursor_on_cell(
             treepath, self.name_column, self.name_cell, True
         )
 
@@ -336,7 +358,7 @@ class PortfolioFiles(Gtk.TreeView):
             return
 
         self.switch_to_selection_mode()
-        path = self.get_path_at_pos(x, y)
+        path = self.treeview.get_path_at_pos(x, y)
 
         if path is None:
             self.switch_to_navigation_mode()
@@ -351,7 +373,7 @@ class PortfolioFiles(Gtk.TreeView):
 
     def _update_treeview(self):
         sensitive = not self._busy
-        self.props.sensitive = sensitive
+        self.treeview.props.sensitive = sensitive
 
     def update_scrolling(self):
         if self._to_select_row is not None:

@@ -17,8 +17,6 @@
 
 import os
 
-from pathlib import Path
-
 from .translation import gettext as _
 
 from gi.repository import Gtk, GLib, Gio, Handy
@@ -110,7 +108,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     menu_popover = Gtk.Template.Child()
     menu_button = Gtk.Template.Child()
     home_menu_button = Gtk.Template.Child()
-    content_scroll = Gtk.Template.Child()
+    content_inner_box = Gtk.Template.Child()
     go_top_revealer = Gtk.Template.Child()
     properties_box = Gtk.Template.Child()
     properties_inner_box = Gtk.Template.Child()
@@ -139,7 +137,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._busy = False
         self._to_copy = []
         self._to_cut = []
-        self._last_vscroll_value = None
         self._force_go_home = False
         self._history = []
         self._index = -1
@@ -181,10 +178,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._files.connect("path-rename-finished", self._on_path_rename_finished)
         self._files.connect("path-rename-failed", self._on_path_rename_failed)
         self._files.connect("path-added-failed", self._on_path_added_failed)
-
-        self.content_scroll.add(self._files)
-        self._adjustment = self.content_scroll.get_vadjustment()
-        self._adjustment.connect("value-changed", self._update_go_top_button)
+        self._files.connect("path-adjustment-changed", self._on_path_adjustment_changed)
+        self.content_inner_box.pack_start(self._files, True, True, 0)
 
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
@@ -224,17 +219,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.a_to_z_button.props.active = True
         else:
             self.last_modified_button.props.active = True
-
-    def  _wait_and_edit(self):
-        value = self._adjustment.get_value()
-
-        if value == self._last_vscroll_value:
-            self._on_rename_clicked(None)
-            self._last_vscroll_value = None
-            return False
-
-        self._last_vscroll_value = value
-        return True
 
     def _populate(self, directory):
         self._files.switch_to_navigation_mode()
@@ -381,7 +365,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_action_stack()
         self._update_tools_stack()
         self._update_menu()
-        self._update_go_top_button()
 
     def _update_search(self):
         # XXX PortfolioFiles
@@ -493,12 +476,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_menu(self):
         self.menu_box.props.sensitive = not self._busy
 
-    def _update_go_top_button(self, *args):
-        # XXX PortfolioFiles
-        alloc = self.get_allocation()
-        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._files.editing
-        self.go_top_revealer.props.reveal_child = reveal
-
     def _reset_search(self):
         self.search.set_active(False)
         self.search_entry.set_text("")
@@ -517,7 +494,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_search()
         self._update_selection()
         self._update_selection_tools()
-        self._update_go_top_button()
 
     def _on_path_rename_finished(self, files):
         self._update_all()
@@ -542,6 +518,9 @@ class PortfolioWindow(Handy.ApplicationWindow):
             True,
             None,
         )
+
+    def _on_path_adjustment_changed(self, files, reveal):
+        self.go_top_revealer.props.reveal_child = reveal
 
     def _on_open_started(self, worker):
         self._busy = True
