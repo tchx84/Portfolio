@@ -425,11 +425,11 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         row = self.liststore.append([icon, folder_name, path])
         self._select_and_go(row, edit=True)
 
-    def remove(self, ref):
-        if ref is None or not ref.valid():
+    def remove_row(self, row):
+        if row is None or not row.valid():
             return
 
-        treepath = ref.get_path()
+        treepath = row.get_path()
         treepath = self.sorted.convert_path_to_child_path(treepath)
         treepath = self.filtered.convert_path_to_child_path(treepath)
 

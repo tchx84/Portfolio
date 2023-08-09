@@ -824,8 +824,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         name = os.path.basename(path)
         self.loading.update(description=name)
 
-    def _on_delete_updated(self, worker, path, ref, index, total):
-        self._files.remove(ref)
+    def _on_delete_updated(self, worker, path, row, index, total):
+        self._files.remove_row(row)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_finished(self, worker, total):
@@ -922,8 +922,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         name = os.path.basename(path)
         self.loading.update(description=name)
 
-    def _on_restore_trash_updated(self, worker, path, ref, index, total):
-        self._files.remove(ref)
+    def _on_restore_trash_updated(self, worker, path, row, index, total):
+        self._files.remove_row(row)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_restore_trash_finished(self, worker, total):
@@ -996,8 +996,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         name = os.path.basename(path)
         self.loading.update(description=name)
 
-    def _on_delete_trash_updated(self, worker, path, ref, index, total):
-        self._files.remove(ref)
+    def _on_delete_trash_updated(self, worker, path, row, index, total):
+        self._files.remove_row(row)
         self.loading.update(progress=(index + 1) / total)
 
     def _on_delete_trash_finished(self, worker, total):
