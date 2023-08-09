@@ -372,8 +372,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.search_entry.sensitive = sensitive
 
     def _update_treeview(self):
-        # XXX PortfolioFiles
-        pass
+        self._files.update(not self._busy)
 
     def _update_content_stack(self):
         if self._busy:

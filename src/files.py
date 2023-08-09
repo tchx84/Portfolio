@@ -355,7 +355,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
     def switch_to_selection_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
-    def update_treeview(self, sensitive):
+    def update(self, sensitive):
         self.treeview.props.sensitive = sensitive
 
     def update_mode(self):
