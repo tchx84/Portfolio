@@ -32,13 +32,13 @@ class PortfolioFiles(Gtk.ScrolledWindow):
     __gtype_name__ = "PortfolioFiles"
 
     __gsignals__ = {
-        "path-selected": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "path-activated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "path-rename-started": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "path-rename-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "path-rename-failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-        "path-added-failed": (GObject.SignalFlags.RUN_LAST, None, ()),
-        "path-adjustment-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
+        "selected": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "activated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "rename-started": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "rename-finished": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "rename-failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "add-failed": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "adjustment-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
     }
 
     treeview = Gtk.Template.Child()
@@ -172,7 +172,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
     def _on_adjustment_changed(self, adjustment):
         alloc = self.get_allocation()
         reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._editing
-        self.emit("path-adjustment-changed", reveal)
+        self.emit("adjustment-changed", reveal)
 
     def _wait_and_edit(self):
         value = self._adjustment.get_value()
@@ -206,7 +206,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         return path
 
     def _on_selection_changed(self, selection):
-        self.emit("path-selected")
+        self.emit("selected")
 
     def _on_select(self, selection, model, treepath, selected, data=None):
         should_select = False
@@ -284,7 +284,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             return
         if self.selection.get_mode() == Gtk.SelectionMode.NONE:
             path = self._get_path(self.sorted, treepath)
-            self.emit("path-activated", path)
+            self.emit("activated", path)
 
     def _on_clicked(self, treeview, event):
         result = self.treeview.get_path_at_pos(event.x, event.y)
@@ -295,7 +295,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
     def _on_rename_started(self, cell_name, treepath, data=None):
         self._editing = True
-        self.emit("path-rename-started")
+        self.emit("rename-started")
 
     def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
         old_path = self._get_path(self.sorted, treepath)
@@ -322,7 +322,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             self.liststore.set_value(row, self.NAME_COLUMN, new_name)
         except Exception as e:
             logger.debug(e)
-            self.emit("path-rename-failed", new_name)
+            self.emit("rename-failed", new_name)
             return
 
         # take the user to the new position
@@ -332,7 +332,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
     def _on_rename_finished(self, *args):
         self.name_cell.props.editable = False
         self._editing = False
-        self.emit("path-rename-finished")
+        self.emit("rename-finished")
 
     def rename_selected_path(self):
         self.name_cell.props.editable = True
@@ -406,7 +406,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             Path(path).mkdir(parents=False, exist_ok=True)
         except Exception as e:
             logger.debug(e)
-            self.emit("path-added-failed")
+            self.emit("add-failed")
             return
 
         icon = utils.get_file_icon(path)

@@ -172,13 +172,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.home_menu_button.connect("clicked", self._on_menu_button_clicked)
 
         self._files = PortfolioFiles()
-        self._files.connect("path-activated", self._on_path_activated)
-        self._files.connect("path-selected", self._on_path_selected)
-        self._files.connect("path-rename-started", self._on_path_rename_started)
-        self._files.connect("path-rename-finished", self._on_path_rename_finished)
-        self._files.connect("path-rename-failed", self._on_path_rename_failed)
-        self._files.connect("path-added-failed", self._on_path_added_failed)
-        self._files.connect("path-adjustment-changed", self._on_path_adjustment_changed)
+        self._files.connect("activated", self._on_files_activated)
+        self._files.connect("selected", self._on_files_selected)
+        self._files.connect("rename-started", self._on_files_rename_started)
+        self._files.connect("rename-finished", self._on_files_rename_finished)
+        self._files.connect("rename-failed", self._on_files_rename_failed)
+        self._files.connect("add-failed", self._on_files_add_failed)
+        self._files.connect("adjustment-changed", self._on_files_adjustment_changed)
         self.content_inner_box.pack_start(self._files, True, True, 0)
 
         self.search.connect("toggled", self._on_search_toggled)
@@ -481,24 +481,24 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.search_entry.set_text("")
         self.search.grab_focus()
 
-    def _on_path_activated(self, files, path):
+    def _on_files_activated(self, files, path):
         self._move(path)
 
-    def _on_path_selected(self, files):
+    def _on_files_selected(self, files):
         if self._busy is True:
             return
         self._update_all()
         self._files.update_mode()
 
-    def _on_path_rename_started(self, files):
+    def _on_files_rename_started(self, files):
         self._update_search()
         self._update_selection()
         self._update_selection_tools()
 
-    def _on_path_rename_finished(self, files):
+    def _on_files_rename_finished(self, files):
         self._update_all()
 
-    def _on_path_rename_failed(self, files, new_name):
+    def _on_files_rename_failed(self, files, new_name):
         self._on_rename_clicked(None)
         self._notify(
             _("%s already exists") % new_name,
@@ -509,7 +509,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             None,
         )
 
-    def _on_path_added_failed(self, files):
+    def _on_files_add_failed(self, files):
         self._notify(
             _("No permissions on this directory"),
             None,
@@ -519,7 +519,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             None,
         )
 
-    def _on_path_adjustment_changed(self, files, reveal):
+    def _on_files_adjustment_changed(self, files, reveal):
         self.go_top_revealer.props.reveal_child = reveal
 
     def _on_open_started(self, worker):
