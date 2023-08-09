@@ -215,7 +215,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         value = self._adjustment.get_value()
 
         if value == self._last_vscroll_value:
-            self.rename_selected_path()
+            self.rename_selected_row()
             self._last_vscroll_value = None
             return False
 
@@ -349,26 +349,13 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self.selection.unselect_all()
         self._force_select = False
 
-    def rename_selected_path(self):
-        self.name_cell.props.editable = True
-        model, treepaths = self.selection.get_selected_rows()
-        treepath = treepaths[-1]
-        self.treeview.set_cursor_on_cell(
-            treepath, self.name_column, self.name_cell, True
-        )
-
     def switch_to_navigation_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.NONE)
 
     def switch_to_selection_mode(self):
         self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
-    def go_to_top(self):
-        if len(self.sorted) >= 1:
-            self.treeview.scroll_to_cell(0, None, True, 0, 0)
-
-    def update_treeview(self):
-        sensitive = not self._busy
+    def update_treeview(self, sensitive):
         self.treeview.props.sensitive = sensitive
 
     def update_mode(self):
@@ -383,6 +370,10 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             self._go_to(self._to_go_to_row)
         else:
             self.go_to_top()
+
+    def go_to_top(self):
+        if len(self.sorted) >= 1:
+            self.treeview.scroll_to_cell(0, None, True, 0, 0)
 
     def get_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -410,7 +401,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         if self._to_go_to_path == path:
             self._to_go_to_row = row
 
-    def add_new_folder(self, directory):
+    def add_new_folder_row(self, directory):
         folder_name = utils.find_new_name(directory, _("New Folder"))
         path = os.path.join(directory, folder_name)
 
@@ -434,6 +425,14 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         treepath = self.filtered.convert_path_to_child_path(treepath)
 
         self.liststore.remove(self.liststore.get_iter(treepath))
+
+    def rename_selected_row(self):
+        self.name_cell.props.editable = True
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        self.treeview.set_cursor_on_cell(
+            treepath, self.name_column, self.name_cell, True
+        )
 
     def clear(self):
         self.liststore.clear()

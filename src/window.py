@@ -629,7 +629,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.show_properties(path)
 
     def _on_rename_clicked(self, button):
-        self._files.rename_selected_path()
+        self._files.rename_selected_row()
 
     def _on_delete_clicked(self, button):
         selection = self._files.get_selection()
@@ -873,7 +873,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_new_folder(self, button):
         directory = self._history[self._index]
-        self._files.add_new_folder(directory)
+        self._files.add_new_folder_row(directory)
 
     def _on_restore_trash_clicked(self, button):
         selection = self._files.get_selection()
