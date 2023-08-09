@@ -758,7 +758,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_paste_stopped(self, worker):
         self._paste_finish()
-        # XXX nuclear fix for when parent directorty doesn't get to be updated
+        # XXX nuclear fix for when parent directory does not get to be updated
         self._refresh()
 
     def _on_trash_instead(self, button, popup, selection):
