@@ -259,9 +259,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._to_copy = []
 
         self._files.unselect_all()
-
         self._update_all()
-        self._files.update_mode()
 
     def _delete_finish(self):
         self._busy = False
@@ -270,7 +268,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
         self._files.unselect_all()
         self._update_all()
-        self._files.update_mode()
 
     def _get_row(self, model, treepath):
         return model.get_iter(treepath)
@@ -309,7 +306,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._history = []
         self._index = -1
         self._move(path, False)
-        self._files.update_mode()
 
     def _refresh(self):
         if self._index > -1:
@@ -486,7 +482,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         if self._busy is True:
             return
         self._update_all()
-        self._files.update_mode()
 
     def _on_files_rename_started(self, files):
         self._update_search()
@@ -667,7 +662,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._notify(description, None, None, None, True, None)
 
         self._files.unselect_all()
-        self._files.update_mode()
 
     def _on_copy_clicked(self, button):
         selection = self._files.get_selection()
@@ -685,7 +679,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._notify(description, None, None, None, True, None)
 
         self._files.unselect_all()
-        self._files.update_mode()
 
     def _on_paste_clicked(self, button):
         to_paste = self._to_copy if self._to_copy else self._to_cut
@@ -851,7 +844,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.clean()
         self._files.unselect_all()
         self._update_all()
-        self._files.update_mode()
 
         if self._force_go_home is False:
             return
@@ -865,7 +857,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_select_all(self, button):
         self._files.select_all()
-        self._files.update_mode()
 
     def _on_select_none(self, button):
         self._files.unselect_all()
@@ -931,9 +922,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.loading.clean()
 
         self._files.unselect_all()
-
         self._update_all()
-        self._files.update_mode()
 
     def _on_restore_trash_failed(self, worker, path):
         self._busy = False

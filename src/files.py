@@ -231,6 +231,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._to_go_to_row = None
 
     def _on_selection_changed(self, selection):
+        self._update_mode()
         self.emit("selected")
 
     def _on_select(self, selection, model, treepath, selected, data=None):
@@ -325,7 +326,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
         # because of the custom selection rules, is not guaranteed
         # that this will actually be selected so always update mode.
-        self.update_mode()
+        self._update_mode()
 
     def _on_adjustment_changed(self, adjustment):
         alloc = self.get_allocation()
@@ -333,6 +334,11 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             self._adjustment.get_value() > (alloc.height / 2) and not self._is_editing
         )
         self.emit("adjustment-changed", reveal)
+
+    def _update_mode(self):
+        count = self.selection.count_selected_rows()
+        if count == 0:
+            self.switch_to_navigation_mode()
 
     def _select_row(self, row):
         self._force_select = True
@@ -357,11 +363,6 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
     def update(self, sensitive):
         self.treeview.props.sensitive = sensitive
-
-    def update_mode(self):
-        count = self.selection.count_selected_rows()
-        if count == 0:
-            self.switch_to_navigation_mode()
 
     def update_scrolling(self):
         if self._to_select_row is not None:
