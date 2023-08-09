@@ -58,7 +58,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._setup()
 
     def _setup(self):
-        self._editing = False
+        self._is_editing = False
         self._to_select_path = None
         self._to_select_row = None
         self._to_go_to_path = None
@@ -121,8 +121,8 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._sort_order = value
 
     @property
-    def editing(self):
-        return self._editing
+    def is_editing(self):
+        return self._is_editing
 
     def _filter_func(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -171,7 +171,9 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
     def _on_adjustment_changed(self, adjustment):
         alloc = self.get_allocation()
-        reveal = self._adjustment.get_value() > (alloc.height / 2) and not self._editing
+        reveal = (
+            self._adjustment.get_value() > (alloc.height / 2) and not self._is_editing
+        )
         self.emit("adjustment-changed", reveal)
 
     def _wait_and_edit(self):
@@ -294,7 +296,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._last_clicked = treepath
 
     def _on_rename_started(self, cell_name, treepath, data=None):
-        self._editing = True
+        self._is_editing = True
         self.emit("rename-started")
 
     def _on_rename_updated(self, cell_name, treepath, new_name, data=None):
@@ -331,7 +333,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
     def _on_rename_finished(self, *args):
         self.name_cell.props.editable = False
-        self._editing = False
+        self._is_editing = False
         self.emit("rename-finished")
 
     def rename_selected_path(self):

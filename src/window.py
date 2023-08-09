@@ -367,8 +367,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_menu()
 
     def _update_search(self):
-        # XXX PortfolioFiles
-        sensitive = not self._files.editing and not self._busy
+        sensitive = not self._files.is_editing and not self._busy
         self.search.props.sensitive = sensitive
         self.search_entry.sensitive = sensitive
 
@@ -399,7 +398,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         )
 
     def _update_selection(self):
-        sensitive = not self._files.editing and not self._busy
+        sensitive = not self._files.is_editing and not self._busy
 
         self.select_all.props.sensitive = sensitive
         self.select_none.props.sensitive = sensitive
@@ -424,7 +423,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_selection_tools(self):
         # XXX  PortfolioFiles
         count = self._files.selected_count()
-        sensitive = count >= 1 and not self._files.editing and not self._busy
+        sensitive = count >= 1 and not self._files.is_editing and not self._busy
 
         self.delete.props.sensitive = sensitive
         self.cut.props.sensitive = sensitive
@@ -448,12 +447,12 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _update_rename(self):
         count = self._files.selected_count()
-        sensitive = count == 1 and not self._files.editing and not self._busy
+        sensitive = count == 1 and not self._files.is_editing and not self._busy
         self.rename.props.sensitive = sensitive
 
     def _update_detail(self):
         count = self._files.selected_count()
-        sensitive = count == 1 and not self._files.editing and not self._busy
+        sensitive = count == 1 and not self._files.is_editing and not self._busy
         self.detail.props.sensitive = sensitive
 
     def _update_directory_title(self):
