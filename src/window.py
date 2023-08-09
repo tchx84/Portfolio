@@ -378,13 +378,13 @@ class PortfolioWindow(Handy.ApplicationWindow):
     def _update_content_stack(self):
         if self._busy:
             return
-        elif self._files.is_empty():
+        elif self._files.is_empty:
             self.content_stack.set_visible_child(self.placeholder_box)
         else:
             self.content_stack.set_visible_child(self.content_box)
 
     def _update_navigation(self):
-        count = self._files.selected_count()
+        count = self._files.selected_count
         selected = count >= 1
 
         if selected or self._busy:
@@ -404,7 +404,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.select_none.props.sensitive = sensitive
 
     def _update_action_stack(self):
-        count = self._files.selected_count()
+        count = self._files.selected_count
         selected = count >= 1
         child = self.selection_box if selected else self.navigation_box
         self.action_stack.set_visible_child(child)
@@ -415,14 +415,14 @@ class PortfolioWindow(Handy.ApplicationWindow):
             self.tools_stack.set_visible_child(self.trash_tools)
             return
 
-        count = self._files.selected_count()
+        count = self._files.selected_count
         selected = count >= 1
         child = self.selection_tools if selected else self.navigation_tools
         self.tools_stack.set_visible_child(child)
 
     def _update_selection_tools(self):
         # XXX  PortfolioFiles
-        count = self._files.selected_count()
+        count = self._files.selected_count
         sensitive = count >= 1 and not self._files.is_editing and not self._busy
 
         self.delete.props.sensitive = sensitive
@@ -433,25 +433,25 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._update_detail()
 
     def _update_navigation_tools(self):
-        count = self._files.selected_count()
+        count = self._files.selected_count
         selected = count >= 1
         to_paste = len(self._to_cut) >= 1 or len(self._to_copy) >= 1
         self.paste.props.sensitive = not selected and to_paste and not self._busy
         self.new_folder.props.sensitive = not selected and not self._busy
 
     def _update_trash_tools(self):
-        selected = self._files.selected_count() >= 1
+        selected = self._files.selected_count >= 1
         is_trash = default_trash.is_trash(self._history[self._index])
         self.restore_trash.props.sensitive = selected and is_trash
         self.delete_trash.props.sensitive = selected and is_trash
 
     def _update_rename(self):
-        count = self._files.selected_count()
+        count = self._files.selected_count
         sensitive = count == 1 and not self._files.is_editing and not self._busy
         self.rename.props.sensitive = sensitive
 
     def _update_detail(self):
-        count = self._files.selected_count()
+        count = self._files.selected_count
         sensitive = count == 1 and not self._files.is_editing and not self._busy
         self.detail.props.sensitive = sensitive
 

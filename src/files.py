@@ -121,8 +121,16 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._sort_order = value
 
     @property
+    def selected_count(self):
+        return self.selection.count_selected_rows()
+
+    @property
     def is_editing(self):
         return self._is_editing
+
+    @property
+    def is_empty(self):
+        return len(self.sorted) == 0
 
     def _filter_func(self, model, row, data=None):
         path = model[row][self.PATH_COLUMN]
@@ -392,12 +400,6 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         treepath = treepaths[-1]
         path = model[treepath][self.PATH_COLUMN]
         return path
-
-    def selected_count(self):
-        return self.selection.count_selected_rows()
-
-    def is_empty(self):
-        return len(self.sorted) == 0
 
     def add(self, icon, name, path):
         row = self.liststore.append([icon, name, path])
