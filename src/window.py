@@ -171,6 +171,11 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.menu_button.connect("clicked", self._on_menu_button_clicked)
         self.home_menu_button.connect("clicked", self._on_menu_button_clicked)
 
+        self.search.connect("toggled", self._on_search_toggled)
+        self.search_entry.connect("search-changed", self._on_search_changed)
+        self.search_entry.connect("stop-search", self._on_search_stopped)
+
+        # XXX Compose these widgets directly in .ui files
         self._files = PortfolioFiles()
         self._files.connect("activated", self._on_files_activated)
         self._files.connect("selected", self._on_files_selected)
@@ -180,10 +185,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._files.connect("add-failed", self._on_files_add_failed)
         self._files.connect("adjustment-changed", self._on_files_adjustment_changed)
         self.content_inner_box.pack_start(self._files, True, True, 0)
-
-        self.search.connect("toggled", self._on_search_toggled)
-        self.search_entry.connect("search-changed", self._on_search_changed)
-        self.search_entry.connect("stop-search", self._on_search_stopped)
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
