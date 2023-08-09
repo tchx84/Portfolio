@@ -70,7 +70,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._filter = ""
         self._sort_order = PortfolioSettings.ALPHABETICAL_ORDER
 
-        self.filtered.set_visible_func(self._filter_func, data=None)
+        self.filtered.set_visible_func(self._filter_func, None)
         self.sorted.set_default_sort_func(self._sort_func, None)
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
