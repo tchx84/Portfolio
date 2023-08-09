@@ -570,7 +570,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
 
     def _on_load_updated(self, worker, directory, found, index, total):
         for name, path, icon in found:
-            self._files.add(icon, name, path)
+            self._files.add_row(icon, name, path)
 
         self.loading.update(progress=(index + 1) / total)
 
@@ -736,7 +736,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
             logger.debug(f"Attempting to add unexisting {path}")
             return
 
-        self._files.add(icon, name, path)
+        self._files.add_row(icon, name, path)
 
     def _on_paste_updated(self, worker, path, index, total, current_bytes, total_bytes):
         description = os.path.basename(path)

@@ -401,7 +401,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         path = model[treepath][self.PATH_COLUMN]
         return path
 
-    def add(self, icon, name, path):
+    def add_row(self, icon, name, path):
         row = self.liststore.append([icon, name, path])
 
         if self._to_select_path == path:
