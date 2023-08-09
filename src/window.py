@@ -416,7 +416,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.tools_stack.set_visible_child(child)
 
     def _update_selection_tools(self):
-        # XXX  PortfolioFiles
         count = self._files.selected_count
         sensitive = count >= 1 and not self._files.is_editing and not self._busy
 
