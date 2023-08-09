@@ -71,7 +71,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._sort_order = PortfolioSettings.ALPHABETICAL_ORDER
 
         self.filtered.set_visible_func(self._filter_func, data=None)
-        self.sorted.set_default_sort_func(self._sort, None)
+        self.sorted.set_default_sort_func(self._sort_func, None)
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
         self.treeview.connect("row-activated", self._on_row_activated)
@@ -130,6 +130,23 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             return True
         return self._filter.lower() in os.path.basename(path).lower()
 
+    def _sort_func(self, model, row1, row2, data=None):
+        path1 = model[row1][self.PATH_COLUMN]
+        path2 = model[row2][self.PATH_COLUMN]
+
+        row1_is_dir = utils.is_file_dir(path1)
+        row2_is_dir = utils.is_file_dir(path2)
+
+        if row1_is_dir and not row2_is_dir:
+            return -1
+        elif not row1_is_dir and row2_is_dir:
+            return 1
+
+        if self._sort_order == PortfolioSettings.ALPHABETICAL_ORDER:
+            return self._sort_by_a_to_z(path1, path2)
+        else:
+            return self._sort_by_last_modified(path1, path2)
+
     def _sort_by_last_modified(self, path1, path2):
         st_mtime1 = utils.get_file_mtime(path1)
         st_mtime2 = utils.get_file_mtime(path2)
@@ -152,98 +169,8 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
         return 0
 
-    def _sort(self, model, row1, row2, data=None):
-        path1 = model[row1][self.PATH_COLUMN]
-        path2 = model[row2][self.PATH_COLUMN]
-
-        row1_is_dir = utils.is_file_dir(path1)
-        row2_is_dir = utils.is_file_dir(path2)
-
-        if row1_is_dir and not row2_is_dir:
-            return -1
-        elif not row1_is_dir and row2_is_dir:
-            return 1
-
-        if self._sort_order == PortfolioSettings.ALPHABETICAL_ORDER:
-            return self._sort_by_a_to_z(path1, path2)
-        else:
-            return self._sort_by_last_modified(path1, path2)
-
-    def _on_adjustment_changed(self, adjustment):
-        alloc = self.get_allocation()
-        reveal = (
-            self._adjustment.get_value() > (alloc.height / 2) and not self._is_editing
-        )
-        self.emit("adjustment-changed", reveal)
-
-    def _wait_and_edit(self):
-        value = self._adjustment.get_value()
-
-        if value == self._last_vscroll_value:
-            self.rename_selected_path()
-            self._last_vscroll_value = None
-            return False
-
-        self._last_vscroll_value = value
-        return True
-
     def _get_path(self, model, treepath):
         return model[model.get_iter(treepath)][self.PATH_COLUMN]
-
-    def get_selection(self):
-        model, treepaths = self.selection.get_selected_rows()
-        selection = [
-            (
-                model[treepath][self.PATH_COLUMN],
-                Gtk.TreeRowReference.new(model, treepath),
-            )
-            for treepath in treepaths
-        ]
-        return selection
-
-    def get_selected_path(self):
-        model, treepaths = self.selection.get_selected_rows()
-        treepath = treepaths[-1]
-        path = model[treepath][self.PATH_COLUMN]
-        return path
-
-    def _on_selection_changed(self, selection):
-        self.emit("selected")
-
-    def _on_select(self, selection, model, treepath, selected, data=None):
-        should_select = False
-
-        if self._force_select is True:
-            should_select = True
-        elif treepath != self._last_clicked and selected:
-            should_select = False
-        elif treepath != self._last_clicked and not selected:
-            should_select = False
-        elif treepath == self._last_clicked and not selected:
-            should_select = True
-        elif treepath == self._last_clicked and selected:
-            should_select = True
-
-        if treepath == self._last_clicked:
-            self._last_clicked = None
-            self._dont_activate = True
-
-        return should_select
-
-    def select_all(self):
-        self._force_select = True
-        self.selection.select_all()
-        self._force_select = False
-
-    def unselect_all(self):
-        self._force_select = True
-        self.selection.unselect_all()
-        self._force_select = False
-
-    def _select_row(self, row):
-        self._force_select = True
-        self.selection.select_iter(row)
-        self._force_select = False
 
     def _go_to_selection(self):
         model, treepaths = self.selection.get_selected_rows()
@@ -276,9 +203,47 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
         self._clear_select_and_go()
 
-    def go_to_top(self):
-        if len(self.sorted) >= 1:
-            self.treeview.scroll_to_cell(0, None, True, 0, 0)
+    def _wait_and_edit(self):
+        value = self._adjustment.get_value()
+
+        if value == self._last_vscroll_value:
+            self.rename_selected_path()
+            self._last_vscroll_value = None
+            return False
+
+        self._last_vscroll_value = value
+        return True
+
+    def _clear_select_and_go(self):
+        self._to_select_path = None
+        self._to_select_row = None
+
+    def _clear_to_go_to(self):
+        self._to_go_to_path = None
+        self._to_go_to_row = None
+
+    def _on_selection_changed(self, selection):
+        self.emit("selected")
+
+    def _on_select(self, selection, model, treepath, selected, data=None):
+        should_select = False
+
+        if self._force_select is True:
+            should_select = True
+        elif treepath != self._last_clicked and selected:
+            should_select = False
+        elif treepath != self._last_clicked and not selected:
+            should_select = False
+        elif treepath == self._last_clicked and not selected:
+            should_select = True
+        elif treepath == self._last_clicked and selected:
+            should_select = True
+
+        if treepath == self._last_clicked:
+            self._last_clicked = None
+            self._dont_activate = True
+
+        return should_select
 
     def _on_row_activated(self, treeview, treepath, treecolumn, data=None):
         if self._dont_activate is True:
@@ -336,25 +301,6 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._is_editing = False
         self.emit("rename-finished")
 
-    def rename_selected_path(self):
-        self.name_cell.props.editable = True
-        model, treepaths = self.selection.get_selected_rows()
-        treepath = treepaths[-1]
-        self.treeview.set_cursor_on_cell(
-            treepath, self.name_column, self.name_cell, True
-        )
-
-    def update_mode(self):
-        count = self.selection.count_selected_rows()
-        if count == 0:
-            self.switch_to_navigation_mode()
-
-    def switch_to_navigation_mode(self):
-        self.selection.set_mode(Gtk.SelectionMode.NONE)
-
-    def switch_to_selection_mode(self):
-        self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
-
     def _on_long_pressed(self, gesture, x, y):
         if self.selection.get_mode() == Gtk.SelectionMode.MULTIPLE:
             return
@@ -373,9 +319,54 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         # that this will actually be selected so always update mode.
         self.update_mode()
 
-    def _update_treeview(self):
+    def _on_adjustment_changed(self, adjustment):
+        alloc = self.get_allocation()
+        reveal = (
+            self._adjustment.get_value() > (alloc.height / 2) and not self._is_editing
+        )
+        self.emit("adjustment-changed", reveal)
+
+    def _select_row(self, row):
+        self._force_select = True
+        self.selection.select_iter(row)
+        self._force_select = False
+
+    def select_all(self):
+        self._force_select = True
+        self.selection.select_all()
+        self._force_select = False
+
+    def unselect_all(self):
+        self._force_select = True
+        self.selection.unselect_all()
+        self._force_select = False
+
+    def rename_selected_path(self):
+        self.name_cell.props.editable = True
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        self.treeview.set_cursor_on_cell(
+            treepath, self.name_column, self.name_cell, True
+        )
+
+    def switch_to_navigation_mode(self):
+        self.selection.set_mode(Gtk.SelectionMode.NONE)
+
+    def switch_to_selection_mode(self):
+        self.selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+
+    def go_to_top(self):
+        if len(self.sorted) >= 1:
+            self.treeview.scroll_to_cell(0, None, True, 0, 0)
+
+    def update_treeview(self):
         sensitive = not self._busy
         self.treeview.props.sensitive = sensitive
+
+    def update_mode(self):
+        count = self.selection.count_selected_rows()
+        if count == 0:
+            self.switch_to_navigation_mode()
 
     def update_scrolling(self):
         if self._to_select_row is not None:
@@ -384,6 +375,23 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             self._go_to(self._to_go_to_row)
         else:
             self.go_to_top()
+
+    def get_selection(self):
+        model, treepaths = self.selection.get_selected_rows()
+        selection = [
+            (
+                model[treepath][self.PATH_COLUMN],
+                Gtk.TreeRowReference.new(model, treepath),
+            )
+            for treepath in treepaths
+        ]
+        return selection
+
+    def get_selected_path(self):
+        model, treepaths = self.selection.get_selected_rows()
+        treepath = treepaths[-1]
+        path = model[treepath][self.PATH_COLUMN]
+        return path
 
     def selected_count(self):
         return self.selection.count_selected_rows()
@@ -427,11 +435,3 @@ class PortfolioFiles(Gtk.ScrolledWindow):
 
     def clear(self):
         self.liststore.clear()
-
-    def _clear_select_and_go(self):
-        self._to_select_path = None
-        self._to_select_row = None
-
-    def _clear_to_go_to(self):
-        self._to_go_to_path = None
-        self._to_go_to_row = None
