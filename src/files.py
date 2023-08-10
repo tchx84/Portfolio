@@ -75,7 +75,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
         self.treeview.connect("row-activated", self._on_row_activated)
-        self.treeview.connect("button-press-event", self._on_clicked)
+        # XXX self.treeview.connect("button-press-event", self._on_clicked)
 
         self.name_cell.connect("editing-started", self._on_rename_started)
         self.name_cell.connect("edited", self._on_rename_updated)
@@ -84,7 +84,7 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._adjustment = self.get_vadjustment()
         self._adjustment.connect("value-changed", self._on_adjustment_changed)
 
-        self.gesture = Gtk.GestureLongPress.new(self.treeview)
+        self.gesture = Gtk.GestureLongPress.new()
         self.gesture.connect("pressed", self._on_long_pressed)
 
     @property

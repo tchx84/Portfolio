@@ -18,31 +18,23 @@
 import sys
 import gi
 
-gi.require_version("Gdk", "3.0")
-gi.require_version("Gtk", "3.0")
+gi.require_version("Gtk", "4.0")
 gi.require_version("Gio", "2.0")
-gi.require_version("Handy", "1")
+gi.require_version("Adw", "1")
 
-from gi.repository import Gdk, Gtk, Gio
+from gi.repository import Adw, Gio, Gtk
 
 from .window import PortfolioWindow
 from .service import PortfolioService
 
 
-class Application(Gtk.Application):
+class Application(Adw.Application):
     def __init__(self):
         super().__init__(
             application_id="dev.tchx84.Portfolio",
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
         self._service = PortfolioService(self)
-
-    def _setup_styles(self):
-        provider = Gtk.CssProvider()
-        provider.load_from_resource("/dev/tchx84/Portfolio/main.css")
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
 
     def show_properties(self, path):
         self.activate()
@@ -59,7 +51,6 @@ class Application(Gtk.Application):
         win = self.props.active_window
         if not win:
             win = PortfolioWindow(application=self)
-            self._setup_styles()
         win.present()
 
 

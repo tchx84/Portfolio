@@ -17,7 +17,7 @@
 
 import os
 
-from gi.repository import GLib, Gtk, GObject, Handy
+from gi.repository import Adw, GLib, Gtk, GObject
 
 from . import logger
 from .place import PortfolioPlace
@@ -77,20 +77,18 @@ class PortfolioPlaces(Gtk.Stack):
         # begin UI structure
 
         self._groups_box = Gtk.Box()
-        self._groups_box.props.expand = True
         self._groups_box.props.visible = True
         self._groups_box.props.orientation = Gtk.Orientation.VERTICAL
 
         self._message_box = Gtk.Box()
-        self._message_box.props.expand = True
         self._message_box.props.visible = True
         self._message_box.props.orientation = Gtk.Orientation.VERTICAL
 
-        self._places_group = Handy.PreferencesGroup()
+        self._places_group = Adw.PreferencesGroup()
         self._places_group.props.title = _("Places")
         self._places_group.props.visible = True
 
-        self._devices_group = Handy.PreferencesGroup()
+        self._devices_group = Adw.PreferencesGroup()
         self._devices_group.props.title = _("Devices")
         self._devices_group.props.visible = True
         self._devices_group.get_style_context().add_class("devices-group")
@@ -165,18 +163,17 @@ class PortfolioPlaces(Gtk.Stack):
                 self.PORTFOLIO_SYSTEM_DIR_FLATPAK,
             )
 
-        self._groups_box.add(self._places_group)
-        self._groups_box.add(self._devices_group)
+        self._groups_box.append(self._places_group)
+        self._groups_box.append(self._devices_group)
 
         # no places message
 
         message = Gtk.Label()
-        message.props.expand = True
         message.props.visible = True
         message.props.label = _("No places found")
         message.get_style_context().add_class("no-places")
 
-        self._message_box.add(message)
+        self._message_box.append(message)
 
         # finalize UI structure
 
@@ -197,8 +194,8 @@ class PortfolioPlaces(Gtk.Stack):
         self._update_device_group_visibility()
 
     def _update_stack_visibility(self):
-        groups = len(self._places_group.get_children())
-        devices = len(self._devices_group.get_children())
+        groups = len([self._places_group])
+        devices = len([self._devices_group])
 
         if not groups and not devices:
             self.set_visible_child_name("message")
@@ -206,11 +203,11 @@ class PortfolioPlaces(Gtk.Stack):
             self.set_visible_child_name("groups")
 
     def _update_places_group_visibility(self):
-        visible = len(self._places_group.get_children()) >= 1
+        visible = len([self._places_group]) >= 1
         self._places_group.props.visible = visible
 
     def _update_device_group_visibility(self):
-        visible = len(self._devices_group.get_children()) >= 1
+        visible = len([self._devices_group]) >= 1
         self._devices_group.props.visible = visible
 
     def _get_permissions(self):
@@ -260,7 +257,7 @@ class PortfolioPlaces(Gtk.Stack):
         return place
 
     def _find_place_by_device_uuid(self, group, device):
-        for place in group.get_children():
+        for place in group:
             if place.uuid == device.uuid:
                 return place
         return None
