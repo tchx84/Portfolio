@@ -149,7 +149,6 @@ scrolledwindow.frame {
 
 treeview.view {
     padding-left: 0px;
-    -GtkTreeView-horizontal-separator: 0px;
 }
 
 /* go to top button */
@@ -158,7 +157,6 @@ treeview.view {
     border: none;
     box-shadow: none;
     border-radius: 9999px;
-    -gtk-outline-radius: 9999px;
     margin: 12px;
     padding: 5px;
     min-width: 30px;
@@ -193,7 +191,7 @@ treeview.view {
 }
 
 .devices-group > box {
-    margin-top: 15px
+    margin-top: 15px;
 }
 
 label.no-places {
@@ -206,7 +204,6 @@ label.no-places {
     border: none;
     box-shadow: none;
     border-radius: 9999px;
-    -gtk-outline-radius: 9999px;
 }
 
 /* passphrase screen */

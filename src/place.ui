@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <requires lib="libhandy" version="0.0"/>
-  <template class="PortfolioPlace" parent="HdyActionRow">
-    <property name="visible">True</property>
+  <requires lib="gtk" version="4.0"/>
+  <template class="PortfolioPlace" parent="AdwActionRow">
     <property name="can-focus">False</property>
     <property name="selectable">False</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <child>
           <object class="GtkButton" id="eject">
-            <property name="can-focus">False</property>
-            <property name="receives-default">False</property>
+            <property name="hexpand">1</property>
             <property name="halign">end</property>
             <property name="valign">center</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="icon-name">media-eject-symbolic</property>
               </object>
             </child>
@@ -28,11 +20,6 @@
               <class name="eject-button"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
     </child>

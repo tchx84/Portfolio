@@ -1,203 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <requires lib="libhandy" version="0.0"/>
+  <requires lib="gtk" version="4.0"/>
   <template class="PortfolioProperties" parent="GtkBox">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="visible">True</property>
+      <object class="AdwPreferencesGroup">
+        <property name="vexpand">1</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Name</property>
+                    <property name="label" translatable="1">Name</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_name">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Location</property>
+                    <property name="label" translatable="1">Location</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_location">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Type</property>
+                    <property name="label" translatable="1">Type</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_type">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Size</property>
+                    <property name="label" translatable="1">Size</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_size">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -207,155 +139,102 @@
           <placeholder/>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="visible">True</property>
+      <object class="AdwPreferencesGroup">
+        <property name="vexpand">1</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="HdyPreferencesRow">
+          <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Created</property>
+                    <property name="label" translatable="1">Created</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_created">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Modified</property>
+                    <property name="label" translatable="1">Modified</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_modified">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Accessed</property>
+                    <property name="label" translatable="1">Accessed</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_accessed">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -365,251 +244,166 @@
           <placeholder/>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="visible">True</property>
+      <object class="AdwPreferencesGroup">
+        <property name="vexpand">1</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Owner</property>
+                    <property name="label" translatable="1">Owner</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_owner">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Group</property>
+                    <property name="label" translatable="1">Group</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_group">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Owner can</property>
+                    <property name="label" translatable="1">Owner can</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_permissions_owner">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Group can</property>
+                    <property name="label" translatable="1">Group can</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_permissions_group">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyPreferencesRow">
-            <property name="visible">True</property>
+          <object class="AdwPreferencesRow">
             <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
               <object class="GtkBox">
                 <property name="height-request">50</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Others can</property>
+                    <property name="label" translatable="1">Others can</property>
                     <style>
                       <class name="property"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="property_permissions_others">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="hexpand">1</property>
                     <property name="halign">end</property>
-                    <property name="selectable">True</property>
+                    <property name="selectable">1</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <style>
                       <class name="value"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -619,11 +413,6 @@
           <placeholder/>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <style>
       <class name="properties"/>

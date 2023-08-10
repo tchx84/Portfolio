@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Handy
+from gi.repository import Adw, Gtk
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/place.ui")
-class PortfolioPlace(Handy.ActionRow):
+class PortfolioPlace(Adw.ActionRow):
     __gtype_name__ = "PortfolioPlace"
 
     eject = Gtk.Template.Child()

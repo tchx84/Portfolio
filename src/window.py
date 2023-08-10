@@ -19,7 +19,7 @@ import os
 
 from .translation import gettext as _
 
-from gi.repository import Gtk, GLib, Gio, Handy
+from gi.repository import Adw, Gtk, GLib, Gio
 
 from . import utils
 from . import logger
@@ -46,7 +46,7 @@ from .trash import default_trash
 
 
 @Gtk.Template(resource_path="/dev/tchx84/Portfolio/window.ui")
-class PortfolioWindow(Handy.ApplicationWindow):
+class PortfolioWindow(Adw.ApplicationWindow):
     __gtype_name__ = "PortfolioWindow"
 
     previous = Gtk.Template.Child()
@@ -126,11 +126,6 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self._setup_settings()
 
     def _setup(self):
-        Handy.init()
-        Handy.StyleManager.get_default().set_color_scheme(
-            Handy.ColorScheme.PREFER_LIGHT
-        )
-
         self._popup = None
         self._places_popup = None
         self._worker = None
@@ -168,8 +163,8 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.passphrase_back_button.connect("clicked", self._on_passphrase_back_clicked)
 
         # XXX no model for options yet so this...
-        self.menu_button.connect("clicked", self._on_menu_button_clicked)
-        self.home_menu_button.connect("clicked", self._on_menu_button_clicked)
+        self.menu_button.connect("activate", self._on_menu_button_clicked)
+        self.home_menu_button.connect("activate", self._on_menu_button_clicked)
 
         self.search.connect("toggled", self._on_search_toggled)
         self.search_entry.connect("search-changed", self._on_search_changed)
@@ -184,7 +179,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         self.files.connect("rename-failed", self._on_files_rename_failed)
         self.files.connect("add-failed", self._on_files_add_failed)
         self.files.connect("adjustment-changed", self._on_files_adjustment_changed)
-        self.content_inner_box.pack_start(self.files, True, True, 0)
+        self.content_inner_box.append(self.files)
 
         places = PortfolioPlaces()
         places.connect("updated", self._on_places_updated)
@@ -192,21 +187,21 @@ class PortfolioWindow(Handy.ApplicationWindow):
         places.connect("removed", self._on_places_removed)
         places.connect("failed", self._on_places_failed)
         places.connect("unlock", self._on_places_unlock)
-        self.places_inner_box.add(places)
+        self.places_inner_box.append(places)
 
         self._properties_worker = PortfolioPropertiesWorker()
-        self.properties_inner_box.add(PortfolioProperties(self._properties_worker))
+        self.properties_inner_box.append(PortfolioProperties(self._properties_worker))
 
-        self.about_inner_box.add(PortfolioAbout())
+        self.about_inner_box.append(PortfolioAbout())
 
         self.passphrase = PortfolioPassphrase()
         self.passphrase.connect("unlocked", self._on_places_unlocked)
-        self.passphrase_inner_box.add(self.passphrase)
+        self.passphrase_inner_box.append(self.passphrase)
 
-        self.placeholder_inner_box.add(PortfolioPlaceholder())
+        self.placeholder_inner_box.append(PortfolioPlaceholder())
 
         self.loading = PortfolioLoading()
-        self.loading_inner_box.add(self.loading)
+        self.loading_inner_box.append(self.loading)
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("destroy", self._on_shutdown)
@@ -458,7 +453,7 @@ class PortfolioWindow(Handy.ApplicationWindow):
         else:
             name = os.path.basename(directory)
 
-        self.headerbar.set_title(name)
+        # XXX self.headerbar.set_title(name)
 
     def _update_filter(self):
         self.files.filter = self.search_entry.get_text()
