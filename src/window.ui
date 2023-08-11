@@ -105,7 +105,6 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkModelButton" id="help_button">
-                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="1">Help</property>
                 <style>
@@ -115,7 +114,6 @@
             </child>
             <child>
               <object class="GtkModelButton" id="about_button">
-                <property name="can-focus">False</property>
                 <property name="receives-default">True</property>
                 <property name="text" translatable="1">About Portfolio</property>
                 <style>
@@ -132,18 +130,15 @@
     </property>
   </object>
   <template class="PortfolioWindow" parent="AdwApplicationWindow">
-    <property name="can-focus">False</property>
     <property name="title">Portfolio</property>
     <property name="default-width">360</property>
     <property name="default-height">600</property>
     <child>
       <object class="AdwLeaflet" id="about_deck">
-        <property name="can-focus">False</property>
         <property name="can-unfold">False</property>
         <property name="can-navigate-back">True</property>
         <child>
           <object class="AdwLeaflet" id="content_deck">
-            <property name="can-focus">False</property>
             <property name="can-unfold">False</property>
             <property name="can-navigate-back">True</property>
             <child>
@@ -151,10 +146,8 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="AdwHeaderBar">
-                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkMenuButton" id="home_menu_button">
-                        <property name="focusable">1</property>
                         <property name="focus-on-click">0</property>
                         <property name="receives-default">1</property>
                         <property name="popover">menu_popover</property>
@@ -172,7 +165,6 @@
                     <property name="vexpand">1</property>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="focusable">1</property>
                         <property name="child">
                           <object class="GtkViewport">
                             <property name="child">
@@ -216,10 +208,8 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="AdwHeaderBar" id="headerbar">
-                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkToggleButton" id="search">
-                                <property name="focusable">1</property>
                                 <property name="receives-default">1</property>
                                 <child>
                                   <object class="GtkImage">
@@ -230,7 +220,6 @@
                             </child>
                             <child>
                               <object class="GtkMenuButton" id="menu_button">
-                                <property name="focusable">1</property>
                                 <property name="focus-on-click">0</property>
                                 <property name="receives-default">1</property>
                                 <property name="popover">menu_popover</property>
@@ -252,7 +241,6 @@
                               <object class="GtkSearchBar" id="search_box">
                                 <property name="child">
                                   <object class="GtkSearchEntry" id="search_entry">
-                                    <property name="focusable">1</property>
                                     <property name="hexpand">1</property>
                                   </object>
                                 </property>
@@ -275,7 +263,6 @@
                                             <property name="vexpand">1</property>
                                             <child>
                                               <object class="GtkBox" id="content_inner_box">
-                                                <property name="focusable">1</property>
                                                 <property name="orientation">vertical</property>
                                                 <child>
                                                   <placeholder/>
@@ -298,7 +285,6 @@
                                                 <property name="transition-type">crossfade</property>
                                                 <property name="child">
                                                   <object class="GtkButton" id="go_top_button">
-                                                    <property name="focusable">1</property>
                                                     <property name="receives-default">1</property>
                                                     <child>
                                                       <object class="GtkImage">
@@ -383,7 +369,6 @@
                                           <object class="GtkBox" id="navigation_box">
                                             <child>
                                               <object class="GtkButton" id="previous">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -397,7 +382,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="next">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -421,7 +405,6 @@
                                           <object class="GtkBox" id="selection_box">
                                             <child>
                                               <object class="GtkButton" id="select_all">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -435,7 +418,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="select_none">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -459,7 +441,6 @@
                                           <object class="GtkBox" id="close_box">
                                             <child>
                                               <object class="GtkButton" id="close_button">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -480,7 +461,6 @@
                                           <object class="GtkBox" id="stop_box">
                                             <child>
                                               <object class="GtkButton" id="stop_button">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -508,7 +488,6 @@
                                             <child>
                                               <object class="GtkButton" id="paste">
                                                 <property name="sensitive">0</property>
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -522,7 +501,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="new_folder">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -546,7 +524,6 @@
                                           <object class="GtkBox" id="selection_tools">
                                             <child>
                                               <object class="GtkButton" id="delete">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -560,7 +537,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="rename">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -574,7 +550,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="cut">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -588,7 +563,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="copy">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -602,7 +576,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="detail">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -655,7 +628,6 @@
                                             <property name="valign">center</property>
                                             <child>
                                               <object class="GtkButton" id="restore_trash">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -669,7 +641,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="delete_trash">
-                                                <property name="focusable">1</property>
                                                 <property name="receives-default">1</property>
                                                 <child>
                                                   <object class="GtkImage">
@@ -704,11 +675,9 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="AdwHeaderBar" id="passphrase_header">
-                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkToggleButton">
                                 <property name="sensitive">0</property>
-                                <property name="focusable">1</property>
                                 <property name="receives-default">1</property>
                                 <child>
                                   <object class="GtkImage">
@@ -720,7 +689,6 @@
                             <child>
                               <object class="GtkMenuButton">
                                 <property name="sensitive">0</property>
-                                <property name="focusable">1</property>
                                 <property name="focus-on-click">0</property>
                                 <property name="receives-default">1</property>
                                 <property name="popover">menu_popover</property>
@@ -754,7 +722,6 @@
                                   <object class="GtkBox">
                                     <child>
                                       <object class="GtkToggleButton" id="passphrase_back_button">
-                                        <property name="focusable">1</property>
                                         <property name="receives-default">1</property>
                                         <child>
                                           <object class="GtkImage">
@@ -769,7 +736,6 @@
                                     <child>
                                       <object class="GtkButton">
                                         <property name="sensitive">0</property>
-                                        <property name="focusable">1</property>
                                         <property name="receives-default">1</property>
                                         <child>
                                           <object class="GtkImage">
@@ -798,10 +764,8 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="AdwHeaderBar">
-                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkToggleButton" id="properties_back_button">
-                        <property name="focusable">1</property>
                         <property name="receives-default">1</property>
                         <child>
                           <object class="GtkImage">
@@ -819,7 +783,6 @@
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="vexpand">1</property>
-                        <property name="focusable">1</property>
                         <property name="child">
                           <object class="GtkViewport">
                             <property name="child">
@@ -847,10 +810,8 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="AdwHeaderBar">
-                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkToggleButton" id="about_back_button">
-                    <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <child>
                       <object class="GtkImage">
@@ -864,7 +825,6 @@
             <child>
               <object class="GtkScrolledWindow">
                 <property name="vexpand">1</property>
-                <property name="focusable">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="child">
                   <object class="GtkViewport">

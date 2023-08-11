@@ -70,7 +70,6 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="focusable">1</property>
             <property name="label" translatable="1">&lt;a href=&quot;https://github.com/tchx84/portfolio&quot;&gt;Website&lt;/a&gt;</property>
             <property name="use-markup">1</property>
             <property name="wrap">1</property>
@@ -100,7 +99,6 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="focusable">1</property>
             <property name="label" translatable="1">This program comes with absolutely no warranty. See the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.html&quot;&gt;GNU General Public License, version 3 or later&lt;/a&gt; for details.</property>
             <property name="use-markup">1</property>
             <property name="justify">center</property>
@@ -117,7 +115,6 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="focusable">1</property>
             <property name="label" translatable="1">Portfolio logo is a modifed version of Jorgen Carlberg&apos;s work. The original version can be found &lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Portfolio.svg&quot;&gt; here &lt;/a&gt;, licensed under &lt;a href=&quot;https://creativecommons.org/licenses/by/3.0/deed.en&quot;&gt; CC BY 3.0 &lt;/a&gt;.</property>
             <property name="use-markup">1</property>
             <property name="justify">center</property>

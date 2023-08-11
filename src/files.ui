@@ -15,11 +15,9 @@
     <property name="model">filtered</property>
   </object>
   <template class="PortfolioFiles" parent="GtkScrolledWindow">
-    <property name="focusable">1</property>
     <property name="vexpand">1</property>
     <property name="child">
       <object class="GtkTreeView" id="treeview">
-        <property name="focusable">1</property>
         <property name="model">sorted</property>
         <property name="headers-visible">0</property>
         <property name="headers-clickable">0</property>

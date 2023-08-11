@@ -2,7 +2,6 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="PortfolioPlace" parent="AdwActionRow">
-    <property name="can-focus">False</property>
     <property name="selectable">False</property>
     <child>
       <object class="GtkBox">
