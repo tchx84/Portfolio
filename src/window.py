@@ -1024,7 +1024,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
 
     def _on_places_unlock(self, button, encrypted):
         self.passphrase.unlock(encrypted)
-        self.passphrase_header.props.title = encrypted.get_friendly_label()
+        # XXX self.passphrase_header.props.title = encrypted.get_friendly_label()
         self.content_deck.set_visible_child(self.files_stack)
         self.files_stack.set_visible_child(self.passphrase_box)
 
