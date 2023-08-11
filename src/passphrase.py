@@ -47,7 +47,7 @@ class PortfolioPassphrase(Gtk.Box):
         self.passphrase_entry.props.sensitive = False
         self.passphrase_label.props.visible = False
         self.passphrase_spinner.props.visible = True
-        self.passphrase_spinner.props.active = True
+        self.passphrase_spinner.props.spinning = True
 
         passphrase = self.passphrase_entry.get_text()
         self._encrypted.unlock(passphrase, self._on_places_unlock_finished)
@@ -74,7 +74,7 @@ class PortfolioPassphrase(Gtk.Box):
         self.passphrase_entry.props.sensitive = True
         self.passphrase_label.props.visible = True
         self.passphrase_spinner.props.visible = False
-        self.passphrase_spinner.props.active = False
+        self.passphrase_spinner.props.spinning = False
 
     def unlock(self, encrypted):
         self.clean()
