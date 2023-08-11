@@ -170,7 +170,7 @@
                 <child>
                   <object class="GtkOverlay">
                     <property name="vexpand">1</property>
-                    <property name="child">
+                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="focusable">1</property>
                         <property name="child">
@@ -189,11 +189,11 @@
                           </object>
                         </property>
                       </object>
-                    </property>
+                    </child>
                     <child type="overlay">
                       <object class="GtkBox" id="places_popup_box">
-                        <property name="can-target">0</property>
                         <property name="orientation">vertical</property>
+                        <property name="valign">start</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -273,7 +273,7 @@
                                         <child>
                                           <object class="GtkOverlay" id="overlay">
                                             <property name="vexpand">1</property>
-                                            <property name="child">
+                                            <child>
                                               <object class="GtkBox" id="content_inner_box">
                                                 <property name="focusable">1</property>
                                                 <property name="orientation">vertical</property>
@@ -281,11 +281,11 @@
                                                   <placeholder/>
                                                 </child>
                                               </object>
-                                            </property>
+                                            </child>
                                             <child type="overlay">
                                               <object class="GtkBox" id="popup_box">
-                                                <property name="can-target">0</property>
                                                 <property name="orientation">vertical</property>
+                                                <property name="valign">start</property>
                                                 <child>
                                                   <placeholder/>
                                                 </child>
@@ -293,7 +293,6 @@
                                             </child>
                                             <child type="overlay">
                                               <object class="GtkRevealer" id="go_top_revealer">
-                                                <property name="can-target">0</property>
                                                 <property name="halign">end</property>
                                                 <property name="valign">end</property>
                                                 <property name="transition-type">crossfade</property>
