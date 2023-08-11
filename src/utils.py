@@ -117,3 +117,12 @@ def get_size_for_humans(num):
             return "%3.1f %sB" % (num, unit)
         num /= 1000.0
     return "%.1f%sB" % (num, "Y")
+
+
+def find_child_by_id(container, child_id):
+    for widget in list(container):
+        if widget.get_buildable_id() == child_id:
+            return widget
+        if child := find_child_by_id(widget, child_id):
+            return child
+    return None

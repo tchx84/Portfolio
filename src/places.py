@@ -19,6 +19,7 @@ import os
 
 from gi.repository import Adw, GLib, Gtk, GObject
 
+from . import utils
 from . import logger
 from .place import PortfolioPlace
 from .devices import PortfolioDevices
@@ -257,7 +258,8 @@ class PortfolioPlaces(Gtk.Stack):
         return place
 
     def _find_place_by_device_uuid(self, group, device):
-        for place in group:
+        list_box = utils.find_child_by_id(group, "listbox")
+        for place in list_box:
             if place.uuid == device.uuid:
                 return place
         return None
@@ -280,7 +282,7 @@ class PortfolioPlaces(Gtk.Stack):
             return
 
         if self._filter_device(device):
-            place.destroy()
+            self._devices_group.remove(place)
             return
 
         place.path = device.mount_point
@@ -346,7 +348,7 @@ class PortfolioPlaces(Gtk.Stack):
         place = self._find_place_by_device_uuid(self._devices_group, device)
 
         if place is not None:
-            place.destroy()
+            self._devices_group.remove(place)
 
         self.emit("removed", device.mount_point, device.safely_removed)
 
