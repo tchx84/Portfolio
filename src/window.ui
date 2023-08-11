@@ -139,11 +139,13 @@
     <child>
       <object class="AdwLeaflet" id="about_deck">
         <property name="can-focus">False</property>
+        <property name="can-unfold">False</property>
         <property name="can-navigate-back">True</property>
         <property name="visible-child-name">about_box</property>
         <child>
           <object class="AdwLeaflet" id="content_deck">
             <property name="can-focus">False</property>
+            <property name="can-unfold">False</property>
             <property name="can-navigate-back">True</property>
             <property name="visible-child-name">places_box</property>
             <child>
