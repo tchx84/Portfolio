@@ -313,15 +313,15 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self._popup = PortfolioPopup(
             description, on_confirm, on_cancel, on_trash, autoclose, data
         )
-        self.popup_box.add(self._popup)
+        self.popup_box.append(self._popup)
         self._popup.props.reveal_child = True
 
     def _places_notify(self, description):
         if self._places_popup is not None:
-            self._places_popup.destroy()
+            self.places_popup_box.remove(self._places_popup)
 
         self._places_popup = PortfolioPopup(description, None, None, None, False, None)
-        self.places_popup_box.add(self._places_popup)
+        self.places_popup_box.append(self._places_popup)
         self._places_popup.props.reveal_child = True
 
     def _clean_workers(self):
@@ -331,7 +331,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def _clean_popups(self):
         if self._popup is None:
             return
-        self._popup.destroy()
+        self.popup.box.remove(self._popup)
         self._popup = None
 
     def _clean_loading_delay(self):
