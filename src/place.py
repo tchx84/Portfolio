@@ -28,3 +28,7 @@ class PortfolioPlace(Adw.ActionRow):
     uuid = ""
     encrypted = None
     device = None
+
+    def set_subtitle_sately(self, subtitle):
+        if subtitle is not None:
+            self.set_subtitle(subtitle)

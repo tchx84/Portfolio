@@ -249,7 +249,7 @@ class PortfolioPlaces(Gtk.Stack):
         place = PortfolioPlace()
         place.set_icon_name(icon)
         place.set_title(name)
-        place.set_subtitle(path)
+        place.set_subtitle_sately(path)
         place.path = path
         place.props.activatable = True
         place.connect("activated", self._on_place_activated)
@@ -287,7 +287,7 @@ class PortfolioPlaces(Gtk.Stack):
 
         place.path = device.mount_point
         place.set_title(device.label)
-        place.set_subtitle(device.mount_point)
+        place.set_subtitle_sately(device.mount_point)
 
     def _on_place_activated(self, place):
         if place.path is not None:
