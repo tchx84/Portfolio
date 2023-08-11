@@ -6,11 +6,9 @@
     <child>
       <object class="AdwPreferencesGroup">
         <property name="vexpand">1</property>
-        <property name="can-focus">False</property>
         <child>
           <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -42,7 +40,6 @@
         <child>
           <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -74,7 +71,6 @@
         <child>
           <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -106,7 +102,6 @@
         <child>
           <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -143,11 +138,9 @@
     <child>
       <object class="AdwPreferencesGroup">
         <property name="vexpand">1</property>
-        <property name="can-focus">False</property>
         <child>
           <object class="AdwPreferencesRow">
             <property name="height-request">50</property>
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -178,7 +171,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -210,7 +202,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -248,10 +239,8 @@
     <child>
       <object class="AdwPreferencesGroup">
         <property name="vexpand">1</property>
-        <property name="can-focus">False</property>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -283,7 +272,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -315,7 +303,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -347,7 +334,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
@@ -379,7 +365,6 @@
         </child>
         <child>
           <object class="AdwPreferencesRow">
-            <property name="can-focus">True</property>
             <property name="activatable">False</property>
             <property name="selectable">False</property>
             <child>
