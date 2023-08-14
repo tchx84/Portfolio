@@ -167,6 +167,9 @@ class PortfolioPlaces(Gtk.Stack):
         self._groups_box.append(self._places_group)
         self._groups_box.append(self._devices_group)
 
+        self._places_listbox = utils.find_child_by_id(self._places_group, "listbox")
+        self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
+
         # no places message
 
         message = Gtk.Label()
@@ -195,8 +198,8 @@ class PortfolioPlaces(Gtk.Stack):
         self._update_device_group_visibility()
 
     def _update_stack_visibility(self):
-        groups = len([self._places_group])
-        devices = len([self._devices_group])
+        groups = len(list(self._places_listbox))
+        devices = len(list(self._devices_listbox))
 
         if not groups and not devices:
             self.set_visible_child_name("message")
@@ -204,11 +207,11 @@ class PortfolioPlaces(Gtk.Stack):
             self.set_visible_child_name("groups")
 
     def _update_places_group_visibility(self):
-        visible = len([self._places_group]) >= 1
+        visible = len(list(self._places_listbox)) >= 1
         self._places_group.props.visible = visible
 
     def _update_device_group_visibility(self):
-        visible = len([self._devices_group]) >= 1
+        visible = len(list(self._devices_listbox)) >= 1
         self._devices_group.props.visible = visible
 
     def _get_permissions(self):
@@ -257,9 +260,8 @@ class PortfolioPlaces(Gtk.Stack):
 
         return place
 
-    def _find_place_by_device_uuid(self, group, device):
-        list_box = utils.find_child_by_id(group, "listbox")
-        for place in list_box:
+    def _find_place_by_device_uuid(self, listbox, device):
+        for place in listbox:
             if place.uuid == device.uuid:
                 return place
         return None
@@ -345,7 +347,7 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _on_device_removed(self, devices, device):
         logger.debug(f"removed {device}")
-        place = self._find_place_by_device_uuid(self._devices_group, device)
+        place = self._find_place_by_device_uuid(self._devices_listbox, device)
 
         if place is not None:
             self._devices_group.remove(place)
@@ -356,7 +358,7 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _on_device_updated(self, device):
         logger.debug(f"updated {device}")
-        place = self._find_place_by_device_uuid(self._devices_group, device)
+        place = self._find_place_by_device_uuid(self._devices_listbox, device)
         self._update_place_from_device(place, device)
         self._update_visibility()
 
