@@ -75,7 +75,6 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self.selection.connect("changed", self._on_selection_changed)
         self.selection.set_select_function(self._on_select)
         self.treeview.connect("row-activated", self._on_row_activated)
-        # XXX self.treeview.connect("button-press-event", self._on_clicked)
 
         self.name_cell.connect("editing-started", self._on_rename_started)
         self.name_cell.connect("edited", self._on_rename_updated)
@@ -84,8 +83,13 @@ class PortfolioFiles(Gtk.ScrolledWindow):
         self._adjustment = self.get_vadjustment()
         self._adjustment.connect("value-changed", self._on_adjustment_changed)
 
-        self.gesture = Gtk.GestureLongPress.new()
-        self.gesture.connect("pressed", self._on_long_pressed)
+        self.clicks = Gtk.GestureClick.new()
+        self.clicks.connect("pressed", self._on_clicked)
+        self.treeview.add_controller(self.clicks)
+
+        self.gestures = Gtk.GestureLongPress.new()
+        self.gestures.connect("pressed", self._on_long_pressed)
+        self.treeview.add_controller(self.gestures)
 
     @property
     def filter(self):
@@ -262,8 +266,8 @@ class PortfolioFiles(Gtk.ScrolledWindow):
             path = self._get_path(self.sorted, treepath)
             self.emit("activated", path)
 
-    def _on_clicked(self, treeview, event):
-        result = self.treeview.get_path_at_pos(event.x, event.y)
+    def _on_clicked(self, gesture, n_press, x, y):
+        result = self.treeview.get_path_at_pos(x, y)
         if result is None:
             return
         treepath, column, x, y = result
