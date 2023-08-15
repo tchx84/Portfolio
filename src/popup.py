@@ -59,4 +59,5 @@ class PortfolioPopup(Gtk.Revealer):
         self.description.set_text(description)
 
     def _on_default_callback(self, button, popup, data):
-        self.get_parent().remove(self)
+        if parent := self.get_parent():
+            parent.remove(self)

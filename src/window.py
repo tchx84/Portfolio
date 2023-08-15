@@ -331,7 +331,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def _clean_popups(self):
         if self._popup is None:
             return
-        self.popup.box.remove(self._popup)
+        self.popup_box.remove(self._popup)
         self._popup = None
 
     def _clean_loading_delay(self):
