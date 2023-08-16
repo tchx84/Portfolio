@@ -88,28 +88,14 @@ scrolledwindow.frame {
 /* menu */
 
 .menu-box {
-    margin: 10px 5px 2.5px 5px;
+    margin: 5px;
 }
 .menu-box .menu-title {
     font-weight: bold;
-    padding: 5px 10px;
+    padding: 7.5px;
 }
 .menu-box .menu-item {
-    padding: 5px 10px;
-}
-.menu-box .menu-item.check-item {
-    padding: 9px 6px;
-}
-.menu-box .menu-item.check-item check {
-    padding: 0px;
-    margin-right: 9px;
-}
-.menu-box .menu-item.radio-item {
-    padding: 7.5px 6px;
-}
-.menu-box .menu-item.radio-item radio {
-    padding: 0px;
-    margin-right: 9px;
+    padding: 7.5px;
 }
 
 /* loading */
