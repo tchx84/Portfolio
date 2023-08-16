@@ -37,6 +37,7 @@
               <object class="GtkCellRendererPixbuf" id="icon">
                 <property name="width">50</property>
                 <property name="height">50</property>
+                <property name="icon-size">2</property>
               </object>
               <attributes>
                 <attribute name="gicon">0</attribute>
