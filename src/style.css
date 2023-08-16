@@ -1,10 +1,5 @@
 /* app */
 
-scrolledwindow.frame {
-    border: none;
-    border-width: 0px;
-}
-
 .select-all-button,
 .previous-button {
     padding-right: 12.5px;
