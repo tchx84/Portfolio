@@ -25,7 +25,6 @@
 
 .placeholder {
     color: @insensitive_fg_color;
-    background-color: @theme_base_color;
 }
 .placeholder label {
     margin: 10px;
