@@ -32,9 +32,6 @@
                 <property name="icon-name">emblem-ok-symbolic</property>
               </object>
             </child>
-            <style>
-              <class name="confirm-button"/>
-            </style>
           </object>
         </child>
         <child>
@@ -47,9 +44,6 @@
                 <property name="icon-name">window-close-symbolic</property>
               </object>
             </child>
-            <style>
-              <class name="confirm-button"/>
-            </style>
           </object>
         </child>
         <child>
@@ -62,9 +56,6 @@
                 <property name="icon-name">user-trash-symbolic</property>
               </object>
             </child>
-            <style>
-              <class name="confirm-button"/>
-            </style>
           </object>
         </child>
         <style>
