@@ -146,7 +146,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="AdwHeaderBar">
-                    <child>
+                    <child type="end">
                       <object class="GtkMenuButton" id="home_menu_button">
                         <property name="focus-on-click">0</property>
                         <property name="receives-default">1</property>
@@ -218,7 +218,7 @@
                                 </child>
                               </object>
                             </child>
-                            <child>
+                            <child type="end">
                               <object class="GtkMenuButton" id="menu_button">
                                 <property name="focus-on-click">0</property>
                                 <property name="receives-default">1</property>
@@ -686,7 +686,7 @@
                                 </child>
                               </object>
                             </child>
-                            <child>
+                            <child type="end">
                               <object class="GtkMenuButton">
                                 <property name="sensitive">0</property>
                                 <property name="focus-on-click">0</property>
