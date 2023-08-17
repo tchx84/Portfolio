@@ -112,7 +112,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     go_top_revealer = Gtk.Template.Child()
     properties_box = Gtk.Template.Child()
     properties_inner_box = Gtk.Template.Child()
-    passphrase_header = Gtk.Template.Child()
+    passphrase_title = Gtk.Template.Child()
     passphrase_box = Gtk.Template.Child()
     passphrase_inner_box = Gtk.Template.Child()
     passphrase_back_button = Gtk.Template.Child()
@@ -1024,7 +1024,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
 
     def _on_places_unlock(self, button, encrypted):
         self.passphrase.unlock(encrypted)
-        # XXX self.passphrase_header.props.title = encrypted.get_friendly_label()
+        self.passphrase_title.props.title = encrypted.get_friendly_label()
         self.content_deck.set_visible_child(self.files_stack)
         self.files_stack.set_visible_child(self.passphrase_box)
 
