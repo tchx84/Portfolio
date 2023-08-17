@@ -204,7 +204,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.loading_inner_box.append(self.loading)
 
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
-        self.connect("destroy", self._on_shutdown)
+        self.connect("close-request", self._on_close_request)
 
     def _setup_settings(self):
         self._settings = PortfolioSettings()
@@ -1074,7 +1074,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         elif child == self.files_box:
             self._properties_worker.stop()
 
-    def _on_shutdown(self, window):
+    def _on_close_request(self, window):
         if self._worker is not None:
             self._worker.stop()
         self._properties_worker.stop()
