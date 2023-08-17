@@ -774,6 +774,11 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="AdwHeaderBar">
+                    <property name="title-widget">
+                      <object class="AdwWindowTitle">
+                        <property name="title" translatable="yes">Properties</property>
+                      </object>
+                    </property>
                     <child>
                       <object class="GtkToggleButton" id="properties_back_button">
                         <property name="receives-default">1</property>
