@@ -679,7 +679,12 @@
                       <object class="GtkBox" id="passphrase_box">
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="AdwHeaderBar" id="passphrase_header">
+                          <object class="AdwHeaderBar">
+                            <property name="title-widget">
+                              <object class="AdwWindowTitle" id="passphrase_title">
+                                <property name="title">Portfolio</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="GtkToggleButton">
                                 <property name="sensitive">0</property>
