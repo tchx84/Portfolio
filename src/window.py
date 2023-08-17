@@ -92,6 +92,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     content_box = Gtk.Template.Child()
     files_stack = Gtk.Template.Child()
     files_box = Gtk.Template.Child()
+    files_title = Gtk.Template.Child()
     about_box = Gtk.Template.Child()
     about_inner_box = Gtk.Template.Child()
     close_box = Gtk.Template.Child()
@@ -101,7 +102,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
     trash_tools = Gtk.Template.Child()
     about_deck = Gtk.Template.Child()
     content_deck = Gtk.Template.Child()
-    headerbar = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
     placeholder_inner_box = Gtk.Template.Child()
     menu_box = Gtk.Template.Child()
@@ -453,7 +453,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         else:
             name = os.path.basename(directory)
 
-        # XXX self.headerbar.set_title(name)
+        self.files_title.props.title = name
 
     def _update_filter(self):
         self.files.filter = self.search_entry.get_text()

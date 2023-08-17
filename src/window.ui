@@ -207,7 +207,12 @@
                       <object class="GtkBox" id="files_box">
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="AdwHeaderBar" id="headerbar">
+                          <object class="AdwHeaderBar">
+                            <property name="title-widget">
+                              <object class="AdwWindowTitle" id="files_title">
+                                <property name="title">Portfolio</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="GtkToggleButton" id="search">
                                 <property name="receives-default">1</property>
