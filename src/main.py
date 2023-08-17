@@ -22,7 +22,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Gio", "2.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, Gio, Gtk
+from gi.repository import Adw, Gio
 
 from .window import PortfolioWindow
 from .service import PortfolioService
