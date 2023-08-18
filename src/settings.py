@@ -31,7 +31,7 @@ class PortfolioSettings(GObject.GObject):
         if Gio.SettingsSchemaSource.get_default().lookup(self.SCHEMA, False):
             self._settings = Gio.Settings(self.SCHEMA)
 
-    @property
+    @GObject.Property(type=bool, default=False)
     def show_hidden(self):
         if self._settings is None:
             return False
@@ -43,7 +43,7 @@ class PortfolioSettings(GObject.GObject):
             return
         self._settings.set_boolean("show-hidden", value)
 
-    @property
+    @GObject.Property(type=str)
     def sort_order(self):
         if self._settings is None:
             return self.ALPHABETICAL_ORDER
