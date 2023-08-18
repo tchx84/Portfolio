@@ -11,6 +11,7 @@
     <file>placeholder.ui</file>
     <file>loading.ui</file>
     <file>files.ui</file>
+    <file>menu.ui</file>
     <file>org.freedesktop.FileManager1.xml</file>
   </gresource>
 </gresources>
