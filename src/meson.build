@@ -50,6 +50,7 @@ portfolio_sources = [
   'placeholder.py',
   'loading.py',
   'files.py',
+  'menu.py',
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)

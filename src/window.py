@@ -19,7 +19,7 @@ import os
 
 from .translation import gettext as _
 
-from gi.repository import Adw, Gtk, GLib, Gio
+from gi.repository import Adw, Gtk, GLib
 
 from . import utils
 from . import logger
@@ -41,6 +41,7 @@ from .passphrase import PortfolioPassphrase
 from .placeholder import PortfolioPlaceholder
 from .loading import PortfolioLoading
 from .files import PortfolioFiles
+from .menu import PortfolioMenu
 from .settings import PortfolioSettings
 from .trash import default_trash
 
@@ -65,11 +66,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
     restore_trash = Gtk.Template.Child()
     close_button = Gtk.Template.Child()
     stop_button = Gtk.Template.Child()
-    help_button = Gtk.Template.Child()
-    about_button = Gtk.Template.Child()
-    show_hidden_button = Gtk.Template.Child()
-    a_to_z_button = Gtk.Template.Child()
-    last_modified_button = Gtk.Template.Child()
     go_top_button = Gtk.Template.Child()
     about_back_button = Gtk.Template.Child()
     properties_back_button = Gtk.Template.Child()
@@ -104,8 +100,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
     content_deck = Gtk.Template.Child()
     placeholder_box = Gtk.Template.Child()
     placeholder_inner_box = Gtk.Template.Child()
-    menu_box = Gtk.Template.Child()
-    menu_popover = Gtk.Template.Child()
     menu_button = Gtk.Template.Child()
     home_menu_button = Gtk.Template.Child()
     content_inner_box = Gtk.Template.Child()
@@ -123,7 +117,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._setup()
-        self._setup_settings()
 
     def _setup(self):
         self._popup = None
@@ -137,6 +130,10 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self._index = -1
         self._search_delay_handler_id = 0
         self._load_delay_handler_id = 0
+
+        self._settings = PortfolioSettings()
+        self._settings.connect("notify::show-hidden", self._on_show_hidden_changed)
+        self._settings.connect("notify::sort-order", self._on_sort_order_changed)
 
         self.previous.connect("clicked", self._on_go_previous)
         self.next.connect("clicked", self._on_go_next)
@@ -152,10 +149,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.select_none.connect("clicked", self._on_select_none)
         self.new_folder.connect("clicked", self._on_new_folder)
         self.close_button.connect("clicked", self._on_button_closed)
-        self.help_button.connect("clicked", self._on_help_clicked)
-        self.about_button.connect("clicked", self._on_about_clicked)
-        self.show_hidden_button.connect("toggled", self._on_hidden_toggled)
-        self.a_to_z_button.connect("toggled", self._on_sort_toggled)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
         self.about_back_button.connect("clicked", self._on_about_back_clicked)
@@ -163,7 +156,14 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.passphrase_back_button.connect("clicked", self._on_passphrase_back_clicked)
 
         # XXX no model for options yet so this...
+        self.menu_popover = PortfolioMenu(self._settings)
+        self.menu_popover.connect("show-about", self._on_about_clicked)
+        self.menu_button.props.popover = self.menu_popover
         self.menu_button.connect("activate", self._on_menu_button_clicked)
+
+        self.home_menu_popover = PortfolioMenu(self._settings)
+        self.home_menu_popover.connect("show-about", self._on_about_clicked)
+        self.home_menu_button.props.popover = self.home_menu_popover
         self.home_menu_button.connect("activate", self._on_menu_button_clicked)
 
         self.search.connect("toggled", self._on_search_toggled)
@@ -179,6 +179,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.connect("rename-failed", self._on_files_rename_failed)
         self.files.connect("add-failed", self._on_files_add_failed)
         self.files.connect("adjustment-changed", self._on_files_adjustment_changed)
+        self.files.sort_order = self._settings.sort_order
         self.content_inner_box.append(self.files)
 
         places = PortfolioPlaces()
@@ -206,16 +207,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.content_deck.connect("notify::visible-child", self._on_content_folded)
         self.connect("close-request", self._on_close_request)
 
-    def _setup_settings(self):
-        self._settings = PortfolioSettings()
-
-        self.show_hidden_button.props.active = self._settings.show_hidden
-
-        if self._settings.sort_order == PortfolioSettings.ALPHABETICAL_ORDER:
-            self.a_to_z_button.props.active = True
-        else:
-            self.last_modified_button.props.active = True
-
     def _populate(self, directory):
         self.files.switch_to_navigation_mode()
 
@@ -227,7 +218,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         else:
             loader_class = PortfolioLoadWorker
 
-        self._worker = loader_class(directory, self.show_hidden_button.props.active)
+        self._worker = loader_class(directory, self._settings.show_hidden)
         self._worker.connect("started", self._on_load_started)
         self._worker.connect("updated", self._on_load_updated)
         self._worker.connect("finished", self._on_load_finished)
@@ -463,7 +454,8 @@ class PortfolioWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _update_menu(self):
-        self.menu_box.props.sensitive = not self._busy
+        self.menu_popover.is_sensitive = not self._busy
+        self.home_menu_popover.is_sensitive = not self._busy
 
     def _reset_search(self):
         self.search.set_active(False)
@@ -1036,9 +1028,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.passphrase.clean()
         self.content_deck.set_visible_child(self.places_box)
 
-    def _on_help_clicked(self, button):
-        Gio.AppInfo.launch_default_for_uri("https://github.com/tchx84/Portfolio", None)
-
     def _on_about_clicked(self, button):
         self.about_deck.set_visible_child(self.about_box)
 
@@ -1048,23 +1037,15 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def _on_properties_back_clicked(self, button):
         self.content_deck.set_visible_child(self.files_stack)
 
-    def _on_hidden_toggled(self, button):
-        self._settings.show_hidden = self.show_hidden_button.props.active
+    def _on_show_hidden_changed(self, settings, data):
         self._refresh()
 
-    def _on_sort_toggled(self, button):
-        if self.a_to_z_button.props.active:
-            self.files.sort_order = PortfolioSettings.ALPHABETICAL_ORDER
-            self._settings.sort_order = PortfolioSettings.ALPHABETICAL_ORDER
-        else:
-            self.files.sort_order = PortfolioSettings.MODIFIED_TIME_ORDER
-            self._settings.sort_order = PortfolioSettings.MODIFIED_TIME_ORDER
-
+    def _on_sort_order_changed(self, settings, data):
+        self.files.sort_order = self._settings.sort_order
         self._refresh()
 
     def _on_menu_button_clicked(self, button):
-        button.props.popover = self.menu_popover
-        self.menu_popover.popup()
+        button.props.popover.popup()
 
     def _on_content_folded(self, deck, data=None):
         child = self.content_deck.get_visible_child()

@@ -1,135 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkPopover" id="menu_popover">
-    <property name="child">
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox" id="menu_box">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkBox" id="filters_box">
-                    <property name="vexpand">1</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="halign">start</property>
-                        <property name="label" translatable="1">Filter</property>
-                        <style>
-                          <class name="menu-title"/>
-                        </style>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="places-box"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="show_hidden_button">
-                    <property name="label" translatable="1">Show Hidden Files</property>
-                    <style>
-                      <class name="menu-item"/>
-                      <class name="check-item"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="vexpand">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="halign">start</property>
-                        <property name="label" translatable="1">Sort</property>
-                        <style>
-                          <class name="menu-title"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="a_to_z_button">
-                        <property name="active">1</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="1">A-Z</property>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="menu-item"/>
-                          <class name="radio-item"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="last_modified_button">
-                        <property name="group">a_to_z_button</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="halign">start</property>
-                            <property name="label" translatable="1">Last Modified</property>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="menu-item"/>
-                          <class name="radio-item"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkModelButton" id="help_button">
-                <property name="receives-default">True</property>
-                <property name="text" translatable="1">Help</property>
-                <style>
-                  <class name="menu-item"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton" id="about_button">
-                <property name="receives-default">True</property>
-                <property name="text" translatable="1">About Portfolio</property>
-                <style>
-                  <class name="menu-item"/>
-                </style>
-              </object>
-            </child>
-          </object>
-        </child>
-        <style>
-          <class name="menu-box"/>
-        </style>
-      </object>
-    </property>
-  </object>
-  <template class="PortfolioWindow" parent="AdwApplicationWindow">
+    <template class="PortfolioWindow" parent="AdwApplicationWindow">
     <property name="title">Portfolio</property>
     <property name="default-width">360</property>
     <property name="default-height">600</property>
@@ -150,7 +22,6 @@
                       <object class="GtkMenuButton" id="home_menu_button">
                         <property name="focus-on-click">0</property>
                         <property name="receives-default">1</property>
-                        <property name="popover">menu_popover</property>
                         <child>
                           <object class="GtkImage">
                             <property name="icon-name">open-menu-symbolic</property>
@@ -227,7 +98,6 @@
                               <object class="GtkMenuButton" id="menu_button">
                                 <property name="focus-on-click">0</property>
                                 <property name="receives-default">1</property>
-                                <property name="popover">menu_popover</property>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">open-menu-symbolic</property>
