@@ -250,7 +250,7 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _add_place(self, group, icon, name, path):
         place = PortfolioPlace()
-        place.set_icon_name(icon)
+        place.set_custom_icon_name(icon)
         place.set_title(name)
         place.set_subtitle_sately(path)
         place.path = path
