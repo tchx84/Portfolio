@@ -22,10 +22,11 @@ window = None
 
 
 def update_gtk():
-    from gi.repository import Gtk
+    from gi.repository import GLib
 
-    while Gtk.events_pending():
-        Gtk.main_iteration()
+    context = GLib.MainContext.default()
+    while context.pending():
+        context.iteration(True)
 
 
 def setup_module():
@@ -33,10 +34,9 @@ def setup_module():
 
     import gi
 
-    gi.require_version("Gdk", "3.0")
-    gi.require_version("Gtk", "3.0")
+    gi.require_version("Gtk", "4.0")
     gi.require_version("Gio", "2.0")
-    gi.require_version("Handy", "1")
+    gi.require_version("Adw", "1")
 
     from gi.repository import Gio
 
@@ -45,7 +45,11 @@ def setup_module():
 
     from gi.repository import Gtk
 
-    Gtk.init(None)
+    Gtk.init()
+
+    from gi.repository import Adw
+
+    Adw.init()
 
     os.environ["PORTFOLIO_HOME_DIR"] = TEST_HOME_DIR
     os.environ["PORTFOLIO_XDG_DATA_DIRS"] = TEST_XDG_DATA_DIRS
