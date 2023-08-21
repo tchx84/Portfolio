@@ -3,6 +3,11 @@
   <requires lib="gtk" version="4.0"/>
   <template class="PortfolioPlace" parent="AdwActionRow">
     <property name="selectable">False</property>
+    <child type="prefix">
+      <object class="GtkImage" id="icon">
+        <property name="icon-size">2</property>
+      </object>
+    </child>
     <child>
       <object class="GtkBox">
         <child>

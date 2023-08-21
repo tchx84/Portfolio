@@ -22,12 +22,16 @@ from gi.repository import Adw, Gtk
 class PortfolioPlace(Adw.ActionRow):
     __gtype_name__ = "PortfolioPlace"
 
+    icon = Gtk.Template.Child()
     eject = Gtk.Template.Child()
     mount = None
     path = ""
     uuid = ""
     encrypted = None
     device = None
+
+    def set_custom_icon_name(self, name):
+        self.icon.set_from_icon_name(name)
 
     def set_subtitle_sately(self, subtitle):
         if subtitle is not None:
