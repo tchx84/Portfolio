@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-09 10:08-0300\n"
+"POT-Creation-Date: 2023-08-23 12:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,7 @@ msgstr ""
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/window.ui:291
-#: src/window.ui:389 src/window.ui:2261
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/about.ui:30
 msgid "Portfolio"
 msgstr ""
 
@@ -37,7 +36,7 @@ msgstr ""
 msgid "folder;manager;explore;disk;filesystem;"
 msgstr ""
 
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/window.ui:2315
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/about.ui:58
 msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr ""
@@ -47,106 +46,18 @@ msgstr ""
 msgid "Martin Abente Lahaye"
 msgstr ""
 
-#: src/window.ui:49
-msgid "Filter"
-msgstr ""
-
-#: src/window.ui:72
-msgid "Show Hidden Files"
-msgstr ""
-
-#: src/window.ui:121
-msgid "Sort"
-msgstr ""
-
-#: src/window.ui:144
-msgid "A-Z"
-msgstr ""
-
-#: src/window.ui:170
-msgid "Last Modified"
-msgstr ""
-
-#: src/window.ui:226
-msgid "Help"
-msgstr ""
-
-#: src/window.ui:242
-msgid "About Portfolio"
-msgstr ""
-
-#: src/window.ui:756
-msgid "No files found"
-msgstr ""
-
-#: src/window.ui:1486
-msgid "Properties"
-msgstr ""
-
-#: src/window.ui:1547
-msgid "Name"
-msgstr ""
-
-#: src/window.ui:1595
-msgid "Location"
-msgstr ""
-
-#: src/window.ui:1643
-msgid "Type"
-msgstr ""
-
-#: src/window.ui:1691
-msgid "Size"
-msgstr ""
-
-#: src/window.ui:1753
-msgid "Created"
-msgstr ""
-
-#: src/window.ui:1801
-msgid "Modified"
-msgstr ""
-
-#: src/window.ui:1849
-msgid "Accessed"
-msgstr ""
-
-#: src/window.ui:1911
-msgid "Owner"
-msgstr ""
-
-#: src/window.ui:1959
-msgid "Group"
-msgstr ""
-
-#: src/window.ui:2007
-msgid "Owner can"
-msgstr ""
-
-#: src/window.ui:2055
-msgid "Group can"
-msgstr ""
-
-#: src/window.ui:2103
-msgid "Others can"
-msgstr ""
-
-#: src/window.ui:2182
-msgid "About"
-msgstr ""
-
-#: src/window.ui:2343
+#: src/about.ui:73
 msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
 msgstr ""
 
-#: src/window.ui:2398
+#: src/about.ui:102
 msgid ""
 "This program comes with absolutely no warranty. See the <a href=\"https://"
 "www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
 "later</a> for details."
 msgstr ""
 
-#: src/window.ui:2427
+#: src/about.ui:118
 msgid ""
 "Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
 "version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
@@ -154,183 +65,271 @@ msgid ""
 "org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
 msgstr ""
 
-#: src/window.ui:2465
+#: src/about.ui:139
 msgid "Created by"
 msgstr ""
 
-#: src/window.ui:2496
+#: src/about.ui:166
 msgid "Artwork by"
 msgstr ""
 
-#: src/window.ui:2528
+#: src/about.ui:194
 msgid "Translated by"
 msgstr ""
 
-#: src/window.ui:2565
+#: src/about.ui:227
 msgid "Contributions by"
 msgstr ""
 
-#: src/places.py:51
-msgid "Trash"
+#: src/menu.ui:21
+msgid "Filter"
 msgstr ""
 
-#: src/places.py:90
-msgid "Places"
+#: src/menu.ui:34
+msgid "Show Hidden Files"
 msgstr ""
 
-#: src/places.py:94
-msgid "Devices"
+#: src/menu.ui:57
+msgid "Sort"
 msgstr ""
 
-#: src/places.py:104
-msgid "Home"
+#: src/menu.ui:69
+msgid "A-Z"
 msgstr ""
 
-#: src/places.py:156
-msgid "System"
+#: src/menu.ui:84
+msgid "Last Modified"
 msgstr ""
 
-#: src/places.py:164
-msgid "Host"
+#: src/menu.ui:109
+msgid "Help"
 msgstr ""
 
-#: src/places.py:176
-msgid "No places found"
+#: src/menu.ui:118
+msgid "About Portfolio"
 msgstr ""
 
-#: src/window.py:737
-msgid "Opening"
+#: src/placeholder.ui:16
+msgid "No files found"
 msgstr ""
 
-#: src/window.py:757 src/window.py:1518 src/window.py:1528
-#, python-format
-msgid "Could not open %s"
+#: src/properties.ui:18
+msgid "Name"
 msgstr ""
 
-#: src/window.py:777 src/window.py:825
-msgid "Loading"
+#: src/properties.ui:49
+msgid "Location"
 msgstr ""
 
-#: src/window.py:826
-#, python-format
-msgid "Could not load %s"
+#: src/properties.ui:80
+msgid "Type"
 msgstr ""
 
-#: src/window.py:928 src/window.py:942
+#: src/properties.ui:111
+msgid "Size"
+msgstr ""
+
+#: src/properties.ui:150
+msgid "Created"
+msgstr ""
+
+#: src/properties.ui:181
+msgid "Modified"
+msgstr ""
+
+#: src/properties.ui:212
+msgid "Accessed"
+msgstr ""
+
+#: src/properties.ui:251
+msgid "Owner"
+msgstr ""
+
+#: src/properties.ui:282
+msgid "Group"
+msgstr ""
+
+#: src/properties.ui:313
+msgid "Owner can"
+msgstr ""
+
+#: src/properties.ui:344
+msgid "Group can"
+msgstr ""
+
+#: src/properties.ui:375
+msgid "Others can"
+msgstr ""
+
+#: src/window.ui:648
+msgid "Properties"
+msgstr ""
+
+#: src/window.ui:699
+msgid "About"
+msgstr ""
+
+#: src/files.py:292 src/window.py:484
 #, python-format
 msgid "%s already exists"
 msgstr ""
 
-#: src/window.py:974 src/window.py:1324
+#: src/files.py:410
+msgid "New Folder"
+msgstr ""
+
+#: src/passphrase.py:69
+msgid "Sorry, that didn't work"
+msgstr ""
+
+#: src/places.py:52
+msgid "Trash"
+msgstr ""
+
+#: src/places.py:89
+msgid "Places"
+msgstr ""
+
+#: src/places.py:93
+msgid "Devices"
+msgstr ""
+
+#: src/places.py:103
+msgid "Home"
+msgstr ""
+
+#: src/places.py:155
+msgid "System"
+msgstr ""
+
+#: src/places.py:163
+msgid "Host"
+msgstr ""
+
+#: src/places.py:177
+msgid "No places found"
+msgstr ""
+
+#: src/window.py:494
+msgid "No permissions on this directory"
+msgstr ""
+
+#: src/window.py:507
+msgid "Opening"
+msgstr ""
+
+#: src/window.py:525 src/window.py:1068 src/window.py:1078
+#, python-format
+msgid "Could not open %s"
+msgstr ""
+
+#: src/window.py:544 src/window.py:573
+msgid "Loading"
+msgstr ""
+
+#: src/window.py:573
+#, python-format
+msgid "Could not load %s"
+msgstr ""
+
+#: src/window.py:623 src/window.py:934
 #, python-format
 msgid "these %d files"
 msgstr ""
 
-#: src/window.py:976 src/window.py:1326
+#: src/window.py:625 src/window.py:936
 #, python-format
 msgid "Delete %s permanently?"
 msgstr ""
 
-#: src/window.py:996
+#: src/window.py:645
 #, python-format
 msgid "%s will be moved"
 msgstr ""
 
-#: src/window.py:998
+#: src/window.py:647
 #, python-format
 msgid "%d files will be moved"
 msgstr ""
 
-#: src/window.py:1014
+#: src/window.py:662
 #, python-format
 msgid "%s will be copied"
 msgstr ""
 
-#: src/window.py:1016
+#: src/window.py:664
 #, python-format
 msgid "%d files will be copied"
 msgstr ""
 
-#: src/window.py:1041 src/window.py:1253
+#: src/window.py:688 src/window.py:867
 msgid "Files will be overwritten, proceed?"
 msgstr ""
 
-#: src/window.py:1057
+#: src/window.py:703
 msgid "Pasting"
 msgstr ""
 
-#: src/window.py:1087
+#: src/window.py:727
 #, python-format
 msgid "%s of %s"
 msgstr ""
 
-#: src/window.py:1102
+#: src/window.py:742
 #, python-format
 msgid "Could not paste %s"
 msgstr ""
 
-#: src/window.py:1155 src/window.py:1352
+#: src/window.py:794 src/window.py:962
 msgid "Deleting"
 msgstr ""
 
-#: src/window.py:1182 src/window.py:1378
+#: src/window.py:819 src/window.py:986
 #, python-format
 msgid "Could not delete %s"
 msgstr ""
 
-#: src/window.py:1206
+#: src/window.py:842
 msgid "Stopping"
 msgstr ""
 
-#: src/window.py:1218
-msgid "New Folder"
-msgstr ""
-
-#: src/window.py:1226
-msgid "No permissions on this directory"
-msgstr ""
-
-#: src/window.py:1276
+#: src/window.py:890
 msgid "Restoring"
 msgstr ""
 
-#: src/window.py:1309
+#: src/window.py:919
 #, python-format
 msgid "Could not restore %s"
 msgstr ""
 
-#: src/window.py:1399
+#: src/window.py:999
 msgid "Removing device, please wait"
 msgstr ""
 
-#: src/window.py:1403
+#: src/window.py:1003
 msgid "Device can be removed"
 msgstr ""
 
-#: src/window.py:1415
+#: src/window.py:1015
 msgid "Device is busy, can't be removed"
 msgstr ""
 
-#: src/window.py:1452
-msgid "Sorry, that didn't work"
-msgstr ""
-
-#: src/worker.py:491
+#: src/worker.py:512
 msgid "read"
 msgstr ""
 
-#: src/worker.py:493
+#: src/worker.py:514
 msgid "write"
 msgstr ""
 
-#: src/worker.py:495
+#: src/worker.py:516
 msgid "execute"
 msgstr ""
 
-#: src/worker.py:500
+#: src/worker.py:521
 msgid "do nothing"
 msgstr ""
 
-#: src/worker.py:580
+#: src/worker.py:601
 msgid "Calculating..."
 msgstr ""
