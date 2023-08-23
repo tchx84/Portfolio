@@ -5,7 +5,9 @@
 - Fixed icons not showing on GNOME Software.
 - Fixed trashing and restoring files with special characters.
 - Fixed progress report when moving files between same device.
-- Changed internal UI structure to prepare for GTK4 migration.
+- Fixed swapping back while browsing files.
+- Changed to GTK 4 and Libadwaita.
+- Changed to GNOME 44 runtime for stability.
 
 ## [0.9.15] 2023-03-14
 
