@@ -15,7 +15,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Name</property>
+                    <property name="label" translatable="yes">Name</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -46,7 +46,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Location</property>
+                    <property name="label" translatable="yes">Location</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -77,7 +77,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Type</property>
+                    <property name="label" translatable="yes">Type</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -108,7 +108,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Size</property>
+                    <property name="label" translatable="yes">Size</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -147,7 +147,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Created</property>
+                    <property name="label" translatable="yes">Created</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -178,7 +178,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Modified</property>
+                    <property name="label" translatable="yes">Modified</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -209,7 +209,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Accessed</property>
+                    <property name="label" translatable="yes">Accessed</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -248,7 +248,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Owner</property>
+                    <property name="label" translatable="yes">Owner</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -279,7 +279,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Group</property>
+                    <property name="label" translatable="yes">Group</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -310,7 +310,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Owner can</property>
+                    <property name="label" translatable="yes">Owner can</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -341,7 +341,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Group can</property>
+                    <property name="label" translatable="yes">Group can</property>
                     <style>
                       <class name="property"/>
                     </style>
@@ -372,7 +372,7 @@
                 <property name="height-request">50</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Others can</property>
+                    <property name="label" translatable="yes">Others can</property>
                     <style>
                       <class name="property"/>
                     </style>

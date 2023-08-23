@@ -13,7 +13,7 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">No files found</property>
+        <property name="label" translatable="yes">No files found</property>
       </object>
     </child>
   </template>
