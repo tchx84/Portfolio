@@ -1,8 +1,13 @@
 data/dev.tchx84.Portfolio.desktop.in
 data/dev.tchx84.Portfolio.metainfo.xml.in
 data/dev.tchx84.Portfolio.gschema.xml
+src/about.ui
+src/menu.ui
+src/placeholder.ui
+src/properties.ui
 src/window.ui
-src/main.py
+src/files.py
+src/passphrase.py
 src/places.py
 src/window.py
 src/worker.py
