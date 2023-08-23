@@ -18,7 +18,7 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="halign">start</property>
-                        <property name="label" translatable="1">Filter</property>
+                        <property name="label" translatable="yes">Filter</property>
                         <style>
                           <class name="menu-title"/>
                         </style>
@@ -31,7 +31,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="show_hidden_button">
-                    <property name="label" translatable="1">Show Hidden Files</property>
+                    <property name="label" translatable="yes">Show Hidden Files</property>
                     <style>
                       <class name="menu-item"/>
                       <class name="check-item"/>
@@ -54,7 +54,7 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="halign">start</property>
-                        <property name="label" translatable="1">Sort</property>
+                        <property name="label" translatable="yes">Sort</property>
                         <style>
                           <class name="menu-title"/>
                         </style>
@@ -66,7 +66,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">A-Z</property>
+                            <property name="label" translatable="yes">A-Z</property>
                           </object>
                         </child>
                         <style>
@@ -81,7 +81,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">Last Modified</property>
+                            <property name="label" translatable="yes">Last Modified</property>
                           </object>
                         </child>
                         <style>
@@ -106,7 +106,7 @@
             <child>
               <object class="GtkModelButton" id="help_button">
                 <property name="receives-default">True</property>
-                <property name="text" translatable="1">Help</property>
+                <property name="text" translatable="yes">Help</property>
                 <style>
                   <class name="menu-item"/>
                 </style>
@@ -115,7 +115,7 @@
             <child>
               <object class="GtkModelButton" id="about_button">
                 <property name="receives-default">True</property>
-                <property name="text" translatable="1">About Portfolio</property>
+                <property name="text" translatable="yes">About Portfolio</property>
                 <style>
                   <class name="menu-item"/>
                 </style>

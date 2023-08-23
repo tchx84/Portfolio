@@ -27,7 +27,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">Portfolio</property>
+            <property name="label" translatable="yes">Portfolio</property>
             <property name="wrap">1</property>
             <style>
               <class name="name-label"/>
@@ -55,7 +55,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">A minimalist file manager for those who want to use Linux mobile devices.</property>
+            <property name="label" translatable="yes">A minimalist file manager for those who want to use Linux mobile devices.</property>
             <property name="justify">center</property>
             <property name="wrap">1</property>
             <style>
@@ -70,7 +70,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">&lt;a href=&quot;https://github.com/tchx84/portfolio&quot;&gt;Website&lt;/a&gt;</property>
+            <property name="label" translatable="yes">&lt;a href=&quot;https://github.com/tchx84/portfolio&quot;&gt;Website&lt;/a&gt;</property>
             <property name="use-markup">1</property>
             <property name="wrap">1</property>
             <style>
@@ -99,7 +99,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">This program comes with absolutely no warranty. See the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.html&quot;&gt;GNU General Public License, version 3 or later&lt;/a&gt; for details.</property>
+            <property name="label" translatable="yes">This program comes with absolutely no warranty. See the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.html&quot;&gt;GNU General Public License, version 3 or later&lt;/a&gt; for details.</property>
             <property name="use-markup">1</property>
             <property name="justify">center</property>
             <property name="wrap">1</property>
@@ -115,7 +115,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">Portfolio logo is a modifed version of Jorgen Carlberg&apos;s work. The original version can be found &lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Portfolio.svg&quot;&gt; here &lt;/a&gt;, licensed under &lt;a href=&quot;https://creativecommons.org/licenses/by/3.0/deed.en&quot;&gt; CC BY 3.0 &lt;/a&gt;.</property>
+            <property name="label" translatable="yes">Portfolio logo is a modifed version of Jorgen Carlberg&apos;s work. The original version can be found &lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Portfolio.svg&quot;&gt; here &lt;/a&gt;, licensed under &lt;a href=&quot;https://creativecommons.org/licenses/by/3.0/deed.en&quot;&gt; CC BY 3.0 &lt;/a&gt;.</property>
             <property name="use-markup">1</property>
             <property name="justify">center</property>
             <property name="wrap">1</property>
@@ -136,7 +136,7 @@
               <object class="GtkLabel">
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="1">Created by</property>
+                <property name="label" translatable="yes">Created by</property>
                 <property name="justify">right</property>
                 <property name="single-line-mode">1</property>
                 <style>
@@ -163,7 +163,7 @@
               <object class="GtkLabel">
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="1">Artwork by</property>
+                <property name="label" translatable="yes">Artwork by</property>
                 <property name="justify">right</property>
                 <property name="single-line-mode">1</property>
                 <style>
@@ -191,7 +191,7 @@ Jakub Steiner</property>
               <object class="GtkLabel">
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="1">Translated by</property>
+                <property name="label" translatable="yes">Translated by</property>
                 <property name="justify">right</property>
                 <property name="single-line-mode">1</property>
                 <style>
@@ -224,7 +224,7 @@ René Coty</property>
               <object class="GtkLabel">
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="1">Contributions by</property>
+                <property name="label" translatable="yes">Contributions by</property>
                 <property name="justify">right</property>
                 <property name="single-line-mode">1</property>
                 <style>
