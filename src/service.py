@@ -69,11 +69,15 @@ class PortfolioService:
         last_path = paths[-1]
 
         if method == "ShowItemProperties":
-            self._app.show_properties(last_path)
+            _method = self._app.show_properties
+        elif method in ["ShowFolders", "ShowItems"]:
+            _method = self._app.open_path
         else:
-            self._app.open_path(last_path)
+            raise ValueError(f"{method} not supported")
 
+        # at this point we know we can handle it, so just respond
         invocation.return_value(None)
+        _method(last_path)
 
     def shutdown(self):
         Gio.bus_unown_name(self._name_id)
