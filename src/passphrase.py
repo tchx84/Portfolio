@@ -44,7 +44,6 @@ class PortfolioPassphrase(Gtk.Box):
         self.passphrase_entry.connect("activate", self._on_passphrase_activate)
 
     def _on_passphrase_activate(self, button):
-        self.passphrase_entry.props.sensitive = False
         self.passphrase_label.props.visible = False
         self.passphrase_spinner.props.visible = True
         self.passphrase_spinner.props.spinning = True
@@ -71,7 +70,6 @@ class PortfolioPassphrase(Gtk.Box):
     def clean(self):
         self.passphrase_entry.set_text("")
         self.passphrase_label.set_text("")
-        self.passphrase_entry.props.sensitive = True
         self.passphrase_label.props.visible = True
         self.passphrase_spinner.props.visible = False
         self.passphrase_spinner.props.spinning = False
