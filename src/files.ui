@@ -35,7 +35,7 @@
             <property name="title">icon</property>
             <child>
               <object class="GtkCellRendererPixbuf" id="icon">
-                <property name="width">50</property>
+                <property name="width">45</property>
                 <property name="height">50</property>
                 <property name="icon-size">2</property>
               </object>
@@ -53,6 +53,7 @@
             <child>
               <object class="GtkCellRendererText" id="name_cell">
                 <property name="ellipsize">end</property>
+                <property name="xpad">0</property>
               </object>
               <attributes>
                 <attribute name="text">1</attribute>
