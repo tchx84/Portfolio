@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.0.0] 2023-08-29
 
 - Fixed icons not showing on GNOME Software.
 - Fixed trashing and restoring files with special characters.
