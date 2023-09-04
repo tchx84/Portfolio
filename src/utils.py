@@ -72,6 +72,17 @@ def get_uri_path(string):
         return string
 
 
+def get_path_for_xdg(directory):
+    path = GLib.get_user_special_dir(directory)
+
+    if path is None:
+        return None
+    if path == GLib.get_home_dir():
+        return None
+
+    return path
+
+
 @cached
 def get_file_mtime(string):
     return os.lstat(string).st_mtime
