@@ -42,11 +42,11 @@ class PortfolioPlaces(Gtk.Stack):
     PORTFOLIO_SYSTEM_DIR_FLATPAK = os.path.join(os.path.abspath(os.sep), "run", "host")
     PORTFOLIO_HOME_DIR = os.environ.get("PORTFOLIO_HOME_DIR", os.path.expanduser("~"))
 
-    XDG_DOWNLOAD = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD)
-    XDG_DOCUMENTS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
-    XDG_PICTURES = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES)
-    XDG_MUSIC = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
-    XDG_VIDEOS = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS)
+    XDG_DOWNLOAD = utils.get_path_for_xdg(GLib.UserDirectory.DIRECTORY_DOWNLOAD)
+    XDG_DOCUMENTS = utils.get_path_for_xdg(GLib.UserDirectory.DIRECTORY_DOCUMENTS)
+    XDG_PICTURES = utils.get_path_for_xdg(GLib.UserDirectory.DIRECTORY_PICTURES)
+    XDG_MUSIC = utils.get_path_for_xdg(GLib.UserDirectory.DIRECTORY_MUSIC)
+    XDG_VIDEOS = utils.get_path_for_xdg(GLib.UserDirectory.DIRECTORY_VIDEOS)
 
     XDG_TRASH = "Trash"
     XDG_TRASH_NAME = _("Trash")
