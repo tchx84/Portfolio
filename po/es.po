@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-23 12:09-0400\n"
+"POT-Creation-Date: 2024-02-09 16:34-0300\n"
 "PO-Revision-Date: 2020-12-30 12:55-0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -41,8 +41,28 @@ msgid ""
 "A minimalist file manager for those who want to use Linux mobile devices."
 msgstr "Un simple gestor de archivos para móviles."
 
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:20
+msgid "Portfolio showing its home view"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:24
+msgid "Portfolio showing directories and files"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:28
+msgid "Portfolio showing file operations"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:32
+msgid "Portfolio showing its file properties view"
+msgstr ""
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:36
+msgid "Portfolio showing its trash management view"
+msgstr ""
+
 #. TRANSLATORS: Don't translate this text
-#: data/dev.tchx84.Portfolio.metainfo.xml.in:39
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:41
 msgid "Martin Abente Lahaye"
 msgstr ""
 
@@ -176,7 +196,7 @@ msgstr "Propiedades"
 msgid "About"
 msgstr "Acerca de"
 
-#: src/files.py:292 src/window.py:484
+#: src/files.py:292 src/window.py:491
 #, python-format
 msgid "%s already exists"
 msgstr "%s ya existe"
@@ -185,7 +205,7 @@ msgstr "%s ya existe"
 msgid "New Folder"
 msgstr "Nueva carpeta"
 
-#: src/passphrase.py:69
+#: src/passphrase.py:68
 msgid "Sorry, that didn't work"
 msgstr "Lo siento, eso no ha funcionado"
 
@@ -217,107 +237,107 @@ msgstr "Anfitrión"
 msgid "No places found"
 msgstr "No se encontraron lugares"
 
-#: src/window.py:494
+#: src/window.py:501
 msgid "No permissions on this directory"
 msgstr "Sin permisos en este directorio"
 
-#: src/window.py:507
+#: src/window.py:514
 msgid "Opening"
 msgstr "Abriendo"
 
-#: src/window.py:525 src/window.py:1068 src/window.py:1078
+#: src/window.py:532 src/window.py:1075 src/window.py:1085
 #, python-format
 msgid "Could not open %s"
 msgstr "No se pudo abrir %s"
 
-#: src/window.py:544 src/window.py:573
+#: src/window.py:551 src/window.py:580
 msgid "Loading"
 msgstr "Cargando"
 
-#: src/window.py:573
+#: src/window.py:580
 #, python-format
 msgid "Could not load %s"
 msgstr "No se pudo cargar %s"
 
-#: src/window.py:623 src/window.py:934
+#: src/window.py:630 src/window.py:941
 #, python-format
 msgid "these %d files"
 msgstr "estos %d"
 
-#: src/window.py:625 src/window.py:936
+#: src/window.py:632 src/window.py:943
 #, python-format
 msgid "Delete %s permanently?"
 msgstr "¿Borrar %s?"
 
-#: src/window.py:645
+#: src/window.py:652
 #, python-format
 msgid "%s will be moved"
 msgstr "%s se moverá"
 
-#: src/window.py:647
+#: src/window.py:654
 #, python-format
 msgid "%d files will be moved"
 msgstr "%d archivos se moverán"
 
-#: src/window.py:662
+#: src/window.py:669
 #, python-format
 msgid "%s will be copied"
 msgstr "%s se copiará"
 
-#: src/window.py:664
+#: src/window.py:671
 #, python-format
 msgid "%d files will be copied"
 msgstr "%d archivos se copiarán"
 
-#: src/window.py:688 src/window.py:867
+#: src/window.py:695 src/window.py:874
 msgid "Files will be overwritten, proceed?"
 msgstr "Sobrescribirá archivos, ¿continuar?"
 
-#: src/window.py:703
+#: src/window.py:710
 msgid "Pasting"
 msgstr "Pegando"
 
-#: src/window.py:727
+#: src/window.py:734
 #, python-format
 msgid "%s of %s"
 msgstr "%s de %s"
 
-#: src/window.py:742
+#: src/window.py:749
 #, python-format
 msgid "Could not paste %s"
 msgstr "No se pudo pegar %s"
 
-#: src/window.py:794 src/window.py:962
+#: src/window.py:801 src/window.py:969
 msgid "Deleting"
 msgstr "Eliminando"
 
-#: src/window.py:819 src/window.py:986
+#: src/window.py:826 src/window.py:993
 #, python-format
 msgid "Could not delete %s"
 msgstr "No se pudo borrar %s"
 
-#: src/window.py:842
+#: src/window.py:849
 msgid "Stopping"
 msgstr "Deteniendo"
 
-#: src/window.py:890
+#: src/window.py:897
 msgid "Restoring"
 msgstr "Restaurando"
 
-#: src/window.py:919
+#: src/window.py:926
 #, python-format
 msgid "Could not restore %s"
 msgstr "No se pudo restaurar %s"
 
-#: src/window.py:999
+#: src/window.py:1006
 msgid "Removing device, please wait"
 msgstr "Removiendo dispositivo, por favor esperar"
 
-#: src/window.py:1003
+#: src/window.py:1010
 msgid "Device can be removed"
 msgstr "Ya puede quitar el dispositivo"
 
-#: src/window.py:1015
+#: src/window.py:1022
 msgid "Device is busy, can't be removed"
 msgstr "Dispositivo ocupado, no se puede quitar"
 
