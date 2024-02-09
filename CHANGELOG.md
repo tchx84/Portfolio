@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed missing screenshots captions.
+- Fixed showing XDG directories when did not exist.
+- Changed to GNOME 45 runtime for stability.
+
 ## [1.0.0] 2023-08-29
 
 - Fixed icons not showing on GNOME Software.
