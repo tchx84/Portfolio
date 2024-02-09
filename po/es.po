@@ -43,23 +43,23 @@ msgstr "Un simple gestor de archivos para móviles."
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:20
 msgid "Portfolio showing its home view"
-msgstr ""
+msgstr "Portfolio mostrando su vista de inicio"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:24
 msgid "Portfolio showing directories and files"
-msgstr ""
+msgstr "Portfolio mostrando directorios y archivos"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:28
 msgid "Portfolio showing file operations"
-msgstr ""
+msgstr "Portfolio mostrando operaciones de archivo"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:32
 msgid "Portfolio showing its file properties view"
-msgstr ""
+msgstr "Portfolio mostrando su vista de propiedades de archivo"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:36
 msgid "Portfolio showing its trash management view"
-msgstr ""
+msgstr "Portfolio mostrando su papelera"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:41
