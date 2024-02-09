@@ -17,22 +17,24 @@
 	</description>
   <screenshots>
     <screenshot type="default">
+      <caption>Portfolio showing its home view</caption>
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/1.png</image>
     </screenshot>
     <screenshot>
+      <caption>Portfolio showing directories and files</caption>
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/2.png</image>
     </screenshot>
     <screenshot>
+      <caption>Portfolio showing file operations</caption>
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/3.png</image>
     </screenshot>
     <screenshot>
+      <caption>Portfolio showing its file properties view</caption>
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/4.png</image>
     </screenshot>
     <screenshot>
+      <caption>Portfolio showing its trash management view</caption>
       <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/5.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://raw.githubusercontent.com/tchx84/Portfolio/master/screenshots/en/6.png</image>
     </screenshot>
   </screenshots>
   <!-- TRANSLATORS: Don't translate this text -->
