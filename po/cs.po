@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 16:34-0300\n"
-"PO-Revision-Date: 2022-02-04 21:26+0100\n"
+"PO-Revision-Date: 2024-02-10 02:32+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
@@ -47,23 +47,23 @@ msgstr ""
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:20
 msgid "Portfolio showing its home view"
-msgstr ""
+msgstr "Portfolio zobrazující domovský pohled"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:24
 msgid "Portfolio showing directories and files"
-msgstr ""
+msgstr "Portfolio zobrazující adresáře a soubory"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:28
 msgid "Portfolio showing file operations"
-msgstr ""
+msgstr "Portfolio zobrazující operace se soubory"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:32
 msgid "Portfolio showing its file properties view"
-msgstr ""
+msgstr "Portfolio zobrazující pohled na vlastnosti souboru"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:36
 msgid "Portfolio showing its trash management view"
-msgstr ""
+msgstr "Portfolio zobrazující pohled na správu koše"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:41
