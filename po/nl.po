@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 16:34-0300\n"
-"PO-Revision-Date: 2023-03-10 13:23+0100\n"
+"PO-Revision-Date: 2024-02-10 22:34+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
@@ -46,23 +46,23 @@ msgstr ""
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:20
 msgid "Portfolio showing its home view"
-msgstr ""
+msgstr "Portfolio - Overzicht"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:24
 msgid "Portfolio showing directories and files"
-msgstr ""
+msgstr "Portfolio - Bestanden en mappen"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:28
 msgid "Portfolio showing file operations"
-msgstr ""
+msgstr "Portfolio - Bestandsacties"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:32
 msgid "Portfolio showing its file properties view"
-msgstr ""
+msgstr "Portfolio - Bestandseigenschappen"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:36
 msgid "Portfolio showing its trash management view"
-msgstr ""
+msgstr "Portfolio - Prullenbakbeheer"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:41
