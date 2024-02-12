@@ -3,6 +3,7 @@
 ## [unreleased]
 
 - Fixed missing screenshots captions.
+- Fixed deprecated regex warnings.
 - Fixed showing XDG directories when did not exist.
 - Changed to GNOME 45 runtime for stability.
 
