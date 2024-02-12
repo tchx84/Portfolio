@@ -79,6 +79,10 @@ def get_path_for_xdg(directory):
         return None
     if path == GLib.get_home_dir():
         return None
+    if not GLib.file_test(path, GLib.FileTest.EXISTS):
+        return None
+    if not GLib.file_test(path, GLib.FileTest.IS_DIR):
+        return None
 
     return path
 
