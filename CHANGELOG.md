@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.0.1] 2024-02-12
 
 - Fixed missing screenshots captions.
 - Fixed deprecated regex warnings.
