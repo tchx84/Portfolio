@@ -27,7 +27,7 @@ def find_new_name(directory, name, fmt="%s(%d)"):
     counter = 1
 
     while os.path.lexists(os.path.join(directory, name)):
-        components = re.split("(\(\d+\)$)", name)
+        components = re.split(r"(\(\d+\)$)", name)
         if len(components) > 1:
             name = "".join(components[:-2])
 
