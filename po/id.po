@@ -1,22 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the portfolio package.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2022.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2022, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: portfolio\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 16:34-0300\n"
-"PO-Revision-Date: 2022-02-04 08:27+0700\n"
+"PO-Revision-Date: 2024-02-13 20:21+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: \n"
 "Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.desktop.in:4
@@ -46,23 +46,23 @@ msgstr ""
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:20
 msgid "Portfolio showing its home view"
-msgstr ""
+msgstr "Portofolio menampilkan tampilan beranda"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:24
 msgid "Portfolio showing directories and files"
-msgstr ""
+msgstr "Portofolio menampilkan direktori dan berkas"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:28
 msgid "Portfolio showing file operations"
-msgstr ""
+msgstr "Portofolio menampilkan operasi berkas"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:32
 msgid "Portfolio showing its file properties view"
-msgstr ""
+msgstr "Portofolio menampilkan tampilan properti berkasnya"
 
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:36
 msgid "Portfolio showing its trash management view"
-msgstr ""
+msgstr "Portofolio menunjukkan tampilan pengelolaan sampahnya"
 
 #. TRANSLATORS: Don't translate this text
 #: data/dev.tchx84.Portfolio.metainfo.xml.in:41
