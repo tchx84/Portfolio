@@ -1,0 +1,366 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Scrambled777 <weblate.scrambled777@simplelogin.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-09 16:34-0300\n"
+"PO-Revision-Date: 2024-05-13 12:07+0530\n"
+"Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
+"Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 46.1\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/about.ui:30
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr "फाइल प्रबंधक"
+
+#: data/dev.tchx84.Portfolio.desktop.in:9
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "चलते-फिरते फाइलें प्रबंधित करें"
+
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "फोल्डर;प्रबंधक;अन्वेषण;डिस्क;फाइलप्रणाली;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/about.ui:58
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"उन लोगों के लिए एक न्यूनतम फाइल प्रबंधक जो Linux मोबाइल उपकरणों का उपयोग करना चाहते "
+"हैं।"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:20
+msgid "Portfolio showing its home view"
+msgstr "Portfolio अपना गृह दृश्य दिखते हुए"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:24
+msgid "Portfolio showing directories and files"
+msgstr "Portfolio निर्देशिकाएं और फाइलें दिखते हुए"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:28
+msgid "Portfolio showing file operations"
+msgstr "Portfolio फाइल संचालन दिखते हुए"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:32
+msgid "Portfolio showing its file properties view"
+msgstr "Portfolio अपना फाइल गुण दृश्य दिखते हुए"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:36
+msgid "Portfolio showing its trash management view"
+msgstr "Portfolio अपना कचरा प्रबंधन दृश्य दिखते हुए"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:41
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/about.ui:73
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">वेबसाइट</a>"
+
+#: src/about.ui:102
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"यह प्रोग्राम बिल्कुल बिना किसी वारंटी के आता है। विवरण के लिए <a href=\"https://www."
+"gnu.org/licenses/gpl-3.0.html\">GNU जनरल पब्लिक लाइसेंस, संस्करण 3 या बाद का "
+"संस्करण</a> देखें।"
+
+#: src/about.ui:118
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Portfolio लोगो जोर्गेन कार्लबर्ग के काम का एक संशोधित संस्करण है। मूल संस्करण <a "
+"href=\"https://commons.wikimedia.org/wiki/File:Portfolio.svg\"> यहां </a> "
+"पाया जा सकता है, जो <a href=\"https://creativecommons.org/licenses/by/3.0/"
+"deed.en\"> CC BY 3.0 </a>।"
+
+#: src/about.ui:139
+msgid "Created by"
+msgstr "इनके द्वारा निर्मित"
+
+#: src/about.ui:166
+msgid "Artwork by"
+msgstr "इनके द्वारा कलाकृति"
+
+#: src/about.ui:194
+msgid "Translated by"
+msgstr "इनके द्वारा अनुवादित"
+
+#: src/about.ui:227
+msgid "Contributions by"
+msgstr "इनके द्वारा योगदान"
+
+#: src/menu.ui:21
+msgid "Filter"
+msgstr "फिल्टर"
+
+#: src/menu.ui:34
+msgid "Show Hidden Files"
+msgstr "छुपी हुई फाइलें दिखाएं"
+
+#: src/menu.ui:57
+msgid "Sort"
+msgstr "छांटें"
+
+#: src/menu.ui:69
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/menu.ui:84
+msgid "Last Modified"
+msgstr "अंतिम संशोधित"
+
+#: src/menu.ui:109
+msgid "Help"
+msgstr "सहायता"
+
+#: src/menu.ui:118
+msgid "About Portfolio"
+msgstr "Portfolio के बारे में"
+
+#: src/placeholder.ui:16
+msgid "No files found"
+msgstr "कोई फाइलें नहीं मिलीं"
+
+#: src/properties.ui:18
+msgid "Name"
+msgstr "नाम"
+
+#: src/properties.ui:49
+msgid "Location"
+msgstr "स्थान"
+
+#: src/properties.ui:80
+msgid "Type"
+msgstr "प्रकार"
+
+#: src/properties.ui:111
+msgid "Size"
+msgstr "आकार"
+
+#: src/properties.ui:150
+msgid "Created"
+msgstr "निर्मित"
+
+#: src/properties.ui:181
+msgid "Modified"
+msgstr "संशोधित"
+
+#: src/properties.ui:212
+msgid "Accessed"
+msgstr "अभिगमित"
+
+#: src/properties.ui:251
+msgid "Owner"
+msgstr "मालिक"
+
+#: src/properties.ui:282
+msgid "Group"
+msgstr "समूह"
+
+#: src/properties.ui:313
+msgid "Owner can"
+msgstr "मालिक कर सकता है"
+
+#: src/properties.ui:344
+msgid "Group can"
+msgstr "समूह कर सकता है"
+
+#: src/properties.ui:375
+msgid "Others can"
+msgstr "अन्य कर सकते हैं"
+
+#: src/window.ui:648
+msgid "Properties"
+msgstr "गुण"
+
+#: src/window.ui:699
+msgid "About"
+msgstr "ऐप के बारे में"
+
+#: src/files.py:292 src/window.py:491
+#, python-format
+msgid "%s already exists"
+msgstr "%s पहले से मौजूद है"
+
+#: src/files.py:410
+msgid "New Folder"
+msgstr "नया फोल्डर"
+
+#: src/passphrase.py:68
+msgid "Sorry, that didn't work"
+msgstr "क्षमा करें, वह काम नहीं किया"
+
+#: src/places.py:52
+msgid "Trash"
+msgstr "रद्दी"
+
+#: src/places.py:89
+msgid "Places"
+msgstr "स्थान"
+
+#: src/places.py:93
+msgid "Devices"
+msgstr "उपकरण"
+
+#: src/places.py:103
+msgid "Home"
+msgstr "गृह"
+
+#: src/places.py:155
+msgid "System"
+msgstr "सिस्टम"
+
+#: src/places.py:163
+msgid "Host"
+msgstr "होस्ट"
+
+#: src/places.py:177
+msgid "No places found"
+msgstr "कोई स्थान नहीं मिला"
+
+#: src/window.py:501
+msgid "No permissions on this directory"
+msgstr "इस निर्देशिका पर कोई अनुमति नहीं"
+
+#: src/window.py:514
+msgid "Opening"
+msgstr "खोल रहे हैं"
+
+#: src/window.py:532 src/window.py:1075 src/window.py:1085
+#, python-format
+msgid "Could not open %s"
+msgstr "%s नहीं खोल सके"
+
+#: src/window.py:551 src/window.py:580
+msgid "Loading"
+msgstr "लोड कर रहे हैं"
+
+#: src/window.py:580
+#, python-format
+msgid "Could not load %s"
+msgstr "%s लोड नहीं कर सके"
+
+#: src/window.py:630 src/window.py:941
+#, python-format
+msgid "these %d files"
+msgstr "ये %d फाइलें"
+
+#: src/window.py:632 src/window.py:943
+#, python-format
+msgid "Delete %s permanently?"
+msgstr "क्या %s को स्थायी रूप से मिटाएं?"
+
+#: src/window.py:652
+#, python-format
+msgid "%s will be moved"
+msgstr "%s स्थानांतरित किया जाएगा"
+
+#: src/window.py:654
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d फाइलें स्थानांतरित कर दी जाएंगी"
+
+#: src/window.py:669
+#, python-format
+msgid "%s will be copied"
+msgstr "%s की प्रतिलिपि बनाई जाएगी"
+
+#: src/window.py:671
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d फाइलों की प्रतिलिपि बनाई जाएगी"
+
+#: src/window.py:695 src/window.py:874
+msgid "Files will be overwritten, proceed?"
+msgstr "फाइलें अधिलेखित हो जाएंगी, आगे बढ़ें?"
+
+#: src/window.py:710
+msgid "Pasting"
+msgstr "चिपका रहे हैं"
+
+#: src/window.py:734
+#, python-format
+msgid "%s of %s"
+msgstr "%s का %s"
+
+#: src/window.py:749
+#, python-format
+msgid "Could not paste %s"
+msgstr "%s को चिपका नहीं सके"
+
+#: src/window.py:801 src/window.py:969
+msgid "Deleting"
+msgstr "मिटा रहे हैं"
+
+#: src/window.py:826 src/window.py:993
+#, python-format
+msgid "Could not delete %s"
+msgstr "%s को मिटा नहीं सके"
+
+#: src/window.py:849
+msgid "Stopping"
+msgstr "रोक रहे हैं"
+
+#: src/window.py:897
+msgid "Restoring"
+msgstr "पुनर्स्थापित कर रहे हैं"
+
+#: src/window.py:926
+#, python-format
+msgid "Could not restore %s"
+msgstr "%s को पुनर्स्थापित नहीं कर सके"
+
+#: src/window.py:1006
+msgid "Removing device, please wait"
+msgstr "उपकरण हटाया जा रहा है, कृपया प्रतीक्षा करें"
+
+#: src/window.py:1010
+msgid "Device can be removed"
+msgstr "उपकरण हटाया जा सकता है"
+
+#: src/window.py:1022
+msgid "Device is busy, can't be removed"
+msgstr "उपकरण व्यस्त है, हटाया नहीं जा सकता"
+
+#: src/worker.py:512
+msgid "read"
+msgstr "पठन"
+
+#: src/worker.py:514
+msgid "write"
+msgstr "लेखन"
+
+#: src/worker.py:516
+msgid "execute"
+msgstr "निष्पादित करें"
+
+#: src/worker.py:521
+msgid "do nothing"
+msgstr "कुछ न करें"
+
+#: src/worker.py:601
+msgid "Calculating..."
+msgstr "गिना जा रहा है..."
