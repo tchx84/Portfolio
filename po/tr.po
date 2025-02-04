@@ -1,0 +1,368 @@
+# Turkish translation for dev.tchx84.Portfolio.
+# Copyright (C) 2024 dev.tchx84.Portfolio's COPYRIGHT HOLDER
+# This file is distributed under the same license as the dev.tchx84.Portfolio package.
+#
+# Sabri Ünal <yakushabb@gmail.com>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-17 20:30+0300\n"
+"PO-Revision-Date: 2024-11-17 20:44+0300\n"
+"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
+"Language-Team: Turkish <takim@gnome.org.tr>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.5\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/about.ui:30
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr "Dosya Yöneticisi"
+
+#: data/dev.tchx84.Portfolio.desktop.in:9
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "Hareketliyken dosyaları yönetin"
+
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr ""
+"portfolio;portfolyo;folder;manager;explore;disk;filesystem;klasör;dizin;"
+"yönetici;gezin;keşfet;disk;dosya sistemi;dosyasistemi;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/about.ui:58
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"Linux mobil aygıtlarını kullanmak isteyenler için minimalist dosya "
+"yöneticisi."
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:20
+msgid "Portfolio showing its home view"
+msgstr "Portfolio ana sayfayı gösterirken"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:24
+msgid "Portfolio showing directories and files"
+msgstr "Portfolio dizinleri ve dosyaları gösterirken"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:28
+msgid "Portfolio showing file operations"
+msgstr "Portfolio dosya işlemlerini gösterirken"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:32
+msgid "Portfolio showing its file properties view"
+msgstr "Portfolio dosya özelliklerini gösterirken"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:36
+msgid "Portfolio showing its trash management view"
+msgstr "Portfolio çöp kutusu yönetimini gösterirken"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:41
+msgid "Martin Abente Lahaye"
+msgstr "Martin Abente Lahaye"
+
+#: src/about.ui:73
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">Web Sitesi</a>"
+
+#: src/about.ui:102
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"Bu program kesinlikle hiçbir garanti vermemektedir. Ayrıntılar için <a href="
+"\"https://www.gnu.org/licenses/gpl-3.0.html\">GNU Genel Kamu Lisansı, sürüm "
+"3 ya da sonrası</a> sayfasına bakınız."
+
+#: src/about.ui:118
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/File:"
+"Portfolio.svg\"> here </a>, licensed under <a href=\"https://creativecommons."
+"org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"Portfolio logosu Jorgen Carlberg çalışmasının değiştirilmiş bir sürümüdür. "
+"Özgün sürüme <a href=\"https://commons.wikimedia.org/wiki/File:Portfolio.svg"
+"\">buradan</a>, <a href=\"https://creativecommons.org/licenses/by/3.0/deed.en"
+"\">CC BY 3.0</a> lisansı altında ulaşabilirsiniz."
+
+#: src/about.ui:139
+msgid "Created by"
+msgstr "Oluşturan"
+
+#: src/about.ui:166
+msgid "Artwork by"
+msgstr "Grafikler"
+
+#: src/about.ui:194
+msgid "Translated by"
+msgstr "Çevirenler"
+
+#: src/about.ui:231
+msgid "Contributions by"
+msgstr "Katkıcılar"
+
+#: src/menu.ui:21
+msgid "Filter"
+msgstr "Süz"
+
+#: src/menu.ui:34
+msgid "Show Hidden Files"
+msgstr "Gizli Dosyaları Göster"
+
+#: src/menu.ui:57
+msgid "Sort"
+msgstr "Sırala"
+
+#: src/menu.ui:69
+msgid "A-Z"
+msgstr "A-Z"
+
+#: src/menu.ui:84
+msgid "Last Modified"
+msgstr "Son Değiştirilme"
+
+#: src/menu.ui:109
+msgid "Help"
+msgstr "Yardım"
+
+#: src/menu.ui:118
+msgid "About Portfolio"
+msgstr "Portfolio Hakkında"
+
+#: src/placeholder.ui:16
+msgid "No files found"
+msgstr "Dosya bulunamadı"
+
+#: src/properties.ui:18
+msgid "Name"
+msgstr "Ad"
+
+#: src/properties.ui:49
+msgid "Location"
+msgstr "Konum"
+
+#: src/properties.ui:80
+msgid "Type"
+msgstr "Tür"
+
+#: src/properties.ui:111
+msgid "Size"
+msgstr "Boyut"
+
+#: src/properties.ui:150
+msgid "Created"
+msgstr "Oluşturulma"
+
+#: src/properties.ui:181
+msgid "Modified"
+msgstr "Değiştirilme"
+
+#: src/properties.ui:212
+msgid "Accessed"
+msgstr "Erişilme"
+
+#: src/properties.ui:251
+msgid "Owner"
+msgstr "Sahip"
+
+#: src/properties.ui:282
+msgid "Group"
+msgstr "Grup"
+
+#: src/properties.ui:313
+msgid "Owner can"
+msgstr "Sahibi yapabilir"
+
+#: src/properties.ui:344
+msgid "Group can"
+msgstr "Grup yapabilir"
+
+#: src/properties.ui:375
+msgid "Others can"
+msgstr "Diğerleri yapabilir"
+
+#: src/window.ui:648
+msgid "Properties"
+msgstr "Özellikler"
+
+#: src/window.ui:699
+msgid "About"
+msgstr "Hakkında"
+
+#: src/files.py:292 src/window.py:491
+#, python-format
+msgid "%s already exists"
+msgstr "%s zaten var"
+
+#: src/files.py:410
+msgid "New Folder"
+msgstr "Yeni Klasör"
+
+#: src/passphrase.py:68
+msgid "Sorry, that didn't work"
+msgstr "Üzgünüm, işe yaramadı"
+
+#: src/places.py:52
+msgid "Trash"
+msgstr "Çöp"
+
+#: src/places.py:89
+msgid "Places"
+msgstr "Yerler"
+
+#: src/places.py:93
+msgid "Devices"
+msgstr "Aygıtlar"
+
+#: src/places.py:103
+msgid "Home"
+msgstr "Ev"
+
+#: src/places.py:155
+msgid "System"
+msgstr "Sistem"
+
+#: src/places.py:163
+msgid "Host"
+msgstr "Ana makine"
+
+#: src/places.py:177
+msgid "No places found"
+msgstr "Yer bulunamadı"
+
+#: src/window.py:501
+msgid "No permissions on this directory"
+msgstr "Bu dizinde izin yok"
+
+#: src/window.py:514
+msgid "Opening"
+msgstr "Açılıyor"
+
+#: src/window.py:532 src/window.py:1075 src/window.py:1085
+#, python-format
+msgid "Could not open %s"
+msgstr "“%s” açılamadı"
+
+#: src/window.py:551 src/window.py:580
+msgid "Loading"
+msgstr "Yükleniyor"
+
+#: src/window.py:580
+#, python-format
+msgid "Could not load %s"
+msgstr "“%s” yüklenemedi"
+
+#: src/window.py:630 src/window.py:941
+#, python-format
+msgid "these %d files"
+msgstr "%d dosya"
+
+#: src/window.py:632 src/window.py:943
+#, python-format
+msgid "Delete %s permanently?"
+msgstr "“%s” kalıcı olarak silinsin mi?"
+
+#: src/window.py:652
+#, python-format
+msgid "%s will be moved"
+msgstr "“%s” taşınacak"
+
+#: src/window.py:654
+#, python-format
+msgid "%d files will be moved"
+msgstr "%d dosya taşınacak"
+
+#: src/window.py:669
+#, python-format
+msgid "%s will be copied"
+msgstr "“%s” kopyalanacak"
+
+#: src/window.py:671
+#, python-format
+msgid "%d files will be copied"
+msgstr "%d dosya kopyalanacak"
+
+#: src/window.py:695 src/window.py:874
+msgid "Files will be overwritten, proceed?"
+msgstr "Dosyaların üzerine yazılacak, devam edilsin mi?"
+
+#: src/window.py:710
+msgid "Pasting"
+msgstr "Yapıştırılıyor"
+
+#: src/window.py:734
+#, python-format
+msgid "%s of %s"
+msgstr "%s / %s"
+
+#: src/window.py:749
+#, python-format
+msgid "Could not paste %s"
+msgstr "“%s” yapıştırılamadı"
+
+#: src/window.py:801 src/window.py:969
+msgid "Deleting"
+msgstr "Siliniyor"
+
+#: src/window.py:826 src/window.py:993
+#, python-format
+msgid "Could not delete %s"
+msgstr "“%s” silinemedi"
+
+#: src/window.py:849
+msgid "Stopping"
+msgstr "Durduruluyor"
+
+#: src/window.py:897
+msgid "Restoring"
+msgstr "Geri yükleniyor"
+
+#: src/window.py:926
+#, python-format
+msgid "Could not restore %s"
+msgstr "“%s” geri yüklenemedi"
+
+#: src/window.py:1006
+msgid "Removing device, please wait"
+msgstr "Aygıt çıkarılıyor, lütfen bekleyin"
+
+#: src/window.py:1010
+msgid "Device can be removed"
+msgstr "Aygıt çıkarılabilir"
+
+#: src/window.py:1022
+msgid "Device is busy, can't be removed"
+msgstr "Aygıt meşgul, çıkarılamıyor"
+
+#: src/worker.py:512
+msgid "read"
+msgstr "oku"
+
+#: src/worker.py:514
+msgid "write"
+msgstr "yaz"
+
+#: src/worker.py:516
+msgid "execute"
+msgstr "çalıştır"
+
+#: src/worker.py:521
+msgid "do nothing"
+msgstr "hiçbir şey yapma"
+
+#: src/worker.py:601
+msgid "Calculating..."
+msgstr "Hesaplanıyor..."
