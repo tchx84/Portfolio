@@ -1,0 +1,21 @@
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: CI
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/andyholmes/flatter/gnome:47
+      options: --privileged
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Build
+        uses: andyholmes/flatter@main
+        with:
+          files: dev.tchx84.Portfolio.json
+          run-tests: true
