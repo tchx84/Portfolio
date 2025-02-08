@@ -28,6 +28,7 @@
         "*.a"
     ],
     "modules" : [
+        "tests/requirements.json",
         {
             "name" : "portfolio",
             "builddir" : true,

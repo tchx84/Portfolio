@@ -1,5 +1,0 @@
-black
-pyflakes
-pytest
-pytest-timeout
-PyGObject
