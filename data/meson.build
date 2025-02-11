@@ -30,10 +30,10 @@ install_data('dev.tchx84.Portfolio-symbolic.svg',
   install_dir: join_paths(get_option('datadir'), 'icons/hicolor/symbolic/apps')
 )
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
-  test('Validate appstream file', appstream_util,
-    args: ['validate', '--nonet', appstream_file]
+appstreamcli = find_program('appstreamcli', required: false)
+if appstreamcli.found()
+  test('Validate appstream file', appstreamcli,
+    args: ['validate', '--no-net', '--explain', appstream_file]
   )
 endif
 
