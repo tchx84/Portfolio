@@ -17,7 +17,7 @@ Tap to activate and long press to select, to browse, open, copy, move, delete, o
 ```
 git clone https://github.com/tchx84/Portfolio.git
 cd Portfolio
-flatpak install --user org.gnome.{Platform,Sdk}//45
+flatpak install --user org.gnome.{Platform,Sdk}//47
 flatpak-builder --user --force-clean --install build dev.tchx84.Portfolio.json
 flatpak run --branch=master dev.tchx84.Portfolio
 ```
