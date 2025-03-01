@@ -85,7 +85,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label">© 2020-2024 Martin Abente Lahaye</property>
+            <property name="label">© 2020-2025 Martin Abente Lahaye</property>
             <property name="wrap">1</property>
             <style>
               <class name="author-label"/>
