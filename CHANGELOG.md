@@ -1,5 +1,16 @@
 # Changelog
 
+## [unreleased]
+
+- Fixed missing metainfo entries by @AsciiWolf.
+- Added Chinese translation by @lujianhua.
+- Added Hindi translation by @Scrambled777.
+- Added Arabib translation by @x9a.
+- Added Hebrew translation by @yoseforb.
+- Added Turkish translation by @yakushabb.
+- Changed CI runner to flatter by @AsciiWolf.
+- Changed to GNOME 47 runtime for stability by @AsciiWolf.
+
 ## [1.0.1] 2024-02-12
 
 - Fixed missing screenshots captions.
