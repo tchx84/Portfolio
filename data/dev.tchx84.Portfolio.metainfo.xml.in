@@ -5,7 +5,7 @@
 	<project_license>GPL-3.0-or-later</project_license>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2024-02-12" version="1.0.1"/>
+    <release date="2025-03-02" version="1.0.2"/>
   </releases>
   <!-- TRANSLATORS: Don't translate this text -->
   <name>Portfolio</name>

@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## [1.0.2] 2025-03-02
 
 - Fixed missing metainfo entries by @AsciiWolf.
 - Added Chinese translation by @lujianhua.
