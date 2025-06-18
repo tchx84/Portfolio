@@ -23,6 +23,7 @@ from . import utils
 from . import logger
 from .place import PortfolioPlace
 from .devices import PortfolioDevices
+from .bookmarks import PortfolioBookmarks
 from .translation import gettext as _
 
 
@@ -75,6 +76,9 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices.connect("removed", self._on_device_removed)
         self._devices.connect("encrypted-added", self._on_encrypted_added)
 
+        self._bookmarks = PortfolioBookmarks()
+        self._bookmarks.connect("bookmark_toggled", self._on_bookmark_toggled)
+
         # begin UI structure
 
         self._groups_box = Gtk.Box()
@@ -93,6 +97,10 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices_group.props.title = _("Devices")
         self._devices_group.props.visible = True
         self._devices_group.get_style_context().add_class("devices-group")
+
+        self._bookmarks_group = Adw.PreferencesGroup()
+        self._bookmarks_group.props.title = _("Bookmarks")
+        self._bookmarks_group.props.visible = True
 
         # places
 
@@ -166,9 +174,11 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._groups_box.append(self._places_group)
         self._groups_box.append(self._devices_group)
+        self._groups_box.append(self._bookmarks_group)
 
         self._places_listbox = utils.find_child_by_id(self._places_group, "listbox")
         self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
+        self._bookmarks_listbox = utils.find_child_by_id(self._bookmarks_group, "listbox")
 
         # no places message
 
@@ -213,6 +223,10 @@ class PortfolioPlaces(Gtk.Stack):
     def _update_device_group_visibility(self):
         visible = len(list(self._devices_listbox)) >= 1
         self._devices_group.props.visible = visible
+
+    def _update_bookmarks_group_visibility(self):
+        visible = len(list(self._bookmarks_listbox)) >= 1
+        self._bookmarks_group.props.visible = visible
 
     def _get_permissions(self):
         if self._permissions is not None:
@@ -384,3 +398,25 @@ class PortfolioPlaces(Gtk.Stack):
             self._on_device_removed(None, encrypted)
         else:
             self.emit("failed", None)
+
+    def _find_place_by_path(self, listbox, path):
+        for place in listbox:
+            if place.path == path:
+                return place
+        return None
+
+    def _add_bookmark_place(self, path):
+        name = os.path.basename(path)
+        place = self._add_place(
+            self._bookmarks_group,
+            "bookmark-filled-symbolic",
+            name,
+            path
+        )
+
+    def _on_bookmark_toggled(self, path):
+        place = self._find_place_by_path(self._bookmarks_listbox, path)
+        if place is None:
+            self._add_bookmark_place(path)
+        else:
+            self._bookmarks_group.remove(place)

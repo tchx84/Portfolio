@@ -360,6 +360,20 @@
                                         <property name="child">
                                           <object class="GtkBox" id="navigation_tools">
                                             <property name="halign">end</property>
+                                              <child>
+                                              <object class="GtkButton" id="bookmark">
+                                                <property name="sensitive">1</property>
+                                                <property name="receives-default">1</property>
+                                                <child>
+                                                  <object class="GtkImage">
+                                                    <property name="icon-name">bookmark-outline-symbolic</property>
+                                                  </object>
+                                                </child>
+                                                <style>
+                                                  <class name="tool-button"/>
+                                                </style>
+                                              </object>
+                                            </child>
                                             <child>
                                               <object class="GtkButton" id="paste">
                                                 <property name="sensitive">0</property>

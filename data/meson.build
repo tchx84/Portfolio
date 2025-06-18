@@ -30,6 +30,14 @@ install_data('dev.tchx84.Portfolio-symbolic.svg',
   install_dir: join_paths(get_option('datadir'), 'icons/hicolor/symbolic/apps')
 )
 
+install_data('bookmark-filled-symbolic.svg',
+  install_dir: join_paths(get_option('datadir'), 'icons/hicolor/scalable/apps')
+)
+
+install_data('bookmark-outline-symbolic.svg',
+  install_dir: join_paths(get_option('datadir'), 'icons/hicolor/symbolic/apps')
+)
+
 appstreamcli = find_program('appstreamcli', required: false)
 if appstreamcli.found()
   test('Validate appstream file', appstreamcli,

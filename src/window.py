@@ -61,6 +61,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     paste = Gtk.Template.Child()
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
+    bookmark = Gtk.Template.Child()
     new_folder = Gtk.Template.Child()
     delete_trash = Gtk.Template.Child()
     restore_trash = Gtk.Template.Child()
@@ -148,6 +149,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.select_all.connect("clicked", self._on_select_all)
         self.select_none.connect("clicked", self._on_select_none)
         self.new_folder.connect("clicked", self._on_new_folder)
+        self.bookmark.connect("clicked", self._on_bookmark)
         self.close_button.connect("clicked", self._on_button_closed)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
@@ -182,13 +184,13 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.sort_order = self._settings.sort_order
         self.content_inner_box.append(self.files)
 
-        places = PortfolioPlaces()
-        places.connect("updated", self._on_places_updated)
-        places.connect("removing", self._on_places_removing)
-        places.connect("removed", self._on_places_removed)
-        places.connect("failed", self._on_places_failed)
-        places.connect("unlock", self._on_places_unlock)
-        self.places_inner_box.append(places)
+        self._places = PortfolioPlaces()
+        self._places.connect("updated", self._on_places_updated)
+        self._places.connect("removing", self._on_places_removing)
+        self._places.connect("removed", self._on_places_removed)
+        self._places.connect("failed", self._on_places_failed)
+        self._places.connect("unlock", self._on_places_unlock)
+        self.places_inner_box.append(self._places)
 
         self._properties_worker = PortfolioPropertiesWorker()
         self.properties_inner_box.append(PortfolioProperties(self._properties_worker))
@@ -858,6 +860,10 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def _on_new_folder(self, button):
         directory = self._history[self._index]
         self.files.add_new_folder_row(directory)
+
+    def _on_bookmark(self, button):
+        self._places._on_bookmark_toggled(self._history[self._index])
+        #self.emit("bookmark_toggled", self._history[self._index])
 
     def _on_restore_trash_clicked(self, button):
         selection = self.files.get_selection()
