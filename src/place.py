@@ -24,6 +24,7 @@ class PortfolioPlace(Adw.ActionRow):
 
     icon = Gtk.Template.Child()
     eject = Gtk.Template.Child()
+    remove_bookmark = Gtk.Template.Child()
     mount = None
     path = ""
     uuid = ""

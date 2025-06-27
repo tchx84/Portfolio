@@ -36,6 +36,7 @@ class PortfolioPlaces(Gtk.Stack):
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "unlock": (GObject.SignalFlags.RUN_LAST, None, (object,)),
+        "toggle-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
@@ -66,6 +67,7 @@ class PortfolioPlaces(Gtk.Stack):
         self._setup()
 
     def _setup(self):
+        self.connect("toggle-bookmark", self._on_bookmark_toggled)
         self.props.visible = True
         self.props.transition_type = Gtk.StackTransitionType.CROSSFADE
 
@@ -77,7 +79,6 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices.connect("encrypted-added", self._on_encrypted_added)
 
         self._bookmarks = PortfolioBookmarks()
-        self._bookmarks.connect("bookmark_toggled", self._on_bookmark_toggled)
 
         # begin UI structure
 
@@ -101,6 +102,9 @@ class PortfolioPlaces(Gtk.Stack):
         self._bookmarks_group = Adw.PreferencesGroup()
         self._bookmarks_group.props.title = _("Bookmarks")
         self._bookmarks_group.props.visible = True
+
+        for path in self._bookmarks.bookmarked:
+            self._add_bookmark_place(path)
 
         # places
 
@@ -405,6 +409,14 @@ class PortfolioPlaces(Gtk.Stack):
                 return place
         return None
 
+    def _remove_bookmark(self, button, path):
+        place = self._find_place_by_path(self._bookmarks_listbox, path)
+        if place is not None:
+            self._bookmarks_group.remove(place)
+            self._bookmarks.emit("toggle-bookmark", path)
+            return True
+        return False
+
     def _add_bookmark_place(self, path):
         name = os.path.basename(path)
         place = self._add_place(
@@ -413,10 +425,13 @@ class PortfolioPlaces(Gtk.Stack):
             name,
             path
         )
+        place.remove_bookmark.props.visible = True
+        place.remove_bookmark.connect("clicked", self._remove_bookmark, path)
 
-    def _on_bookmark_toggled(self, path):
+    def _on_bookmark_toggled(self, places, path):
         place = self._find_place_by_path(self._bookmarks_listbox, path)
         if place is None:
             self._add_bookmark_place(path)
         else:
             self._bookmarks_group.remove(place)
+        self._bookmarks.emit("toggle-bookmark", path)

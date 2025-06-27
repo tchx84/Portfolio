@@ -25,6 +25,20 @@
               <class name="eject-button"/>
             </style>
           </object>
+          <object class="GtkButton" id="remove_bookmark">
+            <property name="visible">0</property>
+            <property name="hexpand">1</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">bookmark-outline-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="remove-bookmark"/>
+            </style>
+          </object>
         </child>
       </object>
     </child>

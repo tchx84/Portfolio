@@ -26,13 +26,14 @@ class PortfolioBookmarks(GObject.GObject):
     __gtype_name__ = "PortfolioBookmarks"
 
     __gsignals__ = {
-        "bookmark_toggled": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "toggle-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self):
         GObject.GObject.__init__(self)
+        self.connect("toggle-bookmark", self._toggle_bookmark)
 
-        self._bookmarked = {}
+        self.bookmarked = {}
         self._portfolio_config_path = os.path.join(GLib.get_user_config_dir(), "portfolio")
         self._bookmark_path = os.path.join(self._portfolio_config_path, "bookmarks")
 
@@ -50,33 +51,30 @@ class PortfolioBookmarks(GObject.GObject):
                         self._add_bookmark(path)
 
         except (json.JSONDecodeError, OSError, IOError):
-            self._bookmarked = {}
-
-        self.connect("bookmark_toggled", self._toggle_bookmark)
+            self.bookmarked = {}
 
     def _add_bookmark(self, path):
-        if path not in self._bookmarked:
+        if path not in self.bookmarked:
             name = os.path.basename(path)
-            self._bookmarked[path] = 0 # Python Hashsets are limited?
+            self.bookmarked[path] = 0 # Python Hashsets are limited?
 
     def _delete_bookmark(self, path):
-        if path in self._bookmarked:
-            self._bookmarked.pop(path)
+        if path in self.bookmarked:
+            self.bookmarked.pop(path)
 
     def _is_bookmarked(self, path):
-        return path in self._bookmarked
-
-    def _toggle_bookmark(self, path):
-        print("hello")
-        if self._is_bookmarked(path):
-            self._delete_bookmark(path)
-        else:
-            self._add_bookmark(path)
+        return path in self.bookmarked
 
     def _save_bookmarks(self):
         os.makedirs(self._portfolio_config_path, exist_ok = True)
         with open(self._bookmark_path, 'w') as f:
-            paths = [bookmark for bookmark in self._bookmarked]
+            paths = [bookmark for bookmark in self.bookmarked]
             json.dump(paths, f)
 
+    def _toggle_bookmark(self, button, path):
+        if self._is_bookmarked(path):
+            self._delete_bookmark(path)
+        else:
+            self._add_bookmark(path)
+        self._save_bookmarks()
 
