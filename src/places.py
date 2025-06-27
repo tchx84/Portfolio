@@ -103,9 +103,6 @@ class PortfolioPlaces(Gtk.Stack):
         self._bookmarks_group.props.title = _("Bookmarks")
         self._bookmarks_group.props.visible = True
 
-        for path in self._bookmarks.bookmarked:
-            self._add_bookmark_place(path)
-
         # places
 
         if self._has_permission_for(self.HOME_PERMISSION):
@@ -184,6 +181,7 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
         self._bookmarks_listbox = utils.find_child_by_id(self._bookmarks_group, "listbox")
 
+        self._add_unadded_accessible_bookmarks()
         # no places message
 
         message = Gtk.Label()
@@ -417,11 +415,17 @@ class PortfolioPlaces(Gtk.Stack):
             return True
         return False
 
+    def _add_unadded_accessible_bookmarks(self):
+        for path in self._bookmarks.bookmarked:
+            notAdded = self._find_place_by_path(self._bookmarks_listbox, path) is None
+            if notAdded and os.path.isdir(path): # Might be a bookmarked path on a unmounted device
+                self._add_bookmark_place(path)
+
     def _add_bookmark_place(self, path):
         name = os.path.basename(path)
         place = self._add_place(
             self._bookmarks_group,
-            "bookmark-filled-symbolic",
+            "user-bookmarks-symbolic",
             name,
             path
         )
