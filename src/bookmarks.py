@@ -27,6 +27,8 @@ class PortfolioBookmarks(GObject.GObject):
 
     __gsignals__ = {
         "toggle-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "add-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "remove-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self):
@@ -57,12 +59,14 @@ class PortfolioBookmarks(GObject.GObject):
         if path not in self.bookmarked:
             name = os.path.basename(path)
             self.bookmarked[path] = 0 # Python Hashsets are limited?
+            self.emit("add-bookmark", path)
 
     def _delete_bookmark(self, path):
         if path in self.bookmarked:
             self.bookmarked.pop(path)
+            self.emit("remove-bookmark", path)
 
-    def _is_bookmarked(self, path):
+    def is_bookmarked(self, path):
         return path in self.bookmarked
 
     def _save_bookmarks(self):
@@ -72,7 +76,7 @@ class PortfolioBookmarks(GObject.GObject):
             json.dump(paths, f)
 
     def _toggle_bookmark(self, button, path):
-        if self._is_bookmarked(path):
+        if self.is_bookmarked(path):
             self._delete_bookmark(path)
         else:
             self._add_bookmark(path)

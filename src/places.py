@@ -204,6 +204,9 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._update_visibility()
 
+        self._bookmarks.connect("add-bookmark", self._add_bookmark)
+        self._bookmarks.connect("remove-bookmark", self._remove_bookmark)
+
     def _update_visibility(self):
         self._update_stack_visibility()
         self._update_places_group_visibility()
@@ -407,11 +410,18 @@ class PortfolioPlaces(Gtk.Stack):
                 return place
         return None
 
-    def _remove_bookmark(self, button, path):
+    def _remove_bookmark(self, bookmark, path):
         place = self._find_place_by_path(self._bookmarks_listbox, path)
         if place is not None:
             self._bookmarks_group.remove(place)
             self._bookmarks.emit("toggle-bookmark", path)
+            return True
+        return False
+
+    def _add_bookmark(self, bookmark, path):
+        place = self._find_place_by_path(self._bookmarks_listbox, path)
+        if place is None:
+            self._add_bookmark_place(path)
             return True
         return False
 
@@ -433,9 +443,4 @@ class PortfolioPlaces(Gtk.Stack):
         place.remove_bookmark.connect("clicked", self._remove_bookmark, path)
 
     def _on_bookmark_toggled(self, places, path):
-        place = self._find_place_by_path(self._bookmarks_listbox, path)
-        if place is None:
-            self._add_bookmark_place(path)
-        else:
-            self._bookmarks_group.remove(place)
         self._bookmarks.emit("toggle-bookmark", path)
