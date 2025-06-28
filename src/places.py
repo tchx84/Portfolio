@@ -36,7 +36,6 @@ class PortfolioPlaces(Gtk.Stack):
         "removed": (GObject.SignalFlags.RUN_LAST, None, (str, bool)),
         "failed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "unlock": (GObject.SignalFlags.RUN_LAST, None, (object,)),
-        "toggle-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     FLATPAK_INFO = os.path.join(os.path.abspath(os.sep), ".flatpak-info")
@@ -67,7 +66,6 @@ class PortfolioPlaces(Gtk.Stack):
         self._setup(bookmarks)
 
     def _setup(self, bookmarks):
-        self.connect("toggle-bookmark", self._on_bookmark_toggled)
         self.props.visible = True
         self.props.transition_type = Gtk.StackTransitionType.CROSSFADE
         self._bookmarks = bookmarks
@@ -204,8 +202,8 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._update_visibility()
 
-        self._bookmarks.connect("add-bookmark", self._add_bookmark)
-        self._bookmarks.connect("remove-bookmark", self._remove_bookmark)
+        bookmarks.connect("add-bookmark", self._add_bookmark)
+        bookmarks.connect("remove-bookmark", self._remove_bookmark)
 
     def _update_visibility(self):
         self._update_stack_visibility()
@@ -414,7 +412,6 @@ class PortfolioPlaces(Gtk.Stack):
         place = self._find_place_by_path(self._bookmarks_listbox, path)
         if place is not None:
             self._bookmarks_group.remove(place)
-            self._bookmarks.emit("toggle-bookmark", path)
             return True
         return False
 
@@ -442,5 +439,3 @@ class PortfolioPlaces(Gtk.Stack):
         place.remove_bookmark.props.visible = True
         place.remove_bookmark.connect("clicked", self._remove_bookmark, path)
 
-    def _on_bookmark_toggled(self, places, path):
-        self._bookmarks.emit("toggle-bookmark", path)
