@@ -62,15 +62,15 @@ class PortfolioPlaces(Gtk.Stack):
     VIDEOS_PERMISSION = ["host", "home", "xdg-videos"]
     TRASH_PERMISSION = ["host", "home"]
 
-    def __init__(self, **kargs):
+    def __init__(self, bookmarks, **kargs):
         super().__init__(**kargs)
-        self._setup()
+        self._setup(bookmarks)
 
-    def _setup(self):
+    def _setup(self, bookmarks):
         self.connect("toggle-bookmark", self._on_bookmark_toggled)
         self.props.visible = True
         self.props.transition_type = Gtk.StackTransitionType.CROSSFADE
-
+        self._bookmarks = bookmarks
         self._permissions = None
 
         self._devices = PortfolioDevices()

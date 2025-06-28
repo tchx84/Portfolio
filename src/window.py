@@ -43,6 +43,7 @@ from .loading import PortfolioLoading
 from .files import PortfolioFiles
 from .menu import PortfolioMenu
 from .settings import PortfolioSettings
+from .bookmarks import PortfolioBookmarks
 from .trash import default_trash
 
 
@@ -183,14 +184,14 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.connect("adjustment-changed", self._on_files_adjustment_changed)
         self.files.sort_order = self._settings.sort_order
         self.content_inner_box.append(self.files)
-
-        self._places = PortfolioPlaces()
-        self._places.connect("updated", self._on_places_updated)
-        self._places.connect("removing", self._on_places_removing)
-        self._places.connect("removed", self._on_places_removed)
-        self._places.connect("failed", self._on_places_failed)
-        self._places.connect("unlock", self._on_places_unlock)
-        self.places_inner_box.append(self._places)
+        self._bookmarks = PortfolioBookmarks()
+        places = PortfolioPlaces(self._bookmarks)
+        places.connect("updated", self._on_places_updated)
+        places.connect("removing", self._on_places_removing)
+        places.connect("removed", self._on_places_removed)
+        places.connect("failed", self._on_places_failed)
+        places.connect("unlock", self._on_places_unlock)
+        self.places_inner_box.append(places)
 
         self._properties_worker = PortfolioPropertiesWorker()
         self.properties_inner_box.append(PortfolioProperties(self._properties_worker))
@@ -862,7 +863,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.add_new_folder_row(directory)
 
     def _toggle_bookmark(self, button):
-        self._places.emit("toggle-bookmark", self._history[self._index])
+        self._bookmarks.emit("toggle-bookmark", self._history[self._index])
 
     def _on_restore_trash_clicked(self, button):
         selection = self.files.get_selection()
