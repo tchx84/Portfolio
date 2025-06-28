@@ -32,7 +32,7 @@
             <property name="valign">center</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">user-bookmarks-symbolic</property>
+                <property name="icon-name">bookmark-outline-symbolic</property>
               </object>
             </child>
             <style>

@@ -432,7 +432,7 @@ class PortfolioPlaces(Gtk.Stack):
         name = os.path.basename(path)
         place = self._add_place(
             self._bookmarks_group,
-            "user-bookmarks-symbolic",
+            "bookmark-filled-symbolic",
             name,
             path
         )

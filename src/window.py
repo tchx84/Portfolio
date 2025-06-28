@@ -228,6 +228,11 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
 
+        if self._bookmarks.is_bookmarked(directory):
+            self.bookmark.props.icon_name = "bookmark-filled-symbolic"
+        else:
+            self.bookmark.props.icon_name = "bookmark-outline-symbolic"
+
     def _paste(self, Worker, to_paste):
         directory = self._history[self._index]
 
@@ -863,7 +868,12 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.add_new_folder_row(directory)
 
     def _toggle_bookmark(self, button):
-        self._bookmarks.emit("toggle-bookmark", self._history[self._index])
+        path = self._history[self._index]
+        self._bookmarks.emit("toggle-bookmark", path)
+        if self._bookmarks.is_bookmarked(path):
+            self.bookmark.props.icon_name = "bookmark-filled-symbolic"
+        else:
+            self.bookmark.props.icon_name = "bookmark-outline-symbolic"
 
     def _on_restore_trash_clicked(self, button):
         selection = self.files.get_selection()
