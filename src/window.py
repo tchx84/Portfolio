@@ -150,7 +150,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.select_all.connect("clicked", self._on_select_all)
         self.select_none.connect("clicked", self._on_select_none)
         self.new_folder.connect("clicked", self._on_new_folder)
-        self.bookmark.connect("clicked", self._toggle_bookmark)
+        self.bookmark.connect("clicked", self._on_bookmark_toggle)
         self.close_button.connect("clicked", self._on_button_closed)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
@@ -867,9 +867,9 @@ class PortfolioWindow(Adw.ApplicationWindow):
         directory = self._history[self._index]
         self.files.add_new_folder_row(directory)
 
-    def _toggle_bookmark(self, button):
+    def _on_bookmark_toggle(self, button):
         path = self._history[self._index]
-        self._bookmarks.emit("toggle-bookmark", path)
+        self._bookmarks.toggle_bookmark(button, path)
         if self._bookmarks.is_bookmarked(path):
             self.bookmark.props.icon_name = "bookmark-filled-symbolic"
         else:

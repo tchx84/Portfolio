@@ -179,7 +179,7 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
         self._bookmarks_listbox = utils.find_child_by_id(self._bookmarks_group, "listbox")
 
-        self._add_unadded_accessible_bookmarks()
+        self._add_accessible_bookmarks()
         # no places message
 
         message = Gtk.Label()
@@ -202,8 +202,8 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._update_visibility()
 
-        bookmarks.connect("add-bookmark", self._add_bookmark)
-        bookmarks.connect("remove-bookmark", self._remove_bookmark)
+        bookmarks.connect("add-bookmark", self._on_bookmark_added)
+        bookmarks.connect("remove-bookmark", self._on_bookmark_removed)
 
     def _update_visibility(self):
         self._update_stack_visibility()
@@ -408,21 +408,16 @@ class PortfolioPlaces(Gtk.Stack):
                 return place
         return None
 
-    def _remove_bookmark(self, bookmark, path):
+    def _on_bookmark_removed(self, bookmark, path):
         place = self._find_place_by_path(self._bookmarks_listbox, path)
         if place is not None:
             self._bookmarks_group.remove(place)
-            return True
-        return False
 
-    def _add_bookmark(self, bookmark, path):
-        place = self._find_place_by_path(self._bookmarks_listbox, path)
-        if place is None:
+    def _on_bookmark_added(self, bookmark, path):
+        if self._find_place_by_path(self._bookmarks_listbox, path) is None:
             self._add_bookmark_place(path)
-            return True
-        return False
 
-    def _add_unadded_accessible_bookmarks(self):
+    def _add_accessible_bookmarks(self):
         for path in self._bookmarks.bookmarked:
             notAdded = self._find_place_by_path(self._bookmarks_listbox, path) is None
             if notAdded and os.path.isdir(path): # Might be a bookmarked path on a unmounted device
@@ -437,5 +432,5 @@ class PortfolioPlaces(Gtk.Stack):
             path
         )
         place.remove_bookmark.props.visible = True
-        place.remove_bookmark.connect("clicked", self._remove_bookmark, path)
+        place.remove_bookmark.connect("clicked", self._on_bookmark_removed, path)
 

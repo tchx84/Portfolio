@@ -26,14 +26,12 @@ class PortfolioBookmarks(GObject.GObject):
     __gtype_name__ = "PortfolioBookmarks"
 
     __gsignals__ = {
-        "toggle-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "add-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
         "remove-bookmark": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.connect("toggle-bookmark", self._toggle_bookmark)
 
         self.bookmarked = {}
         self._portfolio_config_path = os.path.join(GLib.get_user_config_dir(), "portfolio")
@@ -75,10 +73,9 @@ class PortfolioBookmarks(GObject.GObject):
             paths = [bookmark for bookmark in self.bookmarked]
             json.dump(paths, f)
 
-    def _toggle_bookmark(self, button, path):
+    def toggle_bookmark(self, button, path):
         if self.is_bookmarked(path):
             self._delete_bookmark(path)
         else:
             self._add_bookmark(path)
         self._save_bookmarks()
-
