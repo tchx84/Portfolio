@@ -43,7 +43,7 @@ from .loading import PortfolioLoading
 from .files import PortfolioFiles
 from .menu import PortfolioMenu
 from .settings import PortfolioSettings
-from .bookmarks import PortfolioBookmarks
+from .bookmarks import PortfolioBookmarks, PortfolioBookmarkButton
 from .trash import default_trash
 
 
@@ -62,7 +62,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
     paste = Gtk.Template.Child()
     select_all = Gtk.Template.Child()
     select_none = Gtk.Template.Child()
-    bookmark = Gtk.Template.Child()
+    bookmark_box = Gtk.Template.Child()
     new_folder = Gtk.Template.Child()
     delete_trash = Gtk.Template.Child()
     restore_trash = Gtk.Template.Child()
@@ -150,7 +150,7 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.select_all.connect("clicked", self._on_select_all)
         self.select_none.connect("clicked", self._on_select_none)
         self.new_folder.connect("clicked", self._on_new_folder)
-        self.bookmark.connect("clicked", self._on_bookmark_toggle)
+
         self.close_button.connect("clicked", self._on_button_closed)
         self.go_top_button.connect("clicked", self._go_to_top)
         self.stop_button.connect("clicked", self._on_stop_clicked)
@@ -185,6 +185,10 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self.files.sort_order = self._settings.sort_order
         self.content_inner_box.append(self.files)
         self._bookmarks = PortfolioBookmarks()
+
+        self._bookmark_button = PortfolioBookmarkButton(self._bookmarks)
+        self.bookmark_box.append(self._bookmark_button)
+
         places = PortfolioPlaces(self._bookmarks)
         places.connect("updated", self._on_places_updated)
         places.connect("removing", self._on_places_removing)
@@ -227,11 +231,8 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self._worker.connect("finished", self._on_load_finished)
         self._worker.connect("failed", self._on_load_failed)
         self._worker.start()
+        self._bookmark_button.path = directory
 
-        if self._bookmarks.is_bookmarked(directory):
-            self.bookmark.props.icon_name = "bookmark-filled-symbolic"
-        else:
-            self.bookmark.props.icon_name = "bookmark-outline-symbolic"
 
     def _paste(self, Worker, to_paste):
         directory = self._history[self._index]
@@ -866,14 +867,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
     def _on_new_folder(self, button):
         directory = self._history[self._index]
         self.files.add_new_folder_row(directory)
-
-    def _on_bookmark_toggle(self, button):
-        path = self._history[self._index]
-        self._bookmarks.toggle_bookmark(button, path)
-        if self._bookmarks.is_bookmarked(path):
-            self.bookmark.props.icon_name = "bookmark-filled-symbolic"
-        else:
-            self.bookmark.props.icon_name = "bookmark-outline-symbolic"
 
     def _on_restore_trash_clicked(self, button):
         selection = self.files.get_selection()

@@ -361,17 +361,10 @@
                                           <object class="GtkBox" id="navigation_tools">
                                             <property name="halign">end</property>
                                               <child>
-                                              <object class="GtkButton" id="bookmark">
-                                                <property name="sensitive">1</property>
-                                                <property name="receives-default">1</property>
+                                              <object class="GtkBox" id="bookmark_box">
                                                 <child>
-                                                  <object class="GtkImage">
-                                                    <property name="icon-name">bookmark-outline-symbolic</property>
-                                                  </object>
+                                                  <placeholder/>
                                                 </child>
-                                                <style>
-                                                  <class name="tool-button"/>
-                                                </style>
                                               </object>
                                             </child>
                                             <child>

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gio, GLib, GObject
+from gi.repository import Gio, GLib, GObject, Gtk
 
 from . import logger
 from . import utils
@@ -79,3 +79,32 @@ class PortfolioBookmarks(GObject.GObject):
         else:
             self._add_bookmark(path)
         self._save_bookmarks()
+
+class PortfolioBookmarkButton(Gtk.Button):
+    __gtype_name__ = "PortfolioBookmarkButton"
+
+
+    def __init__(self, bookmarks):
+        Gtk.Button.__init__(self)
+        self.connect("clicked", self._on_bookmark_toggle)
+        self._bookmarks = bookmarks
+        self.props.icon_name = "bookmark-filled-symbolic"
+
+    def _change_icon(self):
+        if self._bookmarks.is_bookmarked(self._path):
+            self.props.icon_name = "bookmark-filled-symbolic"
+        else:
+            self.props.icon_name = "bookmark-outline-symbolic"
+
+    def _on_bookmark_toggle(self, button):
+        self._bookmarks.toggle_bookmark(button, self._path)
+        self._change_icon()
+
+    @property
+    def path(self):
+        self._path
+
+    @path.setter
+    def path(self, path):
+        self._path = path
+        self._change_icon()
