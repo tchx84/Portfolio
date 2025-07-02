@@ -233,7 +233,6 @@ class PortfolioWindow(Adw.ApplicationWindow):
         self._worker.start()
         self._bookmark_button.path = directory
 
-
     def _paste(self, Worker, to_paste):
         directory = self._history[self._index]
 

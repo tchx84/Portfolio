@@ -177,7 +177,9 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._places_listbox = utils.find_child_by_id(self._places_group, "listbox")
         self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
-        self._bookmarks_listbox = utils.find_child_by_id(self._bookmarks_group, "listbox")
+        self._bookmarks_listbox = utils.find_child_by_id(
+            self._bookmarks_group, "listbox"
+        )
 
         self._add_accessible_bookmarks()
         # no places message
@@ -420,17 +422,15 @@ class PortfolioPlaces(Gtk.Stack):
     def _add_accessible_bookmarks(self):
         for path in self._bookmarks.bookmarked:
             notAdded = self._find_place_by_path(self._bookmarks_listbox, path) is None
-            if notAdded and os.path.isdir(path): # Might be a bookmarked path on a unmounted device
+            if notAdded and os.path.isdir(
+                path
+            ):  # Might be a bookmarked path on a unmounted device
                 self._add_bookmark_place(path)
 
     def _add_bookmark_place(self, path):
         name = os.path.basename(path)
         place = self._add_place(
-            self._bookmarks_group,
-            "bookmark-filled-symbolic",
-            name,
-            path
+            self._bookmarks_group, "bookmark-filled-symbolic", name, path
         )
         place.remove_bookmark.props.visible = True
         place.remove_bookmark.connect("clicked", self._on_bookmark_removed, path)
-

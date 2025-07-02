@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gio, GLib, GObject, Gtk
+from gi.repository import GLib, GObject, Gtk
 
-from . import logger
-from . import utils
 import json, os
 
 
@@ -34,11 +32,13 @@ class PortfolioBookmarks(GObject.GObject):
         GObject.GObject.__init__(self)
 
         self.bookmarked = {}
-        self._portfolio_config_path = os.path.join(GLib.get_user_config_dir(), "portfolio")
+        self._portfolio_config_path = os.path.join(
+            GLib.get_user_config_dir(), "portfolio"
+        )
         self._bookmark_path = os.path.join(self._portfolio_config_path, "bookmarks")
 
         try:
-            with open(self._bookmark_path, 'r') as f:
+            with open(self._bookmark_path, "r") as f:
                 data = f.read()
                 if not data is None:
                     bookmarked = json.loads(data)
@@ -55,8 +55,7 @@ class PortfolioBookmarks(GObject.GObject):
 
     def _add_bookmark(self, path):
         if path not in self.bookmarked:
-            name = os.path.basename(path)
-            self.bookmarked[path] = 0 # Python Hashsets are limited?
+            self.bookmarked[path] = 0  # Python Hashsets are limited?
             self.emit("add-bookmark", path)
 
     def _delete_bookmark(self, path):
@@ -68,8 +67,8 @@ class PortfolioBookmarks(GObject.GObject):
         return path in self.bookmarked
 
     def _save_bookmarks(self):
-        os.makedirs(self._portfolio_config_path, exist_ok = True)
-        with open(self._bookmark_path, 'w') as f:
+        os.makedirs(self._portfolio_config_path, exist_ok=True)
+        with open(self._bookmark_path, "w") as f:
             paths = [bookmark for bookmark in self.bookmarked]
             json.dump(paths, f)
 
@@ -80,9 +79,9 @@ class PortfolioBookmarks(GObject.GObject):
             self._add_bookmark(path)
         self._save_bookmarks()
 
+
 class PortfolioBookmarkButton(Gtk.Button):
     __gtype_name__ = "PortfolioBookmarkButton"
-
 
     def __init__(self, bookmarks):
         Gtk.Button.__init__(self)
