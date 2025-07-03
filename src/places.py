@@ -421,8 +421,8 @@ class PortfolioPlaces(Gtk.Stack):
 
     def _add_accessible_bookmarks(self):
         for path in self._bookmarks.bookmarked:
-            notAdded = self._find_place_by_path(self._bookmarks_listbox, path) is None
-            if notAdded and os.path.isdir(
+            not_added = self._find_place_by_path(self._bookmarks_listbox, path) is None
+            if not_added and os.path.isdir(
                 path
             ):  # Might be a bookmarked path on a unmounted device
                 self._add_bookmark_place(path)
@@ -430,7 +430,10 @@ class PortfolioPlaces(Gtk.Stack):
     def _add_bookmark_place(self, path):
         name = os.path.basename(path)
         place = self._add_place(
-            self._bookmarks_group, "bookmark-filled-symbolic", name, path
+            self._bookmarks_group,
+            "bookmark-filled-symbolic",
+            name,
+            path,
         )
         place.remove_bookmark.props.visible = True
         place.remove_bookmark.connect("clicked", self._on_bookmark_removed, path)

@@ -31,7 +31,7 @@ class PortfolioBookmarks(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
 
-        self.bookmarked = {}
+        self.bookmarked = set()
         self._portfolio_config_path = os.path.join(
             GLib.get_user_config_dir(), "portfolio"
         )
@@ -51,16 +51,16 @@ class PortfolioBookmarks(GObject.GObject):
                         self._add_bookmark(path)
 
         except (json.JSONDecodeError, OSError, IOError):
-            self.bookmarked = {}
+            self.bookmarked = set()
 
     def _add_bookmark(self, path):
         if path not in self.bookmarked:
-            self.bookmarked[path] = 0  # Python Hashsets are limited?
+            self.bookmarked.add(path)
             self.emit("add-bookmark", path)
 
     def _delete_bookmark(self, path):
         if path in self.bookmarked:
-            self.bookmarked.pop(path)
+            self.bookmarked.remove(path)
             self.emit("remove-bookmark", path)
 
     def is_bookmarked(self, path):
