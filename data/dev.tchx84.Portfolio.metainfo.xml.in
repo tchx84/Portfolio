@@ -48,6 +48,10 @@
   <url type="bugtracker">https://github.com/tchx84/Portfolio/issues</url>
   <url type="vcs-browser">https://github.com/tchx84/Portfolio</url>
   <url type="translate">https://github.com/tchx84/Portfolio/tree/master/po</url>
+  <requires>
+    <control>touch</control>
+    <display_length compare="ge">360</display_length>
+  </requires>
   <custom>
     <value key="Purism::form_factor">mobile</value>
   </custom>
