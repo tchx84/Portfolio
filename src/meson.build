@@ -51,6 +51,7 @@ portfolio_sources = [
   'loading.py',
   'files.py',
   'menu.py',
+  'bookmarks.py'
 ]
 
 install_data(portfolio_sources, install_dir: moduledir)
