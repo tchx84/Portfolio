@@ -1,6 +1,6 @@
 # Changelog
 
-## unreleased
+## [1.0.3] 2026-06-07
 
 - Fixed using deprecated symbolic icon.
 - Fixed missing device support information in metainfo by @1peter10.
