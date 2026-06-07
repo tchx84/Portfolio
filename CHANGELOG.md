@@ -1,5 +1,11 @@
 # Changelog
 
+## unreleased
+
+- Fixed using deprecated symbolic icon.
+- Fixed missing device support information in metainfo by @1peter10.
+- Changed to GNOME 50 runtime for stability.
+
 ## [1.0.2] 2025-03-02
 
 - Fixed missing metainfo entries by @AsciiWolf.
