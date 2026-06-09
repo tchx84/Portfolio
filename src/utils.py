@@ -97,7 +97,15 @@ def is_file_dir(string):
     return os.path.isdir(string)
 
 
+def _is_image(path): # TODO: replace with filetype to do more intelligent introspection
+    return os.path.isfile(path) and \
+    os.path.splitext(path)[1] in [".png", ".jpeg", ".jpg", ".tga", ".dds"]
+
+
 def get_file_icon(path):
+    if _is_image(path):
+        return Gio.FileIcon.new(Gio.file_new_for_path(path))
+
     return (
         Gio.file_new_for_path(path)
         .query_info(
