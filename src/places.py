@@ -23,6 +23,7 @@ from . import utils
 from . import logger
 from .place import PortfolioPlace
 from .devices import PortfolioDevices
+from .bookmarks import PortfolioBookmarks
 from .translation import gettext as _
 
 
@@ -60,20 +61,22 @@ class PortfolioPlaces(Gtk.Stack):
     VIDEOS_PERMISSION = ["host", "home", "xdg-videos"]
     TRASH_PERMISSION = ["host", "home"]
 
-    def __init__(self, **kargs):
+    def __init__(self, bookmarks, **kargs):
         super().__init__(**kargs)
-        self._setup()
+        self._setup(bookmarks)
 
-    def _setup(self):
+    def _setup(self, bookmarks):
         self.props.visible = True
         self.props.transition_type = Gtk.StackTransitionType.CROSSFADE
-
+        self._bookmarks = bookmarks
         self._permissions = None
 
         self._devices = PortfolioDevices()
         self._devices.connect("added", self._on_device_added)
         self._devices.connect("removed", self._on_device_removed)
         self._devices.connect("encrypted-added", self._on_encrypted_added)
+
+        self._bookmarks = PortfolioBookmarks()
 
         # begin UI structure
 
@@ -93,6 +96,10 @@ class PortfolioPlaces(Gtk.Stack):
         self._devices_group.props.title = _("Devices")
         self._devices_group.props.visible = True
         self._devices_group.get_style_context().add_class("devices-group")
+
+        self._bookmarks_group = Adw.PreferencesGroup()
+        self._bookmarks_group.props.title = _("Bookmarks")
+        self._bookmarks_group.props.visible = True
 
         # places
 
@@ -166,10 +173,15 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._groups_box.append(self._places_group)
         self._groups_box.append(self._devices_group)
+        self._groups_box.append(self._bookmarks_group)
 
         self._places_listbox = utils.find_child_by_id(self._places_group, "listbox")
         self._devices_listbox = utils.find_child_by_id(self._devices_group, "listbox")
+        self._bookmarks_listbox = utils.find_child_by_id(
+            self._bookmarks_group, "listbox"
+        )
 
+        self._add_accessible_bookmarks()
         # no places message
 
         message = Gtk.Label()
@@ -192,6 +204,9 @@ class PortfolioPlaces(Gtk.Stack):
 
         self._update_visibility()
 
+        bookmarks.connect("add-bookmark", self._on_bookmark_added)
+        bookmarks.connect("remove-bookmark", self._on_bookmark_removed)
+
     def _update_visibility(self):
         self._update_stack_visibility()
         self._update_places_group_visibility()
@@ -213,6 +228,10 @@ class PortfolioPlaces(Gtk.Stack):
     def _update_device_group_visibility(self):
         visible = len(list(self._devices_listbox)) >= 1
         self._devices_group.props.visible = visible
+
+    def _update_bookmarks_group_visibility(self):
+        visible = len(list(self._bookmarks_listbox)) >= 1
+        self._bookmarks_group.props.visible = visible
 
     def _get_permissions(self):
         if self._permissions is not None:
@@ -384,3 +403,37 @@ class PortfolioPlaces(Gtk.Stack):
             self._on_device_removed(None, encrypted)
         else:
             self.emit("failed", None)
+
+    def _find_place_by_path(self, listbox, path):
+        for place in listbox:
+            if place.path == path:
+                return place
+        return None
+
+    def _on_bookmark_removed(self, bookmark, path):
+        place = self._find_place_by_path(self._bookmarks_listbox, path)
+        if place is not None:
+            self._bookmarks_group.remove(place)
+
+    def _on_bookmark_added(self, bookmark, path):
+        if self._find_place_by_path(self._bookmarks_listbox, path) is None:
+            self._add_bookmark_place(path)
+
+    def _add_accessible_bookmarks(self):
+        for path in self._bookmarks.bookmarked:
+            not_added = self._find_place_by_path(self._bookmarks_listbox, path) is None
+            if not_added and os.path.isdir(
+                path
+            ):  # Might be a bookmarked path on a unmounted device
+                self._add_bookmark_place(path)
+
+    def _add_bookmark_place(self, path):
+        name = os.path.basename(path)
+        place = self._add_place(
+            self._bookmarks_group,
+            "bookmark-filled-symbolic",
+            name,
+            path,
+        )
+        place.remove_bookmark.props.visible = True
+        place.remove_bookmark.connect("clicked", self._on_bookmark_removed, path)
