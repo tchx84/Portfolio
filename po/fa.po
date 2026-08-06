@@ -1,0 +1,366 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the portfolio package.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: portfolio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-09 16:34-0300\n"
+"PO-Revision-Date: 2025-08-16 18:45+0330\n"
+"Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
+"Language-Team: \n"
+"Language: fa\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.desktop.in:4
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:11 src/about.ui:30
+msgid "Portfolio"
+msgstr "پورتفولیو"
+
+#: data/dev.tchx84.Portfolio.desktop.in:8
+msgid "File Manager"
+msgstr "مدیر پرونده"
+
+#: data/dev.tchx84.Portfolio.desktop.in:9
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:12
+msgid "Manage files on the go"
+msgstr "مدیریت پرونده‌ها در مسیر"
+
+#: data/dev.tchx84.Portfolio.desktop.in:15
+msgid "folder;manager;explore;disk;filesystem;"
+msgstr "folder;manager;explore;disk;filesystem;شاخه;پوشه;مدیر;پرونده;مرور;کشف;دیسک;"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:14 src/about.ui:58
+msgid ""
+"A minimalist file manager for those who want to use Linux mobile devices."
+msgstr ""
+"مدیر پرونده‌ای کمینه‌گرا برای آنانی که می‌خواهند از افزاره‌های همراه گنو/لینوکسی "
+"استفاده کنند."
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:20
+msgid "Portfolio showing its home view"
+msgstr "پورتفولیو در حال نمایش نمای خانه‌اش"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:24
+msgid "Portfolio showing directories and files"
+msgstr "پورتفولیو در حال نمایش شاخه‌ها و پرونده‌ها"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:28
+msgid "Portfolio showing file operations"
+msgstr "پورتفولیو در حال نمایش عملیات پرونده"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:32
+msgid "Portfolio showing its file properties view"
+msgstr "پورتفولیو در حال نمایش نمای ویژگی‌های پرونده‌اش"
+
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:36
+msgid "Portfolio showing its trash management view"
+msgstr "پورتفولیو در حال نمایش نمای مدیریت زباله‌دان"
+
+#. TRANSLATORS: Don't translate this text
+#: data/dev.tchx84.Portfolio.metainfo.xml.in:41
+msgid "Martin Abente Lahaye"
+msgstr "مارتین ابنته لاهایه"
+
+#: src/about.ui:73
+msgid "<a href=\"https://github.com/tchx84/portfolio\">Website</a>"
+msgstr "<a href=\"https://github.com/tchx84/portfolio\">پایگاه وب</a>"
+
+#: src/about.ui:102
+msgid ""
+"This program comes with absolutely no warranty. See the <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">GNU General Public License, version 3 or "
+"later</a> for details."
+msgstr ""
+"برنامه بدون هیچ ضمانتی می‌آید. برای جزییات بیش‌تر <a href=\"https://"
+"www.gnu.org/licenses/gpl-3.0.html\">نگارش ۳ یا بالاتر پروانهٔ جامع همگانی "
+"گنو</a> را ببینید."
+
+#: src/about.ui:118
+msgid ""
+"Portfolio logo is a modifed version of Jorgen Carlberg's work. The original "
+"version can be found <a href=\"https://commons.wikimedia.org/wiki/"
+"File:Portfolio.svg\"> here </a>, licensed under <a href=\"https://"
+"creativecommons.org/licenses/by/3.0/deed.en\"> CC BY 3.0 </a>."
+msgstr ""
+"نشان پورتفولیو نگارشی تغییر یافته از کار جورگن کارل‌برگ است. نگارش اصلی "
+"می‌تواند <a href=\"https://commons.wikimedia.org/wiki/"
+"File:Portfolio.svg\">این‌جا</a> با پروانهٔ <a href=\"https://"
+"creativecommons.org/licenses/by/3.0/deed.en\">CC BY 3.0</a> پیدا شود."
+
+#: src/about.ui:139
+msgid "Created by"
+msgstr "ایجاد شده به دست"
+
+#: src/about.ui:166
+msgid "Artwork by"
+msgstr "کار هنری به دست"
+
+#: src/about.ui:194
+msgid "Translated by"
+msgstr "بازگردانی به دست"
+
+#: src/about.ui:227
+msgid "Contributions by"
+msgstr "مشارکت‌ها از سوی"
+
+#: src/menu.ui:21
+msgid "Filter"
+msgstr "پالایش"
+
+#: src/menu.ui:34
+msgid "Show Hidden Files"
+msgstr "نمایش پرونده‌های مخفی"
+
+#: src/menu.ui:57
+msgid "Sort"
+msgstr "ترتیب"
+
+#: src/menu.ui:69
+msgid "A-Z"
+msgstr "آ-ی"
+
+#: src/menu.ui:84
+msgid "Last Modified"
+msgstr "آخرین تغییر"
+
+#: src/menu.ui:109
+msgid "Help"
+msgstr "راهنما"
+
+#: src/menu.ui:118
+msgid "About Portfolio"
+msgstr "دربارهٔ پورتفولیو"
+
+#: src/placeholder.ui:16
+msgid "No files found"
+msgstr "هیچ پرونده‌ای پیدا نشد"
+
+#: src/properties.ui:18
+msgid "Name"
+msgstr "نام"
+
+#: src/properties.ui:49
+msgid "Location"
+msgstr "مکان"
+
+#: src/properties.ui:80
+msgid "Type"
+msgstr "گونه"
+
+#: src/properties.ui:111
+msgid "Size"
+msgstr "اندازه"
+
+#: src/properties.ui:150
+msgid "Created"
+msgstr "ایجاد شده"
+
+#: src/properties.ui:181
+msgid "Modified"
+msgstr "تغییر یافته"
+
+#: src/properties.ui:212
+msgid "Accessed"
+msgstr "دسترسی"
+
+#: src/properties.ui:251
+msgid "Owner"
+msgstr "مالک"
+
+#: src/properties.ui:282
+msgid "Group"
+msgstr "گروه"
+
+#: src/properties.ui:313
+msgid "Owner can"
+msgstr "مالک می‌تواند"
+
+#: src/properties.ui:344
+msgid "Group can"
+msgstr "گروه می‌تواند"
+
+#: src/properties.ui:375
+msgid "Others can"
+msgstr "هر فرد دیگری می‌تواند"
+
+#: src/window.ui:648
+msgid "Properties"
+msgstr "ویژگی‌ها"
+
+#: src/window.ui:699
+msgid "About"
+msgstr "درباره"
+
+#: src/files.py:292 src/window.py:491
+#, python-format
+msgid "%s already exists"
+msgstr "‏%s از پیش موجود است"
+
+#: src/files.py:410
+msgid "New Folder"
+msgstr "شاخهٔ جدید"
+
+#: src/passphrase.py:68
+msgid "Sorry, that didn't work"
+msgstr "متأسفانه کار نکرد"
+
+#: src/places.py:52
+msgid "Trash"
+msgstr "زباله‌دان"
+
+#: src/places.py:89
+msgid "Places"
+msgstr "مکان‌ها"
+
+#: src/places.py:93
+msgid "Devices"
+msgstr "‌افزاره‌ها"
+
+#: src/places.py:103
+msgid "Home"
+msgstr "خانه"
+
+#: src/places.py:155
+msgid "System"
+msgstr "سامانه"
+
+#: src/places.py:163
+msgid "Host"
+msgstr "میزبان"
+
+#: src/places.py:177
+msgid "No places found"
+msgstr "هیچ جایی پیدا نشد"
+
+#: src/window.py:501
+msgid "No permissions on this directory"
+msgstr "بدون اجازه در این شاخه"
+
+#: src/window.py:514
+msgid "Opening"
+msgstr "گشودن"
+
+#: src/window.py:532 src/window.py:1075 src/window.py:1085
+#, python-format
+msgid "Could not open %s"
+msgstr "نتوانست %s را بگشاید"
+
+#: src/window.py:551 src/window.py:580
+msgid "Loading"
+msgstr "بار کردن"
+
+#: src/window.py:580
+#, python-format
+msgid "Could not load %s"
+msgstr "نتوانست %s را بار کند"
+
+#: src/window.py:630 src/window.py:941
+#, python-format
+msgid "these %d files"
+msgstr "این %d پرونده"
+
+#: src/window.py:632 src/window.py:943
+#, python-format
+msgid "Delete %s permanently?"
+msgstr "حذف همیشگی %s؟"
+
+#: src/window.py:652
+#, python-format
+msgid "%s will be moved"
+msgstr "‏%s جابه‌جا خواهد شد"
+
+#: src/window.py:654
+#, python-format
+msgid "%d files will be moved"
+msgstr "‏%d پرونده جابه‌جا خواهد شد"
+
+#: src/window.py:669
+#, python-format
+msgid "%s will be copied"
+msgstr "‏%s رونوشت خواهد شد"
+
+#: src/window.py:671
+#, python-format
+msgid "%d files will be copied"
+msgstr "‏%d پرونده رونوشت خواهد شد"
+
+#: src/window.py:695 src/window.py:874
+msgid "Files will be overwritten, proceed?"
+msgstr "پرونده رونویسی خواهد شد. ادامه؟"
+
+#: src/window.py:710
+msgid "Pasting"
+msgstr "جایگذاری کردن"
+
+#: src/window.py:734
+#, python-format
+msgid "%s of %s"
+msgstr "‏%s از %s"
+
+#: src/window.py:749
+#, python-format
+msgid "Could not paste %s"
+msgstr "نتوانست %s را جایگذاری کند"
+
+#: src/window.py:801 src/window.py:969
+msgid "Deleting"
+msgstr "حذف کردن"
+
+#: src/window.py:826 src/window.py:993
+#, python-format
+msgid "Could not delete %s"
+msgstr "نتوانست %s را حذف کند"
+
+#: src/window.py:849
+msgid "Stopping"
+msgstr "متوقّف کردن"
+
+#: src/window.py:897
+msgid "Restoring"
+msgstr "بازیابی کردن"
+
+#: src/window.py:926
+#, python-format
+msgid "Could not restore %s"
+msgstr "نتوانست «%s» را بازگرداند"
+
+#: src/window.py:1006
+msgid "Removing device, please wait"
+msgstr "برداشتن افزاره. لطفاً شکیبا باشید"
+
+#: src/window.py:1010
+msgid "Device can be removed"
+msgstr "افزاره می تواند برداشته شود"
+
+#: src/window.py:1022
+msgid "Device is busy, can't be removed"
+msgstr "افزاره مشغول است. نمی‌تواند برداشته شود"
+
+#: src/worker.py:512
+msgid "read"
+msgstr "خواندن"
+
+#: src/worker.py:514
+msgid "write"
+msgstr "نوشتن"
+
+#: src/worker.py:516
+msgid "execute"
+msgstr "اجرا"
+
+#: src/worker.py:521
+msgid "do nothing"
+msgstr "کاری نکردن"
+
+#: src/worker.py:601
+msgid "Calculating..."
+msgstr "محاسبه کردن…"
