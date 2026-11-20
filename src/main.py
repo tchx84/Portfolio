@@ -34,7 +34,18 @@ class Application(Adw.Application):
             application_id="dev.tchx84.Portfolio",
             flags=Gio.ApplicationFlags.HANDLES_OPEN,
         )
-        self._service = PortfolioService(self)
+
+    def do_dbus_register(self, connection, object_path):
+        Gio.Application.do_dbus_register(self, connection, object_path)
+
+        self._service = PortfolioService(self, connection, object_path)
+
+        return True
+
+    def do_dbus_unregister(self, connection, object_path):
+        del self._service
+
+        Gio.Application.do_dbus_unregister(self, connection, object_path)
 
     def show_properties(self, path):
         self.activate()

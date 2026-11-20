@@ -1,2 +1,2 @@
-option('service_filename', type : 'string', value : 'dev.tchx84.Portfolio.service')
+option('service_filename', type : 'string', value : 'dev.tchx84.Portfolio.FileManager1.service')
 option('run_service_tests', type : 'boolean', value : true)

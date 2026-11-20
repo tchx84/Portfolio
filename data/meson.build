@@ -52,6 +52,13 @@ conf.set('bindir', get_option('bindir'))
 
 configure_file(
   input: 'dev.tchx84.Portfolio.service.in',
+  output: 'dev.tchx84.Portfolio.service',
+  configuration: conf,
+  install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services')
+)
+
+configure_file(
+  input: 'org.freedesktop.FileManager1.service.in',
   output: get_option('service_filename'),
   configuration: conf,
   install_dir: join_paths(get_option('datadir'), 'dbus-1', 'services')
