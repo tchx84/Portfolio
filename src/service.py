@@ -21,9 +21,31 @@ from gi.repository import Gio
 
 
 class PortfolioService:
-    def __init__(self, app):
+    def __init__(self, app, connection, object_path):
         self._app = app
-        self._dbus_id = None
+
+        xml = (
+            Gio.resources_lookup_data(
+                "/dev/tchx84/Portfolio/org.freedesktop.FileManager1.xml",
+                Gio.ResourceLookupFlags.NONE,
+            )
+            .get_data()
+            .decode("utf-8")
+        )
+        info = Gio.DBusNodeInfo.new_for_xml(xml)
+
+        activation_id = connection.register_object(
+            object_path, info.interfaces[0], self._on_called
+        )
+
+        assert activation_id > 0
+
+        activation_id = connection.register_object(
+            "/org/freedesktop/FileManager1", info.interfaces[0], self._on_called
+        )
+
+        assert activation_id > 0
+
         self._name_id = Gio.bus_own_name(
             Gio.BusType.SESSION,
             os.environ.get("PORTFOLIO_SERVICE_NAME", "org.freedesktop.FileManager1"),
@@ -37,21 +59,7 @@ class PortfolioService:
         self.shutdown()
 
     def _on_bus_acquired(self, connection, name):
-        xml = (
-            Gio.resources_lookup_data(
-                "/dev/tchx84/Portfolio/org.freedesktop.FileManager1.xml",
-                Gio.ResourceLookupFlags.NONE,
-            )
-            .get_data()
-            .decode("utf-8")
-        )
-        info = Gio.DBusNodeInfo.new_for_xml(xml)
-
-        activation_id = connection.register_object(
-            "/org/freedesktop/FileManager1", info.interfaces[0], self._on_called
-        )
-
-        assert activation_id > 0
+        pass
 
     def _on_name_acquired(self, connection, name):
         pass

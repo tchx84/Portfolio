@@ -9,7 +9,9 @@ Comment=Manage files on the go
 Categories=GTK;Utility;FileManager;
 # TRANSLATORS: Don't translate this text
 Icon=dev.tchx84.Portfolio
+DBusActivatable=true
 StartupNotify=true
 X-Purism-FormFactor=Mobile;
 Keywords=folder;manager;explore;disk;filesystem;
+Implements=org.freedesktop.FileManager1
 MimeType=inode/directory;
